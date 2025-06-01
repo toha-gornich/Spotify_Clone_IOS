@@ -7,21 +7,22 @@
 
 import SwiftUI
 
-struct TrackItemView: View {
-    @State var item: [String: String]
+struct TrackCell: View {
+    @State var track: Track
     
     var body: some View {
         HStack {
-            AsyncImageView(item["image"] ?? "", width: 70, height: 70)
+            AsyncImageView(track.album.image, width: 60, height: 60)
             
-            Text(item["name"] ?? "")
+            Text(track.slug)
                 .font(.customFont(.bold, fontSize: 13))
-                .foregroundColor(.primaryText60)
+                .foregroundColor(.primaryText)
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
             
             
         }
-        .background(Color.darkGray)
+        .background(Color.elementBg)
+        .cornerRadius(8)
         
             
     }
@@ -29,9 +30,5 @@ struct TrackItemView: View {
 }
 
 #Preview {
-    TrackItemView(item: [
-        "image": "http://192.168.0.110:8080/mediafiles/artists/artist2/ab6761610000e5eb214f3cf1cbe7139c1e26ffbb.jpg",
-        "name": "Classic Playlist",
-        "artists": "Piano Guys"
-    ])
+    TrackCell(track: MockData.track)
 }

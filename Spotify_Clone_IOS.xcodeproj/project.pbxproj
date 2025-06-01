@@ -35,16 +35,6 @@
 			path = Spotify_Clone_IOS;
 			sourceTree = "<group>";
 		};
-		627246C52DDB84AE000C8562 /* Spotify_Clone_IOSTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Spotify_Clone_IOSTests;
-			sourceTree = "<group>";
-		};
-		627246CF2DDB84AE000C8562 /* Spotify_Clone_IOSUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Spotify_Clone_IOSUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,8 +66,6 @@
 			isa = PBXGroup;
 			children = (
 				627246B42DDB84AD000C8562 /* Spotify_Clone_IOS */,
-				627246C52DDB84AE000C8562 /* Spotify_Clone_IOSTests */,
-				627246CF2DDB84AE000C8562 /* Spotify_Clone_IOSUITests */,
 				627246B32DDB84AD000C8562 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -130,9 +118,6 @@
 			dependencies = (
 				627246C42DDB84AE000C8562 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				627246C52DDB84AE000C8562 /* Spotify_Clone_IOSTests */,
-			);
 			name = Spotify_Clone_IOSTests;
 			packageProductDependencies = (
 			);
@@ -152,9 +137,6 @@
 			);
 			dependencies = (
 				627246CE2DDB84AE000C8562 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				627246CF2DDB84AE000C8562 /* Spotify_Clone_IOSUITests */,
 			);
 			name = Spotify_Clone_IOSUITests;
 			packageProductDependencies = (
@@ -321,7 +303,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -378,7 +360,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -398,11 +380,12 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Spotify_Clone_IOS/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Spotify-Clone-IOS-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -410,6 +393,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.cl.Spotify-Clone-IOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -426,11 +412,12 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Spotify_Clone_IOS/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Spotify-Clone-IOS-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -438,6 +425,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.cl.Spotify-Clone-IOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

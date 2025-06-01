@@ -6,3 +6,14 @@
 //
 
 import Foundation
+
+
+struct Constants {
+
+    struct API{
+        static let baseURL = "http://192.168.0.110:8080/api/v1/"
+        static let tracksURL = baseURL + "tracks/"
+        static let artistsURL = baseURL + "artists/"
+    }
+
+}

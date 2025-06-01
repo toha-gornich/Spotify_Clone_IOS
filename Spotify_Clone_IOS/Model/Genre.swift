@@ -6,3 +6,13 @@
 //
 
 import Foundation
+
+
+// MARK: - Genre Model
+struct Genre: Codable, Identifiable {
+    let id: Int
+    let slug: String
+    let name: String
+    let image: String
+    let color: String
+}
