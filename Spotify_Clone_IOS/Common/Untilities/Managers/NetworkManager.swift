@@ -35,6 +35,23 @@ final class NetworkManager {
     }
     
     
+    func getArtistsBySlug(slug:String) async throws -> Artist {
+        guard let url = URL(string: Constants.API.artistsURL + "\(slug)/") else {
+            throw APError.invalidURL
+        }
+        
+        let (data, _) = try await URLSession.shared.data(from: url)
+        
+        do{
+            let decoder = JSONDecoder()
+            return try decoder.decode(Artist.self, from: data)
+        } catch{
+            throw APError.invalidData
+        }
+        
+        
+    }
+    
     func getArtists() async throws ->[Artist] {
         guard let url = URL(string: Constants.API.artistsURL) else {
             throw APError.invalidURL
@@ -46,6 +63,42 @@ final class NetworkManager {
             let decoder = JSONDecoder()
             return try decoder.decode(ArtistResponse.self, from: data).results
         } catch{
+            throw APError.invalidData
+        }
+        
+        
+    }
+    
+    
+    func getAlbums() async throws ->[Album] {
+        guard let url = URL(string: Constants.API.albumsURL) else {
+            throw APError.invalidURL
+        }
+        
+        let (data, _) = try await URLSession.shared.data(from: url)
+        
+        do{
+            let decoder = JSONDecoder()
+            return try decoder.decode(AlbumResponse.self, from: data).results
+        } catch{
+            throw APError.invalidData
+        }
+        
+        
+    }
+
+    func getPlaylists() async throws ->[Playlist] {
+        guard let url = URL(string: Constants.API.playlistsURL) else {
+            throw APError.invalidURL
+        }
+        
+        let (data, _) = try await URLSession.shared.data(from: url)
+        
+        do{
+            let decoder = JSONDecoder()
+            return try decoder.decode(PlaylistResponse.self, from: data).results
+        } catch{
+            
             throw APError.invalidData
         }
         

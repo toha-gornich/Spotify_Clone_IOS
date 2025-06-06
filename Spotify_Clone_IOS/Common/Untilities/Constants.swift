@@ -14,6 +14,9 @@ struct Constants {
         static let baseURL = "http://192.168.0.110:8080/api/v1/"
         static let tracksURL = baseURL + "tracks/"
         static let artistsURL = baseURL + "artists/"
+//        static let artistsBySlugURL = baseURL + "artists/"
+        static let albumsURL = baseURL + "albums/"
+        static let playlistsURL = baseURL + "playlists/"
     }
 
 }

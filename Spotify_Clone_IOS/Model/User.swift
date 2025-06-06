@@ -13,7 +13,7 @@ struct User: Codable, Identifiable {
     let id: Int
     let displayName: String
     let typeProfile: String
-    let artistSlug: String
+    let artistSlug: String?
     let image: String
     let followersCount: Int
     let isPremium: Bool
@@ -26,4 +26,16 @@ struct User: Codable, Identifiable {
         case followersCount = "followers_count"
         case isPremium = "is_premium"
     }
+    static var empty: User {
+            User(
+                id: -1,
+                displayName: "",
+                typeProfile: "",
+                artistSlug: "",
+                image: "",
+                followersCount: 0,
+                isPremium: false
+            )
+        }
 }
+

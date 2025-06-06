@@ -8,19 +8,29 @@
 import SwiftUI
 
 struct MainView: View {
-    @StateObject var mainVM = MainViewModel .share
+    @StateObject var mainVM = MainViewModel.share
 
     var body: some View {
-        
         ZStack{
+            // Wrap each view in NavigationView for independent navigation
             if (mainVM.selectTab == 0){
-                HomeView()
+                NavigationView {
+                    HomeView()
+                        .navigationBarHidden(true)
+                }
             } else if (mainVM.selectTab == 1){
-                SearchView()
+                NavigationView {
+                    SearchView()
+                        .navigationBarHidden(true)
+                }
             } else if (mainVM.selectTab == 2){
-                LibraryView()
+                NavigationView {
+                    LibraryView()
+                        .navigationBarHidden(true)
+                }
             }
 
+            
             VStack{
                 Spacer()
                 
@@ -75,10 +85,10 @@ struct MainView: View {
         .navigationBarHidden(true)
         .ignoresSafeArea()
     }
-    
-    
 }
 #Preview {
+    NavigationView{        
     MainView()
+    }
     
 }

@@ -1,15 +1,16 @@
 //
-//  HomeViewModel.swift
+//  ArtistViewModel.swift
 //  Spotify_Clone_IOS
 //
-//  Created by Горніч Антон on 01.06.2025.
+//  Created by Горніч Антон on 06.06.2025.
 //
 
-import SwiftUI
+import Foundation
 
-@MainActor final class HomeViewModel: ObservableObject {
+@MainActor final class ArtistViewModel: ObservableObject {
     @Published var tracks: [Track] = []
     @Published var artists: [Artist] = []
+    @Published var artist: Artist = Artist.empty
     @Published var albums: [Album] = []
     @Published var playlists: [Playlist] = []
     @Published var isLoading: Bool = false
@@ -18,6 +19,36 @@ import SwiftUI
     @Published var alertItem: AlertItem?
     
     private let networkManager = NetworkManager.shared
+    
+    func getArtistsBySlug(slug:String) {
+        isLoading = true
+        
+        Task{
+            do{
+                artist = try await NetworkManager.shared.getArtistsBySlug(slug: slug)
+                isLoading = false
+                
+            }catch{
+                if let apError = error as? APError{
+                    switch apError{
+                    case .invalidResponse:
+                        self.alertItem = AlertContext.invalidResponse
+                    case .invalidURL:
+                        self.alertItem = AlertContext.invalidURL
+                    case .invalidData:
+                        self.alertItem = AlertContext.invalidData
+                    case .unableToComplete:
+                        self.alertItem = AlertContext.unableToComplete
+                    }
+                }else{
+                    alertItem = AlertContext.invalidResponse
+                }
+                
+                isLoading = false
+            }
+        }
+    }
+    
     
     
     func getTracks() {

@@ -35,7 +35,6 @@ struct HomeView: View {
                     
                     Spacer()
                     
-                    // Індикатор завантаження
                     if homeVM.isLoading {
                         ProgressView()
                             .scaleEffect(0.8)
@@ -73,41 +72,78 @@ struct HomeView: View {
                                     
                                     let sObj = homeVM.artists[index]
                                     
-                                    VStack {
-                                        AsyncImageView(sObj.image, width: 140, height: 140)
-                                            .padding(.bottom, 4)
-                                            .clipShape(Circle())
-                                        
-                                        Text(sObj.displayName)
-                            
-                                            .font(.customFont(.bold, fontSize: 13))
-                                            .foregroundColor(.primaryText)
-                                            .lineLimit(2)
-                                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                    NavigationLink(destination: ArtistView(slugArtist: sObj.slug)) {
+                                        VStack {
+                                            SpotifyRemoteImage(urlString: sObj.image)
+                                                .frame(width: 140, height: 140)
+                                                .clipShape(Circle())
+                                            
+                                            Text(sObj.displayName)
+                                                .font(.customFont(.bold, fontSize: 13))
+                                                .foregroundColor(.primaryText)
+                                                .lineLimit(2)
+                                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                        }
                                     }
                                 }
                             }
                         }
-                        .task{
+                        .task {
                             homeVM.getArtists()
                         }
                         
+                        ViewAllSection(title: "Popular albums") {}
+
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack(spacing: 15) {
+                                ForEach(homeVM.albums.indices, id: \.self) { index in
+                                    let sObj = homeVM.albums[index]
+                                    MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
+                                }
+                            }
+                        }
+                        .task {
+                            homeVM.getAlbums()
+                        }
+
                         
-                                                ViewAllSection(title: "Popular albums") {}
-//                                                TrackTemplate(tracksArr: displayTracks)
-                        //
-                        //                        ViewAllSection(title: "Popular playlists") {}
-                        //                        TrackTemplate(tracksArr: displayTracks)
-                        //
-                        //                        ViewAllSection(title: "Popular tracks") {}
-                        //                        TrackTemplate(tracksArr: displayTracks)
+                        
+                        ViewAllSection(title: "Popular playlists") {}
+
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack(spacing: 15) {
+                                ForEach(homeVM.playlists.indices, id: \.self) { index in
+                                    let sObj = homeVM.playlists[index]
+                                    MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
+                                }
+                            }
+                        }
+                        .task {
+                            homeVM.getPlaylists()
+                        }
+
+                        ViewAllSection(title: "Popular tracks") {}
+
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack(spacing: 15) {
+                                ForEach(homeVM.tracks.indices, id: \.self) { index in
+                                    let sObj = homeVM.tracks[index]
+                                    MediaItemCell(imageURL: sObj.album.image, title: sObj.slug, width: 140, height: 140)
+                                }
+                            }
+                        }
+                        .task {
+                            homeVM.getTracks()
+                        }
+
                     }
                     .padding(.horizontal)
+                    .padding(.bottom, 100)
                 }
             }
-            if homeVM.isLoading{
-                LoadingView()
-            }
+//            if homeVM.isLoading{
+//                LoadingView()
+//            }
         }
         .frame(width: .screenWidth, height: .screenHeight)
         .background(Color.bg)
@@ -125,5 +161,8 @@ struct HomeView: View {
     }
 }
 #Preview {
-    HomeView()
+    NavigationView{
+        
+        HomeView()
+    }
 }

@@ -12,8 +12,9 @@ struct TrackCell: View {
     
     var body: some View {
         HStack {
-            AsyncImageView(track.album.image, width: 60, height: 60)
             
+            SpotifyRemoteImage(urlString: track.album.image)
+                .frame(width: 60, height: 60)
             Text(track.slug)
                 .font(.customFont(.bold, fontSize: 13))
                 .foregroundColor(.primaryText)

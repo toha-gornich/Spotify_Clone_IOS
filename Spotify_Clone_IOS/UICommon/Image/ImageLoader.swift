@@ -28,7 +28,7 @@ struct RemoteImage: View {
     }
 }
 
-struct SpotyfyRemoteImage: View {
+struct SpotifyRemoteImage: View {
     @StateObject var imageLoader = ImageLoader()
     let urlString: String
     

@@ -27,7 +27,7 @@ struct Track: Codable, Identifiable {
     let color: String
     let playsCount: Int
     let genre: Genre
-    let album: Album
+    let album: AlbumTrack
     
     enum CodingKeys: String, CodingKey {
         case id, slug, artist, title, file, duration, image, color, genre, album
@@ -98,7 +98,7 @@ struct MockData{
             image: "http://192.168.0.110:8080/mediafiles/genres/punk/ab67616d0000b273f8d415dab5ed7e3747bd38dd.jpg",
             color: "#8c3a4a"
         ),
-        album: Album(
+        album: AlbumTrack(
             id: 16,
             slug: "my-dear",
             title: "My Dear",

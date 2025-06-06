@@ -9,7 +9,7 @@ import SwiftUI
 struct ActivityIndicator: UIViewRepresentable{
     func makeUIView(context: Context) -> UIActivityIndicatorView {
         let activityIndicatorView = UIActivityIndicatorView(style: .large)
-        activityIndicatorView.color = UIColor.black
+        activityIndicatorView.color = UIColor.white
         activityIndicatorView.startAnimating()
         return activityIndicatorView
     }
@@ -21,10 +21,10 @@ struct ActivityIndicator: UIViewRepresentable{
 struct LoadingView: View {
     var body: some View {
         ZStack {
-            Color(.systemBackground)
+            Color(.black)
                 .ignoresSafeArea()
             ProgressView()
-                .progressViewStyle(CircularProgressViewStyle(tint:.bg))
+                .progressViewStyle(CircularProgressViewStyle(tint:.white))
                 .scaleEffect(2)
         }
     }

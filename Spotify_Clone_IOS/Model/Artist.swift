@@ -8,6 +8,23 @@
 import Foundation
 
 
+
+// MARK: - Album Artist Model (simplified artist info for albums)
+struct ArtistAlbum: Codable, Identifiable {
+    let id: Int
+    let slug: String
+    let displayName: String
+    let image: String
+    let color: String
+    let isVerify: Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case id, slug, image, color
+        case displayName = "display_name"
+        case isVerify = "is_verify"
+    }
+}
+
 // MARK: - Artist Model
 struct ArtistTrack: Codable, Identifiable {
     let id: Int
@@ -22,6 +39,7 @@ struct ArtistTrack: Codable, Identifiable {
         case displayName = "display_name"
         case isVerify = "is_verify"
     }
+    
 }
 
 // MARK: - Main Response Model
@@ -56,53 +74,71 @@ struct Artist: Codable, Identifiable {
         case artistListeners = "artist_listeners"
         case isVerify = "is_verify"
     }
-}
-
-
-// MARK: - Extension for convenience methods
-extension Artist {
-    var fullName: String {
-        return "\(firstName) \(lastName)"
+    static var empty: Artist {
+        Artist(
+            id: -1,
+            slug: "",
+            user: User.empty,
+            firstName: "",
+            lastName: "",
+            displayName: "",
+            image: "",
+            color: "#000000",
+            trackSlug: "",
+            artistListeners: 0,
+            isVerify: false
+        )
     }
+}
     
-    var formattedListeners: String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        return formatter.string(from: NSNumber(value: artistListeners)) ?? "0"
-    }
     
-    var hasTrack: Bool {
-        return trackSlug != nil
-    }
-}
-
-extension User {
-    var isArtist: Bool {
-        return typeProfile == "Artist"
-    }
-}
-
-// MARK: - Sample Usage
-class ArtistService {
-    func parseArtistResponse(from data: Data) -> ArtistResponse? {
-        let decoder = JSONDecoder()
-        do {
-            let response = try decoder.decode(ArtistResponse.self, from: data)
-            return response
-        } catch {
-            print("Error parsing artist response: \(error)")
-            return nil
+    
+    
+    
+    // MARK: - Extension for convenience methods
+    extension Artist {
+        var fullName: String {
+            return "\(firstName) \(lastName)"
+        }
+        
+        var formattedListeners: String {
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
+            return formatter.string(from: NSNumber(value: artistListeners)) ?? "0"
+        }
+        
+        var hasTrack: Bool {
+            return trackSlug != nil
         }
     }
     
-    func encodeArtistResponse(_ response: ArtistResponse) -> Data? {
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
-        do {
-            return try encoder.encode(response)
-        } catch {
-            print("Error encoding artist response: \(error)")
-            return nil
+    extension User {
+        var isArtist: Bool {
+            return typeProfile == "Artist"
         }
     }
-}
+    
+    // MARK: - Sample Usage
+    class ArtistService {
+        func parseArtistResponse(from data: Data) -> ArtistResponse? {
+            let decoder = JSONDecoder()
+            do {
+                let response = try decoder.decode(ArtistResponse.self, from: data)
+                return response
+            } catch {
+                print("Error parsing artist response: \(error)")
+                return nil
+            }
+        }
+        
+        func encodeArtistResponse(_ response: ArtistResponse) -> Data? {
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted
+            do {
+                return try encoder.encode(response)
+            } catch {
+                print("Error encoding artist response: \(error)")
+                return nil
+            }
+        }
+    }
