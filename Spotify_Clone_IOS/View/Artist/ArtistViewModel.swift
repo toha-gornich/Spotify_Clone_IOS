@@ -20,6 +20,37 @@ import Foundation
     
     private let networkManager = NetworkManager.shared
     
+    // MARK: - Artists
+    
+    func getArtists() {
+        isLoading = true
+        
+        Task{
+            do{
+                artists = try await NetworkManager.shared.getArtists()
+                isLoading = false
+                
+            }catch{
+                if let apError = error as? APError{
+                    switch apError{
+                    case .invalidResponse:
+                        self.alertItem = AlertContext.invalidResponse
+                    case .invalidURL:
+                        self.alertItem = AlertContext.invalidURL
+                    case .invalidData:
+                        self.alertItem = AlertContext.invalidData
+                    case .unableToComplete:
+                        self.alertItem = AlertContext.unableToComplete
+                    }
+                }else{
+                    alertItem = AlertContext.invalidResponse
+                }
+                
+                isLoading = false
+            }
+        }
+    }
+    
     func getArtistsBySlug(slug:String) {
         isLoading = true
         
@@ -50,6 +81,7 @@ import Foundation
     }
     
     
+    // MARK: - Tracks
     
     func getTracks() {
         isLoading = true
@@ -80,34 +112,7 @@ import Foundation
         }
     }
     
-    func getArtists() {
-        isLoading = true
-        
-        Task{
-            do{
-                artists = try await NetworkManager.shared.getArtists()
-                isLoading = false
-                
-            }catch{
-                if let apError = error as? APError{
-                    switch apError{
-                    case .invalidResponse:
-                        self.alertItem = AlertContext.invalidResponse
-                    case .invalidURL:
-                        self.alertItem = AlertContext.invalidURL
-                    case .invalidData:
-                        self.alertItem = AlertContext.invalidData
-                    case .unableToComplete:
-                        self.alertItem = AlertContext.unableToComplete
-                    }
-                }else{
-                    alertItem = AlertContext.invalidResponse
-                }
-                
-                isLoading = false
-            }
-        }
-    }
+
     
     func getAlbums() {
         isLoading = true
