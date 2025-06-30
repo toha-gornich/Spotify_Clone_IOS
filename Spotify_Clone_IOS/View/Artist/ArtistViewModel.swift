@@ -113,6 +113,33 @@ import Foundation
     }
     
 
+    func getTracksBySlugArtist(slug:String) {
+        isLoading = true
+        Task{
+            do{
+                tracks = try await NetworkManager.shared.getTracksBySlugArtist(slug: slug)
+                isLoading = false
+                
+            }catch{
+                if let apError = error as? APError{
+                    switch apError{
+                    case .invalidResponse:
+                        self.alertItem = AlertContext.invalidResponse
+                    case .invalidURL:
+                        self.alertItem = AlertContext.invalidURL
+                    case .invalidData:
+                        self.alertItem = AlertContext.invalidData
+                    case .unableToComplete:
+                        self.alertItem = AlertContext.unableToComplete
+                    }
+                }else{
+                    alertItem = AlertContext.invalidResponse
+                }
+                
+                isLoading = false
+            }
+        }
+    }
     
     func getAlbums() {
         isLoading = true

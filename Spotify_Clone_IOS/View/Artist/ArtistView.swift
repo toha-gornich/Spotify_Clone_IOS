@@ -189,6 +189,7 @@ struct ArtistView: View {
                                 
                                 // Вертикальний список для всіх треків
                                 LazyVStack(spacing: 0) {
+                                    
                                     ForEach(0..<artistVM.tracks.count, id: \.self) { index in
                                         TrackRowCell(
                                             track: artistVM.tracks[index],
@@ -205,7 +206,7 @@ struct ArtistView: View {
                                 }
                             }
                             .task {
-                                artistVM.getTracks()
+                                artistVM.getTracksBySlugArtist(slug: slugArtist)
                             }
                             
                             
@@ -248,7 +249,6 @@ struct ArtistView: View {
     
     private func updateScrollOffset(_ offset: CGFloat) {
         scrollOffset = offset
-        print("Current scroll offset: \(offset), overlay opacity: \(overlayOpacity)")
         
         // Show navigation bar when scrolled down enough to cover the image
         let shouldShow = offset < -imageHeight + 30
