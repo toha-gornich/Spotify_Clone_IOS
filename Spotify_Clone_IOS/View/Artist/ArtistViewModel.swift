@@ -9,6 +9,7 @@ import Foundation
 
 @MainActor final class ArtistViewModel: ObservableObject {
     @Published var tracks: [Track] = []
+    @Published var popTracks: [Track] = []
     @Published var artists: [Artist] = []
     @Published var artist: Artist = Artist.empty
     @Published var albums: [Album] = []
@@ -88,7 +89,7 @@ import Foundation
         
         Task{
             do{
-                tracks = try await NetworkManager.shared.getTracks()
+                popTracks = try await NetworkManager.shared.getTracks()
                 isLoading = false
                 
             }catch{
@@ -141,12 +142,41 @@ import Foundation
         }
     }
     
+    
+    // MARK: - Albums
     func getAlbums() {
         isLoading = true
         
         Task{
             do{
                 albums = try await NetworkManager.shared.getAlbums()
+                isLoading = false
+                
+            }catch{
+                if let apError = error as? APError{
+                    switch apError{
+                    case .invalidResponse:
+                        self.alertItem = AlertContext.invalidResponse
+                    case .invalidURL:
+                        self.alertItem = AlertContext.invalidURL
+                    case .invalidData:
+                        self.alertItem = AlertContext.invalidData
+                    case .unableToComplete:
+                        self.alertItem = AlertContext.unableToComplete
+                    }
+                }else{
+                    alertItem = AlertContext.invalidResponse
+                }
+                
+                isLoading = false
+            }
+        }
+    }
+    func getAlbumsBySlugArtist(slug:String) {
+        isLoading = true
+        Task{
+            do{
+                albums = try await NetworkManager.shared.getAlbumsBySlugArtist(slug: slug)
                 isLoading = false
                 
             }catch{

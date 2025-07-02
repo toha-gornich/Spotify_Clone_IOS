@@ -177,7 +177,7 @@ struct ArtistView: View {
                             
                             
                             VStack(spacing: 20) {
-                                // Заголовок для треків
+                                // Title for tracks
                                 HStack {
                                     Text("Popular")
                                         .font(.customFont(.bold, fontSize: 20))
@@ -187,16 +187,15 @@ struct ArtistView: View {
                                 
                                 
                                 
-                                // Вертикальний список для всіх треків
+                                // Vertical list for all tracks by slug artist
                                 LazyVStack(spacing: 0) {
-                                    
-                                    ForEach(0..<artistVM.tracks.count, id: \.self) { index in
+                                    ForEach(0..<min(4,artistVM.tracks.count), id: \.self) { index in
                                         TrackRowCell(
                                             track: artistVM.tracks[index],
                                             index: index + 1
                                         )
                                         
-                                        // Роздільник між треками
+                                        // Track separator
                                         if index < artistVM.tracks.count - 1 {
                                             Divider()
                                                 .background(Color.gray.opacity(0.2))
@@ -209,16 +208,81 @@ struct ArtistView: View {
                                 artistVM.getTracksBySlugArtist(slug: slugArtist)
                             }
                             
-                            
-                            ForEach(0..<20, id: \.self) { index in
-                                HStack {
-                                    Text("Content \(index + 1)")
-                                        .foregroundColor(.white)
-                                    Spacer()
-                                }
-                                
-                                .padding(.vertical, 16)
+                            // Title for albums
+                            HStack {
+                                Text("Albums")
+                                    .font(.customFont(.bold, fontSize: 20))
+                                    .foregroundColor(.primaryText)
+                                Spacer()
                             }
+                            
+                            // Vertical list for all albums by slug artist
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                LazyHStack(spacing: 15) {
+                                    ForEach(artistVM.albums.indices, id: \.self) { index in
+                                        let sObj = artistVM.albums[index]
+                                        MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
+                                    }
+                                }
+                            }
+                            .task {
+                                artistVM.getAlbumsBySlugArtist(slug: slugArtist)
+                            }
+                            
+                            
+                            // Title for popular releases
+                            HStack {
+                                Text("Popular releases")
+                                    .font(.customFont(.bold, fontSize: 20))
+                                    .foregroundColor(.primaryText)
+                                Spacer()
+                            }
+                            
+                            // Vertical list for popular releases by slug artist
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                LazyHStack(spacing: 15) {
+                                    ForEach(artistVM.tracks.indices.reversed(), id: \.self) { index in
+                                        let sObj = artistVM.tracks[index]
+                                        MediaItemCell(imageURL: sObj.album.image, title: sObj.title, width: 140, height: 140)
+                                    }
+                                }
+                            }
+
+                            // Title for popular releases
+                            HStack {
+                                Text("Fans also like")
+                                    .font(.customFont(.bold, fontSize: 20))
+                                    .foregroundColor(.primaryText)
+                                Spacer()
+                            }
+                            
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                LazyHStack(spacing: 15) {
+                                    ForEach(artistVM.artists.indices, id: \.self) { index in
+                                        
+                                        let sObj = artistVM.artists[index]
+                                        
+                                        NavigationLink(destination: ArtistView(slugArtist: sObj.slug)) {
+                                            VStack {
+                                                SpotifyRemoteImage(urlString: sObj.image)
+                                                    .frame(width: 140, height: 140)
+                                                    .clipShape(Circle())
+                                                
+                                                Text(sObj.displayName)
+                                                    .font(.customFont(.bold, fontSize: 13))
+                                                    .foregroundColor(.primaryText)
+                                                    .lineLimit(2)
+                                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                            }
+                                        }
+                                    }
+                                }
+                                .padding(.bottom, 100)
+                            }
+                            .task {
+                                artistVM.getArtists()
+                            }
+                            
                         }
                         .background(Color.bg)
                         .padding(.horizontal, 16)
@@ -260,6 +324,7 @@ struct ArtistView: View {
         }
     }
 }
+
 #Preview {
     MainView()
     

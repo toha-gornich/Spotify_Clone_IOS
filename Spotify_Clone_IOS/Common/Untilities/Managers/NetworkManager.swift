@@ -35,36 +35,17 @@ final class NetworkManager {
     }
     
     func getTracksBySlugArtist(slug: String) async throws -> [Track] {
-        print(Constants.API.tracksBySlugArtistURL + "\(slug)")
-        guard let url = URL(string: Constants.API.tracksBySlugArtistURL + "\(slug)/") else {
+        print("getTracksBySlugArtist")
+        guard let url = URL(string: Constants.API.tracksBySlugArtistURL + "\(slug)") else {
             throw APError.invalidURL
         }
         
-        let (data, response) = try await URLSession.shared.data(from: url)
+        let (data, _) = try await URLSession.shared.data(from: url)
         
-        // Виводимо HTTP статус
-        if let httpResponse = response as? HTTPURLResponse {
-            print("HTTP Status Code: \(httpResponse.statusCode)")
-        }
-        
-        // Виводимо сирий JSON
-        if let jsonString = String(data: data, encoding: .utf8) {
-            print("JSON Response:")
-            print(jsonString)
-        } else {
-            print("Unable to decode response data to string")
-        }
-        
-        do {
+        do{
             let decoder = JSONDecoder()
-            let result = try decoder.decode(TracksResponse.self, from: data)
-            print("Decoded successfully. Number of tracks: \(result.results.count)")
-            return result.results
-        } catch {
-            print("Decoding error: \(error)")
-            if let decodingError = error as? DecodingError {
-                print("Decoding error details: \(decodingError)")
-            }
+            return try decoder.decode(TracksResponse.self, from: data).results
+        } catch{
             throw APError.invalidData
         }
     }
@@ -118,10 +99,25 @@ final class NetworkManager {
         } catch{
             throw APError.invalidData
         }
-        
-        
     }
 
+    func getAlbumsBySlugArtist(slug: String) async throws -> [Album] {
+        print("getAlbumsBySlugArtist")
+        guard let url = URL(string: Constants.API.albumsBySlugArtistURL + "\(slug)") else {
+            throw APError.invalidURL
+        }
+        
+        let (data, _) = try await URLSession.shared.data(from: url)
+        
+        do{
+            let decoder = JSONDecoder()
+            return try decoder.decode(AlbumResponse.self, from: data).results
+        } catch{
+            throw APError.invalidData
+        }
+    }
+
+    
     func getPlaylists() async throws ->[Playlist] {
         guard let url = URL(string: Constants.API.playlistsURL) else {
             throw APError.invalidURL
