@@ -78,7 +78,18 @@ struct ArtistView: View {
                     
                     Spacer()
                     
-                    Color.clear.frame(width: 44)
+                    // Play button in navigation bar
+                    Button(action: {
+                        // Play action
+                    }) {
+                        Image(systemName: "play.fill")
+                            .font(.title3)
+                            .foregroundColor(.black)
+                            .frame(width: 44, height: 44)
+                            .background(Color.green)
+                            .clipShape(Circle())
+                    }
+                    .opacity(showTitleInNavBar ? 1 : 0)
                 }
                 .padding(.horizontal, 16)
                 .padding(.top, 8)
@@ -158,7 +169,7 @@ struct ArtistView: View {
                                         )
                                 }
                                 Spacer()
-                                // Play button
+                                // Play button (this one will hide when scrolled)
                                 Button(action: {
                                     // Play action
                                 }) {
@@ -169,22 +180,14 @@ struct ArtistView: View {
                                         .background(Color.green)
                                         .clipShape(Circle())
                                 }
-                                
+                                .opacity(showTitleInNavBar ? 0 : 1)
                                 
                             }
                             
                             
-                            
-                            
                             VStack(spacing: 20) {
                                 // Title for tracks
-                                HStack {
-                                    Text("Popular")
-                                        .font(.customFont(.bold, fontSize: 20))
-                                        .foregroundColor(.primaryText)
-                                    Spacer()
-                                }
-                                
+                                ViewAllSection(title: "Popular") {}
                                 
                                 
                                 // Vertical list for all tracks by slug artist
@@ -209,12 +212,7 @@ struct ArtistView: View {
                             }
                             
                             // Title for albums
-                            HStack {
-                                Text("Albums")
-                                    .font(.customFont(.bold, fontSize: 20))
-                                    .foregroundColor(.primaryText)
-                                Spacer()
-                            }
+                            ViewAllSection(title: "Albums") {}
                             
                             // Vertical list for all albums by slug artist
                             ScrollView(.horizontal, showsIndicators: false) {
@@ -231,12 +229,7 @@ struct ArtistView: View {
                             
                             
                             // Title for popular releases
-                            HStack {
-                                Text("Popular releases")
-                                    .font(.customFont(.bold, fontSize: 20))
-                                    .foregroundColor(.primaryText)
-                                Spacer()
-                            }
+                            ViewAllSection(title: "Popular releases") {}
                             
                             // Vertical list for popular releases by slug artist
                             ScrollView(.horizontal, showsIndicators: false) {
@@ -249,12 +242,8 @@ struct ArtistView: View {
                             }
 
                             // Title for popular releases
-                            HStack {
-                                Text("Fans also like")
-                                    .font(.customFont(.bold, fontSize: 20))
-                                    .foregroundColor(.primaryText)
-                                Spacer()
-                            }
+                            ViewAllSection(title: "Fans also like") {}
+                            
                             
                             ScrollView(.horizontal, showsIndicators: false) {
                                 LazyHStack(spacing: 15) {
@@ -318,9 +307,7 @@ struct ArtistView: View {
         let shouldShow = offset < -imageHeight + 30
         
         if shouldShow != showTitleInNavBar {
-            
             showTitleInNavBar = shouldShow
-            
         }
     }
 }

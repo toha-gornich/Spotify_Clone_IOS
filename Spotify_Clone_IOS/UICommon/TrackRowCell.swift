@@ -12,18 +12,18 @@ struct TrackRowCell: View {
     
     var body: some View {
         HStack(spacing: 12) {
-            // Номер треку
+            // track number
             Text("\(index)")
                 .font(.customFont(.medium, fontSize: 16))
                 .foregroundColor(.secondaryText)
                 .frame(width: 20, alignment: .center)
             
-            // Обкладинка альбому
+            // image album
             SpotifyRemoteImage(urlString: track.album.image)
                 .frame(width: 50, height: 50)
                 .cornerRadius(4)
             
-            // Інформація про трек
+            // info about track
             VStack(alignment: .leading, spacing: 2) {
                 Text(track.title)
                     .font(.customFont(.medium, fontSize: 16))
@@ -38,16 +38,16 @@ struct TrackRowCell: View {
             
             Spacer()
             
-            // Тривалість треку (якщо є)
+            // duration track if exist
             if let duration = Int(track.duration)  {
                 Text(formatDuration(Int(duration)))
                     .font(.customFont(.regular, fontSize: 14))
                     .foregroundColor(.secondaryText)
             }
             
-            // Кнопка меню
+            // button menu
             Button(action: {
-                // Дія для меню
+                
             }) {
                 Image(systemName: "ellipsis")
                     .foregroundColor(.secondaryText)
@@ -58,7 +58,7 @@ struct TrackRowCell: View {
         .padding(.vertical, 8)
         .background(Color.clear)
         .onTapGesture {
-            // Дія при натисканні на трек
+            
         }
     }
     
