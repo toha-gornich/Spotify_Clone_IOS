@@ -98,7 +98,9 @@ struct HomeView: View {
                             LazyHStack(spacing: 15) {
                                 ForEach(homeVM.albums.indices, id: \.self) { index in
                                     let sObj = homeVM.albums[index]
-                                    MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
+                                    NavigationLink(destination: AlbumView(slugAlbum: sObj.slug)) {
+                                        MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
+                                    }
                                 }
                             }
                         }

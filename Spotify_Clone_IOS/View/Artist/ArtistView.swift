@@ -92,7 +92,7 @@ struct ArtistView: View {
                     .opacity(showTitleInNavBar ? 1 : 0)
                 }
                 .padding(.horizontal, 16)
-                .padding(.top, 8)
+                .padding(.bottom, 24)
                 .frame(height: 44)
                 .background(
                     Color.bg
