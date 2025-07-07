@@ -56,4 +56,18 @@ struct Album: Codable, Identifiable {
         case createdAt = "created_at"
         case updatedAt = "updated_at"
     }
+    static let empty = Album(
+        id: 0,
+        slug: "",
+        title: "",
+        description: "",
+        artist: ArtistAlbum.empty,
+        trackSlug: nil,
+        image: "",
+        color: "",
+        isPrivate: false,
+        releaseDate: "",
+        createdAt: "",
+        updatedAt: ""
+    )
 }

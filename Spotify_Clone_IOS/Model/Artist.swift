@@ -23,6 +23,16 @@ struct ArtistAlbum: Codable, Identifiable {
         case displayName = "display_name"
         case isVerify = "is_verify"
     }
+    static var empty: ArtistAlbum {
+           ArtistAlbum(
+               id: -1,
+               slug: "",
+               displayName: "",
+               image: "",
+               color: "#000000",
+               isVerify: false
+           )
+       }
 }
 
 // MARK: - Artist Model

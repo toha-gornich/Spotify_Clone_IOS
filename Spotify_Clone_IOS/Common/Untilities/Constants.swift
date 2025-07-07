@@ -17,6 +17,7 @@ struct Constants {
         static let artistsURL = baseURL + "artists/"
 //        static let artistsBySlugURL = baseURL + "artists/"
         static let albumsURL = baseURL + "albums/"
+        static let albumsBySlugURL = baseURL + "albums/"
         static let albumsBySlugArtistURL = baseURL + "albums/?album__slug="
         static let playlistsURL = baseURL + "playlists/"
         

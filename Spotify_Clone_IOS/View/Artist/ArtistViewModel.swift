@@ -19,6 +19,8 @@ import Foundation
     @Published var selectTab: Int = 0
     @Published var alertItem: AlertItem?
     
+    @Published var album: Album = Album.empty
+    
     private let networkManager = NetworkManager.shared
     
     // MARK: - Artists
@@ -26,206 +28,131 @@ import Foundation
     func getArtists() {
         isLoading = true
         
-        Task{
-            do{
-                artists = try await NetworkManager.shared.getArtists()
+        Task {
+            do {
+                let fetchedArtists = try await networkManager.getArtists()
+               
+                artists = fetchedArtists
                 isLoading = false
-                
-            }catch{
-                if let apError = error as? APError{
-                    switch apError{
-                    case .invalidResponse:
-                        self.alertItem = AlertContext.invalidResponse
-                    case .invalidURL:
-                        self.alertItem = AlertContext.invalidURL
-                    case .invalidData:
-                        self.alertItem = AlertContext.invalidData
-                    case .unableToComplete:
-                        self.alertItem = AlertContext.unableToComplete
-                    }
-                }else{
-                    alertItem = AlertContext.invalidResponse
-                }
-                
+            } catch {
+                handleError(error)
                 isLoading = false
             }
         }
     }
     
-    func getArtistsBySlug(slug:String) {
+    func getArtistsBySlug(slug: String) {
         isLoading = true
         
-        Task{
-            do{
-                artist = try await NetworkManager.shared.getArtistsBySlug(slug: slug)
+        Task {
+            do {
+                let fetchedArtist = try await networkManager.getArtistsBySlug(slug: slug)
+                artist = fetchedArtist
                 isLoading = false
-                
-            }catch{
-                if let apError = error as? APError{
-                    switch apError{
-                    case .invalidResponse:
-                        self.alertItem = AlertContext.invalidResponse
-                    case .invalidURL:
-                        self.alertItem = AlertContext.invalidURL
-                    case .invalidData:
-                        self.alertItem = AlertContext.invalidData
-                    case .unableToComplete:
-                        self.alertItem = AlertContext.unableToComplete
-                    }
-                }else{
-                    alertItem = AlertContext.invalidResponse
-                }
-                
+            } catch {
+                handleError(error)
                 isLoading = false
             }
         }
     }
-    
     
     // MARK: - Tracks
     
     func getTracks() {
         isLoading = true
         
-        Task{
-            do{
-                popTracks = try await NetworkManager.shared.getTracks()
+        Task {
+            do {
+                let fetchedTracks = try await networkManager.getTracks()
+                popTracks = fetchedTracks
                 isLoading = false
-                
-            }catch{
-                if let apError = error as? APError{
-                    switch apError{
-                    case .invalidResponse:
-                        self.alertItem = AlertContext.invalidResponse
-                    case .invalidURL:
-                        self.alertItem = AlertContext.invalidURL
-                    case .invalidData:
-                        self.alertItem = AlertContext.invalidData
-                    case .unableToComplete:
-                        self.alertItem = AlertContext.unableToComplete
-                    }
-                }else{
-                    alertItem = AlertContext.invalidResponse
-                }
-                
+            } catch {
+                handleError(error)
                 isLoading = false
             }
         }
     }
     
-
-    func getTracksBySlugArtist(slug:String) {
+    func getTracksBySlugArtist(slug: String) {
         isLoading = true
-        Task{
-            do{
-                tracks = try await NetworkManager.shared.getTracksBySlugArtist(slug: slug)
+        
+        Task {
+            do {
+                let fetchedTracks = try await networkManager.getTracksBySlugArtist(slug: slug)
+                tracks = fetchedTracks
                 isLoading = false
-                
-            }catch{
-                if let apError = error as? APError{
-                    switch apError{
-                    case .invalidResponse:
-                        self.alertItem = AlertContext.invalidResponse
-                    case .invalidURL:
-                        self.alertItem = AlertContext.invalidURL
-                    case .invalidData:
-                        self.alertItem = AlertContext.invalidData
-                    case .unableToComplete:
-                        self.alertItem = AlertContext.unableToComplete
-                    }
-                }else{
-                    alertItem = AlertContext.invalidResponse
-                }
-                
+            } catch {
+                handleError(error)
                 isLoading = false
             }
         }
     }
-    
     
     // MARK: - Albums
+    
     func getAlbums() {
         isLoading = true
         
-        Task{
-            do{
-                albums = try await NetworkManager.shared.getAlbums()
+        Task {
+            do {
+                let fetchedAlbums = try await networkManager.getAlbums()
+                albums = fetchedAlbums
                 isLoading = false
-                
-            }catch{
-                if let apError = error as? APError{
-                    switch apError{
-                    case .invalidResponse:
-                        self.alertItem = AlertContext.invalidResponse
-                    case .invalidURL:
-                        self.alertItem = AlertContext.invalidURL
-                    case .invalidData:
-                        self.alertItem = AlertContext.invalidData
-                    case .unableToComplete:
-                        self.alertItem = AlertContext.unableToComplete
-                    }
-                }else{
-                    alertItem = AlertContext.invalidResponse
-                }
-                
-                isLoading = false
-            }
-        }
-    }
-    func getAlbumsBySlugArtist(slug:String) {
-        isLoading = true
-        Task{
-            do{
-                albums = try await NetworkManager.shared.getAlbumsBySlugArtist(slug: slug)
-                isLoading = false
-                
-            }catch{
-                if let apError = error as? APError{
-                    switch apError{
-                    case .invalidResponse:
-                        self.alertItem = AlertContext.invalidResponse
-                    case .invalidURL:
-                        self.alertItem = AlertContext.invalidURL
-                    case .invalidData:
-                        self.alertItem = AlertContext.invalidData
-                    case .unableToComplete:
-                        self.alertItem = AlertContext.unableToComplete
-                    }
-                }else{
-                    alertItem = AlertContext.invalidResponse
-                }
-                
+            } catch {
+                handleError(error)
                 isLoading = false
             }
         }
     }
     
-    func getPlaylists() {
+    func getAlbumsBySlugArtist(slug: String) {
         isLoading = true
         
-        Task{
-            do{
-                playlists = try await NetworkManager.shared.getPlaylists()
+        Task {
+            do {
+                let fetchedAlbums = try await networkManager.getAlbumsBySlugArtist(slug: slug)
+                albums = fetchedAlbums
                 isLoading = false
-                
-            }catch{
-                if let apError = error as? APError{
-                    switch apError{
-                    case .invalidResponse:
-                        self.alertItem = AlertContext.invalidResponse
-                    case .invalidURL:
-                        self.alertItem = AlertContext.invalidURL
-                    case .invalidData:
-                        self.alertItem = AlertContext.invalidData
-                    case .unableToComplete:
-                        self.alertItem = AlertContext.unableToComplete
-                    }
-                }else{
-                    alertItem = AlertContext.invalidResponse
-                }
-                
+            } catch {
+                handleError(error)
                 isLoading = false
             }
+        }
+    }
+    
+//    // MARK: - Playlists
+//    
+//    func getPlaylists() {
+//        isLoading = true
+//        
+//        Task {
+//            do {
+//                let fetchedPlaylists = try await networkManager.getPlaylists()
+//                playlists = fetchedPlaylists
+//                isLoading = false
+//            } catch {
+//                handleError(error)
+//                isLoading = false
+//            }
+//        }
+//    }
+    
+    // MARK: - Error Handling
+    
+    private func handleError(_ error: Error) {
+        if let apError = error as? APError {
+            switch apError {
+            case .invalidResponse:
+                alertItem = AlertContext.invalidResponse
+            case .invalidURL:
+                alertItem = AlertContext.invalidURL
+            case .invalidData:
+                alertItem = AlertContext.invalidData
+            case .unableToComplete:
+                alertItem = AlertContext.unableToComplete
+            }
+        } else {
+            alertItem = AlertContext.invalidResponse
         }
     }
 }

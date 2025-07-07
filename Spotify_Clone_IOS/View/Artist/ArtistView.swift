@@ -15,6 +15,15 @@ struct ArtistView: View {
     
     private let imageHeight: CGFloat = 200
     
+    // Artist color for gradient
+    private var artistColor: Color {
+        let colorString = artistVM.artist.color
+        if !colorString.isEmpty {
+            return Color(hex: colorString)
+        }
+        return Color.bg
+    }
+    
     // Calculate overlay opacity based on scroll offset
     private var overlayOpacity: CGFloat {
         let fadeThreshold: CGFloat = 50 // Start fading after scrolling 50 points
@@ -92,10 +101,10 @@ struct ArtistView: View {
                     .opacity(showTitleInNavBar ? 1 : 0)
                 }
                 .padding(.horizontal, 16)
-                .padding(.bottom, 24)
+                .padding(.bottom, 25)
                 .frame(height: 44)
                 .background(
-                    Color.bg
+                    artistColor
                         .opacity(showTitleInNavBar ? 1 : 0)
                 )
                 
@@ -127,7 +136,7 @@ struct ArtistView: View {
                             
                         }
                         
-                        // Content section
+                        // Content section with gradient background
                         LazyVStack(alignment: .leading, spacing: 16) {
                             
                             Text("3 007 212 355 listeners")
@@ -273,9 +282,38 @@ struct ArtistView: View {
                             }
                             
                         }
-                        .background(Color.bg)
                         .padding(.horizontal, 16)
                         .padding(.top, 8)
+                        .background(
+                            // Gradient background starting from artist name - full width
+                            VStack(spacing: 0) {
+                                if #available(iOS 18.0, *) {
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [
+                                            artistColor,
+                                            artistColor.mix(with: Color.bg, by: 0.1),
+                                            artistColor.mix(with: Color.bg, by: 0.2),
+                                            artistColor.mix(with: Color.bg, by: 0.3),
+                                            artistColor.mix(with: Color.bg, by: 0.4),
+                                            artistColor.mix(with: Color.bg, by: 0.5),
+                                            artistColor.mix(with: Color.bg, by: 0.6),
+                                            artistColor.mix(with: Color.bg, by: 0.7),
+                                            artistColor.mix(with: Color.bg, by: 0.8),
+                                            artistColor.mix(with: Color.bg, by: 0.9),
+                                            Color.bg
+                                        ]),
+                                        startPoint: .top,
+                                        endPoint: .bottom
+                                    )
+                                    .frame(height: 200)
+                                } else {
+                                    // Fallback on earlier versions
+                                }
+                                
+                                Color.bg
+                            }
+                            .ignoresSafeArea(.all, edges: .horizontal)
+                        )
                     }
                     .background(
                         GeometryReader { scrollGeometry in
@@ -311,7 +349,6 @@ struct ArtistView: View {
         }
     }
 }
-
 #Preview {
     MainView()
     
