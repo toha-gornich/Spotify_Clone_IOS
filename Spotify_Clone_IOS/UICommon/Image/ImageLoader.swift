@@ -11,11 +11,16 @@ import SwiftUI
 final class ImageLoader: ObservableObject{
     
     @Published var image: Image? = nil
-    func load(fromURLString urlString: String){
+    func load(fromURLString urlString: String) {
+        
+        
         NetworkManager.shared.downloadImage(fromURLString: urlString) { uiImage in
-            guard let uiImage else { return }
-            DispatchQueue.main.async {
-                self.image = Image(uiImage: uiImage)
+            if let uiImage = uiImage {
+                DispatchQueue.main.async {
+                    self.image = Image(uiImage: uiImage)
+                }
+            } else {
+                print("Image upload error")
             }
         }
     }
@@ -31,13 +36,21 @@ struct RemoteImage: View {
 struct SpotifyRemoteImage: View {
     @StateObject var imageLoader = ImageLoader()
     let urlString: String
-    
-    
+
     var body: some View {
         RemoteImage(image: imageLoader.image)
-            .onAppear{
-                imageLoader.load(fromURLString: urlString)
+            .onAppear {
+                if !urlString.isEmpty {
+                    imageLoader.load(fromURLString: urlString)
+                } else {
+                    print("⚠️ URL is empty on onAppear, waiting for album to load")
+                }
+            }
+            .onChange(of: urlString) { newURL in
+                if !newURL.isEmpty {
+                    print("🖼️ URL updated, loading image: \(newURL)")
+                    imageLoader.load(fromURLString: newURL)
+                }
             }
     }
 }
-

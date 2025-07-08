@@ -29,19 +29,29 @@ import Foundation
         Task {
             do {
                 let fetchedAlbum = try await networkManager.getAlbumBySlug(slug: slug)
-                
                 album = fetchedAlbum
-                print(album.title)
                 isLoading = false
-                
             } catch {
-                
                 handleError(error)
-                
                 isLoading = false
             }
         }
     }
+    func getTracksBySlugAlbum(slug: String) {
+        isLoading = true
+        
+        Task {
+            do {
+                let fetchedTracks = try await networkManager.getTracksBySlugAlbum(slug: slug)
+                tracks = fetchedTracks
+                isLoading = false
+            } catch {
+                handleError(error)
+                isLoading = false
+            }
+        }
+    }
+    
     
     func handleError(_ error: Error) {
         if let apError = error as? APError {

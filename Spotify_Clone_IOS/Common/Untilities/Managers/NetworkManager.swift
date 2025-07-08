@@ -49,7 +49,23 @@ final class NetworkManager {
             throw APError.invalidData
         }
     }
-
+    func getTracksBySlugAlbum(slug: String) async throws -> [Track] {
+        print("getTracksBySlugAlbum")
+        print(slug)
+        guard let url = URL(string: Constants.API.tracksBySlugAlbumURL + "\(slug)") else {
+            throw APError.invalidURL
+        }
+        
+        let (data, _) = try await URLSession.shared.data(from: url)
+        
+        do{
+            let decoder = JSONDecoder()
+            return try decoder.decode(TracksResponse.self, from: data).results
+        } catch{
+            throw APError.invalidData
+        }
+    }
+    
     
     func getArtistsBySlug(slug:String) async throws -> Artist {
         guard let url = URL(string: Constants.API.artistsURL + "\(slug)/") else {
