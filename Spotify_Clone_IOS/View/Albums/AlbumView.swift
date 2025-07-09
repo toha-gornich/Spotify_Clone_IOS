@@ -323,26 +323,74 @@ struct AlbumView: View {
                                     }
                                 }
                             }
-                            .task {
-                                albumVM.getTracksBySlugAlbum(slug: albumVM.album.slug)
+                            .task(id: albumVM.album.slug) {
+                                if !albumVM.album.slug.isEmpty {
+                                    albumVM.getTracksBySlugAlbum(slug: albumVM.album.slug)
+                                }
                             }
                             
-                            
                             // Title for albums
-                            ViewAllSection(title: "Albums") {}
+                            if !albumVM.album.artist.displayName.isEmpty {
+                                ViewAllSection(title: "More by \(albumVM.album.artist.displayName)") {}
+                            }
                             
-                            // Vertical list for all albums by slug artist
                             ScrollView(.horizontal, showsIndicators: false) {
                                 LazyHStack(spacing: 15) {
-                                    ForEach(albumVM.albums.indices, id: \.self) { index in
-                                        let sObj = albumVM.albums[index]
-                                        MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
+                                    ForEach(albumVM.tracksByArtist.indices, id: \.self) { index in
+                                        
+                                        let sObj = albumVM.tracksByArtist[index]
+                                        
+                                        VStack {
+                                            if !sObj.artist.image.isEmpty {
+                                                SpotifyRemoteImage(urlString: sObj.artist.image)
+                                                    .frame(width: 140, height: 140)
+                                                    .clipShape(Circle())
+                                            } else {
+                                                // Placeholder під час завантаження
+                                                Circle()
+                                                    .fill(Color.gray.opacity(0.3))
+                                                    .frame(width: 140, height: 140)
+                                                    .overlay(
+                                                        ProgressView()
+                                                            .progressViewStyle(CircularProgressViewStyle())
+                                                    )
+                                            }
+                                            
+                                            Text(sObj.title)
+                                                .font(.customFont(.bold, fontSize: 13))
+                                                .foregroundColor(.primaryText)
+                                                .lineLimit(2)
+                                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                        }
                                     }
                                 }
                             }
                             .task {
-                                //                                albumVM.getAlbumsBySlugArtist(slug: slugArtist)
+                                if !albumVM.album.artist.slug.isEmpty {
+                                    albumVM.getTracksBySlugArtist(slug: albumVM.album.artist.slug)
+                                }
                             }
+                            
+                            // Copyright information section
+                            VStack(alignment: .leading, spacing: 4) {
+                                // Release date
+                                Text(albumVM.album.releaseDate)
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                                
+                               
+                                VStack(alignment: .leading) {
+                                    Text("© \(albumVM.album.releaseDate.prefix(4)) \(albumVM.album.artist.displayName)")
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
+                                    
+                                    Text("℗ \(albumVM.album.releaseDate.prefix(4)) \(albumVM.album.artist.displayName)")
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
+                                }
+                            }
+//                            .padding(.top, 24)
+//                            .padding(.bottom, 16)
                             
                             
                         }

@@ -35,26 +35,42 @@ final class NetworkManager {
     }
     
     func getTracksBySlugArtist(slug: String) async throws -> [Track] {
-        print("getTracksBySlugArtist")
-        guard let url = URL(string: Constants.API.tracksBySlugArtistURL + "\(slug)") else {
+        print("🎵 Starting getTracksBySlugArtist for slug: '\(slug)'")
+        
+        let fullURL = Constants.API.tracksBySlugArtistURL + "\(slug)"
+        print("🔗 Full URL: \(fullURL)")
+        
+        guard let url = URL(string: fullURL) else {
+            print("❌ Invalid URL: \(fullURL)")
             throw APError.invalidURL
         }
         
-        let (data, _) = try await URLSession.shared.data(from: url)
+        print("📡 Making request to: \(url)")
         
-        do{
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            print("📦 Received data: \(data.count) bytes")
+            
             let decoder = JSONDecoder()
-            return try decoder.decode(TracksResponse.self, from: data).results
-        } catch{
+            let tracks = try decoder.decode(TracksResponse.self, from: data).results
+            
+            print("✅ Successfully decoded \(tracks.count) tracks")
+            return tracks
+            
+        } catch {
+            print("❌ Error occurred: \(error)")
             throw APError.invalidData
         }
     }
+    
+    
     func getTracksBySlugAlbum(slug: String) async throws -> [Track] {
         print("getTracksBySlugAlbum")
-        print(slug)
+        
         guard let url = URL(string: Constants.API.tracksBySlugAlbumURL + "\(slug)") else {
             throw APError.invalidURL
         }
+         
         
         let (data, _) = try await URLSession.shared.data(from: url)
         

@@ -8,13 +8,15 @@
 import Foundation
 @MainActor final class AlbumViewModel: ObservableObject {
     @Published var tracks: [Track] = []
-    @Published var popTracks: [Track] = []
     @Published var artists: [Artist] = []
+    @Published var tracksByArtist: [Track] = []
     @Published var artist: Artist = Artist.empty
     @Published var album: Album = Album.empty
     @Published var albums: [Album] = []
     @Published var playlists: [Playlist] = []
     @Published var isLoading: Bool = false
+    
+    
     @Published var errorMessage: String? = nil
     @Published var selectTab: Int = 0
     @Published var alertItem: AlertItem?
@@ -25,15 +27,17 @@ import Foundation
     
     func getAlbumBySlug(slug: String) {
         isLoading = true
-        
+    
         Task {
             do {
                 let fetchedAlbum = try await networkManager.getAlbumBySlug(slug: slug)
                 album = fetchedAlbum
                 isLoading = false
+                
             } catch {
                 handleError(error)
                 isLoading = false
+                
             }
         }
     }
@@ -42,6 +46,7 @@ import Foundation
         
         Task {
             do {
+                
                 let fetchedTracks = try await networkManager.getTracksBySlugAlbum(slug: slug)
                 tracks = fetchedTracks
                 isLoading = false
@@ -52,6 +57,22 @@ import Foundation
         }
     }
     
+
+    
+    func getTracksBySlugArtist(slug: String) {
+        isLoading = true
+        
+        Task {
+            do {
+                let fetchedTracks = try await networkManager.getTracksBySlugArtist(slug: slug)
+                tracksByArtist = fetchedTracks
+                isLoading = false
+            } catch {
+                handleError(error)
+                isLoading = false
+            }
+        }
+    }
     
     func handleError(_ error: Error) {
         if let apError = error as? APError {
@@ -69,4 +90,5 @@ import Foundation
             alertItem = AlertContext.invalidResponse
         }
     }
+    
 }
