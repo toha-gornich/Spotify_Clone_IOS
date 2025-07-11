@@ -35,32 +35,20 @@ final class NetworkManager {
     }
     
     func getTracksBySlugArtist(slug: String) async throws -> [Track] {
-        print("🎵 Starting getTracksBySlugArtist for slug: '\(slug)'")
-        
-        let fullURL = Constants.API.tracksBySlugArtistURL + "\(slug)"
-        print("🔗 Full URL: \(fullURL)")
-        
-        guard let url = URL(string: fullURL) else {
-            print("❌ Invalid URL: \(fullURL)")
-            throw APError.invalidURL
-        }
-        
-        print("📡 Making request to: \(url)")
-        
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            print("📦 Received data: \(data.count) bytes")
-            
-            let decoder = JSONDecoder()
-            let tracks = try decoder.decode(TracksResponse.self, from: data).results
-            
-            print("✅ Successfully decoded \(tracks.count) tracks")
-            return tracks
-            
-        } catch {
-            print("❌ Error occurred: \(error)")
-            throw APError.invalidData
-        }
+       let fullURL = Constants.API.tracksBySlugArtistURL + "\(slug)"
+       
+       guard let url = URL(string: fullURL) else {
+           throw APError.invalidURL
+       }
+       
+       do {
+           let (data, _) = try await URLSession.shared.data(from: url)
+           let decoder = JSONDecoder()
+           let tracks = try decoder.decode(TracksResponse.self, from: data).results
+           return tracks
+       } catch {
+           throw APError.invalidData
+       }
     }
     
     
@@ -96,8 +84,7 @@ final class NetworkManager {
         } catch{
             throw APError.invalidData
         }
-        
-        
+         
     }
     
     func getArtists() async throws ->[Artist] {
@@ -183,6 +170,23 @@ final class NetworkManager {
         }
         
         
+    }
+    
+    func getPlaylistsBySlug(slug:String) async throws -> PlaylistDetail {
+        print("getPlaylistsBySlug")
+        guard let url = URL(string: Constants.API.playlistBySlugURL + "\(slug)/") else {
+            throw APError.invalidURL
+        }
+        
+        let (data, _) = try await URLSession.shared.data(from: url)
+        
+        do{
+            let decoder = JSONDecoder()
+            return try decoder.decode(PlaylistDetail.self, from: data)
+        } catch{
+            throw APError.invalidData
+        }
+         
     }
     
     

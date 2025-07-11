@@ -6,18 +6,18 @@
 //
 
 import SwiftUI
-struct AlbumView: View {
-    let slugAlbum: String
+struct PlaylistView: View {
+    let slugPlaylist: String
     @Environment(\.dismiss) private var dismiss
-    @StateObject private var albumVM = AlbumViewModel()
+    @StateObject private var playlistVM = PlaylistViewModel()
     @State private var scrollOffset: CGFloat = 0
     @State private var showTitleInNavBar = false
     
     private let imageHeight: CGFloat = 250
     
-    // Album color computed property
-    private var albumColor: Color {
-        let colorString = albumVM.album.color
+    // Playlist color computed property
+    private var playlistColor: Color {
+        let colorString = playlistVM.playlist.color
         if !colorString.isEmpty {
             return Color(hex: colorString)
         }
@@ -46,8 +46,8 @@ struct AlbumView: View {
                     // Gradient background behind image
                     LinearGradient(
                         gradient: Gradient(colors: [
-                            albumColor.opacity(0.8),
-                            albumColor.opacity(0.4),
+                            playlistColor.opacity(0.8),
+                            playlistColor.opacity(0.4),
                             Color.bg
                         ]),
                         startPoint: .top,
@@ -55,7 +55,7 @@ struct AlbumView: View {
                     )
                     .frame(maxWidth: .infinity, maxHeight: imageHeight + 100)
                     
-                    SpotifyRemoteImage(urlString: albumVM.album.image)
+                    SpotifyRemoteImage(urlString: playlistVM.playlist.image)
                         .aspectRatio(contentMode: .fill)
                         .frame(maxWidth: 250, maxHeight: imageHeight)
                         .padding(.top, 120)
@@ -92,7 +92,7 @@ struct AlbumView: View {
                     
                     Spacer()
                     
-                    Text(showTitleInNavBar ? albumVM.album.title : "")
+                    Text(showTitleInNavBar ? playlistVM.playlist.title : "")
                         .font(.headline)
                         .fontWeight(.semibold)
                         .foregroundColor(.white)
@@ -138,7 +138,7 @@ struct AlbumView: View {
                         VStack {
                             HStack {
                                 
-                                Text(albumVM.album.title)
+                                Text(playlistVM.playlist.title)
                                     .font(.largeTitle)
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
@@ -153,37 +153,35 @@ struct AlbumView: View {
                         // Content section
                         LazyVStack(alignment: .leading, spacing: 16) {
                             
-                            // Album info section
+                            // Artist info section
                             HStack(spacing: 12) {
                                 // Artist image
-                                SpotifyRemoteImage(urlString: albumVM.album.artist.image)
+                                SpotifyRemoteImage(urlString: playlistVM.artist.image)
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: 40, height: 40)
                                     .clipShape(Circle())
                                 
                                 VStack(alignment: .leading, spacing: 2) {
                                     HStack(spacing: 8) {
-                                        // Album/Single indicator
+                                        // Artist indicator
                                         HStack(spacing: 4) {
                                             Circle()
                                                 .fill(Color.gray)
                                                 .frame(width: 6, height: 6)
                                             
-                                            Text(albumVM.tracks.count > 1 ? "Album" : "Single")
+                                            Text("Artist")
                                                 .font(.caption)
                                                 .foregroundColor(.gray)
                                         }
                                         
                                         // Artist name
-                                        NavigationLink(destination: ArtistView(slugArtist: albumVM.album.artist.slug)) {
-                                            Text(albumVM.album.artist.displayName)
-                                                .font(.subheadline)
-                                                .foregroundColor(.white)
-                                        }
+                                        Text(playlistVM.artist.displayName)
+                                            .font(.subheadline)
+                                            .foregroundColor(.white)
                                     }
                                     
-                                    // Total duration
-                                    Text("\(albumVM.album.releaseDate.prefix(4)) • 45 min 32 sec")
+                                    // Listeners count
+                                    Text("3 007 212 355 listeners")
                                         .font(.caption)
                                         .foregroundColor(.gray)
                                 }
@@ -193,8 +191,6 @@ struct AlbumView: View {
                             
                             
                             HStack(spacing: 16) {
-                                
-                                // Add button
                                 Button(action: {
                                     // Add action
                                 }) {
@@ -209,24 +205,9 @@ struct AlbumView: View {
                                         )
                                 }
                                 
-                                // Follow button
-                                Button(action: {
-                                    // Follow action
-                                }) {
-                                    Text("Follow")
-                                        .font(.subheadline)
-                                        .fontWeight(.medium)
-                                        .foregroundColor(.white)
-                                        .padding(.horizontal, 24)
-                                        .padding(.vertical, 12)
-                                        .background(Color.clear)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 20)
-                                                .stroke(Color.gray, lineWidth: 1)
-                                        )
-                                }
                                 Spacer()
-                                // Play button (this one will hide when scrolled)
+                                
+                                
                                 Button(action: {
                                     // Play action
                                 }) {
@@ -240,6 +221,7 @@ struct AlbumView: View {
                                 .opacity(showTitleInNavBar ? 0 : 1)
                                 
                             }
+                            
                             VStack(spacing: 20) {
                                 // Vertical list for all tracks by slug artist
                                 LazyVStack(spacing: 0) {
@@ -276,7 +258,7 @@ struct AlbumView: View {
                                         .background(Color.gray.opacity(0.3))
                                         .padding(.bottom, 8)
                                     
-                                    ForEach(0..<albumVM.tracks.count, id: \.self) { index in
+                                    ForEach(0..<playlistVM.playlist.tracks.count, id: \.self) { index in
                                         HStack(spacing: 12) {
                                             // Track number
                                             Text("\(index + 1)")
@@ -286,12 +268,12 @@ struct AlbumView: View {
                                             
                                             // Track info
                                             VStack(alignment: .leading, spacing: 2) {
-                                                Text(albumVM.tracks[index].title)
+                                                Text(playlistVM.playlist.tracks[index].title)
                                                     .font(.subheadline)
                                                     .foregroundColor(.white)
                                                     .lineLimit(1)
                                                 
-                                                Text(albumVM.tracks[index].artist.displayName)
+                                                Text(playlistVM.playlist.tracks[index].artist.displayName)
                                                     .font(.caption)
                                                     .foregroundColor(.gray)
                                                     .lineLimit(1)
@@ -300,7 +282,7 @@ struct AlbumView: View {
                                             Spacer()
                                             
                                             // Duration
-                                            Text(albumVM.tracks[index].formattedDuration)
+                                            Text(playlistVM.playlist.tracks[index].formattedDuration)
                                                 .font(.caption)
                                                 .foregroundColor(.gray)
                                             
@@ -316,7 +298,7 @@ struct AlbumView: View {
                                         .padding(.vertical, 8)
                                         
                                         // Track separator
-                                        if index < albumVM.tracks.count - 1 {
+                                        if index < playlistVM.playlist.tracks.count - 1 {
                                             Divider()
                                                 .background(Color.gray.opacity(0.2))
                                                 .padding(.leading, 32)
@@ -324,80 +306,12 @@ struct AlbumView: View {
                                     }
                                 }
                             }
-                            .task(id: albumVM.album.slug) {
-                                if !albumVM.album.slug.isEmpty {
-                                    albumVM.getTracksBySlugAlbum(slug: albumVM.album.slug)
-                                }
+                            .task {
+//                                playlistVM.getTracksBySlugArtist(slug: slugPlaylist)
                             }
-                            
-                            // Copyright information section
-                            VStack(alignment: .leading, spacing: 4) {
-                                // Release date
-                                Text(albumVM.album.releaseDate)
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                                
-                               
-                                VStack(alignment: .leading) {
-                                    Text("© \(albumVM.album.releaseDate.prefix(4)) \(albumVM.album.artist.displayName)")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                    
-                                    Text("℗ \(albumVM.album.releaseDate.prefix(4)) \(albumVM.album.artist.displayName)")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                }
-                            }
-//                            .padding(.top, 24)
-//                            .padding(.bottom, 16)
-                            
-                            // Title for albums
-                            if !albumVM.album.artist.displayName.isEmpty {
-                                ViewAllSection(title: "More by \(albumVM.album.artist.displayName)") {}
-                            }
-                            
-                            
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                LazyHStack(spacing: 15) {
-                                    ForEach(albumVM.tracksByArtist.indices, id: \.self) { index in
-                                        
-                                        let sObj = albumVM.tracksByArtist[index]
-                                        
-                                        VStack {
-                                            if !sObj.artist.image.isEmpty {
-                                                SpotifyRemoteImage(urlString: sObj.album.image)
-                                                    .frame(width: 140, height: 140)
-                                                    .clipShape(Circle())
-                                            } else {
-                                                // Placeholder під час завантаження
-                                                Circle()
-                                                    .fill(Color.gray.opacity(0.3))
-                                                    .frame(width: 140, height: 140)
-                                                    .overlay(
-                                                        ProgressView()
-                                                            .progressViewStyle(CircularProgressViewStyle())
-                                                    )
-                                            }
-                                            
-                                            Text(sObj.title)
-                                                .font(.customFont(.bold, fontSize: 13))
-                                                .foregroundColor(.primaryText)
-                                                .lineLimit(2)
-                                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                        }
-                                    }
-                                }
-                            }
-                            .onChange(of: albumVM.album.slug) { newSlug in
-                                if !newSlug.isEmpty {
-                                    print(albumVM.album.artist.displayName)
-                                    albumVM.getTracksBySlugArtist(slug: albumVM.album.artist.slug)
-                                }
-                            }
-                            
 
                             
-                            
+                       
                         }
                         .background(Color.bg)
                         .padding(.horizontal, 16)
@@ -424,8 +338,7 @@ struct AlbumView: View {
         
         .navigationBarHidden(true)
         .task {
-            albumVM.getAlbumBySlug(slug: slugAlbum)
-            
+            playlistVM.getPlaylistBySlug(slug: slugPlaylist)
         }
         
     }
