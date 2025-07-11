@@ -168,9 +168,17 @@ struct AlbumView: View {
                                             Circle()
                                                 .fill(Color.gray)
                                                 .frame(width: 6, height: 6)
-                                            Text("Album")
-                                                .font(.caption)
-                                                .foregroundColor(.gray)
+                                            
+                                            if(albumVM.tracksByArtist.count > 1){
+                                                
+                                                Text("Album")
+                                                    .font(.caption)
+                                                    .foregroundColor(.gray)
+                                            }else{
+                                                Text("Single")
+                                                    .font(.caption)
+                                                    .foregroundColor(.gray)
+                                            }
                                         }
                                         
                                         // Artist name
@@ -329,10 +337,32 @@ struct AlbumView: View {
                                 }
                             }
                             
+                            // Copyright information section
+                            VStack(alignment: .leading, spacing: 4) {
+                                // Release date
+                                Text(albumVM.album.releaseDate)
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                                
+                               
+                                VStack(alignment: .leading) {
+                                    Text("© \(albumVM.album.releaseDate.prefix(4)) \(albumVM.album.artist.displayName)")
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
+                                    
+                                    Text("℗ \(albumVM.album.releaseDate.prefix(4)) \(albumVM.album.artist.displayName)")
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
+                                }
+                            }
+//                            .padding(.top, 24)
+//                            .padding(.bottom, 16)
+                            
                             // Title for albums
                             if !albumVM.album.artist.displayName.isEmpty {
                                 ViewAllSection(title: "More by \(albumVM.album.artist.displayName)") {}
                             }
+                            
                             
                             ScrollView(.horizontal, showsIndicators: false) {
                                 LazyHStack(spacing: 15) {
@@ -342,7 +372,7 @@ struct AlbumView: View {
                                         
                                         VStack {
                                             if !sObj.artist.image.isEmpty {
-                                                SpotifyRemoteImage(urlString: sObj.artist.image)
+                                                SpotifyRemoteImage(urlString: sObj.album.image)
                                                     .frame(width: 140, height: 140)
                                                     .clipShape(Circle())
                                             } else {
@@ -365,38 +395,21 @@ struct AlbumView: View {
                                     }
                                 }
                             }
-                            .task {
-                                if !albumVM.album.artist.slug.isEmpty {
+                            .onChange(of: albumVM.album.slug) { newSlug in
+                                if !newSlug.isEmpty {
+                                    print(albumVM.album.artist.displayName)
                                     albumVM.getTracksBySlugArtist(slug: albumVM.album.artist.slug)
                                 }
                             }
                             
-                            // Copyright information section
-                            VStack(alignment: .leading, spacing: 4) {
-                                // Release date
-                                Text(albumVM.album.releaseDate)
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                                
-                               
-                                VStack(alignment: .leading) {
-                                    Text("© \(albumVM.album.releaseDate.prefix(4)) \(albumVM.album.artist.displayName)")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                    
-                                    Text("℗ \(albumVM.album.releaseDate.prefix(4)) \(albumVM.album.artist.displayName)")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                }
-                            }
-//                            .padding(.top, 24)
-//                            .padding(.bottom, 16)
+
                             
                             
                         }
                         .background(Color.bg)
                         .padding(.horizontal, 16)
                         .padding(.top, 8)
+                        .padding(.bottom, 150)
                     }
                     .background(
                         GeometryReader { scrollGeometry in
@@ -415,6 +428,7 @@ struct AlbumView: View {
             }
             .zIndex(1)
         }
+        
         .navigationBarHidden(true)
         .task {
             albumVM.getAlbumBySlug(slug: slugAlbum)
