@@ -9,9 +9,9 @@ import Foundation
 
 @MainActor final class PlaylistViewModel: ObservableObject {
     @Published var tracks: [Track] = []
-    @Published var popTracks: [Track] = []
-    @Published var artists: [Artist] = []
-    @Published var artist: Artist = Artist.empty
+//    @Published var popTracks: [Track] = []
+//    @Published var artists: [Artist] = []
+//    @Published var artist: Artist = Artist.empty
     @Published var albums: [Album] = []
     @Published var playlists: [Playlist] = []
     @Published var playlist: PlaylistDetail = PlaylistDetail.empty
@@ -22,25 +22,32 @@ import Foundation
     
     @Published var album: Album = Album.empty
     
+    var totalDuration: String {
+        let totalSeconds = playlist.tracks.reduce(0) { $0 + $1.durationInSeconds }
+        let minutes = Int(totalSeconds) / 60
+        let seconds = Int(totalSeconds) % 60
+        return String(format: "%d:%02d", minutes, seconds)
+    }
+    
     private let networkManager = NetworkManager.shared
     
     // MARK: - Artists
-    
-    func getArtists() {
-        isLoading = true
-        
-        Task {
-            do {
-                let fetchedArtists = try await networkManager.getArtists()
-               
-                artists = fetchedArtists
-                isLoading = false
-            } catch {
-                handleError(error)
-                isLoading = false
-            }
-        }
-    }
+//    
+//    func getArtists() {
+//        isLoading = true
+//        
+//        Task {
+//            do {
+//                let fetchedArtists = try await networkManager.getArtists()
+//               
+//                artists = fetchedArtists
+//                isLoading = false
+//            } catch {
+//                handleError(error)
+//                isLoading = false
+//            }
+//        }
+//    }
     
     func getPlaylistBySlug(slug: String) {
         isLoading = true
@@ -56,70 +63,70 @@ import Foundation
         }
     }
     
-    // MARK: - Tracks
+//    // MARK: - Tracks
+//    
+//    func getTracks() {
+//        isLoading = true
+//        
+//        Task {
+//            do {
+//                let fetchedTracks = try await networkManager.getTracks()
+//                popTracks = fetchedTracks
+//                isLoading = false
+//            } catch {
+//                handleError(error)
+//                isLoading = false
+//            }
+//        }
+//    }
+//    
+//    func getTracksBySlugArtist(slug: String) {
+//        isLoading = true
+//        
+//        Task {
+//            do {
+//                let fetchedTracks = try await networkManager.getTracksBySlugArtist(slug: slug)
+//                tracks = fetchedTracks
+//                isLoading = false
+//            } catch {
+//                handleError(error)
+//                isLoading = false
+//            }
+//        }
+//    }
     
-    func getTracks() {
-        isLoading = true
-        
-        Task {
-            do {
-                let fetchedTracks = try await networkManager.getTracks()
-                popTracks = fetchedTracks
-                isLoading = false
-            } catch {
-                handleError(error)
-                isLoading = false
-            }
-        }
-    }
-    
-    func getTracksBySlugArtist(slug: String) {
-        isLoading = true
-        
-        Task {
-            do {
-                let fetchedTracks = try await networkManager.getTracksBySlugArtist(slug: slug)
-                tracks = fetchedTracks
-                isLoading = false
-            } catch {
-                handleError(error)
-                isLoading = false
-            }
-        }
-    }
-    
-    // MARK: - Albums
-    
-    func getAlbums() {
-        isLoading = true
-        
-        Task {
-            do {
-                let fetchedAlbums = try await networkManager.getAlbums()
-                albums = fetchedAlbums
-                isLoading = false
-            } catch {
-                handleError(error)
-                isLoading = false
-            }
-        }
-    }
-    
-    func getAlbumsBySlugArtist(slug: String) {
-        isLoading = true
-        
-        Task {
-            do {
-                let fetchedAlbums = try await networkManager.getAlbumsBySlugArtist(slug: slug)
-                albums = fetchedAlbums
-                isLoading = false
-            } catch {
-                handleError(error)
-                isLoading = false
-            }
-        }
-    }
-    
+//    // MARK: - Albums
+//    
+//    func getAlbums() {
+//        isLoading = true
+//        
+//        Task {
+//            do {
+//                let fetchedAlbums = try await networkManager.getAlbums()
+//                albums = fetchedAlbums
+//                isLoading = false
+//            } catch {
+//                handleError(error)
+//                isLoading = false
+//            }
+//        }
+//    }
+//    
+//    func getAlbumsBySlugArtist(slug: String) {
+//        isLoading = true
+//        
+//        Task {
+//            do {
+//                let fetchedAlbums = try await networkManager.getAlbumsBySlugArtist(slug: slug)
+//                albums = fetchedAlbums
+//                isLoading = false
+//            } catch {
+//                handleError(error)
+//                isLoading = false
+//            }
+//        }
+//    }
+//    
 //    // MARK: - Playlists
 //    
 //    func getPlaylists() {

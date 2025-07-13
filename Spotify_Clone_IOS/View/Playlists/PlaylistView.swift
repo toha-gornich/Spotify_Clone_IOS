@@ -153,37 +153,65 @@ struct PlaylistView: View {
                         // Content section
                         LazyVStack(alignment: .leading, spacing: 16) {
                             
-                            // Artist info section
+                            // Playlist info section
+                            if !playlistVM.playlist.description.isEmpty {
+                                Text(playlistVM.playlist.description)
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                            }
+                            
+                            // Playlist genre
+                            if let playlistName = playlistVM.playlist.genre?.name{
+                                Text(playlistName)
+                                    .font(.title3)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.gray)
+                            }
+                            
+
                             HStack(spacing: 12) {
-                                // Artist image
-                                SpotifyRemoteImage(urlString: playlistVM.artist.image)
+                                
+                                // User  image
+                                SpotifyRemoteImage(urlString: playlistVM.playlist.user.image)
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: 40, height: 40)
                                     .clipShape(Circle())
                                 
                                 VStack(alignment: .leading, spacing: 2) {
+                                    
                                     HStack(spacing: 8) {
-                                        // Artist indicator
+                                        
                                         HStack(spacing: 4) {
                                             Circle()
                                                 .fill(Color.gray)
                                                 .frame(width: 6, height: 6)
                                             
-                                            Text("Artist")
+                                            Text(playlistVM.playlist.user.displayName)
+                                                .font(.caption)
+                                                .foregroundColor(.white)
+                                            Circle()
+                                                .fill(Color.gray)
+                                                .frame(width: 6, height: 6)
+                                            Text("\(String(playlistVM.playlist.favoriteCount)) saves")
+                                                .font(.caption)
+                                                .foregroundColor(.white)
+                                            
+                                            Circle()
+                                                .fill(Color.gray)
+                                                .frame(width: 6, height: 6)
+                                            Text("\(String(playlistVM.playlist.tracks.count)) songs")
+                                                .font(.caption)
+                                                .foregroundColor(.white)
+                                            
+                                            Circle()
+                                                .fill(Color.gray)
+                                                .frame(width: 6, height: 6)
+                                            
+                                            Text("\(playlistVM.totalDuration)")
                                                 .font(.caption)
                                                 .foregroundColor(.gray)
                                         }
-                                        
-                                        // Artist name
-                                        Text(playlistVM.artist.displayName)
-                                            .font(.subheadline)
-                                            .foregroundColor(.white)
                                     }
-                                    
-                                    // Listeners count
-                                    Text("3 007 212 355 listeners")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
                                 }
                                 
                                 Spacer()
@@ -222,96 +250,8 @@ struct PlaylistView: View {
                                 
                             }
                             
-                            VStack(spacing: 20) {
-                                // Vertical list for all tracks by slug artist
-                                LazyVStack(spacing: 0) {
-                                    // Header row
-                                    HStack(spacing: 12) {
-                                        // # column
-                                        Text("#")
-                                            .font(.subheadline)
-                                            .foregroundColor(.gray)
-                                            .frame(width: 20, alignment: .leading)
-                                        
-                                        // Title column
-                                        Text("Title")
-                                            .font(.subheadline)
-                                            .foregroundColor(.gray)
-                                        
-                                        Spacer()
-                                        
-                                        // Time column with clock icon
-                                        HStack(spacing: 4) {
-                                            Image(systemName: "clock")
-                                                .font(.caption)
-                                                .foregroundColor(.gray)
-                                        }
-                                        
-                                        // Space for more options button
-                                        Spacer()
-                                            .frame(width: 20)
-                                    }
-                                    .padding(.vertical, 8)
-                                    
-                                    // Header separator line
-                                    Divider()
-                                        .background(Color.gray.opacity(0.3))
-                                        .padding(.bottom, 8)
-                                    
-                                    ForEach(0..<playlistVM.playlist.tracks.count, id: \.self) { index in
-                                        HStack(spacing: 12) {
-                                            // Track number
-                                            Text("\(index + 1)")
-                                                .font(.subheadline)
-                                                .foregroundColor(.gray)
-                                                .frame(width: 20, alignment: .leading)
-                                            
-                                            // Track info
-                                            VStack(alignment: .leading, spacing: 2) {
-                                                Text(playlistVM.playlist.tracks[index].title)
-                                                    .font(.subheadline)
-                                                    .foregroundColor(.white)
-                                                    .lineLimit(1)
-                                                
-                                                Text(playlistVM.playlist.tracks[index].artist.displayName)
-                                                    .font(.caption)
-                                                    .foregroundColor(.gray)
-                                                    .lineLimit(1)
-                                            }
-                                            
-                                            Spacer()
-                                            
-                                            // Duration
-                                            Text(playlistVM.playlist.tracks[index].formattedDuration)
-                                                .font(.caption)
-                                                .foregroundColor(.gray)
-                                            
-                                            // More options button
-                                            Button(action: {
-                                                // More options action
-                                            }) {
-                                                Image(systemName: "ellipsis")
-                                                    .font(.caption)
-                                                    .foregroundColor(.gray)
-                                            }
-                                        }
-                                        .padding(.vertical, 8)
-                                        
-                                        // Track separator
-                                        if index < playlistVM.playlist.tracks.count - 1 {
-                                            Divider()
-                                                .background(Color.gray.opacity(0.2))
-                                                .padding(.leading, 32)
-                                        }
-                                    }
-                                }
-                            }
-                            .task {
-//                                playlistVM.getTracksBySlugArtist(slug: slugPlaylist)
-                            }
-
+                            TrackListView(tracks: playlistVM.playlist.tracks)
                             
-                       
                         }
                         .background(Color.bg)
                         .padding(.horizontal, 16)

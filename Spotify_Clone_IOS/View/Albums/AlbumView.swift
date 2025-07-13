@@ -183,7 +183,7 @@ struct AlbumView: View {
                                     }
                                     
                                     // Total duration
-                                    Text("\(albumVM.album.releaseDate.prefix(4)) • 45 min 32 sec")
+                                    Text("\(albumVM.album.releaseDate.prefix(4)) • \(albumVM.totalDuration)")
                                         .font(.caption)
                                         .foregroundColor(.gray)
                                 }
@@ -240,90 +240,8 @@ struct AlbumView: View {
                                 .opacity(showTitleInNavBar ? 0 : 1)
                                 
                             }
-                            VStack(spacing: 20) {
-                                // Vertical list for all tracks by slug artist
-                                LazyVStack(spacing: 0) {
-                                    // Header row
-                                    HStack(spacing: 12) {
-                                        // # column
-                                        Text("#")
-                                            .font(.subheadline)
-                                            .foregroundColor(.gray)
-                                            .frame(width: 20, alignment: .leading)
-                                        
-                                        // Title column
-                                        Text("Title")
-                                            .font(.subheadline)
-                                            .foregroundColor(.gray)
-                                        
-                                        Spacer()
-                                        
-                                        // Time column with clock icon
-                                        HStack(spacing: 4) {
-                                            Image(systemName: "clock")
-                                                .font(.caption)
-                                                .foregroundColor(.gray)
-                                        }
-                                        
-                                        // Space for more options button
-                                        Spacer()
-                                            .frame(width: 20)
-                                    }
-                                    .padding(.vertical, 8)
-                                    
-                                    // Header separator line
-                                    Divider()
-                                        .background(Color.gray.opacity(0.3))
-                                        .padding(.bottom, 8)
-                                    
-                                    ForEach(0..<albumVM.tracks.count, id: \.self) { index in
-                                        HStack(spacing: 12) {
-                                            // Track number
-                                            Text("\(index + 1)")
-                                                .font(.subheadline)
-                                                .foregroundColor(.gray)
-                                                .frame(width: 20, alignment: .leading)
-                                            
-                                            // Track info
-                                            VStack(alignment: .leading, spacing: 2) {
-                                                Text(albumVM.tracks[index].title)
-                                                    .font(.subheadline)
-                                                    .foregroundColor(.white)
-                                                    .lineLimit(1)
-                                                
-                                                Text(albumVM.tracks[index].artist.displayName)
-                                                    .font(.caption)
-                                                    .foregroundColor(.gray)
-                                                    .lineLimit(1)
-                                            }
-                                            
-                                            Spacer()
-                                            
-                                            // Duration
-                                            Text(albumVM.tracks[index].formattedDuration)
-                                                .font(.caption)
-                                                .foregroundColor(.gray)
-                                            
-                                            // More options button
-                                            Button(action: {
-                                                // More options action
-                                            }) {
-                                                Image(systemName: "ellipsis")
-                                                    .font(.caption)
-                                                    .foregroundColor(.gray)
-                                            }
-                                        }
-                                        .padding(.vertical, 8)
-                                        
-                                        // Track separator
-                                        if index < albumVM.tracks.count - 1 {
-                                            Divider()
-                                                .background(Color.gray.opacity(0.2))
-                                                .padding(.leading, 32)
-                                        }
-                                    }
-                                }
-                            }
+                            
+                            TrackListView(tracks: albumVM.tracks)
                             .task(id: albumVM.album.slug) {
                                 if !albumVM.album.slug.isEmpty {
                                     albumVM.getTracksBySlugAlbum(slug: albumVM.album.slug)
