@@ -11,21 +11,23 @@ struct TrackCell: View {
     @State var track: Track
     
     var body: some View {
-        HStack {
-            
-            SpotifyRemoteImage(urlString: track.album.image)
-                .frame(width: 60, height: 60)
-            Text(track.slug)
-                .font(.customFont(.bold, fontSize: 13))
-                .foregroundColor(.primaryText)
-                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+        NavigationLink(destination: TrackView(slugTrack: track.slug)) {
+            HStack {
+                
+                SpotifyRemoteImage(urlString: track.album.image)
+                    .frame(width: 60, height: 60)
+                Text(track.slug)
+                    .font(.customFont(.bold, fontSize: 13))
+                    .foregroundColor(.primaryText)
+                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                
+                
+            }
+            .background(Color.elementBg)
+            .cornerRadius(8)
             
             
         }
-        .background(Color.elementBg)
-        .cornerRadius(8)
-        
-            
     }
         
 }
