@@ -92,7 +92,7 @@ struct TrackView: View {
                     
                     Spacer()
                     
-                    Text(showTitleInNavBar ? trackVM.album.title : "")
+                    Text(showTitleInNavBar ? trackVM.track.title : "")
                         .font(.headline)
                         .fontWeight(.semibold)
                         .foregroundColor(.white)
@@ -156,7 +156,7 @@ struct TrackView: View {
                             // Album info section
                             HStack(spacing: 12) {
                                 // Artist image
-                                SpotifyRemoteImage(urlString: trackVM.album.artist.image)
+                                SpotifyRemoteImage(urlString: trackVM.track.artist.image)
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: 40, height: 40)
                                     .clipShape(Circle())
@@ -168,10 +168,6 @@ struct TrackView: View {
                                             Circle()
                                                 .fill(Color.gray)
                                                 .frame(width: 6, height: 6)
-                                            
-//                                            Text(trackVM.tracks.count > 1 ? "Album" : "Single")
-//                                                .font(.caption)
-//                                                .foregroundColor(.gray)
                                         }
                                         
                                         // Artist name
@@ -182,10 +178,10 @@ struct TrackView: View {
                                         }
                                     }
                                     
-                                    // Total duration
-//                                    Text("\(trackVM.album.releaseDate.prefix(4)) • \(trackVM.totalDuration)")
-//                                        .font(.caption)
-//                                        .foregroundColor(.gray)
+//                                     Total duration
+                                    Text("\(trackVM.track.releaseDate.prefix(4)) • ")
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
                                 }
                                 
                                 Spacer()
@@ -209,22 +205,6 @@ struct TrackView: View {
                                         )
                                 }
                                 
-                                // Follow button
-                                Button(action: {
-                                    // Follow action
-                                }) {
-                                    Text("Follow")
-                                        .font(.subheadline)
-                                        .fontWeight(.medium)
-                                        .foregroundColor(.white)
-                                        .padding(.horizontal, 24)
-                                        .padding(.vertical, 12)
-                                        .background(Color.clear)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 20)
-                                                .stroke(Color.gray, lineWidth: 1)
-                                        )
-                                }
                                 Spacer()
                                 // Play button (this one will hide when scrolled)
                                 Button(action: {
