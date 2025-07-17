@@ -7,7 +7,7 @@
 
 import Foundation
 @MainActor final class TrackViewModel: ObservableObject {
-    @Published var track: Track = MockData.track
+    @Published var track: TrackDetail = MockData.trackDetail
     @Published var artists: [Artist] = []
     @Published var tracksByArtist: [Track] = []
     @Published var artist: Artist = Artist.empty

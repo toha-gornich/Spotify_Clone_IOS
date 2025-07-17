@@ -138,7 +138,7 @@ struct TrackView: View {
                         VStack {
                             HStack {
                                 
-                                Text(trackVM.album.title)
+                                Text(trackVM.track.title)
                                     .font(.largeTitle)
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
@@ -171,17 +171,54 @@ struct TrackView: View {
                                         }
                                         
                                         // Artist name
-                                        NavigationLink(destination: ArtistView(slugArtist: trackVM.album.artist.slug)) {
-                                            Text(trackVM.album.artist.displayName)
+                                        NavigationLink(destination: ArtistView(slugArtist: trackVM.track.artist.slug)) {
+                                            Text(trackVM.track.artist.displayName)
                                                 .font(.subheadline)
                                                 .foregroundColor(.white)
                                         }
+                                        
+                                        HStack(spacing: 4) {
+                                            Circle()
+                                                .fill(Color.gray)
+                                                .frame(width: 6, height: 6)
+                                        }
+                                        
+                                        NavigationLink(destination: AlbumView(slugAlbum: trackVM.track.album.slug)) {
+                                            Text(trackVM.track.album.title)
+                                                .font(.subheadline)
+                                                .foregroundColor(.white)
+                                        }
+                                        
                                     }
                                     
-//                                     Total duration
-                                    Text("\(trackVM.track.releaseDate.prefix(4)) • ")
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
+                                    HStack(spacing: 4) {
+                                        Circle()
+                                            .fill(Color.gray)
+                                            .frame(width: 6, height: 6)
+                                        
+                                        Text(String(trackVM.track.createdAt?.prefix(4) ?? ""))
+                                            .font(.subheadline)
+                                            .foregroundColor(.gray)
+                                        
+                                        HStack(spacing: 4) {
+                                            Circle()
+                                                .fill(Color.gray)
+                                                .frame(width: 6, height: 6)
+                                        }
+                                        Text(trackVM.track.formattedDuration)
+                                            .font(.subheadline)
+                                            .foregroundColor(.gray)
+                                        
+                                        
+                                        HStack(spacing: 4) {
+                                            Circle()
+                                                .fill(Color.gray)
+                                                .frame(width: 6, height: 6)
+                                        }
+                                        Text(trackVM.track.playsCount, format: .number.grouping(.automatic))
+                                            .font(.subheadline)
+                                            .foregroundColor(.gray)
+                                    }
                                 }
                                 
                                 Spacer()
@@ -221,33 +258,39 @@ struct TrackView: View {
                                 
                             }
                             
-//                            TrackListView(tracks: trackVM.tracks)
-                            .task(id: trackVM.album.slug) {
-//                                if !trackVM.album.slug.isEmpty {
-////                                    trackVM.getTracksBySlugAlbum(slug: trackVM.album.slug)
-//                                }
+                            
+                            VStack {
+                                Text("Recommended")
+                                    .font(.customFont(.bold, fontSize: 18))
+                                    .foregroundColor(.primaryText)
+                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                
+                                Text("Based on what's in this stack")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                             }
+                            
+                            
                             
                             // Copyright information section
                             VStack(alignment: .leading, spacing: 4) {
                                 // Release date
-                                Text(trackVM.album.releaseDate)
+                                Text(String(trackVM.track.formattedCreatedDate))
                                     .font(.caption)
                                     .foregroundColor(.gray)
                                 
-                               
+                                
                                 VStack(alignment: .leading) {
-                                    Text("© \(trackVM.album.releaseDate.prefix(4)) \(trackVM.album.artist.displayName)")
+                                    Text("© \(trackVM.track.createdAt?.prefix(4) ?? "") \(trackVM.track.artist.displayName)")
                                         .font(.caption)
                                         .foregroundColor(.gray)
                                     
-                                    Text("℗ \(trackVM.album.releaseDate.prefix(4)) \(trackVM.album.artist.displayName)")
+                                    Text("℗ \(trackVM.track.createdAt?.prefix(4) ?? "") \(trackVM.track.artist.displayName)")
                                         .font(.caption)
                                         .foregroundColor(.gray)
                                 }
                             }
-//                            .padding(.top, 24)
-//                            .padding(.bottom, 16)
                             
                             // Title for albums
                             if !trackVM.album.artist.displayName.isEmpty {
@@ -287,13 +330,13 @@ struct TrackView: View {
                                 }
                             }
                             .onChange(of: trackVM.album.slug) { newSlug in
-//                                if !newSlug.isEmpty {
-//                                    print(trackVM.album.artist.displayName)
-//                                    trackVM.getTracksBySlugArtist(slug: trackVM.album.artist.slug)
-//                                }
+                                //                                if !newSlug.isEmpty {
+                                //                                    print(trackVM.album.artist.displayName)
+                                //                                    trackVM.getTracksBySlugArtist(slug: trackVM.album.artist.slug)
+                                //                                }
                             }
                             
-
+                            
                             
                             
                         }

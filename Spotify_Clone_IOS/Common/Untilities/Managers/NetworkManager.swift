@@ -34,7 +34,7 @@ final class NetworkManager {
         
     }
     
-    func getTrackBySlug(slug:String) async throws -> Track {
+    func getTrackBySlug(slug:String) async throws -> TrackDetail {
         guard let url = URL(string: Constants.API.trackBySlugURL + "\(slug)/") else {
             throw APError.invalidURL
         }
@@ -43,7 +43,7 @@ final class NetworkManager {
         
         do{
             let decoder = JSONDecoder()
-            return try decoder.decode(Track.self, from: data)
+            return try decoder.decode(TrackDetail.self, from: data)
         } catch{
             throw APError.invalidData
         }
