@@ -258,19 +258,37 @@ struct TrackView: View {
                                 
                             }
                             
-                            
+                            // recomended Based on what's in this track
                             VStack {
                                 Text("Recommended")
                                     .font(.customFont(.bold, fontSize: 18))
                                     .foregroundColor(.primaryText)
                                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                                 
-                                Text("Based on what's in this stack")
+                                Text("Based on what's in this track")
                                     .font(.subheadline)
                                     .foregroundColor(.gray)
                                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                TrackListView(tracks: Array(trackVM.tracks.prefix(5)))
+                                    .task(id: trackVM.track.genre.slug) {
+                                    if !trackVM.track.genre.slug.isEmpty {
+                                        trackVM.getTracksBySlugGenre(slug: trackVM.track.genre.slug)
+                                    }
+                                }
                             }
                             
+                            // Title for artist
+                            VStack {
+                                Text("Popular Tracks by")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                
+                                Text(trackVM.track.artist.displayName)
+                                    .font(.customFont(.bold, fontSize: 18))
+                                    .foregroundColor(.primaryText)
+                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                            }
                             
                             
                             // Copyright information section
@@ -292,49 +310,48 @@ struct TrackView: View {
                                 }
                             }
                             
-                            // Title for albums
-                            if !trackVM.album.artist.displayName.isEmpty {
-                                ViewAllSection(title: "More by \(trackVM.album.artist.displayName)") {}
-                            }
                             
                             
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                LazyHStack(spacing: 15) {
-                                    ForEach(trackVM.tracksByArtist.indices, id: \.self) { index in
-                                        
-                                        let sObj = trackVM.tracksByArtist[index]
-                                        
-                                        VStack {
-                                            if !sObj.artist.image.isEmpty {
-                                                SpotifyRemoteImage(urlString: sObj.album.image)
-                                                    .frame(width: 140, height: 140)
-                                                    .clipShape(Circle())
-                                            } else {
-                                                // Placeholder під час завантаження
-                                                Circle()
-                                                    .fill(Color.gray.opacity(0.3))
-                                                    .frame(width: 140, height: 140)
-                                                    .overlay(
-                                                        ProgressView()
-                                                            .progressViewStyle(CircularProgressViewStyle())
-                                                    )
-                                            }
-                                            
-                                            Text(sObj.title)
-                                                .font(.customFont(.bold, fontSize: 13))
-                                                .foregroundColor(.primaryText)
-                                                .lineLimit(2)
-                                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                        }
-                                    }
-                                }
-                            }
-                            .onChange(of: trackVM.album.slug) { newSlug in
-                                //                                if !newSlug.isEmpty {
-                                //                                    print(trackVM.album.artist.displayName)
-                                //                                    trackVM.getTracksBySlugArtist(slug: trackVM.album.artist.slug)
-                                //                                }
-                            }
+                            
+                            
+                            
+//                            ScrollView(.horizontal, showsIndicators: false) {
+//                                LazyHStack(spacing: 15) {
+//                                    ForEach(trackVM.tracksByArtist.indices, id: \.self) { index in
+//                                        
+//                                        let sObj = trackVM.tracksByArtist[index]
+//                                        
+//                                        VStack {
+//                                            if !sObj.artist.image.isEmpty {
+//                                                SpotifyRemoteImage(urlString: sObj.album.image)
+//                                                    .frame(width: 140, height: 140)
+//                                                    .clipShape(Circle())
+//                                            } else {
+//                                                // Placeholder під час завантаження
+//                                                Circle()
+//                                                    .fill(Color.gray.opacity(0.3))
+//                                                    .frame(width: 140, height: 140)
+//                                                    .overlay(
+//                                                        ProgressView()
+//                                                            .progressViewStyle(CircularProgressViewStyle())
+//                                                    )
+//                                            }
+//                                            
+//                                            Text(sObj.title)
+//                                                .font(.customFont(.bold, fontSize: 13))
+//                                                .foregroundColor(.primaryText)
+//                                                .lineLimit(2)
+//                                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                            .onChange(of: trackVM.album.slug) { newSlug in
+//                                //                                if !newSlug.isEmpty {
+//                                //                                    print(trackVM.album.artist.displayName)
+//                                //                                    trackVM.getTracksBySlugArtist(slug: trackVM.album.artist.slug)
+//                                //                                }
+//                            }
                             
                             
                             

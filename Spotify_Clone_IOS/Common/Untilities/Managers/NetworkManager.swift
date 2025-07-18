@@ -34,6 +34,7 @@ final class NetworkManager {
         
     }
     
+    
     func getTrackBySlug(slug:String) async throws -> TrackDetail {
         guard let url = URL(string: Constants.API.trackBySlugURL + "\(slug)/") else {
             throw APError.invalidURL
@@ -54,6 +55,23 @@ final class NetworkManager {
     
     func getTracksBySlugArtist(slug: String) async throws -> [Track] {
        let fullURL = Constants.API.tracksBySlugArtistURL + "\(slug)"
+       
+       guard let url = URL(string: fullURL) else {
+           throw APError.invalidURL
+       }
+       
+       do {
+           let (data, _) = try await URLSession.shared.data(from: url)
+           let decoder = JSONDecoder()
+           let tracks = try decoder.decode(TracksResponse.self, from: data).results
+           return tracks
+       } catch {
+           throw APError.invalidData
+       }
+    }
+    
+    func getTracksBySlugGenre(slug: String) async throws -> [Track] {
+       let fullURL = Constants.API.tracksBySlugGenreURL + "\(slug)"
        
        guard let url = URL(string: fullURL) else {
            throw APError.invalidURL

@@ -16,7 +16,7 @@ struct TrackCell: View {
                 
                 SpotifyRemoteImage(urlString: track.album.image)
                     .frame(width: 60, height: 60)
-                Text(track.slug)
+                Text(track.title)
                     .font(.customFont(.bold, fontSize: 13))
                     .foregroundColor(.primaryText)
                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)

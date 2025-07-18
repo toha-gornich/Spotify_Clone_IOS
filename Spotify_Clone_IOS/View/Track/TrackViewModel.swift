@@ -9,7 +9,7 @@ import Foundation
 @MainActor final class TrackViewModel: ObservableObject {
     @Published var track: TrackDetail = MockData.trackDetail
     @Published var artists: [Artist] = []
-    @Published var tracksByArtist: [Track] = []
+    @Published var tracks: [Track] = []
     @Published var artist: Artist = Artist.empty
     @Published var album: Album = Album.empty
     @Published var albums: [Album] = []
@@ -48,7 +48,20 @@ import Foundation
         }
     }
     
-
+    func getTracksBySlugGenre(slug: String) {
+        isLoading = true
+        
+        Task {
+            do {
+                let fetchedTracks = try await networkManager.getTracksBySlugGenre(slug: slug)
+                tracks = fetchedTracks
+                isLoading = false
+            } catch {
+                handleError(error)
+                isLoading = false
+            }
+        }
+    }
     
 
     
