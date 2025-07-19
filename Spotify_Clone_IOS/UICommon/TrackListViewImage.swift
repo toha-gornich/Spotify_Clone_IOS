@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TrackListView: View {
+struct TrackListViewImage: View {
     let tracks: [Track]
     let onMoreOptions: ((Int) -> Void)?
     
@@ -18,43 +18,44 @@ struct TrackListView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            // Vertical list for all tracks
             LazyVStack(spacing: 0) {
                 // Header row
-                HStack(spacing: 12) {
-                    // # column
+                HStack(spacing: 8) {
                     Text("#")
                         .font(.subheadline)
                         .foregroundColor(.gray)
-                        .frame(width: 20, alignment: .leading)
+                        .frame(width: 30, alignment: .leading)
                     
-                    // Title column
                     Text("Title")
                         .font(.subheadline)
                         .foregroundColor(.gray)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    Spacer()
+                    Text("Plays")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                        .frame(width: 70, alignment: .trailing)
                     
-                    // Time column with clock icon
                     HStack(spacing: 4) {
                         Image(systemName: "clock")
                             .font(.caption)
                             .foregroundColor(.gray)
                     }
+                    .frame(width: 50, alignment: .trailing)
                     
-                    // Space for more options button
                     Spacer()
-                        .frame(width: 20)
+                        .frame(width: 30)
                 }
                 .padding(.vertical, 8)
+                .padding(.horizontal, 12)
                 
-                // Header separator line
                 Divider()
                     .background(Color.gray.opacity(0.3))
+                    .padding(.horizontal, 12)
                     .padding(.bottom, 8)
                 
                 ForEach(0..<tracks.count, id: \.self) { index in
-                    HStack(spacing: 12) {
+                    HStack(spacing: 8) {
                         // Track number
                         Text("\(index + 1)")
                             .font(.subheadline)
@@ -62,32 +63,38 @@ struct TrackListView: View {
                             .frame(width: 20, alignment: .leading)
                         
                         // Track info
-                        VStack(alignment: .leading, spacing: 2) {
-                            NavigationLink(destination: TrackView(slugTrack: tracks[index].slug)) {
+                        NavigationLink(destination: TrackView(slugTrack: tracks[index].slug)) {
+                            HStack(spacing: 8) {
+                                SpotifyRemoteImage(urlString: tracks[index].album.image)
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 40, height: 40)
+                                    .clipShape(RoundedRectangle(cornerRadius: 4))
+                                
+                                
                                 Text(tracks[index].title)
                                     .font(.subheadline)
                                     .foregroundColor(.white)
                                     .lineLimit(1)
                                     .truncationMode(.tail)
+                                
+                                
                             }
-                            NavigationLink(destination: ArtistView(slugArtist: tracks[index].artist.slug)) {
-                                Text(tracks[index].artist.displayName)
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                                    .lineLimit(1)
-                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         
-                        
-                        
-                        Spacer()
+                        // Plays count
+                        Text(tracks[index].formattedPlaysCount)
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                            .frame(width: 50, alignment: .trailing)
                         
                         // Duration
                         Text(tracks[index].formattedDuration)
                             .font(.caption)
                             .foregroundColor(.gray)
+                            .frame(width: 50, alignment: .trailing)
                         
-                        // More options button
+                        // More options
                         Button(action: {
                             onMoreOptions?(index)
                         }) {
@@ -95,18 +102,19 @@ struct TrackListView: View {
                                 .font(.caption)
                                 .foregroundColor(.gray)
                         }
+                        .frame(width: 30, alignment: .center)
                     }
                     .padding(.vertical, 8)
+                    .padding(.horizontal, 12)
                     
-                    // Track separator
                     if index < tracks.count - 1 {
                         Divider()
                             .background(Color.gray.opacity(0.2))
-                            .padding(.leading, 32)
+                            .padding(.horizontal, 12)
+                            .padding(.leading, 44)
                     }
                 }
             }
         }
     }
 }
-

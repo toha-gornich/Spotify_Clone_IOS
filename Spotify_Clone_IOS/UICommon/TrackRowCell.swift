@@ -16,7 +16,7 @@ struct TrackRowCell: View {
             Text("\(index)")
                 .font(.customFont(.medium, fontSize: 16))
                 .foregroundColor(.secondaryText)
-                .frame(width: 20, alignment: .center)
+                .frame(width: 14, alignment: .center)
             
             // image album
             SpotifyRemoteImage(urlString: track.album.image)

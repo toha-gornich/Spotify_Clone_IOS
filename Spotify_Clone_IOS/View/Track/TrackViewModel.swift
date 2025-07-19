@@ -10,6 +10,7 @@ import Foundation
     @Published var track: TrackDetail = MockData.trackDetail
     @Published var artists: [Artist] = []
     @Published var tracks: [Track] = []
+    @Published var tracksByArtist: [Track] = []
     @Published var artist: Artist = Artist.empty
     @Published var album: Album = Album.empty
     @Published var albums: [Album] = []
@@ -48,6 +49,22 @@ import Foundation
         }
     }
     
+    func getTrackBySlugArtist(slug: String) {
+        isLoading = true
+        
+        Task {
+            do {
+                
+                let fetchedTrack = try await networkManager.getTracksBySlugArtist(slug: slug)
+                tracksByArtist = fetchedTrack
+                isLoading = false
+            } catch {
+                handleError(error)
+                isLoading = false
+            }
+        }
+    }
+    
     func getTracksBySlugGenre(slug: String) {
         isLoading = true
         
@@ -63,7 +80,40 @@ import Foundation
         }
     }
     
+    func getArtists() {
+        isLoading = true
+        
+        Task {
+            do {
+                let fetchedArtists = try await networkManager.getArtists()
+               
+                artists = fetchedArtists
+                isLoading = false
+            } catch {
+                handleError(error)
+                isLoading = false
+            }
+        }
+    }
 
+    func getAlbumsBySlugArtist(slug: String) {
+        isLoading = true
+    
+        Task {
+            do {
+                let fetchedAlbum = try await networkManager.getAlbumsBySlugArtist(slug: slug)
+                albums = fetchedAlbum
+                isLoading = false
+                
+            } catch {
+                handleError(error)
+                isLoading = false
+                
+            }
+        }
+    }
+    
+    
     
     func handleError(_ error: Error) {
         if let apError = error as? APError {

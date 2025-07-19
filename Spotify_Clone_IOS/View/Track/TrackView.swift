@@ -151,7 +151,7 @@ struct TrackView: View {
                         }
                         
                         // Content section
-                        LazyVStack(alignment: .leading, spacing: 16) {
+                        LazyVStack(alignment: .leading, spacing: 20) {
                             
                             // Album info section
                             HStack(spacing: 12) {
@@ -271,13 +271,13 @@ struct TrackView: View {
                                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                                 TrackListView(tracks: Array(trackVM.tracks.prefix(5)))
                                     .task(id: trackVM.track.genre.slug) {
-                                    if !trackVM.track.genre.slug.isEmpty {
-                                        trackVM.getTracksBySlugGenre(slug: trackVM.track.genre.slug)
+                                        if !trackVM.track.genre.slug.isEmpty {
+                                            trackVM.getTracksBySlugGenre(slug: trackVM.track.genre.slug)
+                                        }
                                     }
-                                }
                             }
                             
-                            // Title for artist
+                            // TPopular Tracks by Artist
                             VStack {
                                 Text("Popular Tracks by")
                                     .font(.subheadline)
@@ -288,7 +288,76 @@ struct TrackView: View {
                                     .font(.customFont(.bold, fontSize: 18))
                                     .foregroundColor(.primaryText)
                                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                
+                                TrackListViewImage(tracks: Array(trackVM.tracksByArtist.prefix(5)))
+                                    .task(id: trackVM.track.artist.slug) {
+                                        if !trackVM.track.artist.slug.isEmpty {
+                                            trackVM.getTrackBySlugArtist(slug: trackVM.track.artist.slug)
+                                        }
+                                    }
+                                
                             }
+                            
+                            // Popular Albums by Artist
+                            VStack {
+                                Text("Popular Albums by")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                
+                                Text(trackVM.track.artist.displayName)
+                                    .font(.customFont(.bold, fontSize: 18))
+                                    .foregroundColor(.primaryText)
+                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    LazyHStack(spacing: 15) {
+                                        ForEach(trackVM.albums.indices, id: \.self) { index in
+                                            let sObj = trackVM.albums[index]
+                                            NavigationLink(destination: AlbumView(slugAlbum: sObj.slug)) {
+                                                MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
+                                            }
+                                        }
+                                    }
+                                }
+                                .task(id: trackVM.track.artist.slug) {
+                                    if !trackVM.track.artist.slug.isEmpty {
+                                        trackVM.getAlbumsBySlugArtist(slug: trackVM.track.artist.slug)
+                                    }
+                                }
+                                
+                            }
+                            // Title for popular releases
+                            VStack {
+                                ViewAllSection(title: "Fans also like") {}
+                                
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    LazyHStack(spacing: 15) {
+                                        ForEach(trackVM.artists.indices, id: \.self) { index in
+                                            
+                                            let sObj = trackVM.artists[index]
+                                            
+                                            NavigationLink(destination: ArtistView(slugArtist: sObj.slug)) {
+                                                VStack {
+                                                    SpotifyRemoteImage(urlString: sObj.image)
+                                                        .frame(width: 140, height: 140)
+                                                        .clipShape(Circle())
+                                                    
+                                                    Text(sObj.displayName)
+                                                        .font(.customFont(.bold, fontSize: 13))
+                                                        .foregroundColor(.primaryText)
+                                                        .lineLimit(2)
+                                                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                .task {
+                                    trackVM.getArtists()
+                                }
+                            }
+                            
                             
                             
                             // Copyright information section
@@ -309,51 +378,6 @@ struct TrackView: View {
                                         .foregroundColor(.gray)
                                 }
                             }
-                            
-                            
-                            
-                            
-                            
-                            
-//                            ScrollView(.horizontal, showsIndicators: false) {
-//                                LazyHStack(spacing: 15) {
-//                                    ForEach(trackVM.tracksByArtist.indices, id: \.self) { index in
-//                                        
-//                                        let sObj = trackVM.tracksByArtist[index]
-//                                        
-//                                        VStack {
-//                                            if !sObj.artist.image.isEmpty {
-//                                                SpotifyRemoteImage(urlString: sObj.album.image)
-//                                                    .frame(width: 140, height: 140)
-//                                                    .clipShape(Circle())
-//                                            } else {
-//                                                // Placeholder під час завантаження
-//                                                Circle()
-//                                                    .fill(Color.gray.opacity(0.3))
-//                                                    .frame(width: 140, height: 140)
-//                                                    .overlay(
-//                                                        ProgressView()
-//                                                            .progressViewStyle(CircularProgressViewStyle())
-//                                                    )
-//                                            }
-//                                            
-//                                            Text(sObj.title)
-//                                                .font(.customFont(.bold, fontSize: 13))
-//                                                .foregroundColor(.primaryText)
-//                                                .lineLimit(2)
-//                                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                            .onChange(of: trackVM.album.slug) { newSlug in
-//                                //                                if !newSlug.isEmpty {
-//                                //                                    print(trackVM.album.artist.displayName)
-//                                //                                    trackVM.getTracksBySlugArtist(slug: trackVM.album.artist.slug)
-//                                //                                }
-//                            }
-                            
-                            
                             
                             
                         }
