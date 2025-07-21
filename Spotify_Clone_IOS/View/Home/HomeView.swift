@@ -169,6 +169,6 @@ struct HomeView: View {
 #Preview {
     NavigationView{
         
-        HomeView()
+        MainView()
     }
 }

@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-
 @MainActor final class HomeViewModel: ObservableObject {
     @Published var tracks: [Track] = []
     @Published var artists: [Artist] = []
@@ -19,31 +18,15 @@ import SwiftUI
     
     private let networkManager = NetworkManager.shared
     
-    
     func getTracks() {
         isLoading = true
         
-        Task{
-            do{
+        Task {
+            do {
                 tracks = try await NetworkManager.shared.getTracks()
                 isLoading = false
-                
-            }catch{
-                if let apError = error as? APError{
-                    switch apError{
-                    case .invalidResponse:
-                        self.alertItem = AlertContext.invalidResponse
-                    case .invalidURL:
-                        self.alertItem = AlertContext.invalidURL
-                    case .invalidData:
-                        self.alertItem = AlertContext.invalidData
-                    case .unableToComplete:
-                        self.alertItem = AlertContext.unableToComplete
-                    }
-                }else{
-                    alertItem = AlertContext.invalidResponse
-                }
-                
+            } catch {
+                handleError(error)
                 isLoading = false
             }
         }
@@ -52,27 +35,12 @@ import SwiftUI
     func getArtists() {
         isLoading = true
         
-        Task{
-            do{
+        Task {
+            do {
                 artists = try await NetworkManager.shared.getArtists()
                 isLoading = false
-                
-            }catch{
-                if let apError = error as? APError{
-                    switch apError{
-                    case .invalidResponse:
-                        self.alertItem = AlertContext.invalidResponse
-                    case .invalidURL:
-                        self.alertItem = AlertContext.invalidURL
-                    case .invalidData:
-                        self.alertItem = AlertContext.invalidData
-                    case .unableToComplete:
-                        self.alertItem = AlertContext.unableToComplete
-                    }
-                }else{
-                    alertItem = AlertContext.invalidResponse
-                }
-                
+            } catch {
+                handleError(error)
                 isLoading = false
             }
         }
@@ -81,27 +49,12 @@ import SwiftUI
     func getAlbums() {
         isLoading = true
         
-        Task{
-            do{
+        Task {
+            do {
                 albums = try await NetworkManager.shared.getAlbums()
                 isLoading = false
-                
-            }catch{
-                if let apError = error as? APError{
-                    switch apError{
-                    case .invalidResponse:
-                        self.alertItem = AlertContext.invalidResponse
-                    case .invalidURL:
-                        self.alertItem = AlertContext.invalidURL
-                    case .invalidData:
-                        self.alertItem = AlertContext.invalidData
-                    case .unableToComplete:
-                        self.alertItem = AlertContext.unableToComplete
-                    }
-                }else{
-                    alertItem = AlertContext.invalidResponse
-                }
-                
+            } catch {
+                handleError(error)
                 isLoading = false
             }
         }
@@ -110,29 +63,31 @@ import SwiftUI
     func getPlaylists() {
         isLoading = true
         
-        Task{
-            do{
+        Task {
+            do {
                 playlists = try await NetworkManager.shared.getPlaylists()
                 isLoading = false
-                
-            }catch{
-                if let apError = error as? APError{
-                    switch apError{
-                    case .invalidResponse:
-                        self.alertItem = AlertContext.invalidResponse
-                    case .invalidURL:
-                        self.alertItem = AlertContext.invalidURL
-                    case .invalidData:
-                        self.alertItem = AlertContext.invalidData
-                    case .unableToComplete:
-                        self.alertItem = AlertContext.unableToComplete
-                    }
-                }else{
-                    alertItem = AlertContext.invalidResponse
-                }
-                
+            } catch {
+                handleError(error)
                 isLoading = false
             }
+        }
+    }
+    
+    private func handleError(_ error: Error) {
+        if let apError = error as? APError {
+            switch apError {
+            case .invalidResponse:
+                alertItem = AlertContext.invalidResponse
+            case .invalidURL:
+                alertItem = AlertContext.invalidURL
+            case .invalidData:
+                alertItem = AlertContext.invalidData
+            case .unableToComplete:
+                alertItem = AlertContext.unableToComplete
+            }
+        } else {
+            alertItem = AlertContext.invalidResponse
         }
     }
 }
