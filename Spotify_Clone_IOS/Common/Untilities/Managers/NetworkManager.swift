@@ -226,6 +226,24 @@ final class NetworkManager {
     }
     
     
+    
+    func getGenres() async throws ->[Genre] {
+        guard let url = URL(string: Constants.API.genresURL) else {
+            throw APError.invalidURL
+        }
+        
+        let (data, _) = try await URLSession.shared.data(from: url)
+        
+        do{
+            let decoder = JSONDecoder()
+            return try decoder.decode(GenresResponse.self, from: data).results
+        } catch{
+            throw APError.invalidData
+        }
+        
+        
+    }
+    
     func downloadImage(fromURLString urlString: String, completed: @escaping (UIImage?) -> Void){
         
         let cacheKey = NSString(string: urlString)

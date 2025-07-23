@@ -6,9 +6,6 @@
 //
 
 import SwiftUI
-import SwiftUI
-
-import SwiftUI
 
 struct HomeView: View {
     @StateObject private var homeVM = HomeViewModel()

@@ -16,3 +16,14 @@ struct Genre: Codable, Identifiable {
     let image: String
     let color: String
 }
+
+
+// MARK: - Main Response
+struct GenresResponse: Codable {
+    let count: Int
+    let next: String?
+    let previous: String?
+    let results: [Genre]
+}
+
+
