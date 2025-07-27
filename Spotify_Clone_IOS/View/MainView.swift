@@ -20,7 +20,7 @@ struct MainView: View {
                 }
             } else if (mainVM.selectTab == 1){
                 NavigationView {
-                    GenreView()
+                    GenresView()
                         .navigationBarHidden(true)
                 }
             } else if (mainVM.selectTab == 2){

@@ -18,6 +18,7 @@ final class NetworkManager {
   
     
     func getTracks() async throws ->[Track] {
+        print("getTracks")
         guard let url = URL(string: Constants.API.tracksURL) else {
             throw APError.invalidURL
         }
@@ -36,6 +37,7 @@ final class NetworkManager {
     
     
     func getTrackBySlug(slug:String) async throws -> TrackDetail {
+        print("getTrackBySlug")
         guard let url = URL(string: Constants.API.trackBySlugURL + "\(slug)/") else {
             throw APError.invalidURL
         }
@@ -54,6 +56,7 @@ final class NetworkManager {
     
     
     func getTracksBySlugArtist(slug: String) async throws -> [Track] {
+        print("getTracksBySlugArtist")
        let fullURL = Constants.API.tracksBySlugArtistURL + "\(slug)"
        
        guard let url = URL(string: fullURL) else {
@@ -71,6 +74,7 @@ final class NetworkManager {
     }
     
     func getTracksBySlugGenre(slug: String) async throws -> [Track] {
+        print("getTracksBySlugGenre")
        let fullURL = Constants.API.tracksBySlugGenreURL + "\(slug)"
        
        guard let url = URL(string: fullURL) else {
@@ -108,6 +112,7 @@ final class NetworkManager {
     
     
     func getArtistsBySlug(slug:String) async throws -> Artist {
+        print("getArtistsBySlug")
         guard let url = URL(string: Constants.API.artistsURL + "\(slug)/") else {
             throw APError.invalidURL
         }
@@ -124,6 +129,7 @@ final class NetworkManager {
     }
     
     func getArtists() async throws ->[Artist] {
+        print("getArtists")
         guard let url = URL(string: Constants.API.artistsURL) else {
             throw APError.invalidURL
         }
@@ -142,6 +148,7 @@ final class NetworkManager {
     
     
     func getAlbums() async throws ->[Album] {
+        print("getAlbums")
         guard let url = URL(string: Constants.API.albumsURL) else {
             throw APError.invalidURL
         }
@@ -191,6 +198,7 @@ final class NetworkManager {
 
     
     func getPlaylists() async throws ->[Playlist] {
+        print("getPlaylists")
         guard let url = URL(string: Constants.API.playlistsURL) else {
             throw APError.invalidURL
         }
@@ -225,9 +233,27 @@ final class NetworkManager {
          
     }
     
+    func getPlaylistsBySlugGenre(slug:String) async throws ->[Playlist] {
+        print("getPlaylistsBySlugGenre")
+        guard let url = URL(string: Constants.API.playlistsByGenreURL + slug) else {
+            throw APError.invalidURL
+        }
+        
+        let (data, _) = try await URLSession.shared.data(from: url)
+        
+        do{
+            let decoder = JSONDecoder()
+            return try decoder.decode(PlaylistResponse.self, from: data).results
+        } catch{
+            
+            throw APError.invalidData
+        }
+         
+    }
     
     
     func getGenres() async throws ->[Genre] {
+        print("getGenres")
         guard let url = URL(string: Constants.API.genresURL) else {
             throw APError.invalidURL
         }
@@ -242,6 +268,23 @@ final class NetworkManager {
         }
         
         
+    }
+    
+    func getGenreBySlug(slug:String) async throws -> Genre {
+        print("getGenreBySlug")
+        guard let url = URL(string: Constants.API.genresBySlugURL + "\(slug)/") else {
+            throw APError.invalidURL
+        }
+        
+        let (data, _) = try await URLSession.shared.data(from: url)
+        
+        do{
+            let decoder = JSONDecoder()
+            return try decoder.decode(Genre.self, from: data)
+        } catch{
+            throw APError.invalidData
+        }
+         
     }
     
     func downloadImage(fromURLString urlString: String, completed: @escaping (UIImage?) -> Void){

@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct GenreView: View {
+struct GenresView: View {
     
-    @StateObject private var genreVM = GenreViewModel()
+    @StateObject private var genreVM = GenresViewModel()
     @StateObject private var mainVM = MainViewModel.share
     
     var body: some View {
@@ -49,11 +49,16 @@ struct GenreView: View {
                         GridItem(.flexible())
                     ], spacing: 10) {
                         ForEach(0..<genreVM.genres.count, id: \.self) { index in
-                            if index == 0 {
-                                SearchCardView(genre: genreVM.genres[index])
-                                    .gridCellColumns(2)
-                            } else {
-                                SearchCardView(genre: genreVM.genres[index])
+                            NavigationLink(destination: GenreDetailsView(
+                                        slugGenre: genreVM.genres[index].slug,
+                                        genresVM: genreVM
+                                    )) {
+                                if index == 0 {
+                                    SearchCardView(genre: genreVM.genres[index])
+                                        .gridCellColumns(2)
+                                } else {
+                                    SearchCardView(genre: genreVM.genres[index])
+                                }
                             }
                         }
                     }.padding(.bottom, 100)

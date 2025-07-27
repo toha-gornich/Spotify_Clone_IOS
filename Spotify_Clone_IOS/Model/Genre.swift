@@ -15,6 +15,16 @@ struct Genre: Codable, Identifiable {
     let name: String
     let image: String
     let color: String
+    
+    static func empty() -> Genre {
+        return Genre(
+            id: 0,
+            slug: "",
+            name: "",
+            image: "",
+            color: ""
+        )
+    }
 }
 
 
