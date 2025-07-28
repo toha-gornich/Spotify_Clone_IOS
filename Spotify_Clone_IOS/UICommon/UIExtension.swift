@@ -121,6 +121,11 @@ extension Color{
     static var bg: Color {
         return Color(hex: "121212")
     }
+    
+    static var lightBg: Color {
+        return Color(hex: "2A2A2A")
+    }
+    
     static var elementBg: Color {
         return Color(hex: "414141")
     }

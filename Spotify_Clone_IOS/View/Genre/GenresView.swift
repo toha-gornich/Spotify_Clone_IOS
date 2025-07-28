@@ -9,80 +9,136 @@ import SwiftUI
 
 struct GenresView: View {
     
+    @State private var searchText = ""
+    @State private var searchQuery = ""
+    @State private var isShowingSearchResults = false
     @StateObject private var genreVM = GenresViewModel()
     @StateObject private var mainVM = MainViewModel.share
     
     var body: some View {
-        
-        ZStack {
-            VStack {
-                HStack(spacing: 15) {
-                    Button {
-                        print("open Menu")
-                        mainVM.isShowMenu = true
-                    } label: {
-                        Image("settings")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 25, height: 25)
+        NavigationStack {
+            ZStack {
+                VStack {
+                    HStack(spacing: 15) {
+                        Button {
+                            print("open Menu")
+                            mainVM.isShowMenu = true
+                        } label: {
+                            Image("settings")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 25, height: 25)
+                        }
+                        
+                        Text("Search")
+                            .font(.customFont(.bold, fontSize: 18))
+                            .foregroundColor(.primaryText)
+                        
+                        Spacer()
+                        
+                        if genreVM.isLoading {
+                            ProgressView()
+                                .scaleEffect(0.8)
+                        }
                     }
-                    
-                    Text("Search")
-                        .font(.customFont(.bold, fontSize: 18))
-                        .foregroundColor(.primaryText)
-                    
-                    Spacer()
-                    
-                    if genreVM.isLoading {
-                        ProgressView()
-                            .scaleEffect(0.8)
+                    .padding(.top, .topInsets)
+                    .padding(.horizontal, 20)
+
+                    // Search Field
+                    HStack {
+                        // Magnifying glass button
+                        Button(action: {
+                            performSearch()
+                        }) {
+                            Image(systemName: "magnifyingglass")
+                                .foregroundColor(.gray)
+                                .font(.system(size: 18))
+                        }
+                        
+                        TextField("What do you want to listen to?", text: $searchText)
+                            .foregroundColor(.black)
+                            .font(.customFont(.regular, fontSize: 16))
+                            .onSubmit {
+                                performSearch()
+                            }
+                        
+                        // Clear button
+                        if !searchText.isEmpty {
+                            Button(action: {
+                                searchText = ""
+                                // Скидаємо результати пошуку при очищенні
+                                isShowingSearchResults = false
+                            }) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundColor(.gray)
+                                    .font(.system(size: 18))
+                            }
+                        }
                     }
-                }
-                .padding(.top, .topInsets)
-                .padding(.horizontal, 20)
-                
-                
-                
-                ScrollView(.vertical, showsIndicators: false) {
-                    LazyVGrid(columns: [
-                        GridItem(.flexible()),
-                        GridItem(.flexible())
-                    ], spacing: 10) {
-                        ForEach(0..<genreVM.genres.count, id: \.self) { index in
-                            NavigationLink(destination: GenreDetailsView(
-                                        slugGenre: genreVM.genres[index].slug,
-                                        genresVM: genreVM
-                                    )) {
-                                if index == 0 {
-                                    SearchCardView(genre: genreVM.genres[index])
-                                        .gridCellColumns(2)
-                                } else {
-                                    SearchCardView(genre: genreVM.genres[index])
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .padding(.horizontal, 20) // Додаємо горизонтальні відступи
+                    .padding(.vertical, 6)
+                    
+                    ScrollView(.vertical, showsIndicators: false) {
+                        LazyVGrid(columns: [
+                            GridItem(.flexible()),
+                            GridItem(.flexible())
+                        ], spacing: 10) {
+                            ForEach(0..<genreVM.genres.count, id: \.self) { index in
+                                NavigationLink(destination: GenreDetailsView(
+                                            slugGenre: genreVM.genres[index].slug,
+                                            genresVM: genreVM
+                                        )) {
+                                    if index == 0 {
+                                        SearchCardView(genre: genreVM.genres[index])
+                                            .gridCellColumns(2)
+                                    } else {
+                                        SearchCardView(genre: genreVM.genres[index])
+                                    }
                                 }
                             }
                         }
-                    }.padding(.bottom, 100)
-                    .task{
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, 100)
+                    }
+                    .task {
                         genreVM.getGenres()
                     }
-
                 }
-               
+            }
+            .frame(width: .screenWidth, height: .screenHeight)
+            .background(Color.bg)
+            .navigationTitle("")
+            .navigationBarBackButtonHidden()
+            .navigationBarHidden(true)
+            .ignoresSafeArea()
+            .navigationDestination(isPresented: $isShowingSearchResults) {
+                SearchView(searchText: searchQuery)
             }
         }
-        .frame(width: .screenWidth, height: .screenHeight)
-        .background(Color.bg)
-        .navigationTitle("")
-        .navigationBarBackButtonHidden()
-        .navigationBarHidden(true)
-        .ignoresSafeArea()
-        .alert(item: $genreVM.alertItem){ alertItem in
+        .alert(item: $genreVM.alertItem) { alertItem in
             Alert(title: alertItem.title,
                   message: alertItem.message,
                   dismissButton: alertItem.dismissButton)
         }
+    }
+    
+    private func performSearch() {
+        guard !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            print("Пустий пошуковий запит")
+            return
+        }
         
+        searchQuery = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         
+        // Додаємо невелику затримку для кращої UX
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            isShowingSearchResults = true
+            print("Шукаємо: \(searchQuery)")
+        }
     }
 }
 #Preview {
