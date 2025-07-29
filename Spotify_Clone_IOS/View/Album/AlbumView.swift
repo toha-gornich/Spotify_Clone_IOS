@@ -183,7 +183,7 @@ struct AlbumView: View {
                                     }
                                     
                                     // Total duration
-                                    Text("\(albumVM.album.releaseDate.prefix(4)) • \(albumVM.totalDuration)")
+                                    Text("\(albumVM.album.releaseDate.prefix(4)) • \(albumVM.tracks)")
                                         .font(.caption)
                                         .foregroundColor(.gray)
                                 }
