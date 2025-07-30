@@ -63,6 +63,8 @@ struct HomeView: View {
                         
                         ViewAllSection(title: "Popular artists") {}
                         
+                        
+
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 15) {
                                 ForEach(homeVM.artists.indices, id: \.self) { index in
@@ -70,17 +72,7 @@ struct HomeView: View {
                                     let sObj = homeVM.artists[index]
                                     
                                     NavigationLink(destination: ArtistView(slugArtist: sObj.slug)) {
-                                        VStack {
-                                            SpotifyRemoteImage(urlString: sObj.image)
-                                                .frame(width: 140, height: 140)
-                                                .clipShape(Circle())
-                                            
-                                            Text(sObj.displayName)
-                                                .font(.customFont(.bold, fontSize: 13))
-                                                .foregroundColor(.primaryText)
-                                                .lineLimit(2)
-                                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                        }
+                                        ArtistItemView(artist: sObj)
                                     }
                                 }
                             }

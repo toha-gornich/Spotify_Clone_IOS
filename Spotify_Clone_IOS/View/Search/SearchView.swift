@@ -136,7 +136,7 @@ struct SearchView: View {
                                         Capsule()
                                             .fill(selectedTab == tab ? Color.green : Color.elementBg)
                                     )
-                                }
+                                } 
                                 .buttonStyle(PlainButtonStyle())
                             }
                         }
@@ -269,14 +269,21 @@ struct AlbumsSearchContentView: View {
     @ObservedObject var searchVM: SearchViewModel
     
     var body: some View {
-        LazyVStack(spacing: 12) {
-            //            ForEach(searchVM.albums, id: \.id) { album in
-            //                AlbumRowView(album: album)
-            //            }
-            
-            if searchVM.albums.isEmpty {
-                NoResultsView(type: "albums")
+        ScrollView(showsIndicators: false){
+            LazyVGrid(columns: [
+                GridItem(.flexible()),
+                GridItem(.flexible())
+            ], spacing: 10) {
+                ForEach(searchVM.albums.indices, id: \.self) { index in
+                    let sObj = searchVM.albums[index]
+                    NavigationLink(destination: AlbumView(slugAlbum: sObj.slug)) {
+                        MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
+                    }
+                }
+
             }
+            .padding(.bottom, 70)
+            .padding(.top, 20)
         }
     }
 }
@@ -286,14 +293,21 @@ struct ArtistsSearchContentView: View {
     @ObservedObject var searchVM: SearchViewModel
     
     var body: some View {
-        LazyVStack(spacing: 12) {
-            //            ForEach(searchVM.artists, id: \.id) { artist in
-            //                ArtistRowView(artist: artist)
-            //            }
-            
-            if searchVM.artists.isEmpty {
-                NoResultsView(type: "artists")
+        ScrollView(showsIndicators: false){
+            LazyVGrid(columns: [
+                GridItem(.flexible()),
+                GridItem(.flexible())
+            ], spacing: 10) {
+                ForEach(searchVM.artists.indices, id: \.self) { index in
+                    let sObj = searchVM.artists[index]
+                    NavigationLink(destination: ArtistView(slugArtist: sObj.slug)) {
+                        ArtistItemView(artist: sObj)
+                    }
+                }
+
             }
+            .padding(.bottom, 70)
+            .padding(.top, 20)
         }
     }
 }
@@ -303,14 +317,21 @@ struct PlaylistsSearchContentView: View {
     @ObservedObject var searchVM: SearchViewModel
     
     var body: some View {
-        LazyVStack(spacing: 12) {
-            //            ForEach(searchVM.playlists, id: \.id) { playlist in
-            //                PlaylistRowView(playlist: playlist)
-            //            }
-            
-            if searchVM.playlists.isEmpty {
-                NoResultsView(type: "playlists")
+        ScrollView(showsIndicators: false){
+            LazyVGrid(columns: [
+                GridItem(.flexible()),
+                GridItem(.flexible())
+            ], spacing: 10) {
+                ForEach(searchVM.playlists.indices, id: \.self) { index in
+                    let sObj = searchVM.playlists[index]
+                    NavigationLink(destination: PlaylistView(slugPlaylist: sObj.slug)) {
+                        MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
+                    }
+                }
+
             }
+            .padding(.bottom, 70)
+            .padding(.top, 20)
         }
     }
 }

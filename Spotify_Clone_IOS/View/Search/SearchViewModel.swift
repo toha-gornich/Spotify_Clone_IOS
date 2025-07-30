@@ -108,8 +108,8 @@ import SwiftUI
     }
     
     private func handleError(_ error: Error) {
-        if let apError = error as? APError {
-            switch apError {
+        if let appError = error as? APError {
+            switch appError {
             case .invalidResponse:
                 alertItem = AlertContext.invalidResponse
             case .invalidURL:
