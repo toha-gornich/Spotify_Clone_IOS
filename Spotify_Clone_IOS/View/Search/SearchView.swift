@@ -13,14 +13,7 @@ struct SearchView: View {
     @State private var selectedTab: SearchTab = .all
     @Environment(\.dismiss) private var dismiss
     
-    enum SearchTab: String, CaseIterable {
-        case all = "All"
-        case songs = "Songs"
-        case albums = "Albums"
-        case artists = "Artists"
-        case playlists = "Playlists"
-        case profiles = "Profiles"
-    }
+    
     
     
     private var availableTabs: [SearchTab] {
@@ -33,10 +26,9 @@ struct SearchView: View {
         let hasAlbums = !searchVM.albums.isEmpty
         let hasArtists = !searchVM.artists.isEmpty
         let hasPlaylists = !searchVM.playlists.isEmpty
-        let hasProfiles = !searchVM.profiles.isEmpty
         
         //Додаємо "All" тільки якщо є хоча б один тип результатів
-        if hasSongs || hasAlbums || hasArtists || hasPlaylists || hasProfiles {
+        if hasSongs || hasAlbums || hasArtists || hasPlaylists {
             tabs.append(.all)
         }
         
@@ -45,7 +37,6 @@ struct SearchView: View {
         if hasAlbums { tabs.append(.albums) }
         if hasArtists { tabs.append(.artists) }
         if hasPlaylists { tabs.append(.playlists) }
-        if hasProfiles { tabs.append(.profiles) }
         
         return tabs
     }
@@ -136,7 +127,7 @@ struct SearchView: View {
                                         Capsule()
                                             .fill(selectedTab == tab ? Color.green : Color.elementBg)
                                     )
-                                } 
+                                }
                                 .buttonStyle(PlainButtonStyle())
                             }
                         }
@@ -157,7 +148,7 @@ struct SearchView: View {
                         
                         switch selectedTab {
                         case .all:
-                            AllSearchContentView(searchText: currentSearchText, searchVM: searchVM)
+                            AllSearchContentView(selectedTab: $selectedTab, searchVM: searchVM)
                         case .songs:
                             TrackListViewImage(tracks: searchVM.tracks)
                                 .padding(.bottom, 70)
@@ -167,8 +158,6 @@ struct SearchView: View {
                             ArtistsSearchContentView(searchText: currentSearchText, searchVM: searchVM)
                         case .playlists:
                             PlaylistsSearchContentView(searchText: currentSearchText, searchVM: searchVM)
-                        case .profiles:
-                            ProfilesSearchContentView(searchText: currentSearchText, searchVM: searchVM)
                         }
                     } else {
                         EmptySearchView()
@@ -217,37 +206,116 @@ extension View {
 
 
 struct AllSearchContentView: View {
-    let searchText: String
+    @Binding var selectedTab: SearchTab
     @ObservedObject var searchVM: SearchViewModel
     
     var body: some View {
-        //        VStack(spacing: 20) {
-        //            // Показуємо всі типи результатів
-        //            if !searchVM.tracks.isEmpty {
-        //                SearchSectionView(title: "Songs", items: Array(searchVM.tracks.prefix(3))) { track in
-        //                    TrackRowView(track: track)
-        //                }
-        //            }
-        //
-        //            if !searchVM.artists.isEmpty {
-        //                SearchSectionView(title: "Artists", items: Array(searchVM.artists.prefix(3))) { artist in
-        Text("all")
-        //                    ArtistRowView(artist: artist)
-        //                }
-        //            }
-        //
-        //            if !searchVM.albums.isEmpty {
-        //                SearchSectionView(title: "Albums", items: Array(searchVM.albums.prefix(3))) { album in
-        //                    AlbumRowView(album: album)
-        //                }
-        //            }
-        //
-        //            if !searchVM.playlists.isEmpty {
-        //                SearchSectionView(title: "Playlists", items: Array(searchVM.playlists.prefix(3))) { playlist in
-        //                    PlaylistRowView(playlist: playlist)
-        //                }
-        //            }
-        //        }
+        ScrollView(showsIndicators: false){
+            VStack(spacing: 20) {
+                if !searchVM.tracks.isEmpty {
+                    
+                    ViewAllSection(title: "Top result",buttonFlag: false )
+                    
+                    
+                    ViewAllSection(title: "Songs",buttonFlag: false )
+                        .onTapGesture {selectedTab = SearchTab.songs}
+                    
+                    LazyVStack(spacing: 0) {
+                        ForEach(0..<min(6,searchVM.tracks.count), id: \.self) { index in
+                            TrackRowCell(
+                                track: searchVM.tracks[index],
+                                index: index + 1
+                            )
+                            
+                            // Track separator
+                            if index < searchVM.tracks.count - 1 {
+                                Divider()
+                                    .background(Color.gray.opacity(0.2))
+                                    .padding(.leading, 82)
+                            }
+                        }
+                    }
+                }
+                
+                if !searchVM.artists.isEmpty {
+                    ViewAllSection(title: "Artists",buttonFlag: false )
+                        .padding(.horizontal)
+                        .onTapGesture {selectedTab = SearchTab.artists}
+                    ArtistsSearchContentView(searchText: "text", searchVM: searchVM)
+//                    ScrollView(.horizontal, showsIndicators: false) {
+//                        ScrollView(.horizontal, showsIndicators: false) {
+//                            LazyVStack(spacing: 0) {LazyVGrid(columns: [
+//                                GridItem(.flexible()),
+//                                GridItem(.flexible())
+//                            ], spacing: 10) {
+//                                ForEach(searchVM.artists.indices, id: \.self) { index in
+//                                    
+//                                    let sObj = searchVM.artists[index]
+//                                    
+//                                    NavigationLink(destination: ArtistView(slugArtist: sObj.slug)) {
+//                                        ArtistItemView(artist: sObj)
+//                                    }
+//                                }
+//                            }
+//                            }
+//                        }
+//                    }
+                }
+                
+                if !searchVM.albums.isEmpty {
+                    ViewAllSection(title: "Albums",buttonFlag: false )
+                        .padding(.horizontal)
+                        .onTapGesture {selectedTab = SearchTab.albums}
+                    
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        LazyHStack(spacing: 15) {
+                            ForEach(searchVM.albums.indices, id: \.self) { index in
+                                let sObj = searchVM.albums[index]
+                                NavigationLink(destination: AlbumView(slugAlbum: sObj.slug)) {
+                                    MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                if !searchVM.playlists.isEmpty {
+                    ViewAllSection(title: "Playlists",buttonFlag: false )
+                        .padding(.horizontal)
+                        .onTapGesture {selectedTab = SearchTab.playlists}
+                    
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        LazyHStack(spacing: 15) {
+                            ForEach(searchVM.playlists.indices, id: \.self) { index in
+                                let sObj = searchVM.playlists[index]
+                                NavigationLink(destination: PlaylistView(slugPlaylist: sObj.slug)) {
+                                    MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
+                                }
+                            }
+                        }
+                    }
+                }
+                if !searchVM.profiles.isEmpty {
+                    ViewAllSection(title: "Profiles",buttonFlag: false )
+                        .padding(.horizontal)
+                    
+                    //                    ScrollView(.horizontal, showsIndicators: false) {
+                    //                        LazyHStack(spacing: 15) {
+                    //                            ForEach(searchVM.profiles.indices, id: \.self) { index in
+                    //
+                    //                                let sObj = searchVM.profiles[index]
+                    //
+                    //                                NavigationLink(destination: ArtistView(slugArtist: sObj.slug)) {
+                    //                                    ArtistItemView(artist: sObj)
+                    //                                }
+                    //                            }
+                    //                        }
+                    //                    }
+                }
+            }
+        }
+        .padding(.bottom, 100)
+        .padding(.horizontal)
     }
 }
 
@@ -280,7 +348,7 @@ struct AlbumsSearchContentView: View {
                         MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
                     }
                 }
-
+                
             }
             .padding(.bottom, 70)
             .padding(.top, 20)
@@ -304,7 +372,7 @@ struct ArtistsSearchContentView: View {
                         ArtistItemView(artist: sObj)
                     }
                 }
-
+                
             }
             .padding(.bottom, 70)
             .padding(.top, 20)
@@ -328,7 +396,7 @@ struct PlaylistsSearchContentView: View {
                         MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
                     }
                 }
-
+                
             }
             .padding(.bottom, 70)
             .padding(.top, 20)
@@ -426,4 +494,14 @@ struct NoResultsView: View {
                 .foregroundColor(.primaryText.opacity(0.7))
         }
     }
+}
+
+
+enum SearchTab: String, CaseIterable {
+    case all = "All"
+    case songs = "Songs"
+    case albums = "Albums"
+    case artists = "Artists"
+    case playlists = "Playlists"
+    
 }

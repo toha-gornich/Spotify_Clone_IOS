@@ -11,6 +11,7 @@ struct ViewAllSection: View {
     
     @State var title: String =  "Title"
     @State var button: String = "View All"
+    @State var buttonFlag: Bool = true
     var didTap: (()->())?
     
     var body: some View {
@@ -20,17 +21,15 @@ struct ViewAllSection: View {
                 .foregroundColor(.primaryText)
                 .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
             
-            
-            Button {
-                didTap?()
-            } label: {
-                Text(button)
-                    .font(.customFont(.regular, fontSize: 11))
-                    .foregroundColor(.primaryText35)
+            if buttonFlag {
+                Button {
+                    didTap?()
+                } label: {
+                    Text(button)
+                        .font(.customFont(.regular, fontSize: 11))
+                        .foregroundColor(.primaryText35)
+                }
             }
-
-           
-                
         }.padding(.vertical, 16)
         
     }
