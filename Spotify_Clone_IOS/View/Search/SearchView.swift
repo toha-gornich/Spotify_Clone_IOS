@@ -7,14 +7,17 @@
 
 import SwiftUI
 struct SearchView: View {
-    let searchText: String
+    @State var searchText: String
+    @State private var searchQuery = ""
+    @State private var searchTimer: Timer?
     @StateObject private var searchVM = SearchViewModel()
     @State private var currentSearchText: String = ""
     @State private var selectedTab: SearchTab = .all
     @Environment(\.dismiss) private var dismiss
     
-    
-    
+    @State private var isShowingSearchResults = false
+    @State private var hasInitialized = false
+
     
     private var availableTabs: [SearchTab] {
         guard !currentSearchText.isEmpty else { return [] }
@@ -27,7 +30,7 @@ struct SearchView: View {
         let hasArtists = !searchVM.artists.isEmpty
         let hasPlaylists = !searchVM.playlists.isEmpty
         
-        //Додаємо "All" тільки якщо є хоча б один тип результатів
+
         if hasSongs || hasAlbums || hasArtists || hasPlaylists {
             tabs.append(.all)
         }
@@ -55,10 +58,14 @@ struct SearchView: View {
                 HStack(spacing: 12) {
                     // Search field with magnifying glass
                     HStack {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(.white.opacity(0.7))
-                            .font(.system(size: 18))
-                        
+                        Button(action: {
+                            performSearch()
+                        }) {
+                            Image(systemName: "magnifyingglass")
+                                .foregroundColor(.white.opacity(0.7))
+                                .font(.system(size: 18))
+                        }
+
                         TextField("", text: $currentSearchText)
                             .foregroundColor(.white)
                             .font(.customFont(.regular, fontSize: 16))
@@ -70,6 +77,22 @@ struct SearchView: View {
                                     .lineLimit(1)
                                     .truncationMode(.tail)
                             }
+                            .onSubmit {
+                                print("Press Enter")
+                                searchTimer?.invalidate()
+                                performSearch()
+                            }
+                            .onChange(of: currentSearchText) { newValue in
+                                searchTimer?.invalidate()
+                                
+                                
+                                if !newValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                                    searchTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+                                        performSearch()
+                                    }
+                                }
+                            }
+                        
                         
                         // Clear button container
                         HStack {
@@ -149,15 +172,19 @@ struct SearchView: View {
                         switch selectedTab {
                         case .all:
                             AllSearchContentView(selectedTab: $selectedTab, searchVM: searchVM)
+                                .padding(.bottom, 100)
                         case .songs:
                             TrackListViewImage(tracks: searchVM.tracks)
-                                .padding(.bottom, 70)
+                                .padding(.top, 20)
                         case .albums:
-                            AlbumsSearchContentView(searchText: currentSearchText, searchVM: searchVM)
+                            AlbumsSearchContentView(searchVM: searchVM)
+                                .padding(.top, 20)
                         case .artists:
-                            ArtistsSearchContentView(searchText: currentSearchText, searchVM: searchVM)
+                            ArtistsSearchContentView(searchVM: searchVM)
+                                .padding(.top, 20)
                         case .playlists:
-                            PlaylistsSearchContentView(searchText: currentSearchText, searchVM: searchVM)
+                            PlaylistsSearchContentView(searchVM: searchVM)
+                                .padding(.top, 20)
                         }
                     } else {
                         EmptySearchView()
@@ -167,23 +194,48 @@ struct SearchView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .task {
-                searchVM.searchTracks(searchText: currentSearchText)
-                searchVM.searchArtists(searchText: currentSearchText)
-                searchVM.searchAlbums(searchText: currentSearchText)
-                searchVM.searchPlaylists(searchText: currentSearchText)
-                searchVM.searchProfiles(searchText: currentSearchText)
+            .onAppear {
+                
+                if !hasInitialized {
+                    currentSearchText = searchText
+                    hasInitialized = true
+                    
+                    if !searchText.isEmpty {
+                        performSearch()
+                    }
+                }
+
             }
             .background(Color.bg)
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .ignoresSafeArea(.container, edges: .top)
-        .onAppear {
-            // Initialize search text from parameter
-            currentSearchText = searchText
+        
+    }
+    
+    private func performSearch() {
+        guard !currentSearchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            return
+        }
+        
+        searchQuery = currentSearchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            isShowingSearchResults = true
+            print("Search: \(searchQuery)")
+            
+            
+            searchVM.searchTracks(searchText: currentSearchText)
+            searchVM.searchArtists(searchText: currentSearchText)
+            searchVM.searchAlbums(searchText: currentSearchText)
+            searchVM.searchPlaylists(searchText: currentSearchText)
+            searchVM.searchProfiles(searchText: currentSearchText)
         }
     }
+    
+    
+    
 }
 
 // Extension for placeholder functionality
@@ -214,52 +266,21 @@ struct AllSearchContentView: View {
             VStack(spacing: 20) {
                 if !searchVM.tracks.isEmpty {
                     
-                    ViewAllSection(title: "Top result",buttonFlag: false )
+                    ViewAllSection(title: "Top result",buttonFlag: false)
                     
+                    TopResultView(track: searchVM.tracks[0])
                     
                     ViewAllSection(title: "Songs",buttonFlag: false )
                         .onTapGesture {selectedTab = SearchTab.songs}
                     
-                    LazyVStack(spacing: 0) {
-                        ForEach(0..<min(6,searchVM.tracks.count), id: \.self) { index in
-                            TrackRowCell(
-                                track: searchVM.tracks[index],
-                                index: index + 1
-                            )
-                            
-                            // Track separator
-                            if index < searchVM.tracks.count - 1 {
-                                Divider()
-                                    .background(Color.gray.opacity(0.2))
-                                    .padding(.leading, 82)
-                            }
-                        }
-                    }
+                    TrackListViewImage(tracks: searchVM.tracks, maxItems6: true, padding: 8)
                 }
                 
                 if !searchVM.artists.isEmpty {
                     ViewAllSection(title: "Artists",buttonFlag: false )
                         .padding(.horizontal)
                         .onTapGesture {selectedTab = SearchTab.artists}
-                    ArtistsSearchContentView(searchText: "text", searchVM: searchVM)
-//                    ScrollView(.horizontal, showsIndicators: false) {
-//                        ScrollView(.horizontal, showsIndicators: false) {
-//                            LazyVStack(spacing: 0) {LazyVGrid(columns: [
-//                                GridItem(.flexible()),
-//                                GridItem(.flexible())
-//                            ], spacing: 10) {
-//                                ForEach(searchVM.artists.indices, id: \.self) { index in
-//                                    
-//                                    let sObj = searchVM.artists[index]
-//                                    
-//                                    NavigationLink(destination: ArtistView(slugArtist: sObj.slug)) {
-//                                        ArtistItemView(artist: sObj)
-//                                    }
-//                                }
-//                            }
-//                            }
-//                        }
-//                    }
+                    ArtistsSearchContentView(searchVM: searchVM, maxItems6: true, padding: 8)
                 }
                 
                 if !searchVM.albums.isEmpty {
@@ -267,50 +288,18 @@ struct AllSearchContentView: View {
                         .padding(.horizontal)
                         .onTapGesture {selectedTab = SearchTab.albums}
                     
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        LazyHStack(spacing: 15) {
-                            ForEach(searchVM.albums.indices, id: \.self) { index in
-                                let sObj = searchVM.albums[index]
-                                NavigationLink(destination: AlbumView(slugAlbum: sObj.slug)) {
-                                    MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
-                                }
-                            }
-                        }
-                    }
+                    AlbumsSearchContentView(searchVM: searchVM, maxItems6: true, padding: 8 )
                 }
                 
                 if !searchVM.playlists.isEmpty {
                     ViewAllSection(title: "Playlists",buttonFlag: false )
                         .padding(.horizontal)
                         .onTapGesture {selectedTab = SearchTab.playlists}
-                    
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        LazyHStack(spacing: 15) {
-                            ForEach(searchVM.playlists.indices, id: \.self) { index in
-                                let sObj = searchVM.playlists[index]
-                                NavigationLink(destination: PlaylistView(slugPlaylist: sObj.slug)) {
-                                    MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
-                                }
-                            }
-                        }
-                    }
+                    PlaylistsSearchContentView(searchVM: searchVM, maxItems6: true,  padding: 8)
                 }
                 if !searchVM.profiles.isEmpty {
                     ViewAllSection(title: "Profiles",buttonFlag: false )
                         .padding(.horizontal)
-                    
-                    //                    ScrollView(.horizontal, showsIndicators: false) {
-                    //                        LazyHStack(spacing: 15) {
-                    //                            ForEach(searchVM.profiles.indices, id: \.self) { index in
-                    //
-                    //                                let sObj = searchVM.profiles[index]
-                    //
-                    //                                NavigationLink(destination: ArtistView(slugArtist: sObj.slug)) {
-                    //                                    ArtistItemView(artist: sObj)
-                    //                                }
-                    //                            }
-                    //                        }
-                    //                    }
                 }
             }
         }
@@ -319,22 +308,26 @@ struct AllSearchContentView: View {
     }
 }
 
-struct SongsSearchContentView: View {
-    let searchText: String
-    @ObservedObject var searchVM: SearchViewModel
-    
-    var body: some View {
-        TrackListViewImage(tracks: searchVM.tracks)
-            .padding(.bottom, 100)
-        LazyVStack(spacing: 12) {
-            TrackListViewImage(tracks: searchVM.tracks)
-        }
-    }
-}
 
 struct AlbumsSearchContentView: View {
-    let searchText: String
     @ObservedObject var searchVM: SearchViewModel
+    let maxItems6: Bool
+    let padding: Int
+    
+    private var limitedItems: [Album] {
+        if maxItems6{
+            Array(searchVM.albums.prefix(6))
+        }else {
+            Array(searchVM.albums)
+        }
+        
+    }
+    
+    init(searchVM: SearchViewModel, maxItems6: Bool = false, padding: Int = 70) {
+        self.searchVM = searchVM
+        self.maxItems6 = maxItems6
+        self.padding = padding
+    }
     
     var body: some View {
         ScrollView(showsIndicators: false){
@@ -342,7 +335,7 @@ struct AlbumsSearchContentView: View {
                 GridItem(.flexible()),
                 GridItem(.flexible())
             ], spacing: 10) {
-                ForEach(searchVM.albums.indices, id: \.self) { index in
+                ForEach(0..<limitedItems.count, id: \.self) { index in
                     let sObj = searchVM.albums[index]
                     NavigationLink(destination: AlbumView(slugAlbum: sObj.slug)) {
                         MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
@@ -350,15 +343,30 @@ struct AlbumsSearchContentView: View {
                 }
                 
             }
-            .padding(.bottom, 70)
-            .padding(.top, 20)
+            .padding(.bottom, CGFloat(padding))
         }
     }
 }
 
 struct ArtistsSearchContentView: View {
-    let searchText: String
     @ObservedObject var searchVM: SearchViewModel
+    let maxItems6: Bool
+    let padding: Int
+    
+    private var limitedItems: [Artist] {
+        if maxItems6{
+            Array(searchVM.artists.prefix(6))
+        }else {
+            Array(searchVM.artists)
+        }
+        
+    }
+    
+    init(searchVM: SearchViewModel, maxItems6: Bool = false, padding: Int = 70) {
+        self.searchVM = searchVM
+        self.maxItems6 = maxItems6
+        self.padding = padding
+    }
     
     var body: some View {
         ScrollView(showsIndicators: false){
@@ -366,7 +374,7 @@ struct ArtistsSearchContentView: View {
                 GridItem(.flexible()),
                 GridItem(.flexible())
             ], spacing: 10) {
-                ForEach(searchVM.artists.indices, id: \.self) { index in
+                ForEach(0..<limitedItems.count, id: \.self) { index in
                     let sObj = searchVM.artists[index]
                     NavigationLink(destination: ArtistView(slugArtist: sObj.slug)) {
                         ArtistItemView(artist: sObj)
@@ -374,15 +382,31 @@ struct ArtistsSearchContentView: View {
                 }
                 
             }
-            .padding(.bottom, 70)
-            .padding(.top, 20)
+            .padding(.bottom, CGFloat(padding))
+
         }
     }
 }
 
 struct PlaylistsSearchContentView: View {
-    let searchText: String
     @ObservedObject var searchVM: SearchViewModel
+    let maxItems6: Bool
+    let padding: Int
+    
+    private var limitedItems: [Playlist] {
+        if maxItems6{
+            Array(searchVM.playlists.prefix(6))
+        }else {
+            Array(searchVM.playlists)
+        }
+        
+    }
+    
+    init(searchVM: SearchViewModel, maxItems6: Bool = false, padding: Int = 70) {
+        self.searchVM = searchVM
+        self.maxItems6 = maxItems6
+        self.padding = padding
+    }
     
     var body: some View {
         ScrollView(showsIndicators: false){
@@ -390,7 +414,7 @@ struct PlaylistsSearchContentView: View {
                 GridItem(.flexible()),
                 GridItem(.flexible())
             ], spacing: 10) {
-                ForEach(searchVM.playlists.indices, id: \.self) { index in
+                ForEach(0..<limitedItems.count, id: \.self) { index in
                     let sObj = searchVM.playlists[index]
                     NavigationLink(destination: PlaylistView(slugPlaylist: sObj.slug)) {
                         MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
@@ -398,14 +422,14 @@ struct PlaylistsSearchContentView: View {
                 }
                 
             }
-            .padding(.bottom, 70)
-            .padding(.top, 20)
+            .padding(.bottom, CGFloat(padding))
+//            .padding(.top, 20)
         }
     }
 }
 
 struct ProfilesSearchContentView: View {
-    let searchText: String
+    //    let searchText: String
     @ObservedObject var searchVM: SearchViewModel
     
     var body: some View {
@@ -504,4 +528,70 @@ enum SearchTab: String, CaseIterable {
     case artists = "Artists"
     case playlists = "Playlists"
     
+}
+
+struct TopResultView: View {
+    let track: Track
+    var body: some View {
+        NavigationLink(destination: TrackView(slugTrack: track.slug)){
+            HStack(spacing: 12) {
+                AsyncImage(url: URL(string: track.album.image)) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    Rectangle()
+                        .fill(Color.gray.opacity(0.3))
+                }
+                .frame(width: 60, height: 60)
+                .clipped()
+                .cornerRadius(8)
+                
+                // Song info
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(track.title)
+                        .font(.customFont(.bold, fontSize: 16))
+                        .foregroundColor(.white)
+                        .lineLimit(1)
+                    
+                    HStack(spacing: 4) {
+                        Text("Song")
+                            .font(.customFont(.regular, fontSize: 14))
+                            .foregroundColor(.gray)
+                        
+                        Text("•")
+                            .font(.customFont(.regular, fontSize: 14))
+                            .foregroundColor(.gray)
+                        
+                        Text(track.artist.displayName)
+                            .font(.customFont(.regular, fontSize: 14))
+                            .foregroundColor(.gray)
+                            .lineLimit(1)
+                    }
+                }
+                
+                Spacer()
+                
+                // Play button
+                Button(action: {
+                    // Play action
+                    print("Play")
+                }) {
+                    Circle()
+                        .fill(Color.green)
+                        .frame(width: 40, height: 40)
+                        .overlay(
+                            Image(systemName: "play.fill")
+                                .foregroundColor(.black)
+                                .font(.system(size: 16))
+                                .offset(x: 1) // Slight offset for visual balance
+                        )
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+            .background(Color.lightBg)
+            .cornerRadius(8)
+        }
+    }
 }

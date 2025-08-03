@@ -6,14 +6,25 @@
 //
 
 import SwiftUI
-
 struct TrackListViewImage: View {
     let tracks: [Track]
     let onMoreOptions: ((Int) -> Void)?
+    let maxItems6: Bool
+    let padding: Int
     
-    init(tracks: [Track], onMoreOptions: ((Int) -> Void)? = nil) {
+    private var limitedItems: [Track] {
+        if maxItems6 {
+            return Array(tracks.prefix(6))
+        } else {
+            return Array(tracks)
+        }
+    }
+    
+    init(tracks: [Track], maxItems6: Bool = false, padding: Int = 100, onMoreOptions: ((Int) -> Void)? = nil) {
         self.tracks = tracks
+        self.maxItems6 = maxItems6
         self.onMoreOptions = onMoreOptions
+        self.padding = padding
     }
     
     var body: some View {
@@ -54,7 +65,7 @@ struct TrackListViewImage: View {
                     .padding(.horizontal, 12)
                     .padding(.bottom, 8)
                 
-                ForEach(0..<tracks.count, id: \.self) { index in
+                ForEach(0..<limitedItems.count, id: \.self) { index in
                     HStack(spacing: 8) {
                         // Track number
                         Text("\(index + 1)")

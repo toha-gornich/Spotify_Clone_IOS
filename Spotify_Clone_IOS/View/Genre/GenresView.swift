@@ -128,16 +128,14 @@ struct GenresView: View {
     
     private func performSearch() {
         guard !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            print("Пустий пошуковий запит")
             return
         }
         
         searchQuery = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        // Додаємо невелику затримку для кращої UX
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             isShowingSearchResults = true
-            print("Шукаємо: \(searchQuery)")
+            print("Search: \(searchQuery)")
         }
     }
 }
