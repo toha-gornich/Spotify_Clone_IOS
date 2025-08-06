@@ -14,7 +14,7 @@ struct LoginView: View {
         GeometryReader { geometry in
             ZStack {
                 // Background
-                Color.black
+                Color.bg
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {

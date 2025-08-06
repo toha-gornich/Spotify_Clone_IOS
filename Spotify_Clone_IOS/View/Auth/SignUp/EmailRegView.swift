@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct CreateAccountView: View {
+struct EmailRegView: View {
+    @EnvironmentObject var registrationData: RegistrationData
     @Environment(\.dismiss) private var dismiss
     @State private var email: String = ""
     @FocusState private var isEmailFocused: Bool
@@ -126,5 +127,5 @@ struct CreateAccountView: View {
 }
 
 #Preview {
-    CreateAccountView()
+    EmailRegView()
 }

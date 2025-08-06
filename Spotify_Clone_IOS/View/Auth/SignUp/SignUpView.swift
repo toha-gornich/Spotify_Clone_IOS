@@ -70,7 +70,7 @@ struct SignUpView: View {
                         
                         // Sign up buttons section
                         VStack(spacing: 16) {
-                                NavigationLink(destination: CreateAccountView()){
+                                NavigationLink(destination: EmailRegView()){
                                     HStack {
                                         Image(systemName: "envelope.fill")
                                             .font(.title2)
