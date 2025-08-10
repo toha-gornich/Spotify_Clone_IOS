@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EmailRegView: View {
-    @EnvironmentObject var registrationData: RegistrationData
+    
     @Environment(\.dismiss) private var dismiss
     @State private var email: String = ""
     @FocusState private var isEmailFocused: Bool
@@ -47,32 +47,24 @@ struct EmailRegView: View {
                     .padding(.top, 10)
                     
                     // Content
-                    VStack(alignment: .leading, spacing: 20) {
-                        Spacer().frame(height: 40)
+                    VStack(alignment: .center) {
+                        
                         
                         // Title
-                        VStack(alignment: .leading, spacing: 20) {
+                        VStack(alignment: .leading) {
                             Text("What's your email?")
-                                .font(.system(size: 28, weight: .bold))
+                                .font(.system(size: 24, weight: .bold))
                                 .foregroundColor(.white)
-                                .padding(.horizontal, 24)
+                                .padding(.horizontal)
                             
                             // Email input field
-                            VStack(alignment: .leading, spacing: 12) {
+                            VStack(alignment: .leading) {
                                 ZStack(alignment: .leading) {
                                     RoundedRectangle(cornerRadius: 8)
-                                        .fill(Color.gray.opacity(0.3))
+                                        .fill(Color.primaryText35)
                                         .frame(height: 56)
                                     
                                     HStack {
-                                        // Green cursor indicator
-                                        if isEmailFocused && email.isEmpty {
-                                            Rectangle()
-                                                .fill(Color.green)
-                                                .frame(width: 2, height: 24)
-                                                .padding(.leading, 16)
-                                        }
-                                        
                                         TextField("", text: $email)
                                             .font(.system(size: 16))
                                             .foregroundColor(.white)
@@ -80,41 +72,41 @@ struct EmailRegView: View {
                                             .textInputAutocapitalization(.never)
                                             .keyboardType(.emailAddress)
                                             .autocorrectionDisabled()
-                                            .padding(.horizontal, 16)
+                                            .padding(.horizontal)
                                         
                                         Spacer()
                                     }
                                 }
-                                .padding(.horizontal, 24)
+                                .padding(.horizontal)
                                 
                                 Text("You'll need to confirm this email later.")
                                     .font(.system(size: 14))
                                     .foregroundColor(.white.opacity(0.7))
-                                    .padding(.horizontal, 24)
+                                    .padding(.horizontal)
                             }
                         }
                         
-                        Spacer()
+                        Spacer().frame(height: 40)
                         
-                        // Next button
-                        VStack(spacing: 20) {
-                            Button(action: {
-                                // Next action
-                            }) {
-                                Text("Next")
-                                    .font(.system(size: 16, weight: .bold))
-                                    .foregroundColor(.black)
-                                    .frame(maxWidth: .infinity)
-                                    .frame(height: 56)
-                                    .background(email.isEmpty ? Color.gray.opacity(0.5) : Color.gray.opacity(0.8))
-                                    .cornerRadius(28)
-                            }
-                            .disabled(email.isEmpty)
-                            .padding(.horizontal, 80)
+                        Button(action: {
+                            // Next action
+                        }) {
+                            Text("Next")
+                                .font(.system(size: 16, weight: .bold))
+                                .foregroundColor(.black)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 56)
+                                .background(email.isEmpty ? Color.primaryText80 : Color.primaryText80)
+                                .cornerRadius(28)
                         }
-                        .padding(.bottom, 40)
+                        .disabled(email.isEmpty)
+                        .frame(width: 100)
+                        
+                        
+                        
                         
                         Spacer()
+                        
                     }
                 }
             }

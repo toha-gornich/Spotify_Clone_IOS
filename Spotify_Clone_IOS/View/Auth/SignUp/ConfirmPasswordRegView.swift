@@ -1,16 +1,23 @@
 //
-//  PasswordRegView.swift
+//  ConfirmPasswordRegView.swift
 //  Spotify_Clone_IOS
 //
-//  Created by Горніч Антон on 07.08.2025.
+//  Created by Горніч Антон on 08.08.2025.
 //
 
 import SwiftUI
-struct PasswordRegView: View {
+
+struct ConfirmPasswordRegView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var password: String = ""
+    @State private var confirmPassword: String = ""
     @State private var isPasswordVisible: Bool = false
     @FocusState private var isPasswordFocused: Bool
+    
+    let originalPassword: String
+    
+    var isPasswordMatching: Bool {
+        return confirmPassword == originalPassword && !confirmPassword.isEmpty
+    }
     
     var body: some View {
         GeometryReader { geometry in
@@ -51,7 +58,7 @@ struct PasswordRegView: View {
                         
                         // Title
                         VStack(alignment: .leading) {
-                            Text("Create a password")
+                            Text("Repeat your password")
                                 .font(.system(size: 24, weight: .bold))
                                 .foregroundColor(.white)
                                 .padding(.horizontal)
@@ -65,7 +72,7 @@ struct PasswordRegView: View {
                                     
                                     HStack {
                                         if isPasswordVisible {
-                                            TextField("", text: $password)
+                                            TextField("", text: $confirmPassword)
                                                 .font(.system(size: 16))
                                                 .foregroundColor(.white)
                                                 .focused($isPasswordFocused)
@@ -73,7 +80,7 @@ struct PasswordRegView: View {
                                                 .autocorrectionDisabled()
                                                 .padding(.horizontal)
                                         } else {
-                                            SecureField("", text: $password)
+                                            SecureField("", text: $confirmPassword)
                                                 .font(.system(size: 16))
                                                 .foregroundColor(.white)
                                                 .focused($isPasswordFocused)
@@ -97,7 +104,7 @@ struct PasswordRegView: View {
                                 }
                                 .padding(.horizontal)
                                 
-                                Text("Use at least 8 characters.")
+                                Text("Make sure it matches your password.")
                                     .font(.system(size: 14))
                                     .foregroundColor(.white.opacity(0.7))
                                     .padding(.horizontal)
@@ -107,19 +114,22 @@ struct PasswordRegView: View {
                         Spacer().frame(height: 40)
                         
                         Button(action: {
-                            // Next action
+                            // Complete registration action
                         }) {
                             Text("Next")
                                 .font(.system(size: 16, weight: .bold))
                                 .foregroundColor(.black)
                                 .frame(maxWidth: .infinity)
                                 .frame(height: 56)
-                                .background(password.count < 10 ? Color.primaryText80 : Color.primaryText80)
+                                .background(isPasswordMatching ? Color.primaryText80 : Color.primaryText80)
                                 .cornerRadius(28)
                         }
-                        .disabled(password.count < 10)
+                        .disabled(!isPasswordMatching)
                         .frame(width: 100)
-
+                        
+                        
+                        
+                        
                         Spacer()
                         
                     }
@@ -134,5 +144,5 @@ struct PasswordRegView: View {
 }
 
 #Preview {
-    PasswordRegView()
+    ConfirmPasswordRegView(originalPassword: "testpassword123")
 }

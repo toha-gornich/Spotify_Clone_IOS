@@ -63,9 +63,7 @@ struct LoginView: View {
                     // Login buttons section
                     VStack(spacing: 16) {
                         // Continue with email button
-                        Button(action: {
-                            // Email login action
-                        }) {
+                        NavigationLink(destination: AuthView()) {
                             HStack {
                                 Image(systemName: "envelope.fill")
                                     .font(.title2)
@@ -80,8 +78,6 @@ struct LoginView: View {
                             .background(Color.green)
                             .cornerRadius(28)
                         }
-                        .buttonStyle(PlainButtonStyle())
-                        
                         // Continue with Google button
                         Button(action: {
                             // Google login action
