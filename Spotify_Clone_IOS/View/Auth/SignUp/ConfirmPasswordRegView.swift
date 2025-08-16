@@ -8,16 +8,11 @@
 import SwiftUI
 
 struct ConfirmPasswordRegView: View {
+    @ObservedObject var registrationData: RegistrationData
     @Environment(\.dismiss) private var dismiss
-    @State private var confirmPassword: String = ""
     @State private var isPasswordVisible: Bool = false
     @FocusState private var isPasswordFocused: Bool
-    
-    let originalPassword: String
-    
-    var isPasswordMatching: Bool {
-        return confirmPassword == originalPassword && !confirmPassword.isEmpty
-    }
+    @State private var showDateOfBirthView = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -64,15 +59,23 @@ struct ConfirmPasswordRegView: View {
                                 .padding(.horizontal)
                             
                             // Password input field
-                            VStack(alignment: .leading) {
+                            VStack(alignment: .leading, spacing: 8) {
                                 ZStack(alignment: .leading) {
                                     RoundedRectangle(cornerRadius: 8)
                                         .fill(Color.primaryText35)
                                         .frame(height: 56)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .stroke(
+                                                    !registrationData.confirmPassword.isEmpty && !registrationData.doPasswordsMatch ?
+                                                    Color.red : Color.clear,
+                                                    lineWidth: 1
+                                                )
+                                        )
                                     
                                     HStack {
                                         if isPasswordVisible {
-                                            TextField("", text: $confirmPassword)
+                                            TextField("", text: $registrationData.confirmPassword)
                                                 .font(.system(size: 16))
                                                 .foregroundColor(.white)
                                                 .focused($isPasswordFocused)
@@ -80,13 +83,22 @@ struct ConfirmPasswordRegView: View {
                                                 .autocorrectionDisabled()
                                                 .padding(.horizontal)
                                         } else {
-                                            SecureField("", text: $confirmPassword)
+                                            SecureField("", text: $registrationData.confirmPassword)
                                                 .font(.system(size: 16))
                                                 .foregroundColor(.white)
                                                 .focused($isPasswordFocused)
                                                 .textInputAutocapitalization(.never)
                                                 .autocorrectionDisabled()
                                                 .padding(.horizontal)
+                                        }
+                                        
+                                        Spacer()
+                                        
+                                        // Validation indicator
+                                        if !registrationData.confirmPassword.isEmpty {
+                                            Image(systemName: registrationData.doPasswordsMatch ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                                .foregroundColor(registrationData.doPasswordsMatch ? .green : .red)
+                                                .padding(.trailing, 12)
                                         }
                                         
                                         // Eye icon for password visibility toggle
@@ -98,37 +110,51 @@ struct ConfirmPasswordRegView: View {
                                                 .foregroundColor(.gray)
                                                 .padding(.trailing)
                                         }
-                                        
-                                        Spacer()
                                     }
                                 }
                                 .padding(.horizontal)
                                 
-                                Text("Make sure it matches your password.")
-                                    .font(.system(size: 14))
-                                    .foregroundColor(.white.opacity(0.7))
-                                    .padding(.horizontal)
+                                // Error message or helper text
+                                VStack(alignment: .leading, spacing: 4) {
+                                    if !registrationData.confirmPassword.isEmpty && !registrationData.doPasswordsMatch {
+                                        Text("Passwords don't match")
+                                            .font(.system(size: 14))
+                                            .foregroundColor(.red)
+                                            .padding(.horizontal)
+                                    } else {
+                                        Text("Make sure it matches your password.")
+                                            .font(.system(size: 14))
+                                            .foregroundColor(.white.opacity(0.7))
+                                            .padding(.horizontal)
+                                    }
+                                }
                             }
                         }
                         
                         Spacer().frame(height: 40)
                         
                         Button(action: {
-                            // Complete registration action
+                            print("Confirm password tapped - Passwords match: \(registrationData.doPasswordsMatch)")
+                            
+                            if registrationData.doPasswordsMatch {
+                                showDateOfBirthView = true
+                                print("Navigating to date of birth view")
+                            }
                         }) {
                             Text("Next")
                                 .font(.system(size: 16, weight: .bold))
                                 .foregroundColor(.black)
                                 .frame(maxWidth: .infinity)
                                 .frame(height: 56)
-                                .background(isPasswordMatching ? Color.primaryText80 : Color.primaryText80)
+                                .background(
+                                    registrationData.doPasswordsMatch ?
+                                    Color.white : Color.primaryText80
+                                )
                                 .cornerRadius(28)
                         }
-                        .disabled(!isPasswordMatching)
-                        .frame(width: 100)
-                        
-                        
-                        
+                        .disabled(!registrationData.doPasswordsMatch)
+                        .frame(width: 200)
+                        .opacity(registrationData.doPasswordsMatch ? 1.0 : 0.6)
                         
                         Spacer()
                         
@@ -140,9 +166,23 @@ struct ConfirmPasswordRegView: View {
         .onTapGesture {
             isPasswordFocused = false
         }
+        .navigationDestination(isPresented: $showDateOfBirthView) {
+            DateOfBirthRegView(registrationData: registrationData)
+        }
     }
 }
 
+
 #Preview {
-    ConfirmPasswordRegView(originalPassword: "testpassword123")
+    
+    if #available(iOS 16.0, *) {
+        NavigationStack {
+            EmailRegView()
+        }
+    } else {
+        NavigationView {
+            EmailRegView()
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
+    }
 }

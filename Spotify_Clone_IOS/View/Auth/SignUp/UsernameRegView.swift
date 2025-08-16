@@ -1,18 +1,17 @@
 //
-//  CreateAccountView.swift
+//  UsernameRegView.swift
 //  Spotify_Clone_IOS
 //
-//  Created by Горніч Антон on 03.08.2025.
+//  Created by Горніч Антон on 16.08.2025.
 //
 
 import SwiftUI
 
-struct EmailRegView: View {
-    
+
+struct UsernameRegView: View {
+    @ObservedObject var registrationData: RegistrationData
     @Environment(\.dismiss) private var dismiss
-    @StateObject private var registrationData = RegistrationData()
-    @FocusState private var isEmailFocused: Bool
-    @State private var showPasswordView = false
+    @FocusState private var isUsernameFocused: Bool
     
     var body: some View {
         GeometryReader { geometry in
@@ -50,15 +49,16 @@ struct EmailRegView: View {
                     // Content
                     VStack(alignment: .center) {
                         
+                        Spacer().frame(height: 40)
                         
                         // Title
                         VStack(alignment: .leading) {
-                            Text("What's your email?")
+                            Text("Create a username")
                                 .font(.system(size: 24, weight: .bold))
                                 .foregroundColor(.white)
                                 .padding(.horizontal)
                             
-                            // Email input field
+                            // Username input field
                             VStack(alignment: .leading, spacing: 8) {
                                 ZStack(alignment: .leading) {
                                     RoundedRectangle(cornerRadius: 8)
@@ -67,28 +67,27 @@ struct EmailRegView: View {
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 8)
                                                 .stroke(
-                                                    !registrationData.email.isEmpty && !registrationData.isEmailValid ?
+                                                    !registrationData.username.isEmpty && !registrationData.isUsernameValid ?
                                                     Color.red : Color.clear,
                                                     lineWidth: 1
                                                 )
                                         )
                                     
                                     HStack {
-                                        TextField("", text: $registrationData.email)
+                                        TextField("", text: $registrationData.username)
                                             .font(.system(size: 16))
                                             .foregroundColor(.white)
-                                            .focused($isEmailFocused)
+                                            .focused($isUsernameFocused)
                                             .textInputAutocapitalization(.never)
-                                            .keyboardType(.emailAddress)
                                             .autocorrectionDisabled()
                                             .padding(.horizontal)
                                         
                                         Spacer()
                                         
                                         // Validation indicator
-                                        if !registrationData.email.isEmpty {
-                                            Image(systemName: registrationData.isEmailValid ? "checkmark.circle.fill" : "xmark.circle.fill")
-                                                .foregroundColor(registrationData.isEmailValid ? .green : .red)
+                                        if !registrationData.username.isEmpty {
+                                            Image(systemName: registrationData.isUsernameValid ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                                .foregroundColor(registrationData.isUsernameValid ? .green : .red)
                                                 .padding(.trailing)
                                         }
                                     }
@@ -97,13 +96,13 @@ struct EmailRegView: View {
                                 
                                 // Error message or helper text
                                 VStack(alignment: .leading, spacing: 4) {
-                                    if !registrationData.email.isEmpty && !registrationData.isEmailValid {
-                                        Text("Please enter a valid email address")
+                                    if !registrationData.username.isEmpty && !registrationData.isUsernameValid {
+                                        Text("Username must be at least 3 characters long.")
                                             .font(.system(size: 14))
                                             .foregroundColor(.red)
                                             .padding(.horizontal)
                                     } else {
-                                        Text("You'll need to confirm this email later.")
+                                        Text("Username must be at least 3 characters long.")
                                             .font(.system(size: 14))
                                             .foregroundColor(.white.opacity(0.7))
                                             .padding(.horizontal)
@@ -115,23 +114,28 @@ struct EmailRegView: View {
                         Spacer().frame(height: 40)
                         
                         Button(action: {
-                            // Navigate to password view
-                            showPasswordView = true
+                            print("Username button tapped")
+                            print("Username: \(registrationData.username)")
+                            print("Is valid: \(registrationData.isUsernameValid)")
+                            
+                            if registrationData.isUsernameValid {
+                                registrationData.registerUser()
+                                
+                            }
                         }) {
-                            Text("Next")
+                            Text("Complete Registration")
                                 .font(.system(size: 16, weight: .bold))
                                 .foregroundColor(.black)
                                 .frame(maxWidth: .infinity)
                                 .frame(height: 56)
                                 .background(
-                                    registrationData.isEmailValid ?
-                                    Color.white : Color.primaryText80
+                                    registrationData.isUsernameValid ? Color.white : Color.primaryText80
                                 )
                                 .cornerRadius(28)
                         }
-                        .disabled(!registrationData.isEmailValid)
-                        .frame(width: 200)
-                        .opacity(registrationData.isEmailValid ? 1.0 : 0.6)
+                        .disabled(!registrationData.isUsernameValid)
+                        .frame(width: 280)
+                        .opacity(registrationData.isUsernameValid ? 1.0 : 0.6)
                         
                         Spacer()
                     }
@@ -140,16 +144,9 @@ struct EmailRegView: View {
         }
         .navigationBarHidden(true)
         .onTapGesture {
-            isEmailFocused = false
-        }
-        .navigationDestination(isPresented: $showPasswordView) {
-            PasswordRegView(registrationData: registrationData)
+            isUsernameFocused = false
         }
     }
-}
-
-#Preview {
-    NavigationView{
-        EmailRegView()
-    }
+    
+    
 }

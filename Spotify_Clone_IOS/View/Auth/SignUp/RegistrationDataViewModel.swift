@@ -51,7 +51,7 @@ class RegistrationData: ObservableObject {
     }
     
     // POST request function
-    func registerUser() async throws {
+    func registerUser(){
 
     }
 }

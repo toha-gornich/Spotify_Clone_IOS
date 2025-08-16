@@ -7,10 +7,12 @@
 
 import SwiftUI
 struct PasswordRegView: View {
+    @ObservedObject var registrationData: RegistrationData
     @Environment(\.dismiss) private var dismiss
-    @State private var password: String = ""
     @State private var isPasswordVisible: Bool = false
     @FocusState private var isPasswordFocused: Bool
+    @State private var showDateOfBirthView = false
+    @State private var showConfirmPasswordView = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -57,15 +59,23 @@ struct PasswordRegView: View {
                                 .padding(.horizontal)
                             
                             // Password input field
-                            VStack(alignment: .leading) {
+                            VStack(alignment: .leading, spacing: 8) {
                                 ZStack(alignment: .leading) {
                                     RoundedRectangle(cornerRadius: 8)
                                         .fill(Color.primaryText35)
                                         .frame(height: 56)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .stroke(
+                                                    !registrationData.password.isEmpty && !registrationData.isPasswordValid ?
+                                                    Color.red : Color.clear,
+                                                    lineWidth: 1
+                                                )
+                                        )
                                     
                                     HStack {
                                         if isPasswordVisible {
-                                            TextField("", text: $password)
+                                            TextField("", text: $registrationData.password)
                                                 .font(.system(size: 16))
                                                 .foregroundColor(.white)
                                                 .focused($isPasswordFocused)
@@ -73,13 +83,22 @@ struct PasswordRegView: View {
                                                 .autocorrectionDisabled()
                                                 .padding(.horizontal)
                                         } else {
-                                            SecureField("", text: $password)
+                                            SecureField("", text: $registrationData.password)
                                                 .font(.system(size: 16))
                                                 .foregroundColor(.white)
                                                 .focused($isPasswordFocused)
                                                 .textInputAutocapitalization(.never)
                                                 .autocorrectionDisabled()
                                                 .padding(.horizontal)
+                                        }
+                                        
+                                        Spacer()
+                                        
+                                        // Validation indicator
+                                        if !registrationData.password.isEmpty {
+                                            Image(systemName: registrationData.isPasswordValid ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                                .foregroundColor(registrationData.isPasswordValid ? .green : .red)
+                                                .padding(.trailing, 12)
                                         }
                                         
                                         // Eye icon for password visibility toggle
@@ -91,34 +110,52 @@ struct PasswordRegView: View {
                                                 .foregroundColor(.gray)
                                                 .padding(.trailing)
                                         }
-                                        
-                                        Spacer()
                                     }
                                 }
                                 .padding(.horizontal)
                                 
-                                Text("Use at least 8 characters.")
-                                    .font(.system(size: 14))
-                                    .foregroundColor(.white.opacity(0.7))
-                                    .padding(.horizontal)
+                                // Error message or helper text
+                                VStack(alignment: .leading, spacing: 4) {
+                                    if !registrationData.password.isEmpty && !registrationData.isPasswordValid {
+                                        Text("Password must be at least 8 characters long")
+                                            .font(.system(size: 14))
+                                            .foregroundColor(.red)
+                                            .padding(.horizontal)
+                                    } else {
+                                        Text("Use at least 8 characters.")
+                                            .font(.system(size: 14))
+                                            .foregroundColor(.white.opacity(0.7))
+                                            .padding(.horizontal)
+                                    }
+                                }
                             }
                         }
                         
                         Spacer().frame(height: 40)
                         
                         Button(action: {
-                            // Next action
+                            print("Password button tapped - Valid: \(registrationData.isPasswordValid)")
+                            print("Password length: \(registrationData.password.count)")
+                            
+                            if registrationData.isPasswordValid {
+                                showConfirmPasswordView = true
+                                print("Navigating to confirm password view")
+                            }
                         }) {
                             Text("Next")
                                 .font(.system(size: 16, weight: .bold))
                                 .foregroundColor(.black)
                                 .frame(maxWidth: .infinity)
                                 .frame(height: 56)
-                                .background(password.count < 10 ? Color.primaryText80 : Color.primaryText80)
+                                .background(
+                                    registrationData.isPasswordValid ?
+                                    Color.white : Color.primaryText80
+                                )
                                 .cornerRadius(28)
                         }
-                        .disabled(password.count < 10)
-                        .frame(width: 100)
+                        .disabled(!registrationData.isPasswordValid)
+                        .frame(width: 200)
+                        .opacity(registrationData.isPasswordValid ? 1.0 : 0.6)
 
                         Spacer()
                         
@@ -130,9 +167,27 @@ struct PasswordRegView: View {
         .onTapGesture {
             isPasswordFocused = false
         }
+        .fullScreenCover(isPresented: $showDateOfBirthView) {
+            NavigationStack {
+                DateOfBirthRegView(registrationData: registrationData)
+            }
+        }
+        .navigationDestination(isPresented: $showConfirmPasswordView) {
+            ConfirmPasswordRegView(registrationData: registrationData)
+        }
     }
 }
 
 #Preview {
-    PasswordRegView()
+    
+    if #available(iOS 16.0, *) {
+        NavigationStack {
+            EmailRegView()
+        }
+    } else {
+        NavigationView {
+            EmailRegView()
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
+    }
 }
