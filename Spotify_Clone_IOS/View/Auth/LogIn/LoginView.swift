@@ -172,12 +172,6 @@ struct LoginView: View {
                         .buttonStyle(PlainButtonStyle())
                     }
                     .padding(.bottom, 40)
-                    
-                    // Bottom indicator (matching GreetingView)
-                    RoundedRectangle(cornerRadius: 2.5)
-                        .fill(Color.white)
-                        .frame(width: 134, height: 5)
-                        .padding(.bottom, 8)
                 }
             }
         }

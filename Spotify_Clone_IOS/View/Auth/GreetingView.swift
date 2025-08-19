@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct GreetingView: View {
+    @State private var showSignUp = false
+    @State private var showLogin = false
+    
     var body: some View {
-        NavigationView {
+        NavigationStack {
             GeometryReader { geometry in
                 ZStack {
                     // Background
@@ -52,7 +55,9 @@ struct GreetingView: View {
                         // Buttons Section
                         VStack(spacing: 16) {
                             // Sign up button
-                            NavigationLink(destination: SignUpView()) {
+                            Button(action: {
+                                showSignUp = true
+                            }) {
                                 Text("Sign up for free")
                                     .font(.system(size: 16, weight: .bold))
                                     .foregroundColor(.black)
@@ -64,7 +69,9 @@ struct GreetingView: View {
                             .buttonStyle(PlainButtonStyle())
                             
                             // Log in button
-                            NavigationLink(destination: LoginView()) {
+                            Button(action: {
+                                showLogin = true
+                            }) {
                                 Text("Log in")
                                     .font(.system(size: 16, weight: .bold))
                                     .foregroundColor(.white)
@@ -82,24 +89,21 @@ struct GreetingView: View {
                         }
                         .padding(.horizontal, 24)
                         .padding(.bottom, 40)
-                        
-                        // Bottom indicator
-                        RoundedRectangle(cornerRadius: 2.5)
-                            .fill(Color.white)
-                            .frame(width: 134, height: 5)
-                            .padding(.bottom, 8)
                     }
                 }
             }
             .navigationBarHidden(true)
+            .navigationDestination(isPresented: $showSignUp) {
+                SignUpView()
+            }
+            .navigationDestination(isPresented: $showLogin) {
+                LoginView()
+            }
         }
-        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
 
 #Preview {
-    NavigationView{
-        GreetingView()
-    }
+    GreetingView()
 }

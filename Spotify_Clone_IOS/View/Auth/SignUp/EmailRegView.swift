@@ -149,7 +149,7 @@ struct EmailRegView: View {
 }
 
 #Preview {
-    NavigationView{
+    NavigationStack {
         EmailRegView()
     }
 }

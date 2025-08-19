@@ -8,14 +8,21 @@
 import SwiftUI
 
 class RegistrationData: ObservableObject {
+    var user = RegUser.empty
+    var userResponse: RegUserResponse = RegUserResponse.empty
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var confirmPassword: String = ""
     @Published var username: String = ""
-    @Published var dateOfBirth: Date = Date()
-    @Published var gender: String = ""
-    @Published var country: String = ""
+    
     @Published var marketingConsent: Bool = false
+    
+    @Published var isLoading: Bool = false
+    @Published var errorMessage: String? = nil
+    @Published var alertItem: AlertItem?
+    @Published var registrationSuccess: Bool = false 
+    
+    private let networkManager = NetworkManager.shared
     
     // Validation
     var isEmailValid: Bool {
@@ -43,15 +50,54 @@ class RegistrationData: ObservableObject {
             "email": email,
             "password": password,
             "username": username,
-            "date_of_birth": formatter.string(from: dateOfBirth),
-            "gender": gender,
-            "country": country,
-            "marketing_consent": marketingConsent
         ]
     }
     
-    // POST request function
-    func registerUser(){
-
+    @MainActor
+    func registerUser() async -> Bool {
+        isLoading = true
+        registrationSuccess = false
+        
+        do {
+            let response = try await NetworkManager.shared.postRegUser(regUser: createUser())
+            
+            self.userResponse = response
+            self.isLoading = false
+            self.registrationSuccess = true
+            print("Registration successful: \(String(describing: response))")
+            return true
+            
+        } catch {
+            self.handleError(error)
+            self.isLoading = false
+            self.registrationSuccess = false
+            return false
+        }
+    }
+    
+    func createUser() -> RegUser {
+        return RegUser(
+            email: email,
+            displayName: username,
+            password: password,
+            rePassword: confirmPassword
+        )
+    }
+    
+    private func handleError(_ error: Error) {
+        if let apError = error as? APError {
+            switch apError {
+            case .invalidResponse:
+                alertItem = AlertContext.invalidResponse
+            case .invalidURL:
+                alertItem = AlertContext.invalidURL
+            case .invalidData:
+                alertItem = AlertContext.invalidData
+            case .unableToComplete:
+                alertItem = AlertContext.unableToComplete
+            }
+        } else {
+            alertItem = AlertContext.invalidResponse
+        }
     }
 }

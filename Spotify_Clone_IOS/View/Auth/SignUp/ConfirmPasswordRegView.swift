@@ -167,22 +167,14 @@ struct ConfirmPasswordRegView: View {
             isPasswordFocused = false
         }
         .navigationDestination(isPresented: $showDateOfBirthView) {
-            DateOfBirthRegView(registrationData: registrationData)
+            UsernameRegView(registrationData: registrationData)
         }
     }
 }
 
 
 #Preview {
-    
-    if #available(iOS 16.0, *) {
-        NavigationStack {
-            EmailRegView()
-        }
-    } else {
-        NavigationView {
-            EmailRegView()
-        }
-        .navigationViewStyle(StackNavigationViewStyle())
+    NavigationStack {
+        ConfirmPasswordRegView(registrationData: RegistrationData())
     }
 }

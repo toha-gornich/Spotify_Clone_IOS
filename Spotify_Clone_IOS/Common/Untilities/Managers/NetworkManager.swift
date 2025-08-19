@@ -17,6 +17,136 @@ final class NetworkManager {
     private init() {}
   
     
+    func postRegUser(regUser: RegUser) async throws -> RegUserResponse {
+        print("postRegUser")
+        guard let url = URL(string: Constants.API.regUserURL) else {
+            throw APError.invalidURL
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        do {
+            let encoder = JSONEncoder()
+            request.httpBody = try encoder.encode(regUser)
+        } catch {
+            throw APError.invalidData
+        }
+        
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw APError.invalidResponse
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw APError.invalidResponse
+        }
+        do {
+            let decoder = JSONDecoder()
+            return try decoder.decode(RegUserResponse.self, from: data)
+        } catch {
+            throw APError.invalidData
+        }
+    }
+    
+    func postLogin(loginRequest: LoginRequest) async throws -> LoginResponse {
+        print("postLogin")
+        guard let url = URL(string: Constants.API.createTokenURL) else {
+            throw APError.invalidURL
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        do {
+            let encoder = JSONEncoder()
+            request.httpBody = try encoder.encode(loginRequest)
+        } catch {
+            throw APError.invalidData
+        }
+        
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw APError.invalidResponse
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw APError.invalidResponse
+        }
+        do {
+            let decoder = JSONDecoder()
+            return try decoder.decode(LoginResponse.self, from: data)
+        } catch {
+            throw APError.invalidData
+        }
+    }
+    
+    func postVerifyToken(tokenVerifyRequest: TokenVerifyRequest) async throws {
+        print("postVerifyToken")
+        guard let url = URL(string: Constants.API.verifyTokenURL) else {
+            throw APError.invalidURL
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        do {
+            let encoder = JSONEncoder()
+            request.httpBody = try encoder.encode(tokenVerifyRequest)
+        } catch {
+            throw APError.invalidData
+        }
+        
+        
+        let (_, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw APError.invalidResponse
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw APError.invalidResponse
+        }
+    }
+    
+    func postActivateAccount(activationRequest: AccountActivationRequest) async throws {
+        print("postActivateAccount - Starting")
+        
+        guard let url = URL(string: Constants.API.activationEmailURL) else {
+            print("postActivateAccount - Invalid URL")
+            throw APError.invalidURL
+        }
+        
+        print("postActivateAccount - URL: \(url)")
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let jsonData = try JSONEncoder().encode(activationRequest)
+        request.httpBody = jsonData
+        
+        if let jsonString = String(data: jsonData, encoding: .utf8) {
+            print("postActivateAccount - Data: \(jsonString)")
+        }
+        
+        print("postActivateAccount - Sending request")
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse,
+              200...299 ~= httpResponse.statusCode else {
+            print("postActivateAccount - Invalid response: \((response as? HTTPURLResponse)?.statusCode ?? -1)")
+            throw APError.invalidResponse
+        }
+        
+    }
     func getTracks() async throws ->[Track] {
         print("getTracks")
         guard let url = URL(string: Constants.API.tracksURL) else {

@@ -6,12 +6,11 @@
 //
 
 import SwiftUI
-
-
 struct UsernameRegView: View {
     @ObservedObject var registrationData: RegistrationData
     @Environment(\.dismiss) private var dismiss
     @FocusState private var isUsernameFocused: Bool
+    @State private var showAuthView = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -81,6 +80,7 @@ struct UsernameRegView: View {
                                             .textInputAutocapitalization(.never)
                                             .autocorrectionDisabled()
                                             .padding(.horizontal)
+                                            .disabled(registrationData.isLoading)
                                         
                                         Spacer()
                                         
@@ -114,28 +114,34 @@ struct UsernameRegView: View {
                         Spacer().frame(height: 40)
                         
                         Button(action: {
-                            print("Username button tapped")
-                            print("Username: \(registrationData.username)")
-                            print("Is valid: \(registrationData.isUsernameValid)")
-                            
-                            if registrationData.isUsernameValid {
-                                registrationData.registerUser()
-                                
+                            if registrationData.isUsernameValid && !registrationData.isLoading {
+                                handleRegistration()
                             }
                         }) {
-                            Text("Complete Registration")
-                                .font(.system(size: 16, weight: .bold))
-                                .foregroundColor(.black)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 56)
-                                .background(
-                                    registrationData.isUsernameValid ? Color.white : Color.primaryText80
-                                )
-                                .cornerRadius(28)
+                            HStack {
+                                if registrationData.isLoading {
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle(tint: .black))
+                                        .scaleEffect(0.8)
+                                    Text("Registering...")
+                                        .font(.system(size: 16, weight: .bold))
+                                        .foregroundColor(.black)
+                                } else {
+                                    Text("Complete Registration")
+                                        .font(.system(size: 16, weight: .bold))
+                                        .foregroundColor(.black)
+                                }
+                            }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 56)
+                            .background(
+                                (registrationData.isUsernameValid && !registrationData.isLoading) ? Color.white : Color.primaryText80
+                            )
+                            .cornerRadius(28)
                         }
-                        .disabled(!registrationData.isUsernameValid)
+                        .disabled(!registrationData.isUsernameValid || registrationData.isLoading)
                         .frame(width: 280)
-                        .opacity(registrationData.isUsernameValid ? 1.0 : 0.6)
+                        .opacity((registrationData.isUsernameValid && !registrationData.isLoading) ? 1.0 : 0.6)
                         
                         Spacer()
                     }
@@ -144,9 +150,40 @@ struct UsernameRegView: View {
         }
         .navigationBarHidden(true)
         .onTapGesture {
-            isUsernameFocused = false
+            if !registrationData.isLoading {
+                isUsernameFocused = false
+            }
+        }
+        .fullScreenCover(isPresented: $showAuthView) {
+            // CHANGED: Pass a flag to hide back button
+            AuthView(hideBackButton: true)
+        }
+        .alert(item: $registrationData.alertItem) { alertItem in
+            Alert(title: alertItem.title,
+                  message: alertItem.message,
+                  dismissButton: alertItem.dismissButton)
         }
     }
     
     
+    private func handleRegistration() {
+        Task {
+            let success = await registrationData.registerUser()
+            
+            if success {
+                // Only show AuthView on successful registration
+                await MainActor.run {
+                    showAuthView = true
+                }
+            }
+            // If registration fails, alertItem will be set and alert will show
+        }
+    }
 }
+
+#Preview {
+    NavigationStack {
+        UsernameRegView(registrationData: RegistrationData())
+    }
+}
+

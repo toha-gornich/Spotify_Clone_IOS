@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SignUpView: View {
     @Environment(\.dismiss) private var dismiss
+    @State private var showEmailReg = false
+    @State private var showLogin = false
 
     
     var body: some View {
@@ -70,21 +72,23 @@ struct SignUpView: View {
                         
                         // Sign up buttons section
                         VStack(spacing: 16) {
-                                NavigationLink(destination: EmailRegView()){
-                                    HStack {
-                                        Image(systemName: "envelope.fill")
-                                            .font(.title2)
-                                            .foregroundColor(.black)
-                                        
-                                        Text("Continue with email")
-                                            .font(.system(size: 16, weight: .bold))
-                                            .foregroundColor(.black)
-                                    }
+                            Button(action: {
+                                showEmailReg = true
+                            }) {
+                                HStack {
+                                    Image(systemName: "envelope.fill")
+                                        .font(.title2)
+                                        .foregroundColor(.black)
+                                    
+                                    Text("Continue with email")
+                                        .font(.system(size: 16, weight: .bold))
+                                        .foregroundColor(.black)
                                 }
                                 .frame(maxWidth: .infinity)
                                 .frame(height: 56)
                                 .background(Color.green)
                                 .cornerRadius(28)
+                            }
                                     
                           
                             
@@ -146,32 +150,36 @@ struct SignUpView: View {
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundColor(.white.opacity(0.7))
                             
-                            NavigationLink(destination: LoginView()) {
+                            Button(action: {
+                                showLogin = true
+                            }) {
                                 Text("Log in")
                                     .font(.system(size: 16, weight: .bold))
                                     .foregroundColor(.white)
                                     .underline()
-                                    .buttonStyle(PlainButtonStyle())
                             }
+                            .buttonStyle(PlainButtonStyle())
 
                         }
                         .padding(.bottom, 40)
                         
-                        // Bottom indicator (matching GreetingView)
-                        RoundedRectangle(cornerRadius: 2.5)
-                            .fill(Color.white)
-                            .frame(width: 134, height: 5)
-                            .padding(.bottom, 8)
                     }
                 }
             }
         .navigationBarHidden(true)
+        .navigationDestination(isPresented: $showEmailReg) {
+            EmailRegView()
+        }
+        .navigationDestination(isPresented: $showLogin) {
+            LoginView()
+        }
         }
     }
 
 
+
 #Preview {
-    NavigationView{
+    NavigationStack {
         SignUpView()
     }
 }

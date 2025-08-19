@@ -134,12 +134,10 @@ struct PasswordRegView: View {
                         Spacer().frame(height: 40)
                         
                         Button(action: {
-                            print("Password button tapped - Valid: \(registrationData.isPasswordValid)")
-                            print("Password length: \(registrationData.password.count)")
+                        
                             
                             if registrationData.isPasswordValid {
                                 showConfirmPasswordView = true
-                                print("Navigating to confirm password view")
                             }
                         }) {
                             Text("Next")
@@ -167,11 +165,6 @@ struct PasswordRegView: View {
         .onTapGesture {
             isPasswordFocused = false
         }
-        .fullScreenCover(isPresented: $showDateOfBirthView) {
-            NavigationStack {
-                DateOfBirthRegView(registrationData: registrationData)
-            }
-        }
         .navigationDestination(isPresented: $showConfirmPasswordView) {
             ConfirmPasswordRegView(registrationData: registrationData)
         }
@@ -179,15 +172,7 @@ struct PasswordRegView: View {
 }
 
 #Preview {
-    
-    if #available(iOS 16.0, *) {
-        NavigationStack {
-            EmailRegView()
-        }
-    } else {
-        NavigationView {
-            EmailRegView()
-        }
-        .navigationViewStyle(StackNavigationViewStyle())
+    NavigationStack {
+        PasswordRegView(registrationData: RegistrationData())
     }
 }
