@@ -23,8 +23,8 @@ struct Spotify_Clone_IOSApp: App {
                     } else if isTokenValid {
                          MainView()
                     } else {
-                        MainView()
-//                        GreetingView()
+//                        MainView()
+                        GreetingView()
                     }
                 }
                 .onAppear {
@@ -44,11 +44,18 @@ struct Spotify_Clone_IOSApp: App {
     
     private func verifyToken() {
         let token = UserDefaults.standard.string(forKey: "auth_token")
-
         
         Task {
+            if token?.isEmpty != false {
+                await MainActor.run {
+                    isTokenValid = false
+                    isLoading = false
+                }
+                return
+            }
+            
             do {
-                try await networkManager.postVerifyToken(tokenVerifyRequest: TokenVerifyRequest(token: token ?? ""))
+                try await networkManager.postVerifyToken(tokenVerifyRequest: TokenVerifyRequest(token: token!))
                 await MainActor.run {
                     isTokenValid = true
                     isLoading = false

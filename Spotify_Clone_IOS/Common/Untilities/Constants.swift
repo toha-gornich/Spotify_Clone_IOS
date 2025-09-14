@@ -11,7 +11,7 @@ import Foundation
 struct Constants {
 
     struct API{
-        static let baseURL = "http://192.168.0.160:8080/api/v1/"
+        static let baseURL = "http://192.168.0.159:8080/api/v1/"
         
         static let createTokenURL = baseURL + "auth/jwt/create/"
         static let verifyTokenURL = baseURL + "auth/jwt/verify/"

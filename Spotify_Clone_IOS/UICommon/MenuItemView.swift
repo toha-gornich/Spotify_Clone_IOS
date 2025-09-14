@@ -10,6 +10,14 @@ import SwiftUI
 struct MenuItemView: View {
     let icon: String
     let title: String
+    let action: (() -> Void)?
+    
+    
+    init(icon: String, title: String, action: (() -> Void)? = nil) {
+        self.icon = icon
+        self.title = title
+        self.action = action
+    }
     
     var body: some View {
         HStack(spacing: 16) {
@@ -28,7 +36,7 @@ struct MenuItemView: View {
         .padding(.vertical, 16)
         .contentShape(Rectangle())
         .onTapGesture {
+            action?()
         }
     }
 }
-
