@@ -134,7 +134,6 @@ struct ConfirmPasswordRegView: View {
                         Spacer().frame(height: 40)
                         
                         Button(action: {
-                            print("Confirm password tapped - Passwords match: \(registrationData.doPasswordsMatch)")
                             
                             if registrationData.doPasswordsMatch {
                                 showDateOfBirthView = true

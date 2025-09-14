@@ -23,7 +23,8 @@ struct Spotify_Clone_IOSApp: App {
                     } else if isTokenValid {
                          MainView()
                     } else {
-                        GreetingView()
+                        MainView()
+//                        GreetingView()
                     }
                 }
                 .onAppear {

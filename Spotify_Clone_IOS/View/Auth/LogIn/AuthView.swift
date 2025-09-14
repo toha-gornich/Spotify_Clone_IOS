@@ -204,6 +204,7 @@ struct AuthView: View {
                                 .disabled(viewModel.isLoading)
                             }
                             
+                            
                             // Resend activation code
                             VStack(spacing: 8) {
                                 Text("Haven't received the email with the activation code?")
@@ -249,7 +250,7 @@ struct AuthView: View {
         
     }
     
-    // MARK: - Action Methods
+    // MARK: - Action Methodуs
     private func handleLogin() {
         Task {
             let success = await viewModel.login()
