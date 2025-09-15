@@ -9,8 +9,8 @@ import Foundation
 import SwiftUI
 
 @MainActor
-class AuthViewModel: ObservableObject {
-    // MARK: - Published Properties
+final class AuthViewModel: ObservableObject {
+    
     @Published var emailOrUsername: String = ""
     @Published var password: String = ""
     @Published var isPasswordVisible: Bool = false

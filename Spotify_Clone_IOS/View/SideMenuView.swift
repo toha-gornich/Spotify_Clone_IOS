@@ -10,7 +10,7 @@ struct SideMenuView: View {
     @Binding var isShowing: Bool
     @State private var showGreeting = false
     @State private var showAccount = false
-    @State private var selectedAccountTab: AccountView.AccountTab = .account
+    @State private var selectedAccountTab: UserDashboardView.AccountTab = .account
     
     var edgeTransition: AnyTransition = .move(edge: .leading)
     
@@ -72,7 +72,7 @@ struct SideMenuView: View {
                                              showAccount = true
                                          })
                             .fullScreenCover(isPresented: $showAccount) {
-                                AccountView(selectedTab: selectedAccountTab)
+                                UserDashboardView(selectedTab: selectedAccountTab)
                             }
                             
                             MenuItemView(icon: "person.circle.fill", title: "Profile",
