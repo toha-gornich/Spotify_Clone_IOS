@@ -12,10 +12,10 @@ import SwiftUI
     
     @Published var alertItem: AlertItem?
     @Published var user = UserMe.empty()
-    @Published var email = "user1@gmail.com"
-    @Published var displayName = "Mafan"
-    @Published var selectedGender = "Male"
-    @Published var selectedCountry = "Ukraine"
+    @Published var email = ""
+    @Published var displayName = ""
+    @Published var selectedGender = ""
+    @Published var selectedCountry = ""
     @Published var password = ""
     @Published var showGenderPicker = false
     @Published var showCountryPicker = false
@@ -52,29 +52,34 @@ import SwiftUI
     }
     
     func updateProfile() {
-        // TODO: Implement profile update logic
-        // This could include API calls, validation, etc.
-        print("Updating profile with:")
-        print("Email: \(email)")
-        print("Display Name: \(displayName)")
-        print("Gender: \(selectedGender)")
-        print("Country: \(selectedCountry)")
+        user = UserMe(id: user.id, email: email, displayName: displayName, gender: selectedGender, country: selectedCountry, image: user.image, color: user.color, typeProfile: user.typeProfile, artistSlug: user.artistSlug, isPremium: user.isPremium, followersCount: user.followersCount, followingCount: user.followingCount, playlistsCount: user.playlistsCount)
+        
+        let updateUser = UpdateUserMe(id: user.id, email: email, displayName: displayName, gender: selectedGender, country: selectedCountry, image: user.image)
+        
+        isLoading = true
+    
+        Task {
+            do {
+                let fetchedUser = try await networkManager.putUserMe(user: updateUser)
+                print(fetchedUser.displayName)
+                isLoading = false
+                
+            } catch {
+                handleError(error)
+                isLoading = false
+                
+            }
+        }
+
     }
     
     func deleteAccount() {
-        // TODO: Implement account deletion logic
-        // This should include password validation, API calls, etc.
         guard !password.isEmpty else {
             print("Password is required for account deletion")
             return
         }
         
-        print("Attempting to delete account with password verification")
-        // Here you would typically:
-        // 1. Validate the password
-        // 2. Make API call to delete account
-        // 3. Handle success/error responses
-        // 4. Navigate away from the account screen
+
     }
 
     func getUserMe() {
@@ -84,6 +89,10 @@ import SwiftUI
             do {
                 let fetchedUser = try await networkManager.getUserMe()
                 user = fetchedUser
+                email = user.email
+                displayName = user.displayName ?? ""
+                selectedGender = user.gender ?? ""
+                selectedCountry = user.country!.countryName() ?? "Not specified"
                 isLoading = false
                 
             } catch {
@@ -95,8 +104,8 @@ import SwiftUI
     }
   
     private func handleError(_ error: Error) {
-        if let apError = error as? APError {
-            switch apError {
+        if let appError = error as? APError {
+            switch appError {
             case .invalidResponse:
                 alertItem = AlertContext.invalidResponse
             case .invalidURL:

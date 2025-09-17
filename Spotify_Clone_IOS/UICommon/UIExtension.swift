@@ -192,3 +192,24 @@ struct RoundedCorners: Shape {
         return Path(path.cgPath)
     }
 }
+
+
+extension String {
+    
+    func countryName(locale: Locale = Locale.current) -> String? {
+        return locale.localizedString(forRegionCode: self)
+    }
+    
+    func countryCode(locale: Locale = Locale.current) -> String? {
+        if #available(iOS 16.0, *) {
+            return Locale.Region.isoRegions.first { region in
+                locale.localizedString(forRegionCode: region.identifier)?.lowercased() == self.lowercased()
+            }?.identifier
+        } else {
+            return Locale.isoRegionCodes.first { code in
+                locale.localizedString(forRegionCode: code)?.lowercased() == self.lowercased()
+            }
+        }
+    }
+    
+}

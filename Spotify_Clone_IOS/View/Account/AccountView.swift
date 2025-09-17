@@ -153,9 +153,7 @@ struct AccountView: View {
                             )
                         }
                     }
-                    .task() {
-                        accountVM.getUserMe()
-                    }
+                    
                     
                     
                     Button(action: {
@@ -226,6 +224,9 @@ struct AccountView: View {
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 40)
+            }
+            .onAppear() {
+                accountVM.getUserMe()
             }
         }
         .background(Color.bg)

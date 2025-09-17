@@ -19,6 +19,7 @@ struct Constants {
         static let regUserURL = baseURL + "auth/users/"
         static let userMeURL = baseURL + "auth/users/me/"
         
+        
         static let tracksURL = baseURL + "tracks/"
         static let trackBySlugURL = baseURL + "tracks/"
         static let tracksBySlugGenreURL = baseURL + "tracks/?genre__slug="

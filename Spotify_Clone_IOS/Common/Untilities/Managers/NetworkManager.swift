@@ -166,6 +166,59 @@ final class NetworkManager {
         
     }
     
+    func putUserMe(user: UpdateUserMe, imageData: Data? = nil) async throws -> UserMe {
+        guard let url = URL(string: Constants.API.userMeURL) else {
+            throw APError.invalidURL
+        }
+        
+        let boundary = "Boundary-\(UUID().uuidString)"
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        var body = Data()
+        
+        // Helper function to add form field
+        func addFormField(name: String, value: String) {
+            if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "\(value)\r\n".data(using: .utf8) { body.append(data) }
+        }
+        
+        // Add text fields
+        user.displayName.map { addFormField(name: "display_name", value: $0) }
+        user.gender.map { addFormField(name: "gender", value: $0) }
+        user.country.map { addFormField(name: "country", value: $0) }
+
+        
+        // Add image file if provided
+        if let imageData = imageData {
+            if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "Content-Disposition: form-data; name=\"image\"; filename=\"profile.jpg\"\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "Content-Type: image/jpeg\r\n\r\n".data(using: .utf8) { body.append(data) }
+            body.append(imageData)
+            if let data = "\r\n".data(using: .utf8) { body.append(data) }
+        }
+        
+        if let data = "--\(boundary)--\r\n".data(using: .utf8) { body.append(data) }
+        request.httpBody = body
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw APError.invalidResponse
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw APError.invalidResponse
+        }
+        
+        let decoder = JSONDecoder()
+        return try decoder.decode(UserMe.self, from: data)
+    }
+    
+    
+    
     func getTracks() async throws ->[Track] {
         print("getTracks")
         guard let url = URL(string: Constants.API.tracksURL) else {

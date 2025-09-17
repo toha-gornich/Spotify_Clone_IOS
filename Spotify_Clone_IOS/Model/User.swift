@@ -174,3 +174,32 @@ struct UserMe: Codable, Identifiable {
         )
     }
 }
+
+struct UpdateUserMe: Codable, Identifiable {
+    let id: Int
+    let email: String
+    let displayName: String?
+    let gender: String?
+    let country: String?
+    let image: String?
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case email
+        case displayName = "display_name"
+        case gender
+        case country
+        case image
+    }
+    
+    static func empty() -> UpdateUserMe {
+        return UpdateUserMe(
+            id: 0,
+            email: "",
+            displayName: "",
+            gender: "",
+            country: "",
+            image: ""
+        )
+    }
+}
