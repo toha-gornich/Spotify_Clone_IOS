@@ -21,6 +21,7 @@ struct Spotify_Clone_IOSApp: App {
                     if isLoading {
                         ProgressView("Loading...")
                     } else if isTokenValid {
+//                        GreetingView()
                          MainView()
                     } else {
 //                        MainView()

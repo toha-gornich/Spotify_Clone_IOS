@@ -148,6 +148,24 @@ final class NetworkManager {
         }
         
     }
+    func getUserMe() async throws -> UserMe {
+        print("getUserMe")
+        guard let url = URL(string: Constants.API.userMeURL) else {
+            throw APError.invalidURL
+        }
+        
+        let (data, _) = try await URLSession.shared.data(from: url)
+        
+        do{
+            let decoder = JSONDecoder()
+            return try decoder.decode(UserMe.self, from: data)
+        } catch{
+            throw APError.invalidData
+        }
+        
+        
+    }
+    
     func getTracks() async throws ->[Track] {
         print("getTracks")
         guard let url = URL(string: Constants.API.tracksURL) else {

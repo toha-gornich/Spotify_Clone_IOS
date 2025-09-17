@@ -122,7 +122,7 @@ struct Artist: Codable, Identifiable {
         }
     }
     
-    extension User {
+   extension User {
         var isArtist: Bool {
             return typeProfile == "Artist"
         }

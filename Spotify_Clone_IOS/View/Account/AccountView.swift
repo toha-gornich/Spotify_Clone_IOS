@@ -8,16 +8,7 @@
 import SwiftUI
 
 struct AccountView: View {
-    @State private var email = "user1@gmail.com"
-    @State private var displayName = "Mafan"
-    @State private var selectedGender = "Male"
-    @State private var selectedCountry = "Ukraine"
-    @State private var password = ""
-    @State private var showGenderPicker = false
-    @State private var showCountryPicker = false
-    
-    private let genders = ["Male", "Female", "Other"]
-    private let countries = ["Ukraine", "United States", "Canada", "United Kingdom", "Germany", "France", "Other"]
+    @StateObject private var accountVM = AccountViewModel()
     
     var body: some View {
         ScrollView {
@@ -70,7 +61,7 @@ struct AccountView: View {
                             .fontWeight(.medium)
                             .foregroundColor(.white)
                         
-                        TextField("", text: $email)
+                        TextField("", text: $accountVM.email)
                             .padding()
                             .background(
                                 RoundedRectangle(cornerRadius: 8)
@@ -87,7 +78,7 @@ struct AccountView: View {
                             .fontWeight(.medium)
                             .foregroundColor(.white)
                         
-                        TextField("", text: $displayName)
+                        TextField("", text: $accountVM.displayName)
                             .padding()
                             .background(
                                 RoundedRectangle(cornerRadius: 8)
@@ -105,10 +96,10 @@ struct AccountView: View {
                             .foregroundColor(.white)
                         
                         Button(action: {
-                            showGenderPicker.toggle()
+                            accountVM.showGenderSheet()
                         }) {
                             HStack {
-                                Text(selectedGender)
+                                Text(accountVM.selectedGender)
                                     .foregroundColor(.white)
                                 Spacer()
                                 Image(systemName: "chevron.down")
@@ -121,14 +112,11 @@ struct AccountView: View {
                                     .background(Color.clear)
                             )
                         }
-                        .actionSheet(isPresented: $showGenderPicker) {
-                            ActionSheet(
-                                title: Text("Select Gender"),
-                                buttons: genders.map { gender in
-                                    .default(Text(gender)) {
-                                        selectedGender = gender
-                                    }
-                                } + [.cancel()]
+                        .sheet(isPresented: $accountVM.showGenderPicker) {
+                            GenderPickerSheet(
+                                selectedGender: $accountVM.selectedGender,
+                                showGenderPicker: $accountVM.showGenderPicker,
+                                genderOptions: accountVM.genders
                             )
                         }
                     }
@@ -141,10 +129,10 @@ struct AccountView: View {
                             .foregroundColor(.white)
                         
                         Button(action: {
-                            showCountryPicker.toggle()
+                            accountVM.showCountrySheet()
                         }) {
                             HStack {
-                                Text(selectedCountry)
+                                Text(accountVM.selectedCountry)
                                     .foregroundColor(.white)
                                 Spacer()
                                 Image(systemName: "chevron.down")
@@ -157,21 +145,21 @@ struct AccountView: View {
                                     .background(Color.clear)
                             )
                         }
-                        .actionSheet(isPresented: $showCountryPicker) {
-                            ActionSheet(
-                                title: Text("Select Country"),
-                                buttons: countries.map { country in
-                                    .default(Text(country)) {
-                                        selectedCountry = country
-                                    }
-                                } + [.cancel()]
+                        .sheet(isPresented: $accountVM.showCountryPicker) {
+                            CountryPickerSheet(
+                                selectedCountry: $accountVM.selectedCountry,
+                                showCountryPicker: $accountVM.showCountryPicker,
+                                countryOptions: accountVM.countries
                             )
                         }
+                    }
+                    .task() {
+                        accountVM.getUserMe()
                     }
                     
                     
                     Button(action: {
-                        // Update profile action
+                        accountVM.updateProfile()
                     }) {
                         Text("Update profile")
                             .font(.body)
@@ -179,9 +167,10 @@ struct AccountView: View {
                             .foregroundColor(.black)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.green)
+                            .background(accountVM.canUpdateProfile ? Color.green : Color.green.opacity(0.5))
                             .cornerRadius(8)
                     }
+                    .disabled(!accountVM.canUpdateProfile)
                     .padding(.top, 10)
                     
                     // Delete Account Section
@@ -209,7 +198,7 @@ struct AccountView: View {
                                 .fontWeight(.medium)
                                 .foregroundColor(.white)
                             
-                            SecureField("Password", text: $password)
+                            SecureField("Password", text: $accountVM.password)
                                 .padding()
                                 .background(
                                     RoundedRectangle(cornerRadius: 8)
@@ -227,9 +216,11 @@ struct AccountView: View {
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(Color.red.opacity(0.8))
+                                .background(accountVM.canDeleteAccount ? Color.red.opacity(0.8) : Color.red.opacity(0.4))
                                 .cornerRadius(8)
                         }
+                        .disabled(!accountVM.canDeleteAccount)
+                        
                     }
                     .padding(.top, 20)
                 }
@@ -239,8 +230,8 @@ struct AccountView: View {
         }
         .background(Color.bg)
     }
+        
 }
-
 #Preview {
     AccountView()
 }

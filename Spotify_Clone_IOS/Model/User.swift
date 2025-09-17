@@ -8,7 +8,7 @@
 import Foundation
 
 
-// MARK: - User Model
+
 struct User: Codable, Identifiable {
     let id: Int
     let displayName: String
@@ -124,3 +124,53 @@ struct RegUserResponse: Codable {
     }
 }
 
+
+struct UserMe: Codable, Identifiable {
+    let id: Int
+    let email: String
+    let displayName: String?
+    let gender: String?
+    let country: String?
+    let image: String?
+    let color: String?
+    let typeProfile: String?
+    let artistSlug: String?   
+    let isPremium: Bool
+    let followersCount: Int
+    let followingCount: Int
+    let playlistsCount: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case email
+        case displayName = "display_name"
+        case gender
+        case country
+        case image
+        case color
+        case typeProfile = "type_profile"
+        case artistSlug = "artist_slug"
+        case isPremium = "is_premium"
+        case followersCount = "followers_count"
+        case followingCount = "following_count"
+        case playlistsCount = "playlists_count"
+    }
+    
+    static func empty() -> UserMe {
+        return UserMe(
+            id: 0,
+            email: "",
+            displayName: "",
+            gender: "",
+            country: "",
+            image: "",
+            color: "",
+            typeProfile: "",
+            artistSlug: "",
+            isPremium: false,
+            followersCount: 0,
+            followingCount: 0,
+            playlistsCount: 0
+        )
+    }
+}

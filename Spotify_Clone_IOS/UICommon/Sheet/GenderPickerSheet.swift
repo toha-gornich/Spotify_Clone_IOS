@@ -17,7 +17,6 @@ struct GenderPickerSheet: View {
             Color.lightBg.ignoresSafeArea()
             
             VStack(spacing: 0) {
-                // Top section with Done button
                 HStack {
                     Spacer()
                     Button("Done") {
@@ -31,7 +30,6 @@ struct GenderPickerSheet: View {
                 
                 Spacer().frame(height: 40)
                 
-                // Gender options
                 VStack(spacing: 0) {
                     ForEach(genderOptions, id: \.self) { option in
                         Button(action: {
@@ -65,6 +63,3 @@ struct GenderPickerSheet: View {
         .presentationCornerRadius(20)
     }
 }
-//#Preview {
-//    GenderPickerSheet()
-//}
