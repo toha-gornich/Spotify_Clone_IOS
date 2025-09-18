@@ -12,6 +12,7 @@ import SwiftUI
     
     @Published var alertItem: AlertItem?
     @Published var user = UserMe.empty()
+    @Published var selectedImage: UIImage?
     @Published var email = ""
     @Published var displayName = ""
     @Published var selectedGender = ""
@@ -20,6 +21,7 @@ import SwiftUI
     @Published var showGenderPicker = false
     @Published var showCountryPicker = false
     @Published var isLoading: Bool = false
+    @Published var showImagePicker = false
     
     private let networkManager = NetworkManager.shared
     
@@ -61,7 +63,7 @@ import SwiftUI
         Task {
             do {
                 let fetchedUser = try await networkManager.putUserMe(user: updateUser)
-                print(fetchedUser.displayName)
+                user = fetchedUser
                 isLoading = false
                 
             } catch {

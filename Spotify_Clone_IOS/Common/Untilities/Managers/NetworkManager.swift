@@ -178,20 +178,19 @@ final class NetworkManager {
         
         var body = Data()
         
-        // Helper function to add form field
+        
         func addFormField(name: String, value: String) {
             if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
             if let data = "Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n".data(using: .utf8) { body.append(data) }
             if let data = "\(value)\r\n".data(using: .utf8) { body.append(data) }
         }
         
-        // Add text fields
+        
         user.displayName.map { addFormField(name: "display_name", value: $0) }
         user.gender.map { addFormField(name: "gender", value: $0) }
         user.country.map { addFormField(name: "country", value: $0) }
 
         
-        // Add image file if provided
         if let imageData = imageData {
             if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
             if let data = "Content-Disposition: form-data; name=\"image\"; filename=\"profile.jpg\"\r\n".data(using: .utf8) { body.append(data) }

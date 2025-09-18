@@ -42,17 +42,43 @@ struct AccountView: View {
                 VStack(spacing: 20) {
                     
                     VStack(spacing: 16) {
-                        
-                        Circle()
-                            .fill(Color.gray.opacity(0.3))
-                            .frame(width: 100, height: 100)
-                            .overlay(
-                                Image(systemName: "person.fill")
-                                    .font(.system(size: 40))
-                                    .foregroundColor(.white)
-                            )
+                        Button(action: {
+                            accountVM.showImagePicker = true
+                        }) {
+                            Circle()
+                                .fill(Color.gray.opacity(0.3))
+                                .frame(width: 200, height: 200)
+                                .overlay(
+                                    Group {
+                                        if let selectedImage = accountVM.selectedImage {
+                                            Image(uiImage: selectedImage)
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fill)
+                                                .frame(width: 200, height: 200)
+                                                .clipShape(Circle())
+                                        } else {
+                                            SpotifyRemoteImage(urlString: accountVM.user.image ?? "")
+                                                .frame(width: 200, height: 200)
+                                                .clipShape(Circle())
+                                        }
+                                    }
+                                )
+                                .overlay(
+                                    Image(systemName: "camera.fill")
+                                        .font(.system(size: 24))
+                                        .foregroundColor(.white)
+                                        .background(Color.black.opacity(0.6))
+                                        .clipShape(Circle())
+                                        .padding(8)
+                                    , alignment: .bottomTrailing
+                                )
+                        }
+                        .buttonStyle(PlainButtonStyle())
                     }
                     .padding(.top, 20)
+                    .sheet(isPresented: $accountVM.showImagePicker) {
+                        ImagePicker(selectedImage: $accountVM.selectedImage)
+                    }
                     
                     // Email Field
                     VStack(alignment: .leading, spacing: 8) {
