@@ -54,25 +54,40 @@ import SwiftUI
     }
     
     func updateProfile() {
-        user = UserMe(id: user.id, email: email, displayName: displayName, gender: selectedGender, country: selectedCountry, image: user.image, color: user.color, typeProfile: user.typeProfile, artistSlug: user.artistSlug, isPremium: user.isPremium, followersCount: user.followersCount, followingCount: user.followingCount, playlistsCount: user.playlistsCount)
-        
-        let updateUser = UpdateUserMe(id: user.id, email: email, displayName: displayName, gender: selectedGender, country: selectedCountry, image: user.image)
-        
         isLoading = true
-    
+        
         Task {
             do {
-                let fetchedUser = try await networkManager.putUserMe(user: updateUser)
+                
+                var imageData: Data? = nil
+                if let selectedImage = selectedImage {
+                    imageData = selectedImage.jpegData(compressionQuality: 0.8)
+                }
+                
+                
+                let updateUser = UpdateUserMe(
+                    id: user.id,
+                    email: email,
+                    displayName: displayName,
+                    gender: selectedGender,
+                    country: selectedCountry,
+                    image: user.image
+                )
+                
+                
+                let fetchedUser = try await networkManager.putUserMe(user: updateUser, imageData: imageData)
+                
+                
                 user = fetchedUser
+                
+                selectedImage = nil
                 isLoading = false
                 
             } catch {
                 handleError(error)
                 isLoading = false
-                
             }
         }
-
     }
     
     func deleteAccount() {
@@ -131,7 +146,11 @@ import SwiftUI
     }
     
     var canUpdateProfile: Bool {
-        isEmailValid && isDisplayNameValid
+        return selectedImage != nil ||
+               email != user.email ||
+               displayName != user.displayName ||
+               selectedGender != user.gender ||
+               selectedCountry != user.country
     }
     
     var canDeleteAccount: Bool {

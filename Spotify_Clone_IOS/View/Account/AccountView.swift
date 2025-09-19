@@ -10,6 +10,8 @@ import SwiftUI
 struct AccountView: View {
     @StateObject private var accountVM = AccountViewModel()
     
+
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
