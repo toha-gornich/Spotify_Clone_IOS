@@ -148,7 +148,7 @@ final class NetworkManager {
         }
         
     }
-    func getUserMe() async throws -> UserMe {
+    func getUserMe() async throws -> UserMy {
         print("getUserMe")
         guard let url = URL(string: Constants.API.userMeURL) else {
             throw APError.invalidURL
@@ -158,7 +158,7 @@ final class NetworkManager {
         
         do{
             let decoder = JSONDecoder()
-            return try decoder.decode(UserMe.self, from: data)
+            return try decoder.decode(UserMy.self, from: data)
         } catch{
             throw APError.invalidData
         }
@@ -166,8 +166,13 @@ final class NetworkManager {
         
     }
     
-    func putUserMe(user: UpdateUserMe, imageData: Data? = nil) async throws -> UserMe {
-        guard let url = URL(string: Constants.API.userMeURL) else {
+    func putUserMe(user: UpdateUserMe, imageData: Data? = nil) async throws -> UserMy {
+        print("🚀 Starting putUserMe request")
+        print("📝 User data: displayName=\(user.displayName ?? "nil"), gender=\(user.gender ?? "nil"), country=\(user.country ?? "nil")")
+        print("🖼️ Image data: \(imageData != nil ? "\(imageData!.count) bytes" : "no image")")
+        
+        guard let url = URL(string: Constants.API.profilesMyURL) else {
+            print("❌ Invalid URL: \(Constants.API.profilesMyURL)")
             throw APError.invalidURL
         }
         
@@ -178,20 +183,19 @@ final class NetworkManager {
         
         var body = Data()
         
-        
         func addFormField(name: String, value: String) {
+            print("➕ Adding field: \(name) = \(value)")
             if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
             if let data = "Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n".data(using: .utf8) { body.append(data) }
             if let data = "\(value)\r\n".data(using: .utf8) { body.append(data) }
         }
         
-        
         user.displayName.map { addFormField(name: "display_name", value: $0) }
         user.gender.map { addFormField(name: "gender", value: $0) }
         user.country.map { addFormField(name: "country", value: $0) }
 
-        
         if let imageData = imageData {
+            print("🖼️ Adding image data (\(imageData.count) bytes)")
             if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
             if let data = "Content-Disposition: form-data; name=\"image\"; filename=\"profile.jpg\"\r\n".data(using: .utf8) { body.append(data) }
             if let data = "Content-Type: image/jpeg\r\n\r\n".data(using: .utf8) { body.append(data) }
@@ -202,18 +206,38 @@ final class NetworkManager {
         if let data = "--\(boundary)--\r\n".data(using: .utf8) { body.append(data) }
         request.httpBody = body
         
-        let (data, response) = try await URLSession.shared.data(for: request)
+        print("📤 Sending request to: \(url)")
+        print("📦 Request body size: \(body.count) bytes")
         
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw APError.invalidResponse
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            print("📥 Response status: \(httpResponse.statusCode)")
+            print("📄 Response data size: \(data.count) bytes")
+            
+            if let responseString = String(data: data, encoding: .utf8) {
+                print("📋 Response body: \(responseString)")
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ HTTP error: \(httpResponse.statusCode)")
+                throw APError.invalidResponse
+            }
+            
+            let decoder = JSONDecoder()
+            let result = try decoder.decode(UserMy.self, from: data)
+            print("✅ Successfully decoded user data")
+            return result
+            
+        } catch {
+            print("❌ Request failed with error: \(error)")
+            throw error
         }
-        
-        guard (200...299).contains(httpResponse.statusCode) else {
-            throw APError.invalidResponse
-        }
-        
-        let decoder = JSONDecoder()
-        return try decoder.decode(UserMe.self, from: data)
     }
     
     

@@ -18,6 +18,7 @@ struct Constants {
         static let activationEmailURL = baseURL + "auth/users/activation/"
         static let regUserURL = baseURL + "auth/users/"
         static let userMeURL = baseURL + "auth/users/me/"
+        static let profilesMyURL = baseURL + "users/profiles/my/"
         
         
         static let tracksURL = baseURL + "tracks/"

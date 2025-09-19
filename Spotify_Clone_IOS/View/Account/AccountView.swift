@@ -149,7 +149,7 @@ struct AccountView: View {
                         }
                     }
                     
-                    
+                    // Country Picker
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Country")
                             .font(.body)
@@ -177,7 +177,7 @@ struct AccountView: View {
                             CountryPickerSheet(
                                 selectedCountry: $accountVM.selectedCountry,
                                 showCountryPicker: $accountVM.showCountryPicker,
-                                countryOptions: accountVM.countries
+                                countries: accountVM.countries
                             )
                         }
                     }
@@ -187,16 +187,33 @@ struct AccountView: View {
                     Button(action: {
                         accountVM.updateProfile()
                     }) {
-                        Text("Update profile")
-                            .font(.body)
-                            .fontWeight(.medium)
-                            .foregroundColor(.black)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(accountVM.canUpdateProfile ? Color.green : Color.green.opacity(0.5))
-                            .cornerRadius(8)
+                        HStack {
+                            if accountVM.isLoading {
+                                ProgressView()
+                                    .scaleEffect(0.8)
+                                    .foregroundColor(.black)
+                            }
+                            
+                            Text("Update profile")
+                                .font(.body)
+                                .fontWeight(.medium)
+                                .foregroundColor(.black)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(
+                            accountVM.canUpdateProfile ?
+                            Color.green :
+                            Color.green.opacity(0.5)
+                        )
+                        .cornerRadius(8)
+                        .scaleEffect(accountVM.canUpdateProfile ? 1.0 : 0.98)
+                        .opacity(accountVM.canUpdateProfile ? 1.0 : 0.6)
                     }
-                    .disabled(!accountVM.canUpdateProfile)
+                    .disabled(!accountVM.canUpdateProfile || accountVM.isLoading)
+                    .scaleEffect(accountVM.canUpdateProfile ? 1.0 : 0.95)
+                    .animation(.easeInOut(duration: 0.2), value: accountVM.canUpdateProfile)
+                    .animation(.easeInOut(duration: 0.1), value: accountVM.isLoading)
                     .padding(.top, 10)
                     
                     // Delete Account Section
@@ -255,6 +272,7 @@ struct AccountView: View {
             }
             .onAppear() {
                 accountVM.getUserMe()
+                accountVM.loadUserData()
             }
         }
         .background(Color.bg)

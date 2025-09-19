@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-
 struct GenderPickerSheet: View {
     @Binding var selectedGender: String
     @Binding var showGenderPicker: Bool
@@ -37,11 +36,16 @@ struct GenderPickerSheet: View {
                         }) {
                             HStack {
                                 Text(option)
-                                    .font(.system(size: 20))
+                                    .font(.system(size: 18))
                                     .foregroundColor(selectedGender == option ? .white : .gray)
                                     .padding(.vertical, 12)
                                 
                                 Spacer()
+                                
+                                if selectedGender == option {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(.white)
+                                }
                             }
                             .padding(.horizontal)
                         }
@@ -58,7 +62,7 @@ struct GenderPickerSheet: View {
                 Spacer()
             }
         }
-        .presentationDetents([.height(400)])
+        .presentationDetents([.height(350)])
         .presentationDragIndicator(.hidden)
         .presentationCornerRadius(20)
     }

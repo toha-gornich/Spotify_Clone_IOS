@@ -8,10 +8,17 @@ import Foundation
 import SwiftUI
 
 
+
+struct CountryData {
+    let name: String
+    let code: String
+}
+
+
 @MainActor final class AccountViewModel: ObservableObject {
     
     @Published var alertItem: AlertItem?
-    @Published var user = UserMe.empty()
+    @Published var user = UserMy.empty()
     @Published var selectedImage: UIImage?
     @Published var email = ""
     @Published var displayName = ""
@@ -26,8 +33,30 @@ import SwiftUI
     private let networkManager = NetworkManager.shared
     
     let genders = ["Male", "Female", "Other"]
-    let countries = ["Ukraine", "United States", "Canada", "United Kingdom", "Germany", "France", "Other"]
     
+    
+    lazy var countries: [CountryData] = {
+        let englishLocale = Locale(identifier: "en_US")
+        
+        if #available(iOS 16.0, *) {
+            return Locale.Region.isoRegions
+                .filter { $0.identifier.count == 2 }
+                .compactMap { region in
+                    guard let name = englishLocale.localizedString(forRegionCode: region.identifier) else { return nil }
+                    return CountryData(name: name, code: region.identifier)
+                }
+                .sorted { $0.name < $1.name }
+        } else {
+            return Locale.isoRegionCodes
+                .filter { $0.count == 2 }
+                .compactMap { code in
+                    guard let name = englishLocale.localizedString(forRegionCode: code) else { return nil }
+                    return CountryData(name: name, code: code)
+                }
+                .sorted { $0.name < $1.name }
+        }
+    }()
+        
     
     func showGenderSheet() {
         showGenderPicker = true
@@ -69,8 +98,8 @@ import SwiftUI
                     id: user.id,
                     email: email,
                     displayName: displayName,
-                    gender: selectedGender,
-                    country: selectedCountry,
+                    gender: selectedGender.lowercased(),
+                    country: getCountryCode(for: selectedCountry),
                     image: user.image
                 )
                 
@@ -146,16 +175,37 @@ import SwiftUI
     }
     
     var canUpdateProfile: Bool {
-        return selectedImage != nil ||
-               email != user.email ||
-               displayName != user.displayName ||
-               selectedGender != user.gender ||
-               selectedCountry != user.country
+        let hasDisplayNameChange = displayName != user.displayName
+        let hasEmailChange = email != user.email
+        let hasGenderChange = selectedGender.lowercased() != user.gender
+        
+        // We compare country codes, not names
+        let selectedCountryCode = getCountryCode(for: selectedCountry)
+        let hasCountryChange = selectedCountryCode != user.country
+        
+        let hasImageChange = selectedImage != nil
+        
+        return (hasDisplayNameChange || hasEmailChange || hasGenderChange || hasCountryChange || hasImageChange) && !isLoading
+    }
+
+    private func getCountryCode(for countryName: String) -> String {
+        return countries.first { $0.name == countryName }?.code ?? countryName
+    }
+
+    private func getCountryName(for countryCode: String) -> String {
+        return countries.first { $0.code == countryCode }?.name ?? countryCode
     }
     
     var canDeleteAccount: Bool {
         !password.isEmpty
     }
     
+    func loadUserData() {
+        email = user.email
+        displayName = user.displayName ?? ""
+        selectedGender = user.gender ?? ""
+        selectedCountry = user.country ?? ""
+        selectedImage = nil
+    }
     
 }

@@ -17,7 +17,6 @@ struct DatePickerSheet: View {
             Color.lightBg.ignoresSafeArea()
             
             VStack(spacing: 0) {
-                // Top section with Done button
                 HStack {
                     Spacer()
                     Button("Done") {
@@ -31,7 +30,6 @@ struct DatePickerSheet: View {
                 
                 Spacer().frame(height: 40)
                 
-                // Date Picker
                 DatePicker("", selection: $selectedDate, displayedComponents: .date)
                     .datePickerStyle(WheelDatePickerStyle())
                     .labelsHidden()
