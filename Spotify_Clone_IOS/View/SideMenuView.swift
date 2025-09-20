@@ -14,6 +14,8 @@ struct SideMenuView: View {
     
     var edgeTransition: AnyTransition = .move(edge: .leading)
     
+
+    
     var body: some View {
         ZStack(alignment: .leading) {
             if isShowing {
@@ -68,30 +70,30 @@ struct SideMenuView: View {
                             
                             MenuItemView(icon: "person.crop.circle.badge.plus", title: "Account",
                                          action: {
-                                             selectedAccountTab = .account
-                                             showAccount = true
-                                         })
+                                selectedAccountTab = .account
+                                showAccount = true
+                            })
                             .fullScreenCover(isPresented: $showAccount) {
                                 UserDashboardView(selectedTab: selectedAccountTab)
                             }
                             
                             MenuItemView(icon: "person.circle.fill", title: "Profile",
                                          action: {
-                                             selectedAccountTab = .profile
-                                             showAccount = true
-                                         })
+                                selectedAccountTab = .profile
+                                showAccount = true
+                            })
                             
                             MenuItemView(icon: "crown.fill", title: "Upgrade to Premium",
                                          action: {
-                                             selectedAccountTab = .subscription
-                                             showAccount = true
-                                         })
+                                selectedAccountTab = .subscription
+                                showAccount = true
+                            })
                             
                             MenuItemView(icon: "gearshape.fill", title: "Settings",
                                          action: {
-                                             selectedAccountTab = .settings
-                                             showAccount = true
-                                         })
+                                selectedAccountTab = .settings
+                                showAccount = true
+                            })
                             
                             Divider()
                                 .background(Color.elementBg)
@@ -102,6 +104,9 @@ struct SideMenuView: View {
                             }
                             .fullScreenCover(isPresented: $showGreeting) {
                                 GreetingView()
+                                    .onDisappear {
+                                        showGreeting = false
+                                    }
                             }
                             
                             Spacer()
@@ -119,12 +124,16 @@ struct SideMenuView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .ignoresSafeArea()
         .animation(.easeInOut(duration: 0.3), value: isShowing)
-        
     }
-    func logOut() {
-        UserDefaults.standard.set("", forKey: "auth_token")
-        
-    }
+    
+        func logOut() {
+            UserDefaults.standard.removeObject(forKey: "auth_token")
+            
+            
+            URLCache.shared.removeAllCachedResponses()
+            
+        }
+    
 }
 
 

@@ -29,6 +29,8 @@ struct CountryData {
     @Published var showCountryPicker = false
     @Published var isLoading: Bool = false
     @Published var showImagePicker = false
+    @Published var isDeletingAccount = false
+    @Published var showGreeting = false
     
     private let networkManager = NetworkManager.shared
     
@@ -83,7 +85,9 @@ struct CountryData {
     }
     
     func updateProfile() {
-        isLoading = true
+        withAnimation(.easeInOut(duration: 0.1)) {
+                isLoading = true
+            }
         
         Task {
             do {
@@ -120,12 +124,32 @@ struct CountryData {
     }
     
     func deleteAccount() {
-        guard !password.isEmpty else {
-            print("Password is required for account deletion")
-            return
+        withAnimation(.easeInOut(duration: 0.1)) {
+            isDeletingAccount = true
         }
         
 
+        Task {
+            do {
+                try await networkManager.deleteUserMe(password: password)
+                
+                await MainActor.run {
+                    withAnimation(.easeInOut(duration: 0.1)) {
+                        isDeletingAccount = false
+                    }
+                }
+                
+            } catch {
+                await MainActor.run {
+                    withAnimation(.easeInOut(duration: 0.1)) {
+                        isDeletingAccount = false
+                    }
+                    handleError(error)
+                }
+            }
+        }
+        
+        logOut()
     }
 
     func getUserMe() {
@@ -138,7 +162,7 @@ struct CountryData {
                 email = user.email
                 displayName = user.displayName ?? ""
                 selectedGender = user.gender ?? ""
-                selectedCountry = user.country!.countryName() ?? "Not specified"
+                selectedCountry = getCountryName(for: user.country!)
                 isLoading = false
                 
             } catch {
@@ -146,23 +170,6 @@ struct CountryData {
                 isLoading = false
                 
             }
-        }
-    }
-  
-    private func handleError(_ error: Error) {
-        if let appError = error as? APError {
-            switch appError {
-            case .invalidResponse:
-                alertItem = AlertContext.invalidResponse
-            case .invalidURL:
-                alertItem = AlertContext.invalidURL
-            case .invalidData:
-                alertItem = AlertContext.invalidData
-            case .unableToComplete:
-                alertItem = AlertContext.unableToComplete
-            }
-        } else {
-            alertItem = AlertContext.invalidResponse
         }
     }
     
@@ -174,10 +181,22 @@ struct CountryData {
         !displayName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
+    var canDeleteAccount: Bool {
+        !password.isEmpty
+    }
+    
+    func logOut() {
+        UserDefaults.standard.removeObject(forKey: "auth_token")
+        
+        
+        URLCache.shared.removeAllCachedResponses()
+        
+    }
+    
     var canUpdateProfile: Bool {
         let hasDisplayNameChange = displayName != user.displayName
         let hasEmailChange = email != user.email
-        let hasGenderChange = selectedGender.lowercased() != user.gender
+        let hasGenderChange = selectedGender.lowercased() != user.gender?.lowercased()
         
         // We compare country codes, not names
         let selectedCountryCode = getCountryCode(for: selectedCountry)
@@ -196,9 +215,6 @@ struct CountryData {
         return countries.first { $0.code == countryCode }?.name ?? countryCode
     }
     
-    var canDeleteAccount: Bool {
-        !password.isEmpty
-    }
     
     func loadUserData() {
         email = user.email
@@ -207,5 +223,23 @@ struct CountryData {
         selectedCountry = user.country ?? ""
         selectedImage = nil
     }
+    
+    
+      private func handleError(_ error: Error) {
+          if let appError = error as? APError {
+              switch appError {
+              case .invalidResponse:
+                  alertItem = AlertContext.invalidResponse
+              case .invalidURL:
+                  alertItem = AlertContext.invalidURL
+              case .invalidData:
+                  alertItem = AlertContext.invalidData
+              case .unableToComplete:
+                  alertItem = AlertContext.unableToComplete
+              }
+          } else {
+              alertItem = AlertContext.invalidResponse
+          }
+      }
     
 }

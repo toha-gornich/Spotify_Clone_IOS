@@ -30,7 +30,6 @@ final class AuthViewModel: ObservableObject {
         emailOrUsername.contains("@") && emailOrUsername.contains(".")
     }
     
-//    // MARK: - Authentication Methods
     func login() async -> Bool {
         guard isLoginEnabled else { return false }
         

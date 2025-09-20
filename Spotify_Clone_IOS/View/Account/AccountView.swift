@@ -10,8 +10,6 @@ import SwiftUI
 struct AccountView: View {
     @StateObject private var accountVM = AccountViewModel()
     
-
-    
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
@@ -184,6 +182,7 @@ struct AccountView: View {
                     
                     
                     
+                    // Update Profile Button
                     Button(action: {
                         accountVM.updateProfile()
                     }) {
@@ -207,15 +206,12 @@ struct AccountView: View {
                             Color.green.opacity(0.5)
                         )
                         .cornerRadius(8)
-                        .scaleEffect(accountVM.canUpdateProfile ? 1.0 : 0.98)
+                        .scaleEffect(accountVM.canUpdateProfile ? 1.0 : 0.95)
                         .opacity(accountVM.canUpdateProfile ? 1.0 : 0.6)
                     }
                     .disabled(!accountVM.canUpdateProfile || accountVM.isLoading)
-                    .scaleEffect(accountVM.canUpdateProfile ? 1.0 : 0.95)
-                    .animation(.easeInOut(duration: 0.2), value: accountVM.canUpdateProfile)
-                    .animation(.easeInOut(duration: 0.1), value: accountVM.isLoading)
                     .padding(.top, 10)
-                    
+
                     // Delete Account Section
                     VStack(alignment: .leading, spacing: 16) {
                         VStack(alignment: .leading, spacing: 8) {
@@ -249,21 +245,45 @@ struct AccountView: View {
                                         .background(Color.clear)
                                 )
                                 .foregroundColor(.white)
+                                .autocorrectionDisabled()
+                                .textInputAutocapitalization(.never)
+                                .keyboardType(.default)
                         }
                         
                         Button(action: {
+                            accountVM.deleteAccount()
+                            accountVM.showGreeting = true
                         }) {
-                            Text("Delete account")
-                                .font(.body)
-                                .fontWeight(.medium)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(accountVM.canDeleteAccount ? Color.red.opacity(0.8) : Color.red.opacity(0.4))
-                                .cornerRadius(8)
+                            HStack {
+                                if accountVM.isDeletingAccount {
+                                    ProgressView()
+                                        .scaleEffect(0.8)
+                                        .foregroundColor(.white)
+                                }
+                                
+                                Text("Delete account")
+                                    .font(.body)
+                                    .fontWeight(.medium)
+                                    .foregroundColor(.white)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(
+                                accountVM.canDeleteAccount ?
+                                Color.red.opacity(0.8) :
+                                Color.red.opacity(0.4)
+                            )
+                            .cornerRadius(8)
+                            .scaleEffect(accountVM.canDeleteAccount ? 1.0 : 0.95)
+                            .opacity(accountVM.canDeleteAccount ? 1.0 : 0.6)
                         }
-                        .disabled(!accountVM.canDeleteAccount)
-                        
+                        .disabled(!accountVM.canDeleteAccount || accountVM.isDeletingAccount)
+                        .fullScreenCover(isPresented: $accountVM.showGreeting) {
+                            GreetingView()
+                                .onDisappear {
+                                    accountVM.showGreeting = false
+                                }
+                        }
                     }
                     .padding(.top, 20)
                 }

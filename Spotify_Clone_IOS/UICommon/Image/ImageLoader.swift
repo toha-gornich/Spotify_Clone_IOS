@@ -42,13 +42,10 @@ struct SpotifyRemoteImage: View {
             .onAppear {
                 if !urlString.isEmpty {
                     imageLoader.load(fromURLString: urlString)
-                } else {
-                    print("⚠️ URL is empty on onAppear, waiting for album to load")
                 }
             }
             .onChange(of: urlString) { newURL in
                 if !newURL.isEmpty {
-                    print("🖼️ URL updated, loading image: \(newURL)")
                     imageLoader.load(fromURLString: newURL)
                 }
             }
