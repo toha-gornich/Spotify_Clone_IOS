@@ -10,6 +10,7 @@ struct TrackView: View {
     let slugTrack: String
     @Environment(\.dismiss) private var dismiss
     @StateObject private var trackVM = TrackViewModel()
+    @EnvironmentObject var playerManager: AudioPlayerManager 
     @State private var scrollOffset: CGFloat = 0
     @State private var showTitleInNavBar = false
     
@@ -100,11 +101,12 @@ struct TrackView: View {
                     
                     Spacer()
                     
-                    // Play button in navigation bar
+//                    PlayButton
                     Button(action: {
-                        // Play action
+                        let trackToPlay = trackVM.playableTrack
+                        playerManager.play(track: trackToPlay)
                     }) {
-                        Image(systemName: "play.fill")
+                        Image(systemName: playerManager.playerState == .playing ? "pause.fill" : "play.fill")
                             .font(.title3)
                             .foregroundColor(.black)
                             .frame(width: 44, height: 44)
@@ -245,12 +247,13 @@ struct TrackView: View {
                                 Spacer()
                                 // Play button (this one will hide when scrolled)
                                 Button(action: {
-                                    // Play action
+                                    let trackToPlay = trackVM.playableTrack
+                                    playerManager.play(track: trackToPlay)
                                 }) {
-                                    Image(systemName: "play.fill")
-                                        .font(.title2)
+                                    Image(systemName: playerManager.playerState == .playing ? "pause.fill" : "play.fill")
+                                        .font(.title3)
                                         .foregroundColor(.black)
-                                        .frame(width: 56, height: 56)
+                                        .frame(width: 44, height: 44)
                                         .background(Color.green)
                                         .clipShape(Circle())
                                 }
@@ -411,8 +414,4 @@ struct TrackView: View {
             showTitleInNavBar = shouldShow
         }
     }
-}
-#Preview {
-    MainView()
-    
 }

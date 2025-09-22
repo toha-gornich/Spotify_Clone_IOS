@@ -9,6 +9,8 @@ import SwiftUI
 @main
 struct Spotify_Clone_IOSApp: App {
     private let networkManager = NetworkManager.shared
+    @StateObject private var playerManager = AudioPlayerManager()
+    @StateObject private var mainVM = MainViewModel.share
     @State private var isTokenValid = false
     @State private var isLoading = true
     @State private var showActivationAlert = false
@@ -21,13 +23,13 @@ struct Spotify_Clone_IOSApp: App {
                     if isLoading {
                         ProgressView("Loading...")
                     } else if isTokenValid {
-//                        GreetingView()
-                         MainView()
+                        MainView()
                     } else {
-//                        MainView()
                         GreetingView()
                     }
                 }
+                .environmentObject(playerManager)
+                .environmentObject(mainVM)
                 .onAppear {
                     verifyToken()
                 }
@@ -39,6 +41,26 @@ struct Spotify_Clone_IOSApp: App {
                 } message: {
                     Text(activationMessage)
                 }
+            }
+            .overlay(
+                Group {
+                    if playerManager.sheetState == .mini {
+                        VStack {
+                            Spacer()
+                            
+                            MiniPlayerView(playerManager: playerManager)
+                                .padding(.horizontal, 16)
+                                .padding(.bottom, mainVM.isTabBarVisible ? 45 : 4)
+                                .transition(.move(edge: .bottom).combined(with: .opacity))
+                                .animation(.easeInOut(duration: 0.3), value: playerManager.sheetState)
+                        }
+                        .allowsHitTesting(true)
+                    }
+                },
+                alignment: .bottom
+            )
+            .sheet(isPresented: .constant(playerManager.sheetState == .full)) {
+                FullPlayerView(playerManager: playerManager)
             }
         }
     }

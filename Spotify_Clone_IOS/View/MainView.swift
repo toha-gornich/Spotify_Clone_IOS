@@ -6,35 +6,38 @@
 //
 
 import SwiftUI
-
 struct MainView: View {
     @StateObject var mainVM = MainViewModel.share
-
+    @EnvironmentObject var playerManager: AudioPlayerManager
+    
     var body: some View {
-        ZStack{
-            // Wrap each view in NavigationView for independent navigation
-            if (mainVM.selectTab == 0){
+        ZStack {
+            
+            if (mainVM.selectTab == 0) {
                 NavigationView {
                     HomeView()
                         .navigationBarHidden(true)
+                        .environmentObject(playerManager)
                 }
-            } else if (mainVM.selectTab == 1){
+            } else if (mainVM.selectTab == 1) {
                 NavigationView {
                     GenresView()
                         .navigationBarHidden(true)
+                        .environmentObject(playerManager)
                 }
-            } else if (mainVM.selectTab == 2){
+            } else if (mainVM.selectTab == 2) {
                 NavigationView {
                     LibraryView()
                         .navigationBarHidden(true)
+                        .environmentObject(playerManager)
                 }
             }
-
             
-            VStack{
+            
+            VStack {
                 Spacer()
                 
-                HStack{
+                HStack {
                     Spacer()
                     
                     TabButton(title: "Home", icon: "home_tab_f", iconUnfocus: "home_tab", isSelect: mainVM.selectTab == 0) {
@@ -43,17 +46,17 @@ struct MainView: View {
                     
                     Spacer()
                     
-                    TabButton(title: "Search",icon: "search_tab_f",
-                              iconUnfocus: "search_tab",isSelect:
-                                mainVM.selectTab == 1){
+                    TabButton(title: "Search", icon: "search_tab_f",
+                              iconUnfocus: "search_tab", isSelect:
+                                mainVM.selectTab == 1) {
                         mainVM.selectTab = 1
                     }
                     
                     Spacer()
                     
-                    TabButton(title: "Library",icon: "library_tab_f",
-                              iconUnfocus: "library_tab",isSelect:
-                                mainVM.selectTab == 2){
+                    TabButton(title: "Library", icon: "library_tab_f",
+                              iconUnfocus: "library_tab", isSelect:
+                                mainVM.selectTab == 2) {
                         mainVM.selectTab = 2
                     }
                     
@@ -75,8 +78,11 @@ struct MainView: View {
                 )
                 .shadow(radius: 2)
             }
+            .zIndex(2)
+            
             
             SideMenuView(isShowing: $mainVM.isShowMenu)
+                .zIndex(3)
         }
         .frame(width: .screenWidth, height: .screenHeight)
         .background(Color.bg)
@@ -86,9 +92,9 @@ struct MainView: View {
         .ignoresSafeArea()
     }
 }
+
 #Preview {
-    NavigationView{        
     MainView()
-    }
-    
+        .environmentObject(AudioPlayerManager())
+        .environmentObject(MainViewModel.share)
 }

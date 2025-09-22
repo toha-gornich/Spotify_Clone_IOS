@@ -10,6 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @StateObject private var homeVM = HomeViewModel()
     @StateObject private var mainVM = MainViewModel.share
+    @EnvironmentObject var playerManager: AudioPlayerManager
     
     var body: some View {
         
@@ -52,8 +53,10 @@ struct HomeView: View {
                                 if index == 0 {
                                     TrackCell(track: homeVM.tracks[index])
                                         .gridCellColumns(2)
+                                        .environmentObject(playerManager)
                                 } else {
                                     TrackCell(track: homeVM.tracks[index])
+                                        .environmentObject(playerManager)
                                 }
                             }
                         }
@@ -64,7 +67,7 @@ struct HomeView: View {
                         ViewAllSection(title: "Popular artists") {}
                         
                         
-
+                        
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 15) {
                                 ForEach(homeVM.artists.indices, id: \.self) { index in
@@ -82,7 +85,7 @@ struct HomeView: View {
                         }
                         
                         ViewAllSection(title: "Popular albums") {}
-
+                        
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 15) {
                                 ForEach(homeVM.albums.indices, id: \.self) { index in
@@ -96,11 +99,11 @@ struct HomeView: View {
                         .task {
                             homeVM.getAlbums()
                         }
-
+                        
                         
                         
                         ViewAllSection(title: "Popular playlists") {}
-
+                        
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 15) {
                                 ForEach(homeVM.playlists.indices, id: \.self) { index in
@@ -114,9 +117,9 @@ struct HomeView: View {
                         .task {
                             homeVM.getPlaylists()
                         }
-
+                        
                         ViewAllSection(title: "Popular tracks") {}
-
+                        
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 15) {
                                 ForEach(homeVM.tracks.indices, id: \.self) { index in
@@ -130,15 +133,15 @@ struct HomeView: View {
                         .task {
                             homeVM.getTracks()
                         }
-
+                        
                     }
                     .padding(.horizontal)
                     .padding(.bottom, 100)
                 }
             }
-//            if homeVM.isLoading{
-//                LoadingView()
-//            }
+            //            if homeVM.isLoading{
+            //                LoadingView()
+            //            }
         }
         .frame(width: .screenWidth, height: .screenHeight)
         .background(Color.bg)
@@ -151,13 +154,18 @@ struct HomeView: View {
                   message: alertItem.message,
                   dismissButton: alertItem.dismissButton)
         }
+        .onAppear {
+            mainVM.isTabBarVisible = true
+        }
+        .onDisappear {
+            mainVM.isTabBarVisible = false
+        }
         
         
     }
 }
 #Preview {
-    NavigationView{
-        
-        MainView()
-    }
+    MainView()
+        .environmentObject(AudioPlayerManager())
+        .environmentObject(MainViewModel.share)
 }

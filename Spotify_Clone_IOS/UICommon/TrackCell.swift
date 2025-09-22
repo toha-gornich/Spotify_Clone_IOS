@@ -9,9 +9,13 @@ import SwiftUI
 
 struct TrackCell: View {
     @State var track: Track
+    @EnvironmentObject var playerManager: AudioPlayerManager
     
     var body: some View {
-        NavigationLink(destination: TrackView(slugTrack: track.slug)) {
+        NavigationLink(destination:
+            TrackView(slugTrack: track.slug)
+                .environmentObject(playerManager)
+        ){
             HStack {
                 
                 SpotifyRemoteImage(urlString: track.album.image)
@@ -28,10 +32,7 @@ struct TrackCell: View {
             
             
         }
+        
     }
         
-}
-
-#Preview {
-    TrackCell(track: MockData.track)
 }

@@ -95,8 +95,17 @@ extension Track {
             return "\(playsCount)"
         }
     }
+    var artistName: String {
+        return artist.displayName
+    }
+    
+    var albumTitle: String {
+        return album.title
+    }
+    var audioURL: URL? {
+            return URL(string: file)
+        }
 }
-
 extension TrackDetail {
     // Converting duration from time to seconds
     var durationInSeconds: TimeInterval {
@@ -245,3 +254,20 @@ struct MockData{
         )
 }
 
+extension TrackDetail {
+    func toTrack() -> Track {
+        return Track(
+            id: self.id,
+            slug: self.slug,
+            artist: self.artist,
+            title: self.title,
+            file: self.file,
+            duration: self.duration,
+            image: self.image,
+            color: self.color,
+            playsCount: self.playsCount,
+            genre: self.genre,
+            album: self.album
+        )
+    }
+}

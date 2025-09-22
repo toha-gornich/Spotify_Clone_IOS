@@ -7,6 +7,7 @@
 
 import Foundation
 @MainActor final class TrackViewModel: ObservableObject {
+    @Published var currentTrack: Track?
     @Published var track: TrackDetail = MockData.trackDetail
     @Published var artists: [Artist] = []
     @Published var tracks: [Track] = []
@@ -22,6 +23,9 @@ import Foundation
     @Published var selectTab: Int = 0
     @Published var alertItem: AlertItem?
     
+    var playableTrack: Track {
+            return track.toTrack()
+        }
     
 //    var totalDuration: String {
 //        let totalSeconds = tracks.reduce(0) { $0 + $1.durationInSeconds }
@@ -114,6 +118,11 @@ import Foundation
     }
     
     
+//    func playCurrentTrack() {
+//        guard let track = currentTrack else { return }
+//        playerManager.play(track: track)
+//    }
+//    
     
     func handleError(_ error: Error) {
         if let apError = error as? APError {
