@@ -12,17 +12,8 @@ struct MiniPlayerView: View {
     
     var body: some View {
         HStack {
-            // Artwork
-            AsyncImage(url: URL(string: playerManager.currentTrack?.image ?? "")) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } placeholder: {
-                Rectangle()
-                    .fill(Color.gray.opacity(0.3))
-            }
-            .frame(width: 50, height: 50)
-            .cornerRadius(8)
+            SpotifyRemoteImage(urlString: playerManager.currentTrack!.album.image)
+                .frame(width: 50, height: 50)
             
             // Track Info
             VStack(alignment: .leading, spacing: 2) {
@@ -50,10 +41,12 @@ struct MiniPlayerView: View {
             .frame(width: 44, height: 44)
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 8)
+        .padding(.vertical, 6)
+        .frame(maxWidth: .infinity)
         .background(
-            Color(hex: playerManager.currentTrack?.color ?? "")
+            Color(hex: playerManager.currentTrack!.album.color)
         )
+        .cornerRadius(12)
         .onTapGesture {
             playerManager.showFullPlayer()
         }

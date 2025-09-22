@@ -14,9 +14,8 @@ struct FullPlayerView: View {
     
     var body: some View {
         ZStack {
-            // Background Gradient
             LinearGradient(
-                gradient: Gradient(colors: [Color.blue, Color.purple]),
+                gradient: Gradient(colors: [Color(hex:playerManager.currentTrack!.album.color), Color(hex:playerManager.currentTrack!.album.color).opacity(0.5)]),
                 startPoint: .top,
                 endPoint: .bottom
             )
@@ -52,18 +51,10 @@ struct FullPlayerView: View {
                 
                 Spacer()
                 
-                // Large Artwork
-                AsyncImage(url: URL(string: playerManager.currentTrack?.image ?? "")) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                } placeholder: {
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.3))
-                }
-                .frame(width: 300, height: 300)
-                .cornerRadius(12)
-                .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
+                SpotifyRemoteImage(urlString: playerManager.currentTrack!.album.image)
+                    .frame(width: 300, height: 300)
+                    .cornerRadius(12)
+                    .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
                 
                 Spacer()
                 
@@ -104,13 +95,17 @@ struct FullPlayerView: View {
                 
                 // Player Controls
                 HStack(spacing: 40) {
-                    Button(action: {}) {
+                    Button(action: {
+                        playerManager.toggleShuffle()
+                    }) {
                         Image(systemName: "shuffle")
                             .font(.system(size: 20))
-                            .foregroundColor(.green)
+                            .foregroundColor(playerManager.isShuffleEnabled ? .green : .white)
                     }
                     
-                    Button(action: {}) {
+                    Button(action: {
+                        playerManager.previousTrack()
+                    }) {
                         Image(systemName: "backward.fill")
                             .font(.system(size: 30))
                             .foregroundColor(.white)
@@ -124,7 +119,9 @@ struct FullPlayerView: View {
                             .foregroundColor(.white)
                     }
                     
-                    Button(action: {}) {
+                    Button(action: {
+                        playerManager.nextTrack()
+                    }) {
                         Image(systemName: "forward.fill")
                             .font(.system(size: 30))
                             .foregroundColor(.white)
@@ -162,6 +159,15 @@ struct FullPlayerView: View {
                 .padding(.bottom, 40)
             }
         }
+        .gesture(
+            DragGesture()
+                .onEnded { value in
+                    // Якщо свайп вниз більше 100 пікселів
+                    if value.translation.height > 100 {
+                        playerManager.sheetState = .mini
+                    }
+                }
+        )
     }
     
     private func timeString(from timeInterval: TimeInterval) -> String {

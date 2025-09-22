@@ -245,12 +245,11 @@ struct TrackView: View {
                                 }
                                 
                                 Spacer()
-                                // Play button (this one will hide when scrolled)
                                 Button(action: {
                                     let trackToPlay = trackVM.playableTrack
-                                    playerManager.play(track: trackToPlay)
+                                    playerManager.play(track: trackToPlay, from: trackVM.tracks)
                                 }) {
-                                    Image(systemName: playerManager.playerState == .playing ? "pause.fill" : "play.fill")
+                                    Image(systemName: playerManager.isPlaying(track: trackVM.playableTrack) ? "pause.fill" : "play.fill")
                                         .font(.title3)
                                         .foregroundColor(.black)
                                         .frame(width: 44, height: 44)

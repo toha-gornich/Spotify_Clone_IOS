@@ -24,6 +24,8 @@ struct Spotify_Clone_IOSApp: App {
                         ProgressView("Loading...")
                     } else if isTokenValid {
                         MainView()
+                            .environmentObject(playerManager)
+                            .environmentObject(mainVM)
                     } else {
                         GreetingView()
                     }
@@ -49,8 +51,8 @@ struct Spotify_Clone_IOSApp: App {
                             Spacer()
                             
                             MiniPlayerView(playerManager: playerManager)
-                                .padding(.horizontal, 16)
-                                .padding(.bottom, mainVM.isTabBarVisible ? 45 : 4)
+
+                                .padding(.bottom, mainVM.isTabBarVisible ? 45 : 0)
                                 .transition(.move(edge: .bottom).combined(with: .opacity))
                                 .animation(.easeInOut(duration: 0.3), value: playerManager.sheetState)
                         }
