@@ -10,6 +10,7 @@ struct SideMenuView: View {
     @Binding var isShowing: Bool
     @State private var showGreeting = false
     @State private var showAccount = false
+    @State private var showProfile = false
     @State private var selectedAccountTab: UserDashboardView.AccountTab = .account
     
     var edgeTransition: AnyTransition = .move(edge: .leading)
@@ -79,9 +80,11 @@ struct SideMenuView: View {
                             
                             MenuItemView(icon: "person.circle.fill", title: "Profile",
                                          action: {
-                                selectedAccountTab = .profile
-                                showAccount = true
+                                showProfile = true
                             })
+                            .fullScreenCover(isPresented: $showProfile) {
+                                ProfileView()
+                            }
                             
                             MenuItemView(icon: "crown.fill", title: "Upgrade to Premium",
                                          action: {
@@ -135,7 +138,6 @@ struct SideMenuView: View {
         }
     
 }
-
 
 
 

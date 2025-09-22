@@ -157,7 +157,7 @@ struct CountryData {
     
         Task {
             do {
-                let fetchedUser = try await networkManager.getUserMe()
+                let fetchedUser = try await networkManager.getProfileMy()
                 user = fetchedUser
                 email = user.email
                 displayName = user.displayName ?? ""

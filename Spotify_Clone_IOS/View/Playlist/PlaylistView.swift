@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+
 struct PlaylistView: View {
     let slugPlaylist: String
     @Environment(\.dismiss) private var dismiss

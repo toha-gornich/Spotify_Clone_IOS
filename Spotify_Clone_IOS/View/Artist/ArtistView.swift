@@ -163,7 +163,6 @@ struct ArtistView: View {
                                 
                                 // Follow button
                                 Button(action: {
-                                    // Follow action
                                 }) {
                                     Text("Follow")
                                         .font(.subheadline)
@@ -178,9 +177,9 @@ struct ArtistView: View {
                                         )
                                 }
                                 Spacer()
-                                // Play button (this one will hide when scrolled)
+                                
                                 Button(action: {
-                                    // Play action
+                                    
                                 }) {
                                     Image(systemName: "play.fill")
                                         .font(.title2)
@@ -195,7 +194,6 @@ struct ArtistView: View {
                             
                             
                             VStack(spacing: 20) {
-                                // Title for tracks
                                 ViewAllSection(title: "Popular") {}
                                 
                                 
@@ -339,6 +337,7 @@ struct ArtistView: View {
         }
     }
 }
+
 #Preview {
     MainView()
     

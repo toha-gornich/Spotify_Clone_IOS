@@ -9,7 +9,11 @@ import SwiftUI
 
 struct SubscriptionView: View {
     var body: some View {
+        
+        
         VStack(spacing: 20) {
+            
+            
             Text("Still Under Development")
                 .font(.largeTitle)
                 .fontWeight(.bold)

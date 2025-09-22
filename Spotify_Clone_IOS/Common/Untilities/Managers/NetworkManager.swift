@@ -16,6 +16,8 @@ final class NetworkManager {
         
     private init() {}
   
+
+    // MARK: - Users auth
     
     func postRegUser(regUser: RegUser) async throws -> RegUserResponse {
         guard let url = URL(string: Constants.API.regUserURL) else {
@@ -190,9 +192,42 @@ final class NetworkManager {
         }
     }
 
-    func getUserMe() async throws -> UserMy {
+    func getUserMe() async throws -> UserMe {
         guard let url = URL(string: Constants.API.userMeURL) else {
             print("❌ getUserMe - Invalid URL: \(Constants.API.userMeURL)")
+            throw APError.invalidURL
+        }
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
+                print("❌ getUserMe - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getUserMe - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                return try decoder.decode(UserMe.self, from: data)
+            } catch {
+                print("❌ getUserMe - Failed to decode response: \(error)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getUserMe - Raw response: \(responseString)")
+                }
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ getUserMe - Network error: \(error)")
+            throw error
+        }
+    }
+    
+    func getProfileMy() async throws -> UserMy {
+        guard let url = URL(string: Constants.API.userMeURL) else {
+            print("❌ getUserMe - Invalid URL: \(Constants.API.profilesMyURL)")
             throw APError.invalidURL
         }
         
@@ -325,7 +360,7 @@ final class NetworkManager {
             throw error
         }
     }
-    
+    // MARK: - Tracks
     
     func getTracks() async throws ->[Track] {
         print("getTracks")
@@ -420,7 +455,7 @@ final class NetworkManager {
         }
     }
     
-    
+    // MARK: - Artists
     func getArtistsBySlug(slug:String) async throws -> Artist {
         print("getArtistsBySlug")
         guard let url = URL(string: Constants.API.artistsURL + "\(slug)/") else {
@@ -456,7 +491,7 @@ final class NetworkManager {
         
     }
     
-    
+    // MARK: - Albums
     func getAlbums() async throws ->[Album] {
         print("getAlbums")
         guard let url = URL(string: Constants.API.albumsURL) else {
@@ -506,99 +541,139 @@ final class NetworkManager {
         }
     }
 
+    // MARK: - Playlists
     
     func getPlaylists() async throws ->[Playlist] {
-        print("getPlaylists")
         guard let url = URL(string: Constants.API.playlistsURL) else {
+            print("❌ [getPlaylists] Invalid URL")
             throw APError.invalidURL
         }
         
-        let (data, _) = try await URLSession.shared.data(from: url)
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+            print("❌ [getPlaylists] Response error: \(httpResponse.statusCode)")
+        }
         
         do{
             let decoder = JSONDecoder()
             return try decoder.decode(PlaylistResponse.self, from: data).results
         } catch{
-            
+            print("❌ [getPlaylists] JSON decoding failed: \(error.localizedDescription)")
             throw APError.invalidData
         }
-        
-        
     }
     
-    func getPlaylistsBySlug(slug:String) async throws -> PlaylistDetail {
-        print("getPlaylistsBySlug")
-        guard let url = URL(string: Constants.API.playlistBySlugURL + "\(slug)/") else {
+    func getPlaylistsByIdUser(idUser: Int) async throws -> [Playlist] {
+        guard let url = URL(string: Constants.API.playlistsByIdUserURL + "\(idUser)") else {
+            print("❌ [getPlaylistsByIdUser] Invalid URL for user ID: \(idUser)")
             throw APError.invalidURL
         }
         
-        let (data, _) = try await URLSession.shared.data(from: url)
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+            print("❌ [getPlaylistsByIdUser] Response error: \(httpResponse.statusCode)")
+        }
+        
+        do {
+            let decoder = JSONDecoder()
+            let playlists = try decoder.decode(PlaylistResponse.self, from: data).results
+            return playlists
+        } catch {
+            print("❌ [getPlaylistsByIdUser] JSON decoding failed: \(error.localizedDescription)")
+            throw APError.invalidData
+        }
+    }
+    
+    func getPlaylistsBySlug(slug:String) async throws -> PlaylistDetail {
+        guard let url = URL(string: Constants.API.playlistBySlugURL + "\(slug)/") else {
+            print("❌ [getPlaylistsBySlug] Invalid URL for slug: \(slug)")
+            throw APError.invalidURL
+        }
+        
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+            print("❌ [getPlaylistsBySlug] Response error: \(httpResponse.statusCode) for slug: \(slug)")
+        }
         
         do{
             let decoder = JSONDecoder()
             return try decoder.decode(PlaylistDetail.self, from: data)
         } catch{
+            print("❌ [getPlaylistsBySlug] JSON decoding failed: \(error.localizedDescription)")
             throw APError.invalidData
         }
-         
     }
-    
+
     func getPlaylistsBySlugGenre(slug:String) async throws ->[Playlist] {
-        print("getPlaylistsBySlugGenre")
         guard let url = URL(string: Constants.API.playlistsByGenreURL + slug) else {
+            print("❌ [getPlaylistsBySlugGenre] Invalid URL for genre slug: \(slug)")
             throw APError.invalidURL
         }
         
-        let (data, _) = try await URLSession.shared.data(from: url)
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+            print("❌ [getPlaylistsBySlugGenre] Response error: \(httpResponse.statusCode) for genre: \(slug)")
+        }
         
         do{
             let decoder = JSONDecoder()
             return try decoder.decode(PlaylistResponse.self, from: data).results
         } catch{
-            
+            print("❌ [getPlaylistsBySlugGenre] JSON decoding failed: \(error.localizedDescription)")
             throw APError.invalidData
         }
-         
     }
-    
-    
+
+    // MARK: - Genres
+
     func getGenres() async throws ->[Genre] {
-        print("getGenres")
         guard let url = URL(string: Constants.API.genresURL) else {
+            print("❌ [getGenres] Invalid URL")
             throw APError.invalidURL
         }
         
-        let (data, _) = try await URLSession.shared.data(from: url)
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+            print("❌ [getGenres] Response error: \(httpResponse.statusCode)")
+        }
         
         do{
             let decoder = JSONDecoder()
             return try decoder.decode(GenresResponse.self, from: data).results
         } catch{
+            print("❌ [getGenres] JSON decoding failed: \(error.localizedDescription)")
             throw APError.invalidData
         }
-        
-        
     }
-    
+
     func getGenreBySlug(slug:String) async throws -> Genre {
-        print("getGenreBySlug")
         guard let url = URL(string: Constants.API.genresBySlugURL + "\(slug)/") else {
+            print("❌ [getGenreBySlug] Invalid URL for slug: \(slug)")
             throw APError.invalidURL
         }
         
-        let (data, _) = try await URLSession.shared.data(from: url)
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+            print("❌ [getGenreBySlug] Response error: \(httpResponse.statusCode) for slug: \(slug)")
+        }
         
         do{
             let decoder = JSONDecoder()
             return try decoder.decode(Genre.self, from: data)
         } catch{
+            print("❌ [getGenreBySlug] JSON decoding failed: \(error.localizedDescription)")
             throw APError.invalidData
         }
-         
     }
     
 
-    
+    // MARK: - Search
     func searchTracks(searchText:String) async throws -> [Track] {
         print("searchTracks")
         guard let url = URL(string: Constants.API.searchTracksURL + "\(searchText)") else {
@@ -679,6 +754,8 @@ final class NetworkManager {
             throw APError.invalidData
         }
     }
+    
+    // MARK: - Other
     
     func downloadImage(fromURLString urlString: String, completed: @escaping (UIImage?) -> Void){
         

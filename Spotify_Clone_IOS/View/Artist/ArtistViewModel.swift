@@ -23,7 +23,6 @@ import Foundation
     
     private let networkManager = NetworkManager.shared
     
-    // MARK: - Artists
     
     func getArtists() {
         isLoading = true
@@ -56,7 +55,7 @@ import Foundation
         }
     }
     
-    // MARK: - Tracks
+
     
     func getTracks() {
         isLoading = true
@@ -88,7 +87,6 @@ import Foundation
         }
     }
     
-    // MARK: - Albums
     
     func getAlbums() {
         isLoading = true
@@ -120,24 +118,8 @@ import Foundation
         }
     }
     
-//    // MARK: - Playlists
-//    
-//    func getPlaylists() {
-//        isLoading = true
-//        
-//        Task {
-//            do {
-//                let fetchedPlaylists = try await networkManager.getPlaylists()
-//                playlists = fetchedPlaylists
-//                isLoading = false
-//            } catch {
-//                handleError(error)
-//                isLoading = false
-//            }
-//        }
-//    }
     
-    // MARK: - Error Handling
+
     
     private func handleError(_ error: Error) {
         if let apError = error as? APError {

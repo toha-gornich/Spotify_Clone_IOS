@@ -10,6 +10,7 @@ import SwiftUI
 struct UserDashboardView: View {
     @Environment(\.dismiss) private var dismiss
     @State var selectedTab: AccountTab
+    @State private var showProfileFullScreen = false
     
     enum AccountTab: String, CaseIterable {
         case account = "Account"
@@ -43,12 +44,10 @@ struct UserDashboardView: View {
                                         Image(systemName: "chevron.left")
                                             .font(.title2)
                                             .foregroundColor(.white)
-//                                            .padding()
                                     }
                                     
                                     Spacer()
                                 }
-//                                .padding(.top, 10)
                             }
                         }
 
@@ -70,7 +69,11 @@ struct UserDashboardView: View {
                                     title: tab.rawValue,
                                     isSelected: selectedTab == tab
                                 ) {
-                                    selectedTab = tab
+                                    if tab == .profile {
+                                        showProfileFullScreen = true
+                                    } else {
+                                        selectedTab = tab
+                                    }
                                 }
                             }
                         }
@@ -90,6 +93,9 @@ struct UserDashboardView: View {
             }
         }
         .navigationBarHidden(true)
+        .fullScreenCover(isPresented: $showProfileFullScreen) {
+            ProfileView()
+        }
     }
         
 
@@ -101,7 +107,7 @@ struct UserDashboardView: View {
         case .account:
             AccountView()
         case .profile:
-            ProfileView()
+            Color.clear
         case .subscription:
             SubscriptionView()
         case .payment:
@@ -113,7 +119,6 @@ struct UserDashboardView: View {
         }
     }
 }
-
 
 
 #Preview {

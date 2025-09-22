@@ -43,8 +43,6 @@ import Foundation
         }
     }
     
-
-    // MARK: - Error Handling
     
     private func handleError(_ error: Error) {
         if let apError = error as? APError {
