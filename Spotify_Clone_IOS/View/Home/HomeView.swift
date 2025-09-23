@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject private var homeVM = HomeViewModel()
-    @StateObject private var mainVM = MainViewModel.share
+    @EnvironmentObject var mainVM: MainViewModel
     @EnvironmentObject var playerManager: AudioPlayerManager
     
     var body: some View {
@@ -54,9 +54,11 @@ struct HomeView: View {
                                     TrackCell(track: homeVM.tracks[index])
                                         .gridCellColumns(2)
                                         .environmentObject(playerManager)
+                                        .environmentObject(mainVM)
                                 } else {
                                     TrackCell(track: homeVM.tracks[index])
                                         .environmentObject(playerManager)
+                                        .environmentObject(mainVM)
                                 }
                             }
                         }
@@ -157,15 +159,10 @@ struct HomeView: View {
         .onAppear {
             mainVM.isTabBarVisible = true
         }
-        .onDisappear {
-            mainVM.isTabBarVisible = false
-        }
-        
+//        .onDisappear {
+//            mainVM.isTabBarVisible = false
+//        }
+//        
         
     }
-}
-#Preview {
-    MainView()
-        .environmentObject(AudioPlayerManager())
-        .environmentObject(MainViewModel.share)
 }

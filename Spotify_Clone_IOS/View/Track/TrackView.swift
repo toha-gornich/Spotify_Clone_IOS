@@ -10,7 +10,8 @@ struct TrackView: View {
     let slugTrack: String
     @Environment(\.dismiss) private var dismiss
     @StateObject private var trackVM = TrackViewModel()
-    @EnvironmentObject var playerManager: AudioPlayerManager 
+    @EnvironmentObject var mainVM: MainViewModel
+    @EnvironmentObject var playerManager: AudioPlayerManager
     @State private var scrollOffset: CGFloat = 0
     @State private var showTitleInNavBar = false
     
@@ -400,6 +401,9 @@ struct TrackView: View {
         .task {
             trackVM.getTrackBySlug(slug: slugTrack)
             
+        }
+        .onAppear {
+            mainVM.isTabBarVisible = false
         }
         
     }

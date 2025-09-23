@@ -10,11 +10,13 @@ import SwiftUI
 struct TrackCell: View {
     @State var track: Track
     @EnvironmentObject var playerManager: AudioPlayerManager
+    @EnvironmentObject var mainVM: MainViewModel
     
     var body: some View {
         NavigationLink(destination:
             TrackView(slugTrack: track.slug)
                 .environmentObject(playerManager)
+                .environmentObject(mainVM)
         ){
             HStack {
                 

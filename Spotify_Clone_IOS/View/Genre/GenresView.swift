@@ -13,7 +13,7 @@ struct GenresView: View {
     @State private var searchQuery = ""
     @State private var isShowingSearchResults = false
     @StateObject private var genreVM = GenresViewModel()
-    @StateObject private var mainVM = MainViewModel.share
+    @EnvironmentObject var mainVM: MainViewModel
     
     var body: some View {
         NavigationStack {
@@ -79,7 +79,7 @@ struct GenresView: View {
                     .padding(.vertical, 12)
                     .background(Color.white)
                     .cornerRadius(10)
-                    .padding(.horizontal, 20) // Додаємо горизонтальні відступи
+                    .padding(.horizontal, 20) 
                     .padding(.vertical, 6)
                     
                     ScrollView(.vertical, showsIndicators: false) {
@@ -118,6 +118,14 @@ struct GenresView: View {
             .navigationDestination(isPresented: $isShowingSearchResults) {
                 SearchView(searchText: searchQuery)
             }
+            .onAppear {
+                mainVM.isTabBarVisible = true
+                print("Genres " + String(mainVM.isTabBarVisible))
+            }
+//            .onDisappear {
+//                mainVM.isTabBarVisible = false
+//                print("Genres " + String(mainVM.isTabBarVisible))
+//            }
         }
         .alert(item: $genreVM.alertItem) { alertItem in
             Alert(title: alertItem.title,
@@ -137,11 +145,5 @@ struct GenresView: View {
             isShowingSearchResults = true
             print("Search: \(searchQuery)")
         }
-    }
-}
-#Preview {
-    NavigationView{
-        
-        MainView()
     }
 }
