@@ -12,6 +12,7 @@ struct GenreDetailsView: View {
     
     @Environment(\.dismiss) private var dismiss
     @ObservedObject var genresVM: GenresViewModel
+    @EnvironmentObject var mainVM: MainViewModel
     @State private var scrollOffset: CGFloat = 0
     @State private var showTitleInNavBar = false
     
@@ -57,7 +58,6 @@ struct GenreDetailsView: View {
                     )
                     .frame(maxWidth: .infinity, maxHeight: imageHeight)
                     
-                    
                     // Color overlay that gradually appears
                     Color.bg
                         .opacity(overlayOpacity)
@@ -65,13 +65,38 @@ struct GenreDetailsView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: imageHeight)
                 
-                
                 Spacer()
-                
             }
             .ignoresSafeArea()
             
-            
+            // Back button with blur circle
+            VStack {
+                HStack {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        ZStack {
+                            // Blur circle background (appears on scroll)
+                            Circle()
+                                .fill(.gray)
+                                .opacity(showTitleInNavBar ? 1 : 0)
+                                .animation(.easeInOut(duration: 0.3), value: showTitleInNavBar)
+                            
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(.white)
+                                .font(.title2)
+                        }
+                        .frame(width: 44, height: 44)
+                    }
+                    .padding(.leading, 16)
+                    .padding(.top, 8)
+                    
+                    Spacer()
+                }
+                
+                Spacer()
+            }
+            .zIndex(2)
             
             // Main scrollable content
             GeometryReader { outerGeometry in
@@ -84,7 +109,6 @@ struct GenreDetailsView: View {
                         // Artist title section with gradient overlay
                         VStack {
                             HStack {
-                                
                                 Text(genresVM.genre.name)
                                     .font(.largeTitle)
                                     .fontWeight(.bold)
@@ -92,8 +116,6 @@ struct GenreDetailsView: View {
                                 Spacer()
                             }
                             .padding(.horizontal, 16)
-                            
-                            
                         }
                         
                         // Content section with gradient background
@@ -123,7 +145,6 @@ struct GenreDetailsView: View {
                             .frame(maxWidth: .infinity)
                             
                             LazyVStack(alignment: .leading, spacing: 16) {
-                                
                                 if !genresVM.tracks.isEmpty {
                                     ViewAllSection(title: "Popular \(genresVM.genre.name) tracks") {}
                                     TrackListViewImage(tracks: Array(genresVM.tracks.prefix(5)))
@@ -167,7 +188,6 @@ struct GenreDetailsView: View {
                                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                                     .padding(.top, 60)
                                 }
-                                
                             }
                             .padding(.horizontal, 16)
                             .task {
@@ -192,19 +212,17 @@ struct GenreDetailsView: View {
                         }
                     )
                 }
-                
             }
             .zIndex(1)
         }
-        
         .navigationBarHidden(true)
         .task {
             genresVM.getGenreBySlug(slug: slugGenre)
-            
         }
-        
+        .onAppear {
+            mainVM.isTabBarVisible = false
+        }
     }
-    
     
     private func updateScrollOffset(_ offset: CGFloat) {
         scrollOffset = offset
@@ -217,7 +235,7 @@ struct GenreDetailsView: View {
         }
     }
 }
+
 #Preview {
     MainView()
-    
 }

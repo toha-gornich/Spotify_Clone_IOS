@@ -10,6 +10,7 @@ struct AlbumView: View {
     let slugAlbum: String
     @Environment(\.dismiss) private var dismiss
     @StateObject private var albumVM = AlbumViewModel()
+    @EnvironmentObject var mainVM: MainViewModel
     @State private var scrollOffset: CGFloat = 0
     @State private var showTitleInNavBar = false
     
@@ -344,6 +345,9 @@ struct AlbumView: View {
         .task {
             albumVM.getAlbumBySlug(slug: slugAlbum)
             
+        }
+        .onAppear {
+            mainVM.isTabBarVisible = false
         }
         
     }

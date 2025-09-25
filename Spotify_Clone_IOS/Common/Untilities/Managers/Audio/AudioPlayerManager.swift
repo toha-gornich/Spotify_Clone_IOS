@@ -43,25 +43,20 @@ class AudioPlayerManager: NSObject, ObservableObject {
     private var timeObserver: Any?
     private var originalPlaylist: [Track] = []
     
-    // MARK: - Playback Control
     
     func play(track: Track, from playlist: [Track] = []) {
-        // Перевіряємо чи це той самий трек що вже грає
         if let currentTrack = currentTrack,
            currentTrack.id == track.id,
            playerState == .playing {
-            // Якщо той самий трек грає - ставимо на паузу
             togglePlayPause()
             return
         } else if let currentTrack = currentTrack,
                   currentTrack.id == track.id,
                   playerState == .paused {
-            // Якщо той самий трек на паузі - продовжуємо відтворення
             togglePlayPause()
             return
         }
         
-        // Якщо передано плейлист
         if !playlist.isEmpty {
             self.playlist = playlist
             self.originalPlaylist = playlist
@@ -69,13 +64,13 @@ class AudioPlayerManager: NSObject, ObservableObject {
                 currentTrackIndex = index
             }
         }
-        // Якщо тільки один трек
+        
         else if self.playlist.isEmpty {
             self.playlist = [track]
             self.originalPlaylist = [track]
             currentTrackIndex = 0
         }
-        // Якщо трек вже в поточному плейлисті
+        
         else if let index = self.playlist.firstIndex(where: { $0.id == track.id }) {
             currentTrackIndex = index
         }
@@ -99,7 +94,7 @@ class AudioPlayerManager: NSObject, ObservableObject {
             return
         }
         
-        // Зупиняємо попереднього плеєра
+        
         player?.pause()
         removeTimeObserver()
         
@@ -116,7 +111,7 @@ class AudioPlayerManager: NSObject, ObservableObject {
             sheetState = .mini
         }
         
-        // Простіше - просто чекаємо трохи і запускаємо
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.playerState = .playing
             player.play()
@@ -141,11 +136,10 @@ class AudioPlayerManager: NSObject, ObservableObject {
         updateNowPlayingPlaybackRate()
     }
     
-    // MARK: - Navigation Controls
+    
     
     func nextTrack() {
         if repeatMode == .one {
-            // Повторюємо поточний трек
             playCurrentTrack()
             return
         }
@@ -154,17 +148,14 @@ class AudioPlayerManager: NSObject, ObservableObject {
             currentTrackIndex += 1
             playCurrentTrack()
         } else if repeatMode == .all {
-            // Повертаємося до початку плейлиста
             currentTrackIndex = 0
             playCurrentTrack()
         } else {
-            // Кінець плейлиста
             playerState = .stopped
         }
     }
     
     func previousTrack() {
-        // Якщо пройшло більше 3 секунд, перемотуємо на початок поточного треку
         if currentTime > 3.0 {
             player?.seek(to: .zero)
             return
@@ -174,19 +165,16 @@ class AudioPlayerManager: NSObject, ObservableObject {
             currentTrackIndex -= 1
             playCurrentTrack()
         } else if repeatMode == .all {
-            // Йдемо до останнього треку
             currentTrackIndex = playlist.count - 1
             playCurrentTrack()
         }
     }
     
-    // MARK: - Shuffle & Repeat
     
     func toggleShuffle() {
         isShuffleEnabled.toggle()
         
         if isShuffleEnabled {
-            // Перемішуємо плейлист, залишаючи поточний трек на першому місці
             var shuffledTracks = originalPlaylist
             if let currentTrack = currentTrack,
                let currentIndex = shuffledTracks.firstIndex(where: { $0.id == currentTrack.id }) {
@@ -199,7 +187,6 @@ class AudioPlayerManager: NSObject, ObservableObject {
             playlist = shuffledTracks
             currentTrackIndex = 0
         } else {
-            // Повертаємо оригінальний порядок
             playlist = originalPlaylist
             if let currentTrack = currentTrack,
                let originalIndex = originalPlaylist.firstIndex(where: { $0.id == currentTrack.id }) {
@@ -219,7 +206,6 @@ class AudioPlayerManager: NSObject, ObservableObject {
         }
     }
     
-    // MARK: - UI Controls
     
     func showFullPlayer() {
         sheetState = .full
@@ -236,7 +222,6 @@ class AudioPlayerManager: NSObject, ObservableObject {
         sheetState = .hidden
     }
     
-    // MARK: - Seek
     
     func seek(to time: TimeInterval) {
         let cmTime = CMTime(seconds: time, preferredTimescale: 1)
@@ -244,7 +229,6 @@ class AudioPlayerManager: NSObject, ObservableObject {
         currentTime = time
     }
     
-    // MARK: - Private Methods
     
     private func setupNowPlayingInfo(for track: Track) {
         var nowPlayingInfo = [String: Any]()
@@ -298,7 +282,6 @@ class AudioPlayerManager: NSObject, ObservableObject {
         }
     }
     
-    // MARK: - Helper Methods
     
     func isPlaying(track: Track) -> Bool {
         return currentTrack?.id == track.id && playerState == .playing
@@ -312,7 +295,6 @@ class AudioPlayerManager: NSObject, ObservableObject {
         return currentTrack?.id == track.id
     }
     
-    // MARK: - KVO Observer
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "status", let player = object as? AVPlayer {
@@ -337,7 +319,6 @@ class AudioPlayerManager: NSObject, ObservableObject {
         }
     }
     
-    // MARK: - Cleanup
     
     deinit {
         removeTimeObserver()

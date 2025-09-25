@@ -94,7 +94,7 @@ struct FullPlayerView: View {
                 .padding(.horizontal, 40)
                 
                 // Player Controls
-                HStack(spacing: 40) {
+                HStack(spacing: 28) {
                     Button(action: {
                         playerManager.toggleShuffle()
                     }) {
@@ -134,6 +134,7 @@ struct FullPlayerView: View {
                     }
                 }
                 .padding(.top, 20)
+                .padding(.horizontal, 16)
                 
                 // Bottom Controls
                 HStack(spacing: 60) {
@@ -157,8 +158,10 @@ struct FullPlayerView: View {
                 }
                 .padding(.top, 30)
                 .padding(.bottom, 40)
+                
             }
         }
+
         .gesture(
             DragGesture()
                 .onEnded { value in

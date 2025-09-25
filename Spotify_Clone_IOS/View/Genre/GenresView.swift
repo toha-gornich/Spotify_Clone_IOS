@@ -11,6 +11,7 @@ struct GenresView: View {
     
     @State private var searchText = ""
     @State private var searchQuery = ""
+    @Environment(\.dismiss) private var dismiss
     @State private var isShowingSearchResults = false
     @StateObject private var genreVM = GenresViewModel()
     @EnvironmentObject var mainVM: MainViewModel
@@ -91,7 +92,7 @@ struct GenresView: View {
                                 NavigationLink(destination: GenreDetailsView(
                                             slugGenre: genreVM.genres[index].slug,
                                             genresVM: genreVM
-                                        )) {
+                                        ).environmentObject(mainVM)) {
                                     if index == 0 {
                                         SearchCardView(genre: genreVM.genres[index])
                                             .gridCellColumns(2)
@@ -122,10 +123,6 @@ struct GenresView: View {
                 mainVM.isTabBarVisible = true
                 print("Genres " + String(mainVM.isTabBarVisible))
             }
-//            .onDisappear {
-//                mainVM.isTabBarVisible = false
-//                print("Genres " + String(mainVM.isTabBarVisible))
-//            }
         }
         .alert(item: $genreVM.alertItem) { alertItem in
             Alert(title: alertItem.title,

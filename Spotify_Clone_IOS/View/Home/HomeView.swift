@@ -76,7 +76,7 @@ struct HomeView: View {
                                     
                                     let sObj = homeVM.artists[index]
                                     
-                                    NavigationLink(destination: ArtistView(slugArtist: sObj.slug)) {
+                                    NavigationLink(destination: ArtistView(slugArtist: sObj.slug).environmentObject(mainVM)) {
                                         ArtistItemView(artist: sObj)
                                     }
                                 }
@@ -92,7 +92,7 @@ struct HomeView: View {
                             LazyHStack(spacing: 15) {
                                 ForEach(homeVM.albums.indices, id: \.self) { index in
                                     let sObj = homeVM.albums[index]
-                                    NavigationLink(destination: AlbumView(slugAlbum: sObj.slug)) {
+                                    NavigationLink(destination: AlbumView(slugAlbum: sObj.slug).environmentObject(mainVM)) {
                                         MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
                                     }
                                 }
@@ -110,7 +110,7 @@ struct HomeView: View {
                             LazyHStack(spacing: 15) {
                                 ForEach(homeVM.playlists.indices, id: \.self) { index in
                                     let sObj = homeVM.playlists[index]
-                                    NavigationLink(destination: PlaylistView(slugPlaylist: sObj.slug)) {
+                                    NavigationLink(destination: PlaylistView(slugPlaylist: sObj.slug).environmentObject(mainVM)) {
                                         MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
                                     }
                                 }
@@ -126,7 +126,7 @@ struct HomeView: View {
                             LazyHStack(spacing: 15) {
                                 ForEach(homeVM.tracks.indices, id: \.self) { index in
                                     let sObj = homeVM.tracks[index]
-                                    NavigationLink(destination: TrackView(slugTrack: sObj.slug)) {
+                                    NavigationLink(destination: TrackView(slugTrack: sObj.slug).environmentObject(playerManager).environmentObject(mainVM)) {
                                         MediaItemCell(imageURL: sObj.album.image, title: sObj.slug, width: 140, height: 140)
                                     }
                                 }
@@ -159,10 +159,6 @@ struct HomeView: View {
         .onAppear {
             mainVM.isTabBarVisible = true
         }
-//        .onDisappear {
-//            mainVM.isTabBarVisible = false
-//        }
-//        
         
     }
 }
