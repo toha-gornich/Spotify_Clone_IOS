@@ -174,7 +174,7 @@ struct TrackView: View {
                                         }
                                         
                                         // Artist name
-                                        NavigationLink(destination: ArtistView(slugArtist: trackVM.track.artist.slug)) {
+                                        NavigationLink(destination: ArtistView(slugArtist: trackVM.track.artist.slug).environmentObject(mainVM).environmentObject(playerManager)) {
                                             Text(trackVM.track.artist.displayName)
                                                 .font(.subheadline)
                                                 .foregroundColor(.white)
@@ -186,7 +186,7 @@ struct TrackView: View {
                                                 .frame(width: 6, height: 6)
                                         }
                                         
-                                        NavigationLink(destination: AlbumView(slugAlbum: trackVM.track.album.slug)) {
+                                        NavigationLink(destination: AlbumView(slugAlbum: trackVM.track.album.slug).environmentObject(mainVM).environmentObject(playerManager)) {
                                             Text(trackVM.track.album.title)
                                                 .font(.subheadline)
                                                 .foregroundColor(.white)
@@ -272,7 +272,7 @@ struct TrackView: View {
                                     .font(.subheadline)
                                     .foregroundColor(.gray)
                                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                TrackListView(tracks: Array(trackVM.tracks.prefix(5)))
+                                TrackListView(tracks: Array(trackVM.tracks.prefix(5))).environmentObject(mainVM).environmentObject(playerManager)
                                     .task(id: trackVM.track.genre.slug) {
                                         if !trackVM.track.genre.slug.isEmpty {
                                             trackVM.getTracksBySlugGenre(slug: trackVM.track.genre.slug)
@@ -292,7 +292,7 @@ struct TrackView: View {
                                     .foregroundColor(.primaryText)
                                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                                 
-                                TrackListViewImage(tracks: Array(trackVM.tracksByArtist.prefix(5)))
+                                TrackListViewImage(tracks: Array(trackVM.tracksByArtist.prefix(5))).environmentObject(mainVM).environmentObject(playerManager)
                                     .task(id: trackVM.track.artist.slug) {
                                         if !trackVM.track.artist.slug.isEmpty {
                                             trackVM.getTrackBySlugArtist(slug: trackVM.track.artist.slug)
@@ -317,7 +317,7 @@ struct TrackView: View {
                                     LazyHStack(spacing: 15) {
                                         ForEach(trackVM.albums.indices, id: \.self) { index in
                                             let sObj = trackVM.albums[index]
-                                            NavigationLink(destination: AlbumView(slugAlbum: sObj.slug)) {
+                                            NavigationLink(destination: AlbumView(slugAlbum: sObj.slug).environmentObject(mainVM).environmentObject(playerManager)) {
                                                 MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
                                             }
                                         }
@@ -340,7 +340,7 @@ struct TrackView: View {
                                             
                                             let sObj = trackVM.artists[index]
                                             
-                                            NavigationLink(destination: ArtistView(slugArtist: sObj.slug)) {
+                                            NavigationLink(destination: ArtistView(slugArtist: sObj.slug).environmentObject(mainVM).environmentObject(playerManager)) {
                                                 ArtistItemView(artist: sObj)
                                             }
                                         }

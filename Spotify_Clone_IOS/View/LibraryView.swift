@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct LibraryView: View {
-    @EnvironmentObject var mainVM: MainViewModel  
+    @EnvironmentObject var playerManager: AudioPlayerManager
+    @EnvironmentObject var mainVM: MainViewModel
     
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)

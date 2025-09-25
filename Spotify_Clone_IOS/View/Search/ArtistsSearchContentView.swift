@@ -10,6 +10,8 @@ import SwiftUI
 
 struct ArtistsSearchContentView: View {
     @ObservedObject var searchVM: SearchViewModel
+    @EnvironmentObject var mainVM: MainViewModel
+    @EnvironmentObject var playerManager: AudioPlayerManager
     let maxItems6: Bool
     let padding: Int
     
@@ -36,7 +38,9 @@ struct ArtistsSearchContentView: View {
             ], spacing: 10) {
                 ForEach(0..<limitedItems.count, id: \.self) { index in
                     let sObj = searchVM.artists[index]
-                    NavigationLink(destination: ArtistView(slugArtist: sObj.slug)) {
+                    NavigationLink(destination: ArtistView(slugArtist: sObj.slug).environmentObject(mainVM)
+                        .environmentObject(playerManager)
+) {
                         ArtistItemView(artist: sObj)
                     }
                 }

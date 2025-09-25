@@ -10,7 +10,8 @@ import SwiftUI
 struct TrackListView: View {
     let tracks: [Track]
     let onMoreOptions: ((Int) -> Void)?
-    
+    @EnvironmentObject var playerManager: AudioPlayerManager
+    @EnvironmentObject var mainVM: MainViewModel
     init(tracks: [Track], onMoreOptions: ((Int) -> Void)? = nil) {
         self.tracks = tracks
         self.onMoreOptions = onMoreOptions
@@ -63,14 +64,16 @@ struct TrackListView: View {
                         
                         // Track info
                         VStack(alignment: .leading, spacing: 2) {
-                            NavigationLink(destination: TrackView(slugTrack: tracks[index].slug)) {
+                            NavigationLink(destination: TrackView(slugTrack: tracks[index].slug).environmentObject(mainVM)
+                                .environmentObject(playerManager)) {
                                 Text(tracks[index].title)
                                     .font(.subheadline)
                                     .foregroundColor(.white)
                                     .lineLimit(1)
                                     .truncationMode(.tail)
                             }
-                            NavigationLink(destination: ArtistView(slugArtist: tracks[index].artist.slug)) {
+                            NavigationLink(destination: ArtistView(slugArtist: tracks[index].artist.slug).environmentObject(mainVM)
+                                .environmentObject(playerManager)) {
                                 Text(tracks[index].artist.displayName)
                                     .font(.caption)
                                     .foregroundColor(.gray)

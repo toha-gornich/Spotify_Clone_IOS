@@ -13,6 +13,8 @@ struct GenreDetailsView: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject var genresVM: GenresViewModel
     @EnvironmentObject var mainVM: MainViewModel
+    @EnvironmentObject var playerManager: AudioPlayerManager
+    
     @State private var scrollOffset: CGFloat = 0
     @State private var showTitleInNavBar = false
     
@@ -148,6 +150,8 @@ struct GenreDetailsView: View {
                                 if !genresVM.tracks.isEmpty {
                                     ViewAllSection(title: "Popular \(genresVM.genre.name) tracks") {}
                                     TrackListViewImage(tracks: Array(genresVM.tracks.prefix(5)))
+                                        .environmentObject(mainVM)
+                                        .environmentObject(playerManager)
                                 }
                                 
                                 if !genresVM.playlists.isEmpty {
@@ -160,7 +164,9 @@ struct GenreDetailsView: View {
                                         LazyHStack(spacing: 15) {
                                             ForEach(genresVM.playlists.indices, id: \.self) { index in
                                                 let sObj = genresVM.playlists[index]
-                                                NavigationLink(destination: PlaylistView(slugPlaylist: sObj.slug)) {
+                                                NavigationLink(destination: PlaylistView(slugPlaylist: sObj.slug)
+                                                    .environmentObject(mainVM)
+                                                    .environmentObject(playerManager)) {
                                                     MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
                                                 }
                                             }

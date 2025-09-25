@@ -8,6 +8,8 @@
 import SwiftUI
 struct TrackListViewImage: View {
     let tracks: [Track]
+    @EnvironmentObject var mainVM: MainViewModel
+    @EnvironmentObject var playerManager: AudioPlayerManager
     let onMoreOptions: ((Int) -> Void)?
     let maxItems6: Bool
     let padding: Int
@@ -74,7 +76,9 @@ struct TrackListViewImage: View {
                             .frame(width: 20, alignment: .leading)
                         
                         // Track info
-                        NavigationLink(destination: TrackView(slugTrack: tracks[index].slug)) {
+                        NavigationLink(destination: TrackView(slugTrack: tracks[index].slug)
+                            .environmentObject(mainVM)
+                            .environmentObject(playerManager)) {
                             HStack(spacing: 8) {
                                 SpotifyRemoteImage(urlString: tracks[index].album.image)
                                     .aspectRatio(contentMode: .fill)

@@ -11,6 +11,7 @@ struct AlbumView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var albumVM = AlbumViewModel()
     @EnvironmentObject var mainVM: MainViewModel
+    @EnvironmentObject var playerManager: AudioPlayerManager
     @State private var scrollOffset: CGFloat = 0
     @State private var showTitleInNavBar = false
     
@@ -176,7 +177,8 @@ struct AlbumView: View {
                                         }
                                         
                                         // Artist name
-                                        NavigationLink(destination: ArtistView(slugArtist: albumVM.album.artist.slug)) {
+                                        NavigationLink(destination: ArtistView(slugArtist: albumVM.album.artist.slug).environmentObject(mainVM)
+                                            .environmentObject(playerManager)) {
                                             Text(albumVM.album.artist.displayName)
                                                 .font(.subheadline)
                                                 .foregroundColor(.white)
@@ -242,7 +244,8 @@ struct AlbumView: View {
                                 
                             }
                             
-                            TrackListView(tracks: albumVM.tracks)
+                            TrackListView(tracks: albumVM.tracks).environmentObject(mainVM)
+                                .environmentObject(playerManager)
                             .task(id: albumVM.album.slug) {
                                 if !albumVM.album.slug.isEmpty {
                                     albumVM.getTracksBySlugAlbum(slug: albumVM.album.slug)
@@ -309,7 +312,6 @@ struct AlbumView: View {
                             }
                             .onChange(of: albumVM.album.slug) { newSlug in
                                 if !newSlug.isEmpty {
-                                    print(albumVM.album.artist.displayName)
                                     albumVM.getTracksBySlugArtist(slug: albumVM.album.artist.slug)
                                 }
                             }

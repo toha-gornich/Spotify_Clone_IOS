@@ -10,6 +10,8 @@ import SwiftUI
 
 struct PlaylistsSearchContentView: View {
     @ObservedObject var searchVM: SearchViewModel
+    @EnvironmentObject var mainVM: MainViewModel
+    @EnvironmentObject var playerManager: AudioPlayerManager
     let maxItems6: Bool
     let padding: Int
     
@@ -36,7 +38,9 @@ struct PlaylistsSearchContentView: View {
             ], spacing: 10) {
                 ForEach(0..<limitedItems.count, id: \.self) { index in
                     let sObj = searchVM.playlists[index]
-                    NavigationLink(destination: PlaylistView(slugPlaylist: sObj.slug)) {
+                    NavigationLink(destination: PlaylistView(slugPlaylist: sObj.slug).environmentObject(mainVM)
+                        .environmentObject(playerManager)
+) {
                         MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
                     }
                 }

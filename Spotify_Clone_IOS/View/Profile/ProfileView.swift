@@ -6,11 +6,11 @@
 //
 
 import SwiftUI
-struct ProfileView: View {
-    //    let userId: String
-    
+struct ProfileView: View {    
     @Environment(\.dismiss) private var dismiss
     @StateObject private var profileVM = ProfileViewModel()
+    @EnvironmentObject var playerManager: AudioPlayerManager
+    @EnvironmentObject var mainVM: MainViewModel
     @State private var selectedPlaylistSlug: String?
     
     var body: some View {

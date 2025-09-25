@@ -14,6 +14,7 @@ struct GenresView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var isShowingSearchResults = false
     @StateObject private var genreVM = GenresViewModel()
+    @EnvironmentObject var playerManager: AudioPlayerManager
     @EnvironmentObject var mainVM: MainViewModel
     
     var body: some View {
@@ -44,7 +45,7 @@ struct GenresView: View {
                     }
                     .padding(.top, .topInsets)
                     .padding(.horizontal, 20)
-
+                    
                     // Search Field
                     HStack {
                         // Magnifying glass button
@@ -80,7 +81,7 @@ struct GenresView: View {
                     .padding(.vertical, 12)
                     .background(Color.white)
                     .cornerRadius(10)
-                    .padding(.horizontal, 20) 
+                    .padding(.horizontal, 20)
                     .padding(.vertical, 6)
                     
                     ScrollView(.vertical, showsIndicators: false) {
@@ -90,9 +91,9 @@ struct GenresView: View {
                         ], spacing: 10) {
                             ForEach(0..<genreVM.genres.count, id: \.self) { index in
                                 NavigationLink(destination: GenreDetailsView(
-                                            slugGenre: genreVM.genres[index].slug,
-                                            genresVM: genreVM
-                                        ).environmentObject(mainVM)) {
+                                    slugGenre: genreVM.genres[index].slug,
+                                    genresVM: genreVM
+                                ).environmentObject(mainVM).environmentObject(playerManager)) {
                                     if index == 0 {
                                         SearchCardView(genre: genreVM.genres[index])
                                             .gridCellColumns(2)
@@ -118,16 +119,20 @@ struct GenresView: View {
             .ignoresSafeArea()
             .navigationDestination(isPresented: $isShowingSearchResults) {
                 SearchView(searchText: searchQuery)
+                    .environmentObject(mainVM)
+                    .environmentObject(playerManager)
+            }
+            .alert(item: $genreVM.alertItem) { alertItem in
+                Alert(title: alertItem.title,
+                      message: alertItem.message,
+                      dismissButton: alertItem.dismissButton)
             }
             .onAppear {
-                mainVM.isTabBarVisible = true
-                print("Genres " + String(mainVM.isTabBarVisible))
+                if !mainVM.isTabBarVisible {
+                    mainVM.isTabBarVisible = true
+                    print("Genres " + String(mainVM.isTabBarVisible))
+                }
             }
-        }
-        .alert(item: $genreVM.alertItem) { alertItem in
-            Alert(title: alertItem.title,
-                  message: alertItem.message,
-                  dismissButton: alertItem.dismissButton)
         }
     }
     

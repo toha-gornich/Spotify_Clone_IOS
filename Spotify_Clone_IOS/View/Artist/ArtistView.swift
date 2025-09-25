@@ -11,6 +11,7 @@ struct ArtistView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var mainVM: MainViewModel
     @StateObject private var artistVM = ArtistViewModel()
+    @EnvironmentObject var playerManager: AudioPlayerManager
     @State private var scrollOffset: CGFloat = 0
     @State private var showTitleInNavBar = false
     
@@ -259,7 +260,8 @@ struct ArtistView: View {
                                         
                                         let sObj = artistVM.artists[index]
                                         
-                                        NavigationLink(destination: ArtistView(slugArtist: sObj.slug)) {
+                                        NavigationLink(destination: ArtistView(slugArtist: sObj.slug).environmentObject(mainVM)
+                                            .environmentObject(playerManager)) {
                                             ArtistItemView(artist: sObj)
                                         }
                                     }

@@ -11,6 +11,8 @@ struct PlaylistView: View {
     let slugPlaylist: String
     @Environment(\.dismiss) private var dismiss
     @StateObject private var playlistVM = PlaylistViewModel()
+    @EnvironmentObject var playerManager: AudioPlayerManager
+    @EnvironmentObject var mainVM: MainViewModel
     @State private var scrollOffset: CGFloat = 0
     @State private var showTitleInNavBar = false
     
@@ -251,7 +253,7 @@ struct PlaylistView: View {
                                 
                             }
                             
-                            TrackListView(tracks: playlistVM.playlist.tracks)
+                            TrackListView(tracks: playlistVM.playlist.tracks).environmentObject(playerManager).environmentObject(mainVM)
                             
                         }
                         .background(Color.bg)

@@ -9,8 +9,11 @@ import SwiftUI
 
 struct TopResultView: View {
     let track: Track
+    @EnvironmentObject var mainVM: MainViewModel
+    @EnvironmentObject var playerManager: AudioPlayerManager
     var body: some View {
-        NavigationLink(destination: TrackView(slugTrack: track.slug)){
+        NavigationLink(destination: TrackView(slugTrack: track.slug).environmentObject(mainVM)
+            .environmentObject(playerManager)){
             HStack(spacing: 12) {
                 AsyncImage(url: URL(string: track.album.image)) { image in
                     image

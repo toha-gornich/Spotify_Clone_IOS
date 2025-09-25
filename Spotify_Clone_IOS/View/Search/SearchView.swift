@@ -15,6 +15,7 @@ struct SearchView: View {
     
     @StateObject private var searchVM = SearchViewModel()
     @EnvironmentObject var mainVM: MainViewModel
+    @EnvironmentObject var playerManager: AudioPlayerManager
     @Environment(\.dismiss) private var dismiss
     
     @State private var isShowingSearchResults = false
@@ -204,19 +205,25 @@ struct SearchView: View {
                     switch selectedTab {
                     case .all:
                         AllSearchContentView(selectedTab: $selectedTab, searchVM: searchVM)
-                            .padding(.bottom, 100)
+                            .padding(.bottom, 100).environmentObject(mainVM)
+                            .environmentObject(playerManager)
                     case .songs:
                         TrackListViewImage(tracks: searchVM.tracks)
-                            .padding(.top, 20)
+                            .padding(.top, 20).environmentObject(mainVM)
+                            .environmentObject(playerManager)
                     case .albums:
-                        AlbumsSearchContentView(searchVM: searchVM)
+                        AlbumsSearchContentView(searchVM: searchVM).environmentObject(mainVM)
+                            .environmentObject(playerManager)
                             .padding(.top, 20)
                     case .artists:
-                        ArtistsSearchContentView(searchVM: searchVM)
+                        ArtistsSearchContentView(searchVM: searchVM).environmentObject(mainVM)
+                            .environmentObject(playerManager)
                             .padding(.top, 20)
                     case .playlists:
                         PlaylistsSearchContentView(searchVM: searchVM)
                             .padding(.top, 20)
+                            .environmentObject(mainVM)
+                            .environmentObject(playerManager)
                     }
                 } else {
                     EmptySearchView()
