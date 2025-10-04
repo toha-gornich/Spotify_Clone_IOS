@@ -19,6 +19,7 @@ import Foundation
     
     @Published var album: Album = Album.empty
     
+
     var totalDuration: String {
         let totalSeconds = playlist.tracks.reduce(0) { $0 + $1.durationInSeconds }
         let minutes = Int(totalSeconds) / 60

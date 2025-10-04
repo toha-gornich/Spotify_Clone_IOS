@@ -15,6 +15,13 @@ struct TracksResponse: Codable {
     let results: [Track]
 }
 
+struct TracksMyResponse: Codable {
+    let count: Int
+    let next: String?
+    let previous: String?
+    let results: [TracksMy]
+}
+
 // MARK: - Track Model
 struct Track: Codable, Identifiable {
     let id: Int
@@ -61,6 +68,42 @@ struct TrackDetail: Codable, Identifiable {
     }
 }
 
+struct TracksMy: Codable, Identifiable {
+    let id: Int
+    let slug: String
+    let artist: ArtistTracksMy
+    let title: String
+    let duration: String
+    let image: String
+    let color: String
+    let license: License
+    let genre: Genre
+    let album: AlbumTrack
+    let file: String
+    let playsCount: Int
+    let downloadsCount: Int
+    let likesCount: Int
+    let userOfLikes: [Int]
+    let isPrivate: Bool
+    let releaseDate: String
+    let createdAt: String
+    let updatedAt: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id, slug, artist, title, duration, image, color, license, genre, album, file
+        case playsCount = "plays_count"
+        case downloadsCount = "downloads_count"
+        case likesCount = "likes_count"
+        case userOfLikes = "user_of_likes"
+        case isPrivate = "is_private"
+        case releaseDate = "release_date"
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+    }
+}
+
+
+
 // MARK: - Extension for convenience
 extension Track {
     // Converting duration from time to seconds
@@ -106,6 +149,138 @@ extension Track {
             return URL(string: file)
         }
 }
+
+extension TracksMy {
+    // Converting duration from time to seconds
+    var durationInSeconds: TimeInterval {
+        let components = duration.components(separatedBy: ":")
+        guard components.count >= 3,
+              let hours = Double(components[0]),
+              let minutes = Double(components[1]),
+              let seconds = Double(components[2].components(separatedBy: ".")[0]) else {
+            return 0
+        }
+        return hours * 3600 + minutes * 60 + seconds
+    }
+    
+    // Formatted duration for display
+    var formattedDuration: String {
+        let totalSeconds = Int(durationInSeconds)
+        let minutes = totalSeconds / 60
+        let seconds = totalSeconds % 60
+        return String(format: "%d:%02d", minutes, seconds)
+    }
+    
+    // Formatted number of listens
+    var formattedPlaysCount: String {
+        if playsCount >= 1_000_000_000 {
+            return String(format: "%.1fB", Double(playsCount) / 1_000_000_000)
+        } else if playsCount >= 1_000_000 {
+            return String(format: "%.1fM", Double(playsCount) / 1_000_000)
+        } else if playsCount >= 1_000 {
+            return String(format: "%.1fK", Double(playsCount) / 1_000)
+        } else {
+            return "\(playsCount)"
+        }
+    }
+    
+    // Formatted number of likes
+    var formattedLikesCount: String {
+        if likesCount >= 1_000_000_000 {
+            return String(format: "%.1fB", Double(likesCount) / 1_000_000_000)
+        } else if likesCount >= 1_000_000 {
+            return String(format: "%.1fM", Double(likesCount) / 1_000_000)
+        } else if likesCount >= 1_000 {
+            return String(format: "%.1fK", Double(likesCount) / 1_000)
+        } else {
+            return "\(likesCount)"
+        }
+    }
+    
+    // Formatted number of downloads
+    var formattedDownloadsCount: String {
+        if downloadsCount >= 1_000_000_000 {
+            return String(format: "%.1fB", Double(downloadsCount) / 1_000_000_000)
+        } else if downloadsCount >= 1_000_000 {
+            return String(format: "%.1fM", Double(downloadsCount) / 1_000_000)
+        } else if downloadsCount >= 1_000 {
+            return String(format: "%.1fK", Double(downloadsCount) / 1_000)
+        } else {
+            return "\(downloadsCount)"
+        }
+    }
+    
+    var artistName: String {
+        return artist.displayName
+    }
+    
+    var albumTitle: String {
+        return album.title
+    }
+    
+    var audioURL: URL? {
+        return URL(string: file)
+    }
+    
+    var imageURL: URL? {
+        return URL(string: image)
+    }
+    
+    var artistImageURL: URL? {
+        return URL(string: artist.image)
+    }
+    
+    var genreName: String {
+        return genre.name
+    }
+    
+    var licenseName: String {
+        return license.name
+    }
+    
+    // Date formatters
+    var formattedReleaseDate: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        if let date = dateFormatter.date(from: releaseDate) {
+            let displayFormatter = DateFormatter()
+            displayFormatter.dateStyle = .medium
+            return displayFormatter.string(from: date)
+        }
+        return releaseDate
+    }
+    
+    var releaseDateAsDate: Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        return dateFormatter.date(from: releaseDate)
+    }
+    
+    var createdAtAsDate: Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        return dateFormatter.date(from: createdAt)
+    }
+    
+    var updatedAtAsDate: Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        return dateFormatter.date(from: updatedAt)
+    }
+    
+    // Privacy status
+    var privacyStatus: String {
+        return isPrivate ? "Private" : "Public"
+    }
+    
+    // Check if user liked the track
+    func isLikedBy(userId: Int) -> Bool {
+        return userOfLikes.contains(userId)
+    }
+}
+
+
 extension TrackDetail {
     // Converting duration from time to seconds
     var durationInSeconds: TimeInterval {

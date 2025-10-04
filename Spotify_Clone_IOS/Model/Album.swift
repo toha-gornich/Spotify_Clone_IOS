@@ -31,9 +31,42 @@ struct AlbumResponse: Codable {
     let results: [Album]
 }
 
+struct AlbumMyResponse: Codable {
+    let count: Int
+    let next: String?
+    let previous: String?
+    let results: [AlbumMy]
+}
 
 
 // MARK: - Album Model
+struct AlbumMy: Codable, Identifiable {
+    let id: Int
+    let slug: String
+    let title: String
+    let description: String
+    let artist: ArtistTracksMy
+    let albumListeners: Int
+    let image: String?
+    let color: String?
+    let tracks: [Track]
+    let duration: String
+    let isPrivate: Bool
+    let releaseDate: String?
+    let createdAt: String
+    let updatedAt: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id, slug, title, description, artist, image, color, tracks, duration
+        case albumListeners = "album_listeners"
+        case isPrivate = "is_private"
+        case releaseDate = "release_date"
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+    }
+}
+
+
 struct Album: Codable, Identifiable {
     let id: Int
     let slug: String

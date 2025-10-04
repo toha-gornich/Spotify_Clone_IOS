@@ -22,6 +22,8 @@ struct Constants {
         
         
         static let tracksURL = baseURL + "tracks/"
+        static let tracksCreateMyURL = baseURL + "tracks/my/"
+        static let tracksMyURL = baseURL + "tracks/my/"
         static let trackBySlugURL = baseURL + "tracks/"
         static let tracksBySlugGenreURL = baseURL + "tracks/?genre__slug="
         static let tracksBySlugArtistURL = baseURL + "tracks/?artist__slug="
@@ -29,9 +31,12 @@ struct Constants {
         static let searchTracksURL = baseURL + "tracks/?search="
         
         static let artistsURL = baseURL + "artists/"
+        static let artistMeURL = baseURL + "artists/me/"
+        static let artistMeLicensesURL = baseURL + "artists/me/license/"
         static let searchArtistsURL = baseURL + "artists/?search="
         
         static let albumsURL = baseURL + "albums/"
+        static let albumsMyURL = baseURL + "albums/my/"
         static let albumsBySlugURL = baseURL + "albums/"
         static let albumsBySlugArtistURL = baseURL + "albums/?album__slug="
         static let searchAlbumsURL = baseURL + "albums/?search="

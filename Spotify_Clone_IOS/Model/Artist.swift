@@ -100,8 +100,37 @@ struct Artist: Codable, Identifiable {
         )
     }
 }
+
+struct ArtistTracksMy: Codable, Identifiable {
+    let id: Int
+    let slug: String
+    let displayName: String
+    let image: String
+    let color: String
+    let isVerify: Bool
     
+    enum CodingKeys: String, CodingKey {
+        case id, slug, image, color
+        case displayName = "display_name"
+        case isVerify = "is_verify"
+    }
+}
     
+struct UpdateArtist: Codable, Identifiable {
+    let id: Int
+    let firstName: String
+    let lastName: String
+    let displayName: String
+    let image: String
+
+    
+    enum CodingKeys: String, CodingKey {
+        case id, image
+        case firstName = "first_name"
+        case lastName = "last_name"
+        case displayName = "display_name"
+    }
+}
     
     
     

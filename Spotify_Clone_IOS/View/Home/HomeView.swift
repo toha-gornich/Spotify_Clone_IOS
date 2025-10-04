@@ -10,6 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @StateObject private var homeVM = HomeViewModel()
     @EnvironmentObject var mainVM: MainViewModel
+
     @EnvironmentObject var playerManager: AudioPlayerManager
     
     var body: some View {
@@ -76,7 +77,7 @@ struct HomeView: View {
                                     
                                     let sObj = homeVM.artists[index]
                                     
-                                    NavigationLink(destination: ArtistView(slugArtist: sObj.slug).environmentObject(mainVM)) {
+                                    NavigationLink(destination: ArtistView(slugArtist: sObj.slug).environmentObject(mainVM).environmentObject(playerManager)) {
                                         ArtistItemView(artist: sObj)
                                     }
                                 }
@@ -92,7 +93,7 @@ struct HomeView: View {
                             LazyHStack(spacing: 15) {
                                 ForEach(homeVM.albums.indices, id: \.self) { index in
                                     let sObj = homeVM.albums[index]
-                                    NavigationLink(destination: AlbumView(slugAlbum: sObj.slug).environmentObject(mainVM)) {
+                                    NavigationLink(destination: AlbumView(slugAlbum: sObj.slug).environmentObject(mainVM).environmentObject(playerManager)) {
                                         MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
                                     }
                                 }
@@ -110,7 +111,7 @@ struct HomeView: View {
                             LazyHStack(spacing: 15) {
                                 ForEach(homeVM.playlists.indices, id: \.self) { index in
                                     let sObj = homeVM.playlists[index]
-                                    NavigationLink(destination: PlaylistView(slugPlaylist: sObj.slug).environmentObject(mainVM)) {
+                                    NavigationLink(destination: PlaylistView(slugPlaylist: sObj.slug).environmentObject(mainVM).environmentObject(playerManager)) {
                                         MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
                                     }
                                 }

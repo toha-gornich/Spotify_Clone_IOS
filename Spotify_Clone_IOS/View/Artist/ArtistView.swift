@@ -91,9 +91,10 @@ struct ArtistView: View {
                     
                     // Play button in navigation bar
                     Button(action: {
-                        // Play action
+                        let trackToPlay = artistVM.tracks[0]
+                        playerManager.play(track: trackToPlay, from: artistVM.tracks)
                     }) {
-                        Image(systemName: "play.fill")
+                        Image(systemName: playerManager.playerState == .playing ? "pause.fill" : "play.fill")
                             .font(.title3)
                             .foregroundColor(.black)
                             .frame(width: 44, height: 44)
@@ -181,12 +182,13 @@ struct ArtistView: View {
                                 Spacer()
                                 
                                 Button(action: {
-                                    
+                                    let trackToPlay = artistVM.tracks[0]
+                                    playerManager.play(track: trackToPlay, from: artistVM.tracks)
                                 }) {
-                                    Image(systemName: "play.fill")
-                                        .font(.title2)
+                                    Image(systemName: playerManager.playerState == .playing ? "pause.fill" : "play.fill")
+                                        .font(.title3)
                                         .foregroundColor(.black)
-                                        .frame(width: 56, height: 56)
+                                        .frame(width: 44, height: 44)
                                         .background(Color.green)
                                         .clipShape(Circle())
                                 }
