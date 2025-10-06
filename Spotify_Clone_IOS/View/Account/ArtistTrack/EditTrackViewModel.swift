@@ -10,8 +10,7 @@ import SwiftUI
 import Combine
 
 @MainActor
-final class CreateTrackViewModel: ObservableObject {
-    
+final class EditTrackViewModel: ObservableObject {
     
     @Published var selectedImage: UIImage?
     @Published var trackTitle: String = ""
@@ -22,8 +21,9 @@ final class CreateTrackViewModel: ObservableObject {
     @Published var selectedImageFile: URL?
     @Published var releaseDate: Date = Date()
     @Published var isPrivate: Bool = false
-    
-    
+    @Published var track: TracksMyBySlug = TracksMyBySlug.empty()
+
+
     @Published var albums: [AlbumMy] = []
     @Published var genres: [Genre] = []
     @Published var licenses: [License] = []
@@ -66,15 +66,10 @@ final class CreateTrackViewModel: ObservableObject {
     
     
     init() {
-        loadInitialData()
+        
     }
     
-    
-    func loadInitialData() {
-        loadAlbums()
-        loadGenres()
-        loadLicenses()
-    }
+
     
     
     func loadAlbums() {
@@ -83,7 +78,36 @@ final class CreateTrackViewModel: ObservableObject {
         Task {
             do {
                 albums = try await networkManager.getAlbumsMy()
-                print(albums[0].description)
+                isLoading = false
+            } catch {
+                handleError(error)
+                isLoading = false
+            }
+        }
+        
+    }
+    func getTrackBySlug(slug: String) {
+        isLoading = true
+        
+        Task {
+            do {
+                
+                async let trackData = networkManager.getTrackMyBySlug(slug: slug)
+                async let albumsData = networkManager.getAlbumsMy()
+                async let genresData = networkManager.getGenres()
+                async let licensesData = networkManager.getLicenses()
+                
+                
+                let results = try await (trackData, albumsData, genresData, licensesData)
+                
+                track = results.0
+                albums = results.1
+                genres = results.2
+                licenses = results.3
+                
+                
+                populateFormWithTrack()
+                
                 isLoading = false
             } catch {
                 handleError(error)
@@ -92,7 +116,72 @@ final class CreateTrackViewModel: ObservableObject {
         }
     }
     
+    func populateFormWithTrack() {
+        trackTitle = track.title
+        isPrivate = track.isPrivate
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        if let date = dateFormatter.date(from: track.releaseDate) {
+            releaseDate = date
+        }
+        
+
+        selectedAlbum = albums.first(where: { $0.id == track.album })
+        selectedGenre = genres.first(where: { $0.id == track.genre })
+        selectedLicense = licenses.first(where: { $0.id == track.license })
+    }
+
     
+    func editTrack(completion: @escaping (Bool) -> Void) {
+        guard canUpdateTrack else {
+            return
+        }
+        
+        isLoading = true
+        
+        Task {
+            do {
+                let imageData = selectedImage?.jpegData(compressionQuality: 0.8)
+                
+                var audioData: Data? = nil
+                if let audioFileURL = selectedAudioFile {
+                    audioData = try? Data(contentsOf: audioFileURL)
+                }
+                
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                let releaseDateString = dateFormatter.string(from: releaseDate)
+                
+                
+                _ = try await NetworkManager.shared.patchTrackMyBySlug(
+                    slug: track.slug,
+                    title: trackTitle != track.title ? trackTitle : nil,
+                    albumId: selectedAlbum?.id != track.album ? selectedAlbum?.id : nil,
+                    genreId: selectedGenre?.id != track.genre ? selectedGenre?.id : nil,
+                    licenseId: selectedLicense?.id != track.license ? selectedLicense?.id : nil,
+                    releaseDate: releaseDateString != track.releaseDate ? releaseDateString : nil,
+                    isPrivate: isPrivate != track.isPrivate ? isPrivate : nil,
+                    imageData: imageData,
+                    audioData: audioData
+                )
+                
+                await MainActor.run {
+                    isLoading = false
+                    showSuccessAlert = true
+                    completion(true)
+                }
+            } catch {
+                await MainActor.run {
+                    isLoading = false
+                    errorMessage = error.localizedDescription
+                    showErrorAlert = true
+                    completion(false)
+                }
+            }
+        }
+    }
+  
     func loadGenres() {
         isLoading = true
         
@@ -122,45 +211,24 @@ final class CreateTrackViewModel: ObservableObject {
         }
     }
     
-    func createTrack(completion: @escaping (Bool) -> Void) {
-        guard isFormValid else { return }
+    
+    var canUpdateTrack: Bool {
+        let hasTitleChange = trackTitle != track.title
+        let hasAlbumChange = selectedAlbum?.id != track.album
+        let hasGenreChange = selectedGenre?.id != track.genre
+        let hasLicenseChange = selectedLicense?.id != track.license
+        let hasImageChange = selectedImage != nil
         
-        isLoading = true
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let currentReleaseDateString = dateFormatter.string(from: releaseDate)
+        let hasReleaseDateChange = currentReleaseDateString != track.releaseDate
         
-        Task {
-            do {
-                let imageData = selectedImage?.jpegData(compressionQuality: 0.8)
-                let audioData = try? Data(contentsOf: selectedAudioFile!)
-                
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd"
-                let releaseDateString = dateFormatter.string(from: releaseDate)
-                
-                _ = try await NetworkManager.shared.postCreateTrack(
-                    title: trackTitle,
-                    albumId: selectedAlbum!.id,
-                    genreId: selectedGenre!.id,
-                    licenseId: selectedLicense!.id,
-                    releaseDate: releaseDateString,
-                    isPrivate: isPrivate,
-                    imageData: imageData,
-                    audioData: audioData
-                )
-                
-                await MainActor.run {
-                    isLoading = false
-                    showSuccessAlert = true
-                    completion(true)
-                }
-            } catch {
-                await MainActor.run {
-                    isLoading = false
-                    errorMessage = error.localizedDescription
-                    showErrorAlert = true
-                    completion(false)
-                }
-            }
-        }
+        let hasPrivacyChange = isPrivate != track.isPrivate
+        
+        return (hasTitleChange || hasAlbumChange || hasGenreChange ||
+                hasLicenseChange || hasImageChange ||
+                hasReleaseDateChange || hasPrivacyChange) && !isLoading
     }
     
     
@@ -189,6 +257,8 @@ final class CreateTrackViewModel: ObservableObject {
         }
         return nil
     }
+
+    
     private func handleError(_ error: Error) {
         if let appError = error as? APError {
             switch appError {

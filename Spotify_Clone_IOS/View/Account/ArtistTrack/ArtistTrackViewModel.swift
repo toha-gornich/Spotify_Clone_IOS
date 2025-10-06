@@ -7,7 +7,6 @@
 import Foundation
 import SwiftUI
 
-
 @MainActor
 final class ArtistTracksViewModel: ObservableObject {
     @Published var alertItem: AlertItem?
@@ -16,6 +15,8 @@ final class ArtistTracksViewModel: ObservableObject {
     @Published var selectedFilter: TrackFilter = .all
     @Published var isLoading = false
     @Published var showCreateTrack = false
+    @Published var showEditTrack = false
+    @Published var showOnlyPrivateTracks = false
     
     private let networkManager = NetworkManager.shared
     
@@ -28,25 +29,33 @@ final class ArtistTracksViewModel: ObservableObject {
         }
     }
     
-    
     var filteredTracks: [TracksMy] {
         var result = tracks
         
-        // Apply filter
+        // Apply private filter
+        if showOnlyPrivateTracks {
+            result = result.filter { $0.isPrivate == true }
+        }
+        
+        // Apply tab filter
         if selectedFilter == .private {
-//            result = result.filter { $0.isPrivate }
+            result = result.filter { $0.isPrivate == true }
         }
         
         // Apply search
         if !searchText.isEmpty {
-//            result = result.filter {
-//                $0.title.localizedCaseInsensitiveContains(searchText) ||
-//                $0.album.localizedCaseInsensitiveContains(searchText) ||
-//                $0.genre.localizedCaseInsensitiveContains(searchText)
-//            }
+            result = result.filter {
+                $0.title.localizedCaseInsensitiveContains(searchText) ||
+                $0.albumTitle.localizedCaseInsensitiveContains(searchText) ||
+                $0.genreName.localizedCaseInsensitiveContains(searchText)
+            }
         }
         
         return result
+    }
+    
+    func filterPrivateTracks(_ showOnlyPrivate: Bool) {
+        showOnlyPrivateTracks = showOnlyPrivate
     }
     
     func getTracksMy() {
@@ -56,36 +65,33 @@ final class ArtistTracksViewModel: ObservableObject {
             do {
                 let fetchedTracks = try await networkManager.getTracksMy()
                 tracks = fetchedTracks
-                
-
                 isLoading = false
                 
             } catch {
                 handleError(error)
                 isLoading = false
-                
             }
         }
     }
+    
     func deleteTrack(slug: String) {
         isLoading = true
     
         Task {
             do {
                 try await networkManager.deleteTracksMy(slug: slug)
-                
                 getTracksMy()
                 isLoading = false
                 
             } catch {
                 handleError(error)
                 isLoading = false
-                
             }
         }
     }
+    
     func loadTracksData() {
-
+        // Implement if needed
     }
     
     func togglePrivacy(track: TracksMy) {
@@ -97,20 +103,15 @@ final class ArtistTracksViewModel: ObservableObject {
                 getTracksMy()
                 isLoading = false
                 
-                
             } catch {
                 handleError(error)
                 isLoading = false
-                
             }
         }
-        
-        
     }
     
-    
     func searchTracks() {
-        // Implement search functionality
+        // Search functionality is handled by computed property
     }
     
     private func handleError(_ error: Error) {

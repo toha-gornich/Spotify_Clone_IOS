@@ -114,6 +114,16 @@ struct ArtistTracksMy: Codable, Identifiable {
         case displayName = "display_name"
         case isVerify = "is_verify"
     }
+    static func empty() -> ArtistTracksMy {
+        return ArtistTracksMy(
+            id: 0,
+            slug: "",
+            displayName: "",
+            image: "",
+            color: "#000000",
+            isVerify: false
+        )
+    }
 }
     
 struct UpdateArtist: Codable, Identifiable {

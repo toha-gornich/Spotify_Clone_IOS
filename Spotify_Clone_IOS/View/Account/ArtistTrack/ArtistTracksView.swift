@@ -10,6 +10,8 @@ import SwiftUI
 struct ArtistTracksView: View {
     @StateObject private var tracksVM = ArtistTracksViewModel()
     @State private var selectedTrackId: String? = nil
+    @State private var slug: String = ""
+    @State private var showOnlyPrivate = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -93,11 +95,14 @@ struct ArtistTracksView: View {
                                             .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                                     )
                                     
-                                    // Filter button
-                                    Button(action: {}) {
+                                    // Private filter button
+                                    Button(action: {
+                                        showOnlyPrivate.toggle()
+                                        tracksVM.filterPrivateTracks(showOnlyPrivate)
+                                    }) {
                                         HStack(spacing: 6) {
-                                            Image(systemName: "line.3.horizontal.decrease")
-                                            Text("Filter")
+                                            Image(systemName: showOnlyPrivate ? "eye.slash.fill" : "eye.fill")
+                                            Text(showOnlyPrivate ? "Private" : "All")
                                         }
                                         .font(.system(size: 14, weight: .medium))
                                         .foregroundColor(.white)
@@ -106,7 +111,11 @@ struct ArtistTracksView: View {
                                     .padding(.vertical, 12)
                                     .background(
                                         RoundedRectangle(cornerRadius: 8)
-                                            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                                            .fill(showOnlyPrivate ? Color.green.opacity(0.3) : Color.clear)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 8)
+                                                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                                            )
                                     )
                                     
                                     Spacer()
@@ -137,10 +146,18 @@ struct ArtistTracksView: View {
                         VStack(spacing: 0) {
                             // Tracks header
                             VStack(alignment: .leading, spacing: 8) {
-                                Text("Tracks")
-                                    .font(.title2)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.white)
+                                HStack {
+                                    Text("Tracks")
+                                        .font(.title2)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.white)
+                                    
+                                    if showOnlyPrivate {
+                                        Text("(Private)")
+                                            .font(.subheadline)
+                                            .foregroundColor(.green)
+                                    }
+                                }
                                 
                                 Text("Manage your Tracks and view their details.")
                                     .font(.subheadline)
@@ -162,11 +179,19 @@ struct ArtistTracksView: View {
                                                 .clipShape(RoundedRectangle(cornerRadius: 8))
                                             
                                             VStack(alignment: .leading, spacing: 4) {
-                                                // Title
-                                                Text(track.title)
-                                                    .font(.system(size: 16, weight: .medium))
-                                                    .foregroundColor(.white)
-                                                    .lineLimit(1)
+                                                // Title with privacy indicator
+                                                HStack(spacing: 6) {
+                                                    Text(track.title)
+                                                        .font(.system(size: 16, weight: .medium))
+                                                        .foregroundColor(.white)
+                                                        .lineLimit(1)
+                                                    
+                                                    if track.isPrivate {
+                                                        Image(systemName: "lock.fill")
+                                                            .font(.system(size: 10))
+                                                            .foregroundColor(.gray)
+                                                    }
+                                                }
                                                 
                                                 HStack {
                                                     Text(track.albumTitle)
@@ -196,7 +221,8 @@ struct ArtistTracksView: View {
                                             // Menu button with dropdown
                                             Menu {
                                                 Button(action: {
-                                                    // Edit action
+                                                    slug = track.slug
+                                                    tracksVM.showEditTrack = true
                                                     print("Edit track: \(track.id)")
                                                 }) {
                                                     Label("Edit", systemImage: "pencil")
@@ -204,7 +230,6 @@ struct ArtistTracksView: View {
                                                 
                                                 Button(action: {
                                                     tracksVM.togglePrivacy(track: track)
-                                                    print("Toggle privacy: \(track.id)")
                                                 }) {
                                                     Label(track.isPrivate ? "Make public" : "Make private",
                                                           systemImage: track.isPrivate ? "eye" : "eye.slash")
@@ -289,9 +314,10 @@ struct ArtistTracksView: View {
                 CreateTrackView()
             }
         }
+        .sheet(isPresented: $tracksVM.showEditTrack) {
+            NavigationStack {
+                EditTrackView(slug:slug)
+            }
+        }
     }
-}
-
-#Preview {
-    ArtistTracksView()
 }

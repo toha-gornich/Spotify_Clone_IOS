@@ -7,9 +7,10 @@
 import SwiftUI
 import PhotosUI
 
-struct CreateTrackView: View {
-    @StateObject private var trackVM = CreateTrackViewModel()
+struct EditTrackView: View {
+    @StateObject private var trackVM = EditTrackViewModel()
     @Environment(\.dismiss) var dismiss
+    var slug : String
     
     var body: some View {
         ZStack {
@@ -19,7 +20,7 @@ struct CreateTrackView: View {
                 VStack(spacing: 24) {
                     // Header
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Create Track")
+                        Text("Edit Track")
                             .font(.largeTitle)
                             .fontWeight(.bold)
                             .foregroundColor(.white)
@@ -210,9 +211,9 @@ struct CreateTrackView: View {
                     }
                     .padding(.horizontal, 20)
                     
-                    // Create Button
+                    // edit Button
                     Button(action: {
-                        trackVM.createTrack { success in
+                        trackVM.editTrack { success in
                             if success {
                                 dismiss()
                             }
@@ -222,7 +223,7 @@ struct CreateTrackView: View {
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle(tint: .bg))
                         } else {
-                            Text("Create track")
+                            Text("Edit track")
                                 .font(.system(size: 16, weight: .semibold))
                                 .foregroundColor(.bg)
                         }
@@ -231,9 +232,9 @@ struct CreateTrackView: View {
                     .frame(height: 54)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(trackVM.isFormValid ? Color.green : Color.gray.opacity(0.3))
+                            .fill(trackVM.canUpdateTrack ? Color.green : Color.gray.opacity(0.3))
                     )
-                    .disabled(!trackVM.isFormValid || trackVM.isLoading)
+                    .disabled(!trackVM.canUpdateTrack || trackVM.isLoading)
                     .padding(.horizontal, 20)
                     .padding(.bottom, 40)
                 }
@@ -254,14 +255,14 @@ struct CreateTrackView: View {
                 }
             }
         }
+        .onAppear{trackVM.getTrackBySlug(slug: slug)}
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbarBackground(Color.bg, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
-        
         .alert("Success", isPresented: $trackVM.showSuccessAlert) {
             Button("OK", role: .cancel) { }
         } message: {
-            Text("Track created successfully!")
+            Text("Edit track successfully!")
         }
         .alert("Error", isPresented: $trackVM.showErrorAlert) {
             Button("OK", role: .cancel) { }
@@ -288,8 +289,6 @@ struct CreateTrackView: View {
     }
 }
 
-#Preview {
-    NavigationStack {
-        CreateTrackView()
-    }
-}
+
+
+

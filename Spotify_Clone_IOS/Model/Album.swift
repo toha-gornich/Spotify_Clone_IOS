@@ -20,6 +20,17 @@ struct AlbumTrack: Codable, Identifiable {
         case id, slug, title, image, color
         case isPrivate = "is_private"
     }
+    
+    static func empty() -> AlbumTrack {
+            return AlbumTrack(
+                id: 0,
+                slug: "",
+                title: "",
+                image: "",
+                color: "#000000",
+                isPrivate: false
+            )
+        }
 }
 
 

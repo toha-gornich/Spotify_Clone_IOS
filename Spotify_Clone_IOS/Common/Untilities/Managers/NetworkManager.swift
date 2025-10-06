@@ -473,7 +473,7 @@ final class NetworkManager {
     
     func getTrackMy() async throws -> [TracksMy] {
         guard let url = URL(string: Constants.API.artistMeURL) else {
-            print("❌ getArtistMe - Invalid URL: \(Constants.API.tracksMyURL)")
+            print("❌ getTrackMy - Invalid URL: \(Constants.API.tracksMyURL)")
             throw APError.invalidURL
         }
         
@@ -481,9 +481,9 @@ final class NetworkManager {
             let (data, response) = try await URLSession.shared.data(from: url)
             
             if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
-                print("❌ getArtistMe - HTTP error \(httpResponse.statusCode)")
+                print("❌ getTrackMy - HTTP error \(httpResponse.statusCode)")
                 if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ getArtistMe - Response: \(responseString)")
+                    print("❌ getTrackMy - Response: \(responseString)")
                 }
                 throw APError.invalidResponse
             }
@@ -492,17 +492,52 @@ final class NetworkManager {
                 let decoder = JSONDecoder()
                 return try decoder.decode(TracksMyResponse.self, from: data).results
             } catch {
-                print("❌ getArtistMe - Failed to decode response: \(error)")
+                print("❌ getTrackMy - Failed to decode response: \(error)")
                 if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ getArtistMe - Raw response: \(responseString)")
+                    print("❌ getTrackMy - Raw response: \(responseString)")
                 }
                 throw APError.invalidData
             }
         } catch {
-            print("❌ getArtistMe - Network error: \(error)")
+            print("❌ getTrackMy - Network error: \(error)")
             throw error
         }
     }
+    
+    func getTrackMyBySlug(slug: String) async throws -> TracksMyBySlug {
+        guard let url = URL(string: Constants.API.tracksMyURL + "\(slug)/") else {
+            print("❌ getTrackMyBySlug - Invalid URL: \(Constants.API.tracksMyURL + "\(slug)/")")
+            throw APError.invalidURL
+        }
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
+                print("❌ getTrackMyBySlug - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getTrackMyBySlug - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                return try decoder.decode(TracksMyBySlug.self, from: data)
+            } catch {
+                print("❌ getTrackMyBySlug - Failed to decode response: \(error)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getTrackMyBySlug - Raw response: \(responseString)")
+                }
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ getTrackMyBySlug - Network error: \(error)")
+            throw error
+        }
+    }
+    
+    
     
     func getTrackBySlug(slug:String) async throws -> TrackDetail {
         print("getTrackBySlug")
@@ -520,7 +555,6 @@ final class NetworkManager {
         }
          
     }
-
     
     
     func getTracksBySlugArtist(slug: String) async throws -> [Track] {
@@ -607,6 +641,109 @@ final class NetworkManager {
             }
         } catch {
             print("❌ getTracksMy - Network error: \(error)")
+            throw error
+        }
+    }
+    
+    func patchTrackMyBySlug(
+        slug: String,
+        title: String? = nil,
+        albumId: Int? = nil,
+        genreId: Int? = nil,
+        licenseId: Int? = nil,
+        releaseDate: String? = nil,
+        isPrivate: Bool? = nil,
+        imageData: Data? = nil,
+        audioData: Data? = nil
+    ) async throws -> TracksMyBySlug {
+        guard let url = URL(string: Constants.API.tracksMyURL + "\(slug)/") else {
+            print("❌ patchTrackMyBySlug - Invalid URL: \(Constants.API.tracksMyURL + "\(slug)/")")
+            throw APError.invalidURL
+        }
+        
+        let boundary = "Boundary-\(UUID().uuidString)"
+        var request = URLRequest(url: url)
+        request.httpMethod = "PATCH"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        var body = Data()
+        
+        func addFormField(name: String, value: String) {
+            if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "\(value)\r\n".data(using: .utf8) { body.append(data) }
+        }
+        
+        
+        if let title = title {
+            addFormField(name: "title", value: title)
+        }
+        if let licenseId = licenseId {
+            addFormField(name: "license", value: "\(licenseId)")
+        }
+        if let genreId = genreId {
+            addFormField(name: "genre", value: "\(genreId)")
+        }
+        if let albumId = albumId {
+            addFormField(name: "album", value: "\(albumId)")
+        }
+        if let isPrivate = isPrivate {
+            addFormField(name: "is_private", value: "\(isPrivate)")
+        }
+        if let releaseDate = releaseDate {
+            addFormField(name: "release_date", value: releaseDate)
+        }
+        
+        // Image
+        if let imageData = imageData {
+            if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "Content-Disposition: form-data; name=\"image\"; filename=\"track_image.jpg\"\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "Content-Type: image/jpeg\r\n\r\n".data(using: .utf8) { body.append(data) }
+            body.append(imageData)
+            if let data = "\r\n".data(using: .utf8) { body.append(data) }
+        }
+        
+        // File (audio)
+        if let audioData = audioData {
+            if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "Content-Disposition: form-data; name=\"file\"; filename=\"track.mp3\"\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "Content-Type: audio/mpeg\r\n\r\n".data(using: .utf8) { body.append(data) }
+            body.append(audioData)
+            if let data = "\r\n".data(using: .utf8) { body.append(data) }
+        }
+        
+        if let data = "--\(boundary)--\r\n".data(using: .utf8) { body.append(data) }
+        request.httpBody = body
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ patchTrackMyBySlug - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ patchTrackMyBySlug - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ patchTrackMyBySlug - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let result = try decoder.decode(TracksMyBySlug.self, from: data)
+                return result
+            } catch {
+                print("❌ patchTrackMyBySlug - Failed to decode response: \(error)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ patchTrackMyBySlug - Raw response: \(responseString)")
+                }
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ patchTrackMyBySlug - Network error: \(error)")
             throw error
         }
     }

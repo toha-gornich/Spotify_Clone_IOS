@@ -20,5 +20,14 @@ struct License: Codable, Identifiable{
     let text: String
     
     
+    static func empty() -> License {
+            return License(
+                id: 0,
+                artist: ArtistTracksMy.empty(),
+                name: "",
+                text: ""
+            )
+        }
+    
     
 }

@@ -100,7 +100,87 @@ struct TracksMy: Codable, Identifiable {
         case createdAt = "created_at"
         case updatedAt = "updated_at"
     }
+    static func empty() -> TracksMy {
+            return TracksMy(
+                id: 0,
+                slug: "",
+                artist: ArtistTracksMy.empty(),
+                title: "",
+                duration: "0:00",
+                image: "",
+                color: "#000000",
+                license: License.empty(),
+                genre: Genre.empty(),
+                album: AlbumTrack.empty(),
+                file: "",
+                playsCount: 0,
+                downloadsCount: 0,
+                likesCount: 0,
+                userOfLikes: [],
+                isPrivate: false,
+                releaseDate: "",
+                createdAt: "",
+                updatedAt: ""
+            )
+        }
 }
+struct TracksMyBySlug: Codable, Identifiable {
+    let id: Int
+    let slug: String
+    let artist: ArtistTracksMy
+    let title: String
+    let duration: String
+    let image: String
+    let color: String
+    let license: Int
+    let genre: Int
+    let album: Int
+    let file: String
+    let playsCount: Int
+    let downloadsCount: Int
+    let likesCount: Int
+    let userOfLikes: [Int]
+    let isPrivate: Bool
+    let releaseDate: String
+    let createdAt: String
+    let updatedAt: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id, slug, artist, title, duration, image, color, license, genre, album, file
+        case playsCount = "plays_count"
+        case downloadsCount = "downloads_count"
+        case likesCount = "likes_count"
+        case userOfLikes = "user_of_likes"
+        case isPrivate = "is_private"
+        case releaseDate = "release_date"
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+    }
+    static func empty() -> TracksMyBySlug {
+            return TracksMyBySlug(
+                id: 0,
+                slug: "",
+                artist: ArtistTracksMy.empty(),
+                title: "",
+                duration: "0:00",
+                image: "",
+                color: "#000000",
+                license: -1,
+                genre: -1,
+                album: -1,
+                file: "",
+                playsCount: 0,
+                downloadsCount: 0,
+                likesCount: 0,
+                userOfLikes: [],
+                isPrivate: false,
+                releaseDate: "",
+                createdAt: "",
+                updatedAt: ""
+            )
+        }
+}
+
 
 
 
