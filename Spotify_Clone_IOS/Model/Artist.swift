@@ -110,8 +110,11 @@ struct ArtistTracksMy: Codable, Identifiable {
     let isVerify: Bool
     
     enum CodingKeys: String, CodingKey {
-        case id, slug, image, color
+        case id
+        case slug
         case displayName = "display_name"
+        case image
+        case color
         case isVerify = "is_verify"
     }
     static func empty() -> ArtistTracksMy {

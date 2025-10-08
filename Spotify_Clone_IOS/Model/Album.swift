@@ -22,15 +22,15 @@ struct AlbumTrack: Codable, Identifiable {
     }
     
     static func empty() -> AlbumTrack {
-            return AlbumTrack(
-                id: 0,
-                slug: "",
-                title: "",
-                image: "",
-                color: "#000000",
-                isPrivate: false
-            )
-        }
+        return AlbumTrack(
+            id: 0,
+            slug: "",
+            title: "",
+            image: "",
+            color: "#000000",
+            isPrivate: false
+        )
+    }
 }
 
 
@@ -61,7 +61,7 @@ struct AlbumMy: Codable, Identifiable {
     let image: String?
     let color: String?
     let tracks: [Track]
-    let duration: String
+    let duration: String?
     let isPrivate: Bool
     let releaseDate: String?
     let createdAt: String
@@ -74,6 +74,82 @@ struct AlbumMy: Codable, Identifiable {
         case releaseDate = "release_date"
         case createdAt = "created_at"
         case updatedAt = "updated_at"
+    }
+    
+    var formattedListenersCount: String {
+        formatNumber(albumListeners)
+    }
+    
+    
+    var formattedReleaseDate: String {
+        guard let releaseDate = releaseDate, !releaseDate.isEmpty else {
+            return "Unknown"
+        }
+        
+        let dateFormatter = DateFormatter()
+        
+        //full date format first (YYYY-MM-DD)
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        if let date = dateFormatter.date(from: releaseDate) {
+            dateFormatter.dateFormat = "MMM d, yyyy"
+            return dateFormatter.string(from: date)
+        }
+        
+        // year-month format (YYYY-MM)
+        dateFormatter.dateFormat = "yyyy-MM"
+        if let date = dateFormatter.date(from: releaseDate) {
+            dateFormatter.dateFormat = "MMM yyyy"
+            return dateFormatter.string(from: date)
+        }
+        
+        // year only format (YYYY)
+        dateFormatter.dateFormat = "yyyy"
+        if let date = dateFormatter.date(from: releaseDate) {
+            return releaseDate
+        }
+        
+        
+        return releaseDate
+    }
+    
+    /// Short release date (e.g., "2024")
+    var shortReleaseDate: String {
+        guard let releaseDate = releaseDate, !releaseDate.isEmpty else {
+            return "—"
+        }
+        
+        
+        if releaseDate.count >= 4 {
+            return String(releaseDate.prefix(4))
+        }
+        
+        return releaseDate
+    }
+    
+    /// Number of tracks in album
+    var tracksCount: Int {
+        tracks.count
+    }
+    
+    /// Format number with K, M, B suffixes
+    private func formatNumber(_ number: Int) -> String {
+        let thousand = 1_000
+        let million = 1_000_000
+        let billion = 1_000_000_000
+        
+        switch number {
+        case billion...:
+            let value = Double(number) / Double(billion)
+            return String(format: "%.1fB", value)
+        case million...:
+            let value = Double(number) / Double(million)
+            return String(format: "%.1fM", value)
+        case thousand...:
+            let value = Double(number) / Double(thousand)
+            return String(format: "%.1fK", value)
+        default:
+            return "\(number)"
+        }
     }
 }
 

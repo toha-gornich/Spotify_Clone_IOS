@@ -984,7 +984,199 @@ final class NetworkManager {
         }
     }
     
-    
+    func postCreateLicense(name: String, text: String) async throws -> License {
+        guard let url = URL(string: Constants.API.artistMeLicensesURL) else {
+            print("❌ postCreateLicense - Invalid URL: \(Constants.API.artistMeLicensesURL)")
+            throw APError.invalidURL
+        }
+        
+        let parameters: [String: Any] = [
+            "name": name,
+            "text": text
+        ]
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
+        } catch {
+            print("❌ postCreateLicense - Failed to serialize parameters: \(error)")
+            throw APError.invalidData
+        }
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ postCreateLicense - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ postCreateLicense - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ postCreateLicense - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            let decoder = JSONDecoder()
+            // НЕ використовуємо convertFromSnakeCase, бо у нас є власні CodingKeys
+            
+            do {
+                let license = try decoder.decode(License.self, from: data)
+                print("✅ postCreateLicense - License created successfully: \(license.name)")
+                return license
+            } catch {
+                print("❌ postCreateLicense - Decoding error: \(error)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ postCreateLicense - Response data: \(responseString)")
+                }
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ postCreateLicense - Network error: \(error)")
+            throw error
+        }
+    }
+
+    func getLicenseById(id: String) async throws -> License {
+        guard let url = URL(string: Constants.API.artistMeLicensesURL + "\(id)/") else {
+            print("❌ getLicenseById - Invalid URL: \(Constants.API.artistMeLicensesURL + "\(id)/")")
+            throw APError.invalidURL
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getLicenseById - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ getLicenseById - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getLicenseById - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            
+            do {
+                let license = try decoder.decode(License.self, from: data)
+                return license
+            } catch {
+                print("❌ getLicenseById - Decoding error: \(error)")
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ getLicenseById - Network error: \(error)")
+            throw error
+        }
+    }
+
+    func patchLicenseById(id: String, name: String?, text: String?) async throws -> License {
+        guard let url = URL(string: Constants.API.artistMeLicensesURL + "\(id)/") else {
+            print("❌ patchLicenseById - Invalid URL: \(Constants.API.artistMeLicensesURL + "\(id)/")")
+            throw APError.invalidURL
+        }
+        
+        var parameters: [String: Any] = [:]
+        
+        if let name = name {
+            parameters["name"] = name
+        }
+        if let text = text {
+            parameters["text"] = text
+        }
+        
+        guard !parameters.isEmpty else {
+            print("❌ patchLicenseById - No parameters to update")
+            throw APError.invalidData
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "PATCH"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
+        } catch {
+            print("❌ patchLicenseById - Failed to serialize parameters: \(error)")
+            throw APError.invalidData
+        }
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ patchLicenseById - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ patchLicenseById - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ patchLicenseById - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            
+            do {
+                let license = try decoder.decode(License.self, from: data)
+                return license
+            } catch {
+                print("❌ patchLicenseById - Decoding error: \(error)")
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ patchLicenseById - Network error: \(error)")
+            throw error
+        }
+    }
+
+    func deleteLicenseById(id: String) async throws {
+        guard let url = URL(string: Constants.API.artistMeLicensesURL + "\(id)/") else {
+            print("❌ deleteLicenseById - Invalid URL: \(Constants.API.artistMeLicensesURL + "\(id)/")")
+            throw APError.invalidURL
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ deleteLicenseById - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ deleteLicenseById - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ deleteLicenseById - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+        } catch {
+            print("❌ deleteLicenseById - Network error: \(error)")
+            throw error
+        }
+    }
     
     // MARK: - Albums
     func getAlbums() async throws -> [Album] {
@@ -1036,7 +1228,84 @@ final class NetworkManager {
             throw APError.invalidData
         }
     }
-
+    
+    func postCreateAlbum(
+        title: String,
+        description: String,
+        releaseDate: String,
+        isPrivate: Bool,
+        imageData: Data?
+    ) async throws -> AlbumMy {
+        guard let url = URL(string: Constants.API.albumsMyURL) else {
+            print("❌ postCreateAlbum - Invalid URL: \(Constants.API.albumsMyURL)")
+            throw APError.invalidURL
+        }
+        
+        let boundary = "Boundary-\(UUID().uuidString)"
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        var body = Data()
+        
+        func addFormField(name: String, value: String) {
+            if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "\(value)\r\n".data(using: .utf8) { body.append(data) }
+        }
+        
+        
+        addFormField(name: "title", value: title)
+        addFormField(name: "description", value: description)
+        addFormField(name: "release_date", value: releaseDate)
+        addFormField(name: "is_private", value: isPrivate ? "true" : "false")
+        
+        
+        if let imageData = imageData {
+            if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "Content-Disposition: form-data; name=\"image\"; filename=\"album_cover.jpg\"\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "Content-Type: image/jpeg\r\n\r\n".data(using: .utf8) { body.append(data) }
+            body.append(imageData)
+            if let data = "\r\n".data(using: .utf8) { body.append(data) }
+        }
+        
+        if let data = "--\(boundary)--\r\n".data(using: .utf8) { body.append(data) }
+        request.httpBody = body
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ postCreateAlbum - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ postCreateAlbum - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ postCreateAlbum - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let result = try decoder.decode(AlbumMy.self, from: data)
+                
+                return result
+            } catch {
+                print("❌ postCreateAlbum - Failed to decode response: \(error)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ postCreateAlbum - Raw response: \(responseString)")
+                }
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ postCreateAlbum - Network error: \(error)")
+            throw error
+        }
+    }
+    
     func getAlbumBySlug(slug: String) async throws -> Album {
         print("getAlbumBySlug")
         guard let url = URL(string: Constants.API.albumsBySlugURL + "\(slug)") else {
@@ -1084,6 +1353,107 @@ final class NetworkManager {
                 print("📦 [getAlbumsBySlugArtist] Raw JSON: \(jsonString)")
             }
             throw APError.invalidData
+        }
+    }
+    
+    func patchAlbumBySlugMy(
+        slug: String,
+        title: String? = nil,
+        description: String? = nil,
+        releaseDate: String? = nil,
+        isPrivate: Bool? = nil,
+        imageData: Data? = nil
+    ) async throws -> Album {
+        guard let url = URL(string: Constants.API.albumsMyURL + "\(slug)/") else {
+            print("❌ patchAlbumMyBySlug - Invalid URL: \(Constants.API.albumsMyURL + "\(slug)/")")
+            throw APError.invalidURL
+        }
+        
+        let boundary = "Boundary-\(UUID().uuidString)"
+        var request = URLRequest(url: url)
+        request.httpMethod = "PATCH"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        var body = Data()
+        
+        func addFormField(name: String, value: String) {
+            body.append("--\(boundary)\r\n".data(using: .utf8)!)
+            body.append("Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n".data(using: .utf8)!)
+            body.append("\(value)\r\n".data(using: .utf8)!)
+        }
+        
+        if let title = title {
+            addFormField(name: "title", value: title)
+        }
+        if let description = description {
+            addFormField(name: "description", value: description)
+        }
+        if let releaseDate = releaseDate {
+            addFormField(name: "release_date", value: releaseDate)
+        }
+        if let isPrivate = isPrivate {
+            addFormField(name: "is_private", value: "\(isPrivate)")
+        }
+        
+        if let imageData = imageData {
+            body.append("--\(boundary)\r\n".data(using: .utf8)!)
+            body.append("Content-Disposition: form-data; name=\"image\"; filename=\"album_image.jpg\"\r\n".data(using: .utf8)!)
+            body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+            body.append(imageData)
+            body.append("\r\n".data(using: .utf8)!)
+        }
+        
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+        request.httpBody = body
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("❌ patchAlbumMyBySlug - Invalid response type")
+            throw APError.invalidResponse
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            print("❌ patchAlbumMyBySlug - HTTP error \(httpResponse.statusCode)")
+            if let responseString = String(data: data, encoding: .utf8) {
+                print("❌ patchAlbumMyBySlug - Response: \(responseString)")
+            }
+            throw APError.invalidResponse
+        }
+        
+        let decoder = JSONDecoder()
+        let result = try decoder.decode(Album.self, from: data)
+        return result
+    }
+    
+    func deleteAlbumsMy(slug: String) async throws {
+        guard let url = URL(string: Constants.API.albumsMyURL + "\(slug)/") else {
+            print("❌ deleteAlbumsMy - Invalid URL: \(Constants.API.albumsMyURL + "\(slug)/")")
+            throw APError.invalidURL
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ deleteAlbumsMy - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ deleteAlbumsMy - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ deleteAlbumsMy - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+        } catch {
+            print("❌ deleteAlbumsMy - Network error: \(error)")
+            throw error
         }
     }
 
