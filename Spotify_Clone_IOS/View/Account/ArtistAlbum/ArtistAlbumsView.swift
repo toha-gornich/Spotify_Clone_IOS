@@ -33,6 +33,7 @@ struct ArtistAlbumsView: View {
                             Text("Create and update your albums.")
                                 .font(.subheadline)
                                 .foregroundColor(.gray)
+                                .padding(.bottom, 20)
                         }
                         .padding(.horizontal, 20)
                         .padding(.top, 20)
@@ -95,28 +96,7 @@ struct ArtistAlbumsView: View {
                                             .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                                     )
                                     
-                                    // Private filter button
-                                    Button(action: {
-                                        showOnlyPrivate.toggle()
-                                        albumsVM.filterPrivateAlbums(showOnlyPrivate)
-                                    }) {
-                                        HStack(spacing: 6) {
-                                            Image(systemName: showOnlyPrivate ? "eye.slash.fill" : "eye.fill")
-                                            Text(showOnlyPrivate ? "Private" : "All")
-                                        }
-                                        .font(.system(size: 14, weight: .medium))
-                                        .foregroundColor(.white)
-                                    }
-                                    .padding(.horizontal, 16)
-                                    .padding(.vertical, 12)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .fill(showOnlyPrivate ? Color.green.opacity(0.3) : Color.clear)
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 8)
-                                                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                                            )
-                                    )
+//                                    
                                     
                                     Spacer()
                                     

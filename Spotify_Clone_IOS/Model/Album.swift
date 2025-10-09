@@ -104,7 +104,7 @@ struct AlbumMy: Codable, Identifiable {
         
         // year only format (YYYY)
         dateFormatter.dateFormat = "yyyy"
-        if let date = dateFormatter.date(from: releaseDate) {
+        if dateFormatter.date(from: releaseDate) != nil {
             return releaseDate
         }
         

@@ -51,7 +51,7 @@ final class ArtistLicenseViewModel: ObservableObject {
     
         Task {
             do {
-//                try await networkManager.deleteLicense(id: id)
+                try await networkManager.deleteLicenseById(id: String(id))
                 getLicenses()
                 isLoading = false
                 

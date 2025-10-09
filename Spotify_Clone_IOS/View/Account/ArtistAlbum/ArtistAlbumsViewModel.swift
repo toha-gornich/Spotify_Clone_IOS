@@ -98,7 +98,7 @@ final class ArtistAlbumsViewModel: ObservableObject {
         
         Task {
             do {
-                let empty = try await networkManager.patchAlbumBySlugMy(slug: album.slug, isPrivate: !album.isPrivate)
+                _ = try await networkManager.patchAlbumBySlugMy(slug: album.slug, isPrivate: !album.isPrivate)
                 getAlbumsMy()
                 isLoading = false
                 

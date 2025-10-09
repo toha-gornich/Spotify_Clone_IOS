@@ -1069,7 +1069,7 @@ final class NetworkManager {
             }
             
             let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            
             
             do {
                 let license = try decoder.decode(License.self, from: data)
@@ -1132,7 +1132,7 @@ final class NetworkManager {
             }
             
             let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            
             
             do {
                 let license = try decoder.decode(License.self, from: data)
