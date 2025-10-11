@@ -22,6 +22,7 @@ struct Constants {
         
         
         static let tracksURL = baseURL + "tracks/"
+        static let tracksLikedURL = baseURL + "tracks/liked/"
         static let tracksCreateMyURL = baseURL + "tracks/my/"
         static let tracksMyURL = baseURL + "tracks/my/"
         static let trackBySlugURL = baseURL + "tracks/"
@@ -31,17 +32,20 @@ struct Constants {
         static let searchTracksURL = baseURL + "tracks/?search="
         
         static let artistsURL = baseURL + "artists/"
+        static let artistsFavoriteURL = baseURL + "artists/favorite/"
         static let artistMeURL = baseURL + "artists/me/"
         static let artistMeLicensesURL = baseURL + "artists/me/license/"
         static let searchArtistsURL = baseURL + "artists/?search="
         
         static let albumsURL = baseURL + "albums/"
+        static let albumsFavoriteURL = baseURL + "albums/favorite/"
         static let albumsMyURL = baseURL + "albums/my/"
         static let albumsBySlugURL = baseURL + "albums/"
         static let albumsBySlugArtistURL = baseURL + "albums/?album__slug="
         static let searchAlbumsURL = baseURL + "albums/?search="
         
         static let playlistsURL = baseURL + "playlists/"
+        static let playlistsFavoriteURL = baseURL + "playlists/favorite/"
         static let playlistsByGenreURL = baseURL + "playlists/?genre__slug="
         static let playlistsByIdUserURL = baseURL + "playlists/?user__id="
         static let playlistBySlugURL = baseURL + "playlists/"
