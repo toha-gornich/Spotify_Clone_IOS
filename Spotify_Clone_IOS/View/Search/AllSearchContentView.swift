@@ -58,9 +58,19 @@ struct AllSearchContentView: View {
                 if !searchVM.profiles.isEmpty {
                     ViewAllSection(title: "Profiles",buttonFlag: false )
                         .padding(.horizontal)
+                    ProfilesSearchContentView(searchVM: searchVM, maxItems6: true,  padding: 8).environmentObject(mainVM)
+                        .environmentObject(playerManager)
                 }
             }
         }
+//        .onAppear {
+//            if !mainVM.isTabBarVisible {
+//                mainVM.isTabBarVisible = false
+//                print("Genres " + String(mainVM.isTabBarVisible))
+//            }
+//        }
+
+
         .padding(.bottom, 100)
         .padding(.horizontal)
     }

@@ -17,6 +17,7 @@ import Foundation
     @Published var selectTab: Int = 0
     @Published var alertItem: AlertItem?
     
+    @Published var isPlaylistLiked: Bool = false
     @Published var album: Album = Album.empty
     
 
@@ -29,6 +30,47 @@ import Foundation
     
     private let networkManager = NetworkManager.shared
     
+    func postPlaylistFavorite(slug: String) {
+        isLoading = true
+        
+        Task {
+            do {
+                try await networkManager.postAddFavoritePlaylist(slug: slug)
+                
+                // if successful (204) - track liked
+                isPlaylistLiked = true
+                isLoading = false
+                
+            } catch FavoriteError.alreadyLiked {
+                // Track liked
+                isPlaylistLiked = true
+                isLoading = false
+                
+            } catch {
+                // Another error
+                isPlaylistLiked = false
+                handleError(error)
+                isLoading = false
+            }
+        }
+    }
+    func deletePlaylistFavorite(slug: String) {
+        isLoading = true
+        
+        Task {
+            do {
+                try await networkManager.deletePlaylistFavorite(slug: slug)
+
+                isPlaylistLiked = false
+                isLoading = false
+
+                
+            } catch {
+                handleError(error)
+                isLoading = false
+            }
+        }
+    }
     
     func getPlaylistBySlug(slug: String) {
         isLoading = true

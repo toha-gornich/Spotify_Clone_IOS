@@ -17,7 +17,7 @@ import Foundation
     @Published var albums: [Album] = []
     @Published var playlists: [Playlist] = []
     @Published var isLoading: Bool = false
-    
+    @Published var isTrackLiked: Bool = false
     
     @Published var errorMessage: String? = nil
     @Published var selectTab: Int = 0
@@ -53,6 +53,48 @@ import Foundation
         }
     }
     
+
+    func postTrackFavorite(slug: String) {
+        isLoading = true
+        
+        Task {
+            do {
+                try await networkManager.postLikeTrack(slug: slug)
+                
+                // if successful (204) - track liked
+                isTrackLiked = true
+                isLoading = false
+                
+            } catch FavoriteError.alreadyLiked {
+                // Track liked
+                isTrackLiked = true
+                isLoading = false
+                
+            } catch {
+                // Another error
+                isTrackLiked = false
+                handleError(error)
+                isLoading = false
+            }
+        }
+    }
+    func deleteTrackFavorite(slug: String) {
+        isLoading = true
+        
+        Task {
+            do {
+                try await networkManager.deleteTrackLike(slug: slug)
+
+                isTrackLiked = false
+                isLoading = false
+
+                
+            } catch {
+                handleError(error)
+                isLoading = false
+            }
+        }
+    }
     func getTrackBySlugArtist(slug: String) {
         isLoading = true
         

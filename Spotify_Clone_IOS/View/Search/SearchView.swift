@@ -60,19 +60,17 @@ struct SearchView: View {
             Color.bg.ignoresSafeArea()
             
             VStack(spacing: 0) {
-                // Фіксований хедер з пошуком
                 searchHeaderView
                     .background(Color.lightBg)
                     .zIndex(1)
-                
-                // Контент
                 contentView
             }
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
         .ignoresSafeArea(.keyboard, edges: .bottom)
-        .onAppear {
+        .onAppear {mainVM.isTabBarVisible = true
             if !hasInitialized {
                 currentSearchText = searchText
                 hasInitialized = true
@@ -82,9 +80,9 @@ struct SearchView: View {
                 }
             }
         }
-        .onDisappear {
-            mainVM.isTabBarVisible = false
-        }
+//        .onDisappear {
+//            mainVM.isTabBarVisible = true
+//        }
     }
     
     private var searchHeaderView: some View {
@@ -229,10 +227,10 @@ struct SearchView: View {
                     EmptySearchView()
                 }
             }
-            .padding(.bottom, 120) // Додатковий відступ знизу
+            .padding(.bottom, 120)
         }
         .onTapGesture {
-            // Приховати клавіатуру
+            
             isSearchFieldFocused = false
         }
         

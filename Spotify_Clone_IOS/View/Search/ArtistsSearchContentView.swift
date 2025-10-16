@@ -31,7 +31,7 @@ struct ArtistsSearchContentView: View {
     }
     
     var body: some View {
-        ScrollView(showsIndicators: false){
+        
             LazyVGrid(columns: [
                 GridItem(.flexible()),
                 GridItem(.flexible())
@@ -48,6 +48,6 @@ struct ArtistsSearchContentView: View {
             }
             .padding(.bottom, CGFloat(padding))
 
-        }
+        
     }
 }

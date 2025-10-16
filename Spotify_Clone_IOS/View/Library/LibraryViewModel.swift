@@ -10,7 +10,7 @@ import SwiftUI
 
 @MainActor final class LibraryViewModel: ObservableObject {
     @Published var playlists: [Playlist] = []
-    @Published var artists: [Artist] = []
+    @Published var artists: [ArtistTrack] = []
     @Published var albums: [Album] = []
     @Published var selectedTab: Int = 0
     @Published var isLoading: Bool = false
@@ -30,7 +30,8 @@ import SwiftUI
         
         Task {
             do {
-                playlists = try await networkManager.getPlaylists()
+                let fetchedPlaylists = try await networkManager.getPlaylistsFavorite()
+                playlists = FavoritePlaylistItem.toPlaylists(fetchedPlaylists)
                 isLoading = false
             } catch {
                 handleError(error)
@@ -44,7 +45,8 @@ import SwiftUI
         
         Task {
             do {
-                artists = try await networkManager.getArtists()
+                let fetchedArtists = try await networkManager.getArtistsFavorite()
+                artists = FavoriteArtistItem.toArtists(fetchedArtists)
                 isLoading = false
             } catch {
                 handleError(error)
@@ -58,7 +60,8 @@ import SwiftUI
         
         Task {
             do {
-                albums = try await networkManager.getAlbums()
+                let fetchedAlbums = try await networkManager.getAlbumsFavorite()
+                albums = FavoriteAlbumItem.toAlbums(fetchedAlbums)
                 isLoading = false
             } catch {
                 handleError(error)

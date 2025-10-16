@@ -223,19 +223,25 @@ struct PlaylistView: View {
                             
                             
                             HStack(spacing: 16) {
+                                
                                 Button(action: {
-                                    // Add action
+                                    if playlistVM.isPlaylistLiked{
+                                        playlistVM.deletePlaylistFavorite(slug: slugPlaylist)
+                                    } else {
+                                        playlistVM.postPlaylistFavorite(slug: slugPlaylist)
+                                    }
                                 }) {
-                                    Image(systemName: "plus")
+                                    Image(systemName: playlistVM.isPlaylistLiked ? "checkmark" : "plus")
                                         .font(.title2)
-                                        .foregroundColor(.white)
+                                        .foregroundColor(playlistVM.isPlaylistLiked ? .green : .white)
                                         .frame(width: 44, height: 44)
                                         .background(Color.clear)
                                         .overlay(
                                             Circle()
-                                                .stroke(Color.gray, lineWidth: 1)
+                                                .stroke(playlistVM.isPlaylistLiked ? Color.green : Color.gray, lineWidth: 1)
                                         )
                                 }
+                                .disabled(playlistVM.isLoading)
                                 
                                 Spacer()
                                 
@@ -283,6 +289,7 @@ struct PlaylistView: View {
         
         .navigationBarHidden(true)
         .task {
+            playlistVM.postPlaylistFavorite(slug: slugPlaylist)
             playlistVM.getPlaylistBySlug(slug: slugPlaylist)
         }
         

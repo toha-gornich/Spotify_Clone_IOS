@@ -12,6 +12,7 @@ struct ViewAllSection: View {
     @State var title: String =  "Title"
     @State var button: String = "View All"
     @State var buttonFlag: Bool = true
+    
     var didTap: (()->())?
     
     var body: some View {
@@ -31,7 +32,7 @@ struct ViewAllSection: View {
                 }
             }
         }.padding(.vertical, 16)
-        
+
     }
 }
 

@@ -44,14 +44,18 @@ class AudioPlayerManager: NSObject, ObservableObject {
     private var originalPlaylist: [Track] = []
     
     
-    func play(track: Track, from playlist: [Track] = []) {
+    func play(track: Track?, from playlist: [Track] = []) {
+        if track == nil {
+            return
+        }
+        let newTrack = track!
         if let currentTrack = currentTrack,
-           currentTrack.id == track.id,
+           currentTrack.id == newTrack.id,
            playerState == .playing {
             togglePlayPause()
             return
         } else if let currentTrack = currentTrack,
-                  currentTrack.id == track.id,
+                  currentTrack.id == newTrack.id,
                   playerState == .paused {
             togglePlayPause()
             return
@@ -60,18 +64,18 @@ class AudioPlayerManager: NSObject, ObservableObject {
         if !playlist.isEmpty {
             self.playlist = playlist
             self.originalPlaylist = playlist
-            if let index = playlist.firstIndex(where: { $0.id == track.id }) {
+            if let index = playlist.firstIndex(where: { $0.id == newTrack.id }) {
                 currentTrackIndex = index
             }
         }
         
         else if self.playlist.isEmpty {
-            self.playlist = [track]
-            self.originalPlaylist = [track]
+            self.playlist = [newTrack]
+            self.originalPlaylist = [newTrack]
             currentTrackIndex = 0
         }
         
-        else if let index = self.playlist.firstIndex(where: { $0.id == track.id }) {
+        else if let index = self.playlist.firstIndex(where: { $0.id == newTrack.id }) {
             currentTrackIndex = index
         }
         

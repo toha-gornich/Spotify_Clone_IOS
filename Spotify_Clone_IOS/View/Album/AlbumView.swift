@@ -198,37 +198,26 @@ struct AlbumView: View {
                             
                             HStack(spacing: 16) {
                                 
-                                // Add button
                                 Button(action: {
-                                    // Add action
+                                    if albumVM.isAlbumLiked{
+                                        albumVM.deleteAlbumFavorite(slug: slugAlbum)
+                                    } else {
+                                        albumVM.postAlbumFavorite(slug: slugAlbum)
+                                    }
                                 }) {
-                                    Image(systemName: "plus")
+                                    Image(systemName: albumVM.isAlbumLiked ? "checkmark" : "plus")
                                         .font(.title2)
-                                        .foregroundColor(.white)
+                                        .foregroundColor(albumVM.isAlbumLiked ? .green : .white)
                                         .frame(width: 44, height: 44)
                                         .background(Color.clear)
                                         .overlay(
                                             Circle()
-                                                .stroke(Color.gray, lineWidth: 1)
+                                                .stroke(albumVM.isAlbumLiked ? Color.green : Color.gray, lineWidth: 1)
                                         )
                                 }
+                                .disabled(albumVM.isLoading)
                                 
-                                // Follow button
-                                Button(action: {
-                                    // Follow action
-                                }) {
-                                    Text("Follow")
-                                        .font(.subheadline)
-                                        .fontWeight(.medium)
-                                        .foregroundColor(.white)
-                                        .padding(.horizontal, 24)
-                                        .padding(.vertical, 12)
-                                        .background(Color.clear)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 20)
-                                                .stroke(Color.gray, lineWidth: 1)
-                                        )
-                                }
+                                
                                 Spacer()
                                 // Play button (this one will hide when scrolled)
                                 Button(action: {
@@ -352,6 +341,7 @@ struct AlbumView: View {
         }
         .onAppear {
             mainVM.isTabBarVisible = false
+            albumVM.postAlbumFavorite(slug: slugAlbum)
         }
         
     }

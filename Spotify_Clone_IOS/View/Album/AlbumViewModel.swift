@@ -15,7 +15,7 @@ import Foundation
     @Published var albums: [Album] = []
     @Published var playlists: [Playlist] = []
     @Published var isLoading: Bool = false
-    
+    @Published var isAlbumLiked: Bool = false
     
     @Published var errorMessage: String? = nil
     @Published var selectTab: Int = 0
@@ -33,6 +33,48 @@ import Foundation
     private let networkManager = NetworkManager.shared
     
     // MARK: - Albums
+    
+    func postAlbumFavorite(slug: String) {
+        isLoading = true
+        
+        Task {
+            do {
+                try await networkManager.postAddFavoriteAlbum(slug: slug)
+                
+                // if successful (204) - track liked
+                isAlbumLiked = true
+                isLoading = false
+                
+            } catch FavoriteError.alreadyLiked {
+                // Track liked
+                isAlbumLiked = true
+                isLoading = false
+                
+            } catch {
+                // Another error
+                isAlbumLiked = false
+                handleError(error)
+                isLoading = false
+            }
+        }
+    }
+    func deleteAlbumFavorite(slug: String) {
+        isLoading = true
+        
+        Task {
+            do {
+                try await networkManager.deleteAlbumsFavorite(slug: slug)
+
+                isAlbumLiked = false
+                isLoading = false
+
+                
+            } catch {
+                handleError(error)
+                isLoading = false
+            }
+        }
+    }
     
     func getAlbumBySlug(slug: String) {
         isLoading = true

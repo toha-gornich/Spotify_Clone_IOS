@@ -49,8 +49,39 @@ struct AlbumMyResponse: Codable {
     let results: [AlbumMy]
 }
 
+struct AlbumFavoriteResponse: Codable {
+    let count: Int
+    let next: String?
+    let previous: String?
+    let results: [FavoriteAlbumItem]
+}
+
 
 // MARK: - Album Model
+
+struct FavoriteAlbumItem: Codable {
+    let id: Int
+    let album: Album
+    let createdAt: String
+    let updatedAt: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case album
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+    }
+    
+    
+    func toAlbum() -> Album {
+        return album
+    }
+    
+    
+    static func toAlbums(_ items: [FavoriteAlbumItem]) -> [Album] {
+        return items.map { $0.toAlbum() }
+    }
+}
 struct AlbumMy: Codable, Identifiable {
     let id: Int
     let slug: String

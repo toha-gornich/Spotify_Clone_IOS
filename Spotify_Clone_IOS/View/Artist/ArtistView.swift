@@ -7,7 +7,7 @@
 
 import SwiftUI
 struct ArtistView: View {
-    let slugArtist: String
+    @State var  slugArtist: String
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var mainVM: MainViewModel
     @StateObject private var artistVM = ArtistViewModel()
@@ -149,40 +149,51 @@ struct ArtistView: View {
                             
                             HStack(spacing: 16) {
                                 
-                                // Add button
+                                
                                 Button(action: {
-                                    // Add action
+                                    if artistVM.isTrackLiked {
+                                        artistVM.deleteArtistFavorite(slug: slugArtist)
+                                    } else {
+                                        artistVM.postArtistFavorite(slug: slugArtist)
+                                    }
                                 }) {
-                                    Image(systemName: "plus")
+                                    Image(systemName: artistVM.isTrackLiked ? "checkmark" : "plus")
                                         .font(.title2)
-                                        .foregroundColor(.white)
+                                        .foregroundColor(artistVM.isTrackLiked ? .green : .white)
                                         .frame(width: 44, height: 44)
                                         .background(Color.clear)
                                         .overlay(
                                             Circle()
-                                                .stroke(Color.gray, lineWidth: 1)
+                                                .stroke(artistVM.isTrackLiked ? Color.green : Color.gray, lineWidth: 1)
                                         )
                                 }
+                                .disabled(artistVM.isLoading)
                                 
                                 // Follow button
                                 Button(action: {
+                                    if artistVM.isFollowing {
+                                        artistVM.unfollowArtist(userId:  String(artistVM.artist.id))
+                                    } else {
+                                        artistVM.followArtist(userId: String(artistVM.artist.id))
+                                    }
                                 }) {
-                                    Text("Follow")
+                                    Text(artistVM.isFollowing ? "Following" : "Follow")
                                         .font(.subheadline)
                                         .fontWeight(.medium)
-                                        .foregroundColor(.white)
+                                        .foregroundColor(artistVM.isFollowing ? .green : .white)
                                         .padding(.horizontal, 24)
                                         .padding(.vertical, 12)
                                         .background(Color.clear)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 20)
-                                                .stroke(Color.gray, lineWidth: 1)
+                                                .stroke(artistVM.isFollowing ? Color.green : Color.gray, lineWidth: 1)
                                         )
                                 }
+                                .disabled(artistVM.isLoading)
                                 Spacer()
                                 
                                 Button(action: {
-                                    let trackToPlay = artistVM.tracks[0]
+                                    let trackToPlay = artistVM.tracks.first
                                     playerManager.play(track: trackToPlay, from: artistVM.tracks)
                                 }) {
                                     Image(systemName: playerManager.playerState == .playing ? "pause.fill" : "play.fill")
@@ -332,6 +343,7 @@ struct ArtistView: View {
         
         .onAppear {
             mainVM.isTabBarVisible = false
+            artistVM.postArtistFavorite(slug: slugArtist)
         }
     }
     

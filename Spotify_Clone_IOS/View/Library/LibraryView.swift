@@ -150,7 +150,7 @@ struct PlaylistsContent: View {
 
 // MARK: - Artists Content
 struct ArtistsContent: View {
-    let artists: [Artist]
+    let artists: [ArtistTrack]
     @EnvironmentObject var playerManager: AudioPlayerManager
     @EnvironmentObject var mainVM: MainViewModel
     

@@ -8,6 +8,7 @@
 import SwiftUI
 struct ProfileView: View {    
     @Environment(\.dismiss) private var dismiss
+    @State var userId: String? = nil
     @StateObject private var profileVM = ProfileViewModel()
     @EnvironmentObject var playerManager: AudioPlayerManager
     @EnvironmentObject var mainVM: MainViewModel
@@ -35,7 +36,6 @@ struct ProfileView: View {
                 
                 VStack(spacing: 24) {
                     HStack(spacing: 16) {
-                        
                         
                         SpotifyRemoteImage(urlString: profileVM.image)
                             .aspectRatio(contentMode: .fill)
@@ -125,41 +125,70 @@ struct ProfileView: View {
                     
                     // Playlists section
                     VStack(alignment: .leading, spacing: 16) {
-                        HStack {
-                            Text("Playlists")
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Followers")
                                 .font(.title2)
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
+                                .padding(.horizontal, 16)
                             
-                            Spacer()
-                        }
-                        .padding(.horizontal, 16)
-                        
-                        // Playlists list
-                        if profileVM.isLoading {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                                .frame(height: 100)
-                        } else {
-                            LazyVStack(spacing: 12) {
-                                ForEach(0..<profileVM.playlists.count, id: \.self) { index in
-                                    
-                                        PlaylistRowView(
-                                            title: profileVM.playlists[index].title,
-                                            imageURL: profileVM.playlists[index].image,
-                                            author: profileVM.playlists[index].user.displayName
-                                        ).onTapGesture(){
-                                            profileVM.showPlaylist = true
-                                            profileVM.selectedSlugPlaylist = profileVM.playlists[index].slug
+                            if profileVM.isLoading && profileVM.followers.isEmpty {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                    .frame(height: 100)
+                            } else if profileVM.followers.isEmpty {
+                                Text("No followers yet")
+                                    .foregroundColor(.gray)
+                                    .frame(height: 100)
+                                    .frame(maxWidth: .infinity)
+                            } else {
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    LazyHStack(spacing: 15) {
+                                        ForEach(profileVM.followers) { user in
+                                            NavigationLink(destination: ProfileView()
+                                                .environmentObject(mainVM)
+                                                .environmentObject(playerManager)) {
+                                                ArtistItemView(user: user)
+                                            }
                                         }
-                                        .fullScreenCover(isPresented: $profileVM.showPlaylist) {
-                                            PlaylistView(slugPlaylist: profileVM.selectedSlugPlaylist)
-                                        }
-                                    
+                                    }
+                                    .padding(.horizontal, 16)
                                 }
                             }
-                            .padding(.horizontal, 16)
                         }
+                        
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Following")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 16)
+                            
+                            if profileVM.isLoading && profileVM.following.isEmpty {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                    .frame(height: 100)
+                            } else if profileVM.following.isEmpty {
+                                Text("No following yet")
+                                    .foregroundColor(.gray)
+                                    .frame(height: 100)
+                                    .frame(maxWidth: .infinity)
+                            } else {
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    LazyHStack(spacing: 15) {
+                                        ForEach(profileVM.following) { user in
+                                            NavigationLink(destination: ProfileView(userId: String(user.id))
+                                                .environmentObject(mainVM)
+                                                .environmentObject(playerManager)) {
+                                                ArtistItemView(user: user)
+                                            }
+                                        }
+                                    }
+                                    .padding(.horizontal, 16)
+                                }
+                            }
+                        }
+
                         
                         // See all playlists button
                         if(profileVM.playlists.count>3){
@@ -206,7 +235,7 @@ struct ProfileView: View {
         .navigationBarHidden(true)
         .onAppear {
             Task {
-                await profileVM.getUserMe()
+                await profileVM.getUserMe(userId: userId)
                 await profileVM.loadPlaylists()
             }
         }

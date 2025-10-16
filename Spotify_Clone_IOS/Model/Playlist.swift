@@ -17,7 +17,40 @@ struct PlaylistResponse: Codable {
 }
 
 
+struct PlaylistFavoriteResponse: Codable {
+    let count: Int
+    let next: String?
+    let previous: String?
+    let results: [FavoritePlaylistItem]
+}
+
 // MARK: - Playlist Model (Updated)
+
+struct FavoritePlaylistItem: Codable {
+    let id: Int
+    let playlist: Playlist
+    let createdAt: String
+    let updatedAt: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case playlist
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+    }
+    
+    
+    func toPlaylist() -> Playlist {
+        return playlist
+    }
+    
+    
+    static func toPlaylists(_ items: [FavoritePlaylistItem]) -> [Playlist] {
+        return items.map { $0.toPlaylist() }
+    }
+}
+
+
 struct Playlist: Codable, Identifiable {
    let id: Int
    let slug: String

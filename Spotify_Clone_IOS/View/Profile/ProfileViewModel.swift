@@ -11,6 +11,8 @@ import SwiftUI
     @Published var alertItem: AlertItem?
     @Published var user = UserMe.empty()
     @Published var name = ""
+    @Published var followers:[User] = []
+    @Published var following:[User] = []
     @Published var followingCount: String = ""
     @Published var followersCount: String = ""
     @Published var playlistsCount: String = ""
@@ -27,31 +29,70 @@ import SwiftUI
     private let networkManager = NetworkManager.shared
     
     
-    func getUserMe() async {
+    func getUserMe(userId: String?) async {
         isLoading = true
-
+        
         do {
-            let fetchedUser = try await networkManager.getUserMe()
-            
-            await MainActor.run {
-                user = fetchedUser
-                color = Color(hex: user.color!)
-                name = user.displayName!
-                playlistsCount = String(user.playlistsCount)
-                image = user.image!
-                followingCount = String(user.followingCount)
-                followersCount = String(user.followersCount)
-                isLoading = false
+            var fetchedUser: UserMe = UserMe.empty()
+            if userId == nil{
+                fetchedUser = try await networkManager.getUserMe()
             }
+            else{
+                fetchedUser = try await networkManager.getUser(userId: userId!)
+            }
+            user = fetchedUser
+            color = Color(hex: user.color!)
+            name = user.displayName!
+            playlistsCount = String(user.playlistsCount)
+            image = user.image!
+            followingCount = String(user.followingCount)
+            followersCount = String(user.followersCount)
+            isLoading = false
+            await getFollowers()
+            await getFollowing()
             
         } catch {
-            await MainActor.run {
-                handleError(error)
-                isLoading = false
-            }
+            handleError(error)
+            isLoading = false
         }
     }
-
+    
+    func getFollowers() async {
+        isLoading = true
+        
+        do {
+            if user.id != 0{
+                let fetchedFollowers = try await networkManager.getFollowers(userId: String(user.id))
+                followers = fetchedFollowers
+            }
+            isLoading = false
+            
+        } catch {
+            
+            handleError(error)
+            isLoading = false
+        }
+    }
+    
+    
+    func getFollowing() async {
+        isLoading = true
+        
+        do {
+            if user.id != 0{
+                let fetchedFollowing = try await networkManager.getFollowing(userId: String(user.id))
+                following = fetchedFollowing
+            }
+            isLoading = false
+        } catch {
+            
+            handleError(error)
+            isLoading = false
+            
+        }
+    }
+    
+    
     func loadPlaylists() async {
         guard user.id != 0 else {
             print("❌ User ID is not available yet")
@@ -59,7 +100,7 @@ import SwiftUI
         }
         
         isLoading = true
-
+        
         do {
             let fetchedPlaylists = try await networkManager.getPlaylistsByIdUser(idUser: user.id)
             
@@ -84,21 +125,21 @@ import SwiftUI
     }
     
     func followUser() {
-//        print("Following user: \(userProfile.name)")
+        
     }
     
     func shareProfile() {
-//        print("Sharing profile of: \(userProfile.name)")
+        
     }
     
     func showMoreOptions() {
-//        print("Showing more options for: \(userProfile.name)")
+        
     }
     
     func showAllPlaylists() {
         print("Showing all playlists")
     }
-
+    
     
     private func handleError(_ error: Error) {
         if let appError = error as? APError {

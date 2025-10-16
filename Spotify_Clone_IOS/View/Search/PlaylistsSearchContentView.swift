@@ -16,12 +16,11 @@ struct PlaylistsSearchContentView: View {
     let padding: Int
     
     private var limitedItems: [Playlist] {
-        if maxItems6{
+        if maxItems6 {
             Array(searchVM.playlists.prefix(6))
-        }else {
+        } else {
             Array(searchVM.playlists)
         }
-        
     }
     
     init(searchVM: SearchViewModel, maxItems6: Bool = false, padding: Int = 70) {
@@ -31,23 +30,21 @@ struct PlaylistsSearchContentView: View {
     }
     
     var body: some View {
-        ScrollView(showsIndicators: false){
-            LazyVGrid(columns: [
-                GridItem(.flexible()),
-                GridItem(.flexible())
-            ], spacing: 10) {
-                ForEach(0..<limitedItems.count, id: \.self) { index in
-                    let sObj = searchVM.playlists[index]
-                    NavigationLink(destination: PlaylistView(slugPlaylist: sObj.slug).environmentObject(mainVM)
-                        .environmentObject(playerManager)
-) {
-                        MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
-                    }
+        
+        LazyVGrid(columns: [
+            GridItem(.flexible()),
+            GridItem(.flexible())
+        ], spacing: 10) {
+            ForEach(0..<limitedItems.count, id: \.self) { index in
+                let sObj = limitedItems[index] // ✅ Використовуйте limitedItems замість searchVM.playlists
+                NavigationLink(destination: PlaylistView(slugPlaylist: sObj.slug)
+                    .environmentObject(mainVM)
+                    .environmentObject(playerManager)
+                ) {
+                    MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
                 }
-                
             }
-            .padding(.bottom, CGFloat(padding))
-//            .padding(.top, 20)
         }
+        .padding(.bottom, CGFloat(padding))
     }
 }

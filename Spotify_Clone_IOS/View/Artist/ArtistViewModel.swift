@@ -18,10 +18,158 @@ import Foundation
     @Published var errorMessage: String? = nil
     @Published var selectTab: Int = 0
     @Published var alertItem: AlertItem?
+    @Published var isTrackLiked: Bool = false
+    @Published var isFollowing: Bool = false
     
     @Published var album: Album = Album.empty
     
     private let networkManager = NetworkManager.shared
+    
+    func getArtistsBySlug(slug: String) {
+        isLoading = true
+        
+        Task {
+            do {
+                let fetchedArtist = try await networkManager.getArtistsBySlug(slug: slug)
+                artist = fetchedArtist
+                
+
+                await checkFollowStatus(userId: String(artist.id))
+                
+                isLoading = false
+            } catch {
+                handleError(error)
+                isLoading = false
+            }
+        }
+    }
+
+    
+    func checkFollowStatus(userId: String) async {
+        do {
+            try await networkManager.postFollowArtist(userId: userId)
+            
+            await MainActor.run {
+                isFollowing = true
+                
+            }
+            
+            try? await networkManager.postUnfollowArtist(userId: userId)
+            await MainActor.run {
+                isFollowing = false
+
+            }
+            
+        } catch FavoriteError.alreadyLiked {
+            await MainActor.run {
+                isFollowing = true
+
+            }
+            
+        } catch {
+
+            await MainActor.run {
+                isFollowing = false
+
+            }
+        }
+    }
+
+    func followArtist(userId: String) {
+        isFollowing = true
+        isLoading = true
+        
+        Task {
+            do {
+                try await networkManager.postFollowArtist(userId: userId)
+                
+                await MainActor.run {
+                    isLoading = false
+
+                }
+                
+            } catch FavoriteError.alreadyLiked {
+                await MainActor.run {
+                    isFollowing = true
+                    isLoading = false
+                    
+                }
+                
+            } catch {
+                await MainActor.run {
+                    isFollowing = false
+                    isLoading = false
+                    handleError(error)
+                }
+            }
+        }
+    }
+
+    func unfollowArtist(userId: String) {
+        isFollowing = false
+        isLoading = true
+        
+        Task {
+            do {
+                try await networkManager.postUnfollowArtist(userId: userId)
+                
+                await MainActor.run {
+                    isLoading = false
+                }
+                
+            } catch {
+                await MainActor.run {
+                    isFollowing = true
+                    isLoading = false
+                    handleError(error)
+                }
+            }
+        }
+    }
+    
+
+    
+    func postArtistFavorite(slug: String) {
+        isLoading = true
+        
+        Task {
+            do {
+                try await networkManager.postAddFavoriteArtist(slug: slug)
+                
+                // if successful (204) - track liked
+                isTrackLiked = true
+                isLoading = false
+                
+            } catch FavoriteError.alreadyLiked {
+                // Track liked
+                isTrackLiked = true
+                isLoading = false
+                
+            } catch {
+                // Another error
+                isTrackLiked = false
+                handleError(error)
+                isLoading = false
+            }
+        }
+    }
+    func deleteArtistFavorite(slug: String) {
+        isLoading = true
+        
+        Task {
+            do {
+                try await networkManager.deleteArtistFavorite(slug: slug)
+
+                isTrackLiked = false
+                isLoading = false
+
+                
+            } catch {
+                handleError(error)
+                isLoading = false
+            }
+        }
+    }
     
     
     func getArtists() {
@@ -39,22 +187,7 @@ import Foundation
             }
         }
     }
-    
-    func getArtistsBySlug(slug: String) {
-        isLoading = true
-        
-        Task {
-            do {
-                let fetchedArtist = try await networkManager.getArtistsBySlug(slug: slug)
-                artist = fetchedArtist
-                isLoading = false
-            } catch {
-                handleError(error)
-                isLoading = false
-            }
-        }
-    }
-    
+
 
     
     func getTracks() {

@@ -60,8 +60,50 @@ struct ArtistResponse: Codable {
     let results: [Artist]
 }
 
+struct ArtistFavoriteResponse: Codable {
+    let count: Int
+    let next: String?
+    let previous: String?
+    let results: [FavoriteArtistItem]
+}
+
+
+
 
 // MARK: - Artist Model
+
+
+struct FavoriteArtistItem: Codable {
+    let id: Int
+    let artist: ArtistTrack
+    let createdAt: String
+    let updatedAt: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case artist
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+    }
+    
+    
+        func toArtist() -> ArtistTrack {
+            return ArtistTrack(
+                id: artist.id,
+                slug: artist.slug,
+                displayName: artist.displayName,
+                image: artist.image,
+                color: artist.color,
+                isVerify: artist.isVerify
+            )
+        }
+        
+        
+        static func toArtists(_ items: [FavoriteArtistItem]) -> [ArtistTrack] {
+            return items.map { $0.toArtist() }
+        }
+}
+
 struct Artist: Codable, Identifiable {
     let id: Int
     let slug: String

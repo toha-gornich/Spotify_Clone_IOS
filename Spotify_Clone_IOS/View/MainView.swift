@@ -92,6 +92,7 @@ struct MainView: View {
         .navigationTitle("")
         .navigationBarBackButtonHidden()
         .navigationBarHidden(true)
+        .navigationViewStyle(.stack)
         .ignoresSafeArea()
     }
 }

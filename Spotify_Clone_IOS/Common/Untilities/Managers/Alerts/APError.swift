@@ -14,3 +14,11 @@ enum APError: Error {
     case invalidData
     case unableToComplete
 }
+
+enum FavoriteError: Error {
+    case invalidURL
+    case invalidResponse
+    case invalidData
+    case unableToComplete
+    case alreadyLiked 
+}

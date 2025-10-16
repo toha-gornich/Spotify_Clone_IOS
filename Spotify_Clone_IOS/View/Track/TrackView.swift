@@ -230,20 +230,25 @@ struct TrackView: View {
                             
                             HStack(spacing: 16) {
                                 
-                                // Add button
+                                
                                 Button(action: {
-                                    // Add action
+                                    if trackVM.isTrackLiked {
+                                        trackVM.deleteTrackFavorite(slug: slugTrack)
+                                    } else {
+                                        trackVM.postTrackFavorite(slug: slugTrack)
+                                    }
                                 }) {
-                                    Image(systemName: "plus")
+                                    Image(systemName: trackVM.isTrackLiked ? "checkmark" : "plus")
                                         .font(.title2)
-                                        .foregroundColor(.white)
+                                        .foregroundColor(trackVM.isTrackLiked ? .green : .white)
                                         .frame(width: 44, height: 44)
                                         .background(Color.clear)
                                         .overlay(
                                             Circle()
-                                                .stroke(Color.gray, lineWidth: 1)
+                                                .stroke(trackVM.isTrackLiked ? Color.green : Color.gray, lineWidth: 1)
                                         )
                                 }
+                                .disabled(trackVM.isLoading)
                                 
                                 Spacer()
                                 Button(action: {
@@ -404,6 +409,7 @@ struct TrackView: View {
         }
         .onAppear {
             mainVM.isTabBarVisible = false
+            trackVM.postTrackFavorite(slug: slugTrack)
         }
         
     }
