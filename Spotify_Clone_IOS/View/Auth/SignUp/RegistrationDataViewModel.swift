@@ -22,7 +22,10 @@ class RegistrationData: ObservableObject {
     @Published var alertItem: AlertItem?
     @Published var registrationSuccess: Bool = false 
     
-    private let networkManager = NetworkManager.shared
+    private let authManager: AuthServiceProtocol
+    init(authManager: AuthServiceProtocol = NetworkManager.shared){
+        self.authManager = authManager
+    }
     
     // Validation
     var isEmailValid: Bool {
@@ -59,7 +62,7 @@ class RegistrationData: ObservableObject {
         registrationSuccess = false
         
         do {
-            let response = try await NetworkManager.shared.postRegUser(regUser: createUser())
+            let response = try await authManager.postRegUser(regUser: createUser())
             
             self.userResponse = response
             self.isLoading = false

@@ -57,9 +57,6 @@ struct Constants {
         
         static let searchProfilesURL = baseURL + "users/profiles/?search="
         
-        
-        
-        
     }
 
 }

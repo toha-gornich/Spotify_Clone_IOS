@@ -39,7 +39,12 @@ final class EditTrackViewModel: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     
-    private let networkManager = NetworkManager.shared
+    private let editTrackManager:CreateTrackServiceProtocol
+    
+    init(editTrackManager:CreateTrackServiceProtocol = NetworkManager.shared) {
+        self.editTrackManager = editTrackManager
+        
+    }
     
     
     var isFormValid: Bool {
@@ -63,12 +68,6 @@ final class EditTrackViewModel: ObservableObject {
         }
         return "No image selected"
     }
-    
-    
-    init() {
-        
-    }
-    
 
     
     
@@ -77,7 +76,7 @@ final class EditTrackViewModel: ObservableObject {
         
         Task {
             do {
-                albums = try await networkManager.getAlbumsMy()
+                albums = try await editTrackManager.getAlbumsMy()
                 isLoading = false
             } catch {
                 handleError(error)
@@ -92,10 +91,10 @@ final class EditTrackViewModel: ObservableObject {
         Task {
             do {
                 
-                async let trackData = networkManager.getTrackMyBySlug(slug: slug)
-                async let albumsData = networkManager.getAlbumsMy()
-                async let genresData = networkManager.getGenres()
-                async let licensesData = networkManager.getLicenses()
+                async let trackData = editTrackManager.getTrackMyBySlug(slug: slug)
+                async let albumsData = editTrackManager.getAlbumsMy()
+                async let genresData = editTrackManager.getGenres()
+                async let licensesData = editTrackManager.getLicenses()
                 
                 
                 let results = try await (trackData, albumsData, genresData, licensesData)
@@ -187,7 +186,7 @@ final class EditTrackViewModel: ObservableObject {
         
         Task {
             do {
-                genres = try await networkManager.getGenres()
+                genres = try await editTrackManager.getGenres()
                 isLoading = false
             } catch {
                 handleError(error)
@@ -202,7 +201,7 @@ final class EditTrackViewModel: ObservableObject {
         
         Task {
             do {
-                licenses = try await networkManager.getLicenses()
+                licenses = try await editTrackManager.getLicenses()
                 isLoading = false
             } catch {
                 handleError(error)

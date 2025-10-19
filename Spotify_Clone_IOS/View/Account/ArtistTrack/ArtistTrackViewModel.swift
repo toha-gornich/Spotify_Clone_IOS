@@ -18,6 +18,12 @@ final class ArtistTracksViewModel: ObservableObject {
     @Published var showEditTrack = false
     @Published var showOnlyPrivateTracks = false
     
+    private let trackMyService: MyTracksServiceProtocol
+    
+    init(trackMyService: MyTracksServiceProtocol = NetworkManager.shared){
+        self.trackMyService = trackMyService
+    }
+    
     private let networkManager = NetworkManager.shared
     
     enum TrackFilter: String, CaseIterable {
@@ -63,7 +69,7 @@ final class ArtistTracksViewModel: ObservableObject {
     
         Task {
             do {
-                let fetchedTracks = try await networkManager.getTracksMy()
+                let fetchedTracks = try await trackMyService.getTracksMy()
                 tracks = fetchedTracks
                 isLoading = false
                 
@@ -79,7 +85,7 @@ final class ArtistTracksViewModel: ObservableObject {
     
         Task {
             do {
-                try await networkManager.deleteTracksMy(slug: slug)
+                try await trackMyService.deleteTracksMy(slug: slug)
                 getTracksMy()
                 isLoading = false
                 
@@ -99,7 +105,7 @@ final class ArtistTracksViewModel: ObservableObject {
         
         Task {
             do {
-                try await networkManager.patchTracksMy(slug: track.slug, isPrivate: !track.isPrivate)
+                try await trackMyService.patchTracksMy(slug: track.slug, isPrivate: !track.isPrivate, retryCount: 0)
                 getTracksMy()
                 isLoading = false
                 

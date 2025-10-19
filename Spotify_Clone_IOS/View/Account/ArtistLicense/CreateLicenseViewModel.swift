@@ -10,6 +10,7 @@ import Combine
 
 @MainActor
 final class CreateLicenseViewModel: ObservableObject {
+
     @Published var licenseName: String = ""
     @Published var licenseText: String = ""
     
@@ -21,18 +22,15 @@ final class CreateLicenseViewModel: ObservableObject {
     @Published var alertItem: AlertItem?
     
     private var cancellables = Set<AnyCancellable>()
-    private let networkManager = NetworkManager.shared
-    
+    private let licenseManager: LicenseServiceProtocol
+    init(licenseManager:LicenseServiceProtocol = NetworkManager.shared) {
+        self.licenseManager = licenseManager
+    }
     
     
     var isFormValid: Bool {
         return validateLicenseName() == nil && validateLicenseText() == nil
     }
-    
-    
-    
-    init() {}
-    
     
     
     func createLicense(completion: @escaping (Bool) -> Void) {
@@ -42,7 +40,7 @@ final class CreateLicenseViewModel: ObservableObject {
         
         Task {
             do {
-                _ = try await networkManager.postCreateLicense(
+                _ = try await licenseManager.postCreateLicense(
                     name: licenseName,
                     text: licenseText
                 )

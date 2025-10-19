@@ -14,7 +14,10 @@ final class ArtistLicenseViewModel: ObservableObject {
     @Published var searchText = ""
     @Published var isLoading = false
     
-    private let networkManager = NetworkManager.shared
+    private let licenseManager: LicenseServiceProtocol
+    init(licenseManager:LicenseServiceProtocol = NetworkManager.shared){
+        self.licenseManager = licenseManager
+    }
     
     var filteredLicenses: [License] {
         var result = licenses
@@ -35,7 +38,7 @@ final class ArtistLicenseViewModel: ObservableObject {
     
         Task {
             do {
-                let fetchedLicenses = try await networkManager.getLicenses()
+                let fetchedLicenses = try await licenseManager.getLicenses()
                 licenses = fetchedLicenses
                 isLoading = false
                 
@@ -51,7 +54,7 @@ final class ArtistLicenseViewModel: ObservableObject {
     
         Task {
             do {
-                try await networkManager.deleteLicenseById(id: String(id))
+                try await licenseManager.deleteLicenseById(id: String(id))
                 getLicenses()
                 isLoading = false
                 

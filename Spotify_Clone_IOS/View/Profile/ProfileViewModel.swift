@@ -26,7 +26,11 @@ import SwiftUI
     
     @Published var showPlaylist = false
     @Published var isLoading = false
-    private let networkManager = NetworkManager.shared
+    private let profileManager: ProfileScreenServiceProtocol
+    
+    init(profileManager: ProfileScreenServiceProtocol = NetworkManager.shared){
+        self.profileManager = profileManager
+    }
     
     
     func getUserMe(userId: String?) async {
@@ -35,10 +39,10 @@ import SwiftUI
         do {
             var fetchedUser: UserMe = UserMe.empty()
             if userId == nil{
-                fetchedUser = try await networkManager.getUserMe()
+                fetchedUser = try await profileManager.getUserMe()
             }
             else{
-                fetchedUser = try await networkManager.getUser(userId: userId!)
+                fetchedUser = try await profileManager.getUser(userId: userId!)
             }
             user = fetchedUser
             color = Color(hex: user.color!)
@@ -62,7 +66,7 @@ import SwiftUI
         
         do {
             if user.id != 0{
-                let fetchedFollowers = try await networkManager.getFollowers(userId: String(user.id))
+                let fetchedFollowers = try await profileManager.getFollowers(userId: String(user.id))
                 followers = fetchedFollowers
             }
             isLoading = false
@@ -80,7 +84,7 @@ import SwiftUI
         
         do {
             if user.id != 0{
-                let fetchedFollowing = try await networkManager.getFollowing(userId: String(user.id))
+                let fetchedFollowing = try await profileManager.getFollowing(userId: String(user.id))
                 following = fetchedFollowing
             }
             isLoading = false
@@ -102,7 +106,7 @@ import SwiftUI
         isLoading = true
         
         do {
-            let fetchedPlaylists = try await networkManager.getPlaylistsByIdUser(idUser: user.id)
+            let fetchedPlaylists = try await profileManager.getPlaylistsByIdUser(idUser: user.id)
             
             await MainActor.run {
                 playlists = fetchedPlaylists

@@ -157,13 +157,24 @@ protocol ImageServiceProtocol {
 // Для Library екрану (плейлісти, артисти, альбоми)
 typealias LibraryServiceProtocol = PlaylistServiceProtocol & ArtistServiceProtocol & AlbumServiceProtocol
 
-// Для Home екрану (треки, жанри, артисти)
-typealias HomeServiceProtocol = TrackServiceProtocol & GenreServiceProtocol & ArtistServiceProtocol
+// for Home screen (tracks, genres, artists, playlists)
+typealias HomeServiceProtocol = TrackServiceProtocol & PlaylistServiceProtocol & ArtistServiceProtocol & AlbumServiceProtocol
 
-// Для Profile екрану
+typealias AlbumArtistServiceProtocol = AlbumServiceProtocol & TrackServiceProtocol & ArtistServiceProtocol
+
+typealias CreateAlbumServiceProtocol = GenreServiceProtocol & MyAlbumsServiceProtocol
+typealias EditAlbumServiceProtocol = MyAlbumsServiceProtocol & AlbumServiceProtocol
+
+typealias CreateTrackServiceProtocol = GenreServiceProtocol & MyAlbumsServiceProtocol & MyTracksServiceProtocol & LicenseServiceProtocol
+
 typealias ProfileServiceProtocol = UserServiceProtocol & MyTracksServiceProtocol & MyAlbumsServiceProtocol & LicenseServiceProtocol
 
-// Повний сервіс (якщо треба все)
+typealias GenreScreenServiceProtocol = GenreServiceProtocol & TrackServiceProtocol & PlaylistServiceProtocol
+
+typealias ProfileScreenServiceProtocol = PlaylistServiceProtocol & ProfileServiceProtocol
+
+typealias TrackScreenServiceProtocol = TrackServiceProtocol & AlbumServiceProtocol & ArtistServiceProtocol
+
 typealias FullNetworkServiceProtocol =
     AuthServiceProtocol &
     UserServiceProtocol &
@@ -177,3 +188,26 @@ typealias FullNetworkServiceProtocol =
     GenreServiceProtocol &
     SearchServiceProtocol &
     ImageServiceProtocol
+
+
+// MARK: - extension with default value
+extension MyAlbumsServiceProtocol {
+    func patchAlbumBySlugMy(
+        slug: String,
+        title: String? = nil,
+        description: String? = nil,
+        releaseDate: String? = nil,
+        isPrivate: Bool? = nil,
+        imageData: Data? = nil
+    ) async throws -> Album {
+
+        return try await patchAlbumBySlugMy(
+            slug: slug,
+            title: title,
+            description: description,
+            releaseDate: releaseDate,
+            isPrivate: isPrivate,
+            imageData: imageData
+        )
+    }
+}

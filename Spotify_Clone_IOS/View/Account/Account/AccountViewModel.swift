@@ -32,7 +32,10 @@ struct CountryData {
     @Published var isDeletingAccount = false
     @Published var showGreeting = false
     
-    private let networkManager = NetworkManager.shared
+    private let userService: UserServiceProtocol
+    init(userService: UserServiceProtocol = NetworkManager.shared){
+        self.userService = userService
+    }
     
     let genders = ["Male", "Female", "Other"]
     
@@ -108,7 +111,7 @@ struct CountryData {
                 )
                 
                 
-                let fetchedUser = try await networkManager.putUserMe(user: updateUser, imageData: imageData)
+                let fetchedUser = try await userService.putUserMe(user: updateUser, imageData: imageData)
                 
                 
                 user = fetchedUser
@@ -131,7 +134,7 @@ struct CountryData {
 
         Task {
             do {
-                try await networkManager.deleteUserMe(password: password)
+                try await userService.deleteUserMe(password: password)
                 
                 await MainActor.run {
                     withAnimation(.easeInOut(duration: 0.1)) {
@@ -157,7 +160,7 @@ struct CountryData {
     
         Task {
             do {
-                let fetchedUser = try await networkManager.getProfileMy()
+                let fetchedUser = try await userService.getProfileMy()
                 user = fetchedUser
                 email = user.email
                 displayName = user.displayName ?? ""

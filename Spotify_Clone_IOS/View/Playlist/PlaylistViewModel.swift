@@ -28,14 +28,17 @@ import Foundation
         return String(format: "%d:%02d", minutes, seconds)
     }
     
-    private let networkManager = NetworkManager.shared
+    private let playlistManager: PlaylistServiceProtocol
+    init(playlistManager: PlaylistServiceProtocol = NetworkManager.shared){
+        self.playlistManager = playlistManager
+    }
     
     func postPlaylistFavorite(slug: String) {
         isLoading = true
         
         Task {
             do {
-                try await networkManager.postAddFavoritePlaylist(slug: slug)
+                try await playlistManager.postAddFavoritePlaylist(slug: slug)
                 
                 // if successful (204) - track liked
                 isPlaylistLiked = true
@@ -59,7 +62,7 @@ import Foundation
         
         Task {
             do {
-                try await networkManager.deletePlaylistFavorite(slug: slug)
+                try await playlistManager.deletePlaylistFavorite(slug: slug)
 
                 isPlaylistLiked = false
                 isLoading = false
@@ -77,7 +80,7 @@ import Foundation
         
         Task {
             do {
-                playlist = try await networkManager.getPlaylistsBySlug(slug: slug)
+                playlist = try await playlistManager.getPlaylistsBySlug(slug: slug)
                 isLoading = false
             } catch {
                 handleError(error)

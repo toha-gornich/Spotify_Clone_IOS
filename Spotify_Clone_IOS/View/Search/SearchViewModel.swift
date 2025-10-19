@@ -17,7 +17,10 @@ import SwiftUI
     @Published var selectTab: Int = 0
     @Published var alertItem: AlertItem?
     
-    private let networkManager = NetworkManager.shared
+    private let searchManager: SearchServiceProtocol
+    init(searchManager:SearchServiceProtocol = NetworkManager.shared ){
+        self.searchManager = searchManager
+    }
     
 
     func searchTracks(searchText: String) {
@@ -25,7 +28,7 @@ import SwiftUI
     
         Task {
             do {
-                let fetchedTracks = try await networkManager.searchTracks(searchText: searchText)
+                let fetchedTracks = try await searchManager.searchTracks(searchText: searchText)
                 tracks = fetchedTracks
                 isLoading = false
                 
@@ -42,7 +45,7 @@ import SwiftUI
     
         Task {
             do {
-                let fetchedArtists = try await networkManager.searchArtists(searchText: searchText)
+                let fetchedArtists = try await searchManager.searchArtists(searchText: searchText)
                 artists = fetchedArtists
                 isLoading = false
                 
@@ -59,7 +62,7 @@ import SwiftUI
     
         Task {
             do {
-                let fetchedAlbums = try await networkManager.searchAlbums(searchText: searchText)
+                let fetchedAlbums = try await searchManager.searchAlbums(searchText: searchText)
                 albums = fetchedAlbums
                 isLoading = false
                 
@@ -77,7 +80,7 @@ import SwiftUI
     
         Task {
             do {
-                let fetchedPlaylists = try await networkManager.searchPlaylists(searchText: searchText)
+                let fetchedPlaylists = try await searchManager.searchPlaylists(searchText: searchText)
                 playlists = fetchedPlaylists
                 isLoading = false
                 
@@ -95,7 +98,7 @@ import SwiftUI
     
         Task {
             do {
-                let fetchedProfiles = try await networkManager.searchProfiles(searchText: searchText)
+                let fetchedProfiles = try await searchManager.searchProfiles(searchText: searchText)
                 profiles = fetchedProfiles
                 isLoading = false
                 

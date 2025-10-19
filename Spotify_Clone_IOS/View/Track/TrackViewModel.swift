@@ -35,7 +35,10 @@ import Foundation
 //    }
 
     
-    private let networkManager = NetworkManager.shared
+    private let trackManager: TrackScreenServiceProtocol
+    init(trackManager:TrackScreenServiceProtocol = NetworkManager.shared ){
+        self.trackManager = trackManager
+    }
     
     func getTrackBySlug(slug: String) {
         isLoading = true
@@ -43,7 +46,7 @@ import Foundation
         Task {
             do {
                 
-                let fetchedTrack = try await networkManager.getTrackBySlug(slug: slug)
+                let fetchedTrack = try await trackManager.getTrackBySlug(slug: slug)
                 track = fetchedTrack
                 isLoading = false
             } catch {
@@ -59,7 +62,7 @@ import Foundation
         
         Task {
             do {
-                try await networkManager.postLikeTrack(slug: slug)
+                try await trackManager.postLikeTrack(slug: slug)
                 
                 // if successful (204) - track liked
                 isTrackLiked = true
@@ -83,7 +86,7 @@ import Foundation
         
         Task {
             do {
-                try await networkManager.deleteTrackLike(slug: slug)
+                try await trackManager.deleteTrackLike(slug: slug)
 
                 isTrackLiked = false
                 isLoading = false
@@ -101,7 +104,7 @@ import Foundation
         Task {
             do {
                 
-                let fetchedTrack = try await networkManager.getTracksBySlugArtist(slug: slug)
+                let fetchedTrack = try await trackManager.getTracksBySlugArtist(slug: slug)
                 tracksByArtist = fetchedTrack
                 isLoading = false
             } catch {
@@ -116,7 +119,7 @@ import Foundation
         
         Task {
             do {
-                let fetchedTracks = try await networkManager.getTracksBySlugGenre(slug: slug)
+                let fetchedTracks = try await trackManager.getTracksBySlugGenre(slug: slug)
                 tracks = fetchedTracks
                 isLoading = false
             } catch {
@@ -131,7 +134,7 @@ import Foundation
         
         Task {
             do {
-                let fetchedArtists = try await networkManager.getArtists()
+                let fetchedArtists = try await trackManager.getArtists()
                
                 artists = fetchedArtists
                 isLoading = false
@@ -147,7 +150,7 @@ import Foundation
     
         Task {
             do {
-                let fetchedAlbum = try await networkManager.getAlbumsBySlugArtist(slug: slug)
+                let fetchedAlbum = try await trackManager.getAlbumsBySlugArtist(slug: slug)
                 albums = fetchedAlbum
                 isLoading = false
                 

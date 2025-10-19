@@ -39,8 +39,12 @@ final class CreateTrackViewModel: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     
-    private let networkManager = NetworkManager.shared
+    private let createTrackManager:CreateTrackServiceProtocol
     
+    init(createTrackManager:CreateTrackServiceProtocol = NetworkManager.shared) {
+        self.createTrackManager = createTrackManager
+        loadInitialData()
+    }
     
     var isFormValid: Bool {
         return !trackTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
@@ -65,9 +69,7 @@ final class CreateTrackViewModel: ObservableObject {
     }
     
     
-    init() {
-        loadInitialData()
-    }
+
     
     
     func loadInitialData() {
@@ -82,7 +84,7 @@ final class CreateTrackViewModel: ObservableObject {
         
         Task {
             do {
-                albums = try await networkManager.getAlbumsMy()
+                albums = try await createTrackManager.getAlbumsMy()
                 print(albums[0].description)
                 isLoading = false
             } catch {
@@ -98,7 +100,7 @@ final class CreateTrackViewModel: ObservableObject {
         
         Task {
             do {
-                genres = try await networkManager.getGenres()
+                genres = try await createTrackManager.getGenres()
                 isLoading = false
             } catch {
                 handleError(error)
@@ -113,7 +115,7 @@ final class CreateTrackViewModel: ObservableObject {
         
         Task {
             do {
-                licenses = try await networkManager.getLicenses()
+                licenses = try await createTrackManager.getLicenses()
                 isLoading = false
             } catch {
                 handleError(error)
@@ -146,19 +148,14 @@ final class CreateTrackViewModel: ObservableObject {
                     imageData: imageData,
                     audioData: audioData
                 )
-                
-                await MainActor.run {
                     isLoading = false
                     showSuccessAlert = true
                     completion(true)
-                }
             } catch {
-                await MainActor.run {
                     isLoading = false
                     errorMessage = error.localizedDescription
                     showErrorAlert = true
-                    completion(false)
-                }
+                    completion(false)   
             }
         }
     }

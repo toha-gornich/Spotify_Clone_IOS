@@ -12,9 +12,15 @@ import SwiftUI
     @Published var user = UserMe.empty()
     @Published var actor = ""
     
+    
+    private let userService: UserServiceProtocol
+    
+    init( userService: UserServiceProtocol = NetworkManager.shared){
+        self.userService = userService
+    }
 
     @Published var isLoading = false
-    private let networkManager = NetworkManager.shared
+    
     
     var isActor: Bool{
         if actor == "User"{
@@ -29,7 +35,7 @@ import SwiftUI
         isLoading = true
 
         do {
-            let fetchedUser = try await networkManager.getUserMe()
+            let fetchedUser = try await userService.getUserMe()
             
             await MainActor.run {
                 user = fetchedUser

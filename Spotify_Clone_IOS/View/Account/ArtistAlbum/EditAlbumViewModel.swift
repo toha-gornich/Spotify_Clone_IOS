@@ -30,7 +30,13 @@ final class EditAlbumViewModel: ObservableObject {
     @Published var alertItem: AlertItem?
     
     private var cancellables = Set<AnyCancellable>()
-    private let networkManager = NetworkManager.shared
+    private let editAlbumService: EditAlbumServiceProtocol
+    
+    init(editAlbumService:EditAlbumServiceProtocol = NetworkManager.shared){
+        self.editAlbumService = editAlbumService
+    }
+    
+
     
     
     var imageFileName: String {
@@ -57,8 +63,6 @@ final class EditAlbumViewModel: ObservableObject {
     }
     
     
-    init() {}
-    
     
     
     func getAlbumBySlug(slug: String) {
@@ -66,7 +70,7 @@ final class EditAlbumViewModel: ObservableObject {
         
         Task {
             do {
-                album = try await networkManager.getAlbumBySlug(slug: slug)
+                album = try await editAlbumService.getAlbumBySlug(slug: slug)
                 populateFormWithAlbum()
                 isLoading = false
             } catch {
@@ -104,7 +108,7 @@ final class EditAlbumViewModel: ObservableObject {
                 dateFormatter.dateFormat = "yyyy-MM-dd"
                 let releaseDateString = dateFormatter.string(from: releaseDate)
                 
-                _ = try await networkManager.patchAlbumBySlugMy(
+                _ = try await editAlbumService.patchAlbumBySlugMy(
                     slug: album.slug,
                     title: albumTitle != album.title ? albumTitle : nil,
                     description: albumDescription != album.description ? albumDescription : nil,
@@ -113,18 +117,18 @@ final class EditAlbumViewModel: ObservableObject {
                     imageData: imageData
                 )
                 
-                await MainActor.run {
-                    isLoading = false
-                    showSuccessAlert = true
-                    completion(true)
-                }
+                
+                isLoading = false
+                showSuccessAlert = true
+                completion(true)
+                
             } catch {
-                await MainActor.run {
-                    isLoading = false
-                    errorMessage = error.localizedDescription
-                    showErrorAlert = true
-                    completion(false)
-                }
+                
+                isLoading = false
+                errorMessage = error.localizedDescription
+                showErrorAlert = true
+                completion(false)
+                
             }
         }
     }

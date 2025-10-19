@@ -23,7 +23,11 @@ final class EditLicenseViewModel: ObservableObject {
     @Published var alertItem: AlertItem?
     
     private var cancellables = Set<AnyCancellable>()
-    private let networkManager = NetworkManager.shared
+    private let licenseManager: LicenseServiceProtocol
+    init(licenseManager:LicenseServiceProtocol = NetworkManager.shared) {
+        self.licenseManager = licenseManager
+    }
+    
     
     var canUpdateLicense: Bool {
         let hasNameChange = licenseName != license.name
@@ -34,14 +38,13 @@ final class EditLicenseViewModel: ObservableObject {
         return (hasNameChange || hasTextChange) && isValid && !isLoading
     }
     
-    init() {}
     
     func getLicenseById(id: String) {
         isLoading = true
         
         Task {
             do {
-                license = try await networkManager.getLicenseById(id: id)
+                license = try await licenseManager.getLicenseById(id: id)
                 populateFormWithLicense()
                 isLoading = false
             } catch {
@@ -65,24 +68,22 @@ final class EditLicenseViewModel: ObservableObject {
         
         Task {
             do {
-                _ = try await networkManager.patchLicenseById(
+                _ = try await licenseManager.patchLicenseById(
                     id: String(license.id),
                     name: licenseName != license.name ? licenseName : nil,
                     text: licenseText != license.text ? licenseText : nil
                 )
                 
-                await MainActor.run {
+                
                     isLoading = false
                     showSuccessAlert = true
                     completion(true)
-                }
+                
             } catch {
-                await MainActor.run {
                     isLoading = false
                     errorMessage = error.localizedDescription
                     showErrorAlert = true
                     completion(false)
-                }
             }
         }
     }

@@ -18,8 +18,10 @@ import SwiftUI
     @Published var isLoading: Bool = false
     @Published var showImagePicker = false
     
-    private let networkManager = NetworkManager.shared
-    
+    private let artistManager: ArtistServiceProtocol
+    init(artistManager:ArtistServiceProtocol = NetworkManager.shared) {
+        self.artistManager = artistManager
+    }
         
 
     func updateProfile() {
@@ -41,7 +43,7 @@ import SwiftUI
                 )
                 
                 
-                let fetchedArtist = try await networkManager.putArtistMe(artist: updateArtist, imageData: imageData)
+                let fetchedArtist = try await artistManager.putArtistMe(artist: updateArtist, imageData: imageData)
                 
                 
                 artist = fetchedArtist
@@ -62,7 +64,7 @@ import SwiftUI
     
         Task {
             do {
-                let fetchedArtist = try await networkManager.getArtistMe()
+                let fetchedArtist = try await artistManager.getArtistMe()
                 artist = fetchedArtist
                 firstName = artist.firstName
                 lastName = artist.lastName

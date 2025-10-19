@@ -20,7 +20,10 @@ final class AuthViewModel: ObservableObject {
     @Published var loginSuccess: Bool = false
     
 
-    private let networkManager = NetworkManager.shared
+    private let authManager: AuthServiceProtocol
+    init(authManager: AuthServiceProtocol = NetworkManager.shared){
+        self.authManager = authManager
+    }
     
     var isLoginEnabled: Bool {
         !emailOrUsername.isEmpty && !password.isEmpty
@@ -40,7 +43,7 @@ final class AuthViewModel: ObservableObject {
         do {
             let loginRequest = createLoginRequest()
             
-            let response = try await networkManager.postLogin(loginRequest: loginRequest)
+            let response = try await authManager.postLogin(loginRequest: loginRequest)
             
             let success = await handleLoginSuccess(response)
             return success
@@ -69,7 +72,7 @@ final class AuthViewModel: ObservableObject {
         
         
         do {
-            try await networkManager.postVerifyToken(tokenVerifyRequest: TokenVerifyRequest(token: token))
+            try await authManager.postVerifyToken(tokenVerifyRequest: TokenVerifyRequest(token: token))
             print("Token verified successfully")
             return true
         } catch {

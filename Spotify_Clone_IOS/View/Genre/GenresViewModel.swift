@@ -16,8 +16,11 @@ import SwiftUI
     @Published var alertItem: AlertItem?
     @Published var genre: Genre = Genre.empty()
     
-    private let networkManager = NetworkManager.shared
-    
+    private let genreManager: GenreScreenServiceProtocol
+    init(genreManager: GenreScreenServiceProtocol = NetworkManager.shared){
+        self.genreManager = genreManager
+    }
+
     func getGenres() {
         isLoading = true
         
@@ -37,7 +40,7 @@ import SwiftUI
     
         Task {
             do {
-                let fetchedPlaylists = try await networkManager.getPlaylistsBySlugGenre(slug: slug)
+                let fetchedPlaylists = try await genreManager.getPlaylistsBySlugGenre(slug: slug)
                 playlists = fetchedPlaylists
                 isLoading = false
                 
@@ -54,7 +57,7 @@ import SwiftUI
     
         Task {
             do {
-                let fetchedTracks = try await networkManager.getTracksBySlugGenre(slug: slug)
+                let fetchedTracks = try await genreManager.getTracksBySlugGenre(slug: slug)
                 tracks = fetchedTracks
                 isLoading = false
                 
@@ -72,7 +75,7 @@ import SwiftUI
     
         Task {
             do {
-                let fetchedGenre = try await networkManager.getGenreBySlug(slug: slug)
+                let fetchedGenre = try await genreManager.getGenreBySlug(slug: slug)
                 genre = fetchedGenre
                 isLoading = false
                 

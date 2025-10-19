@@ -17,7 +17,10 @@ import SwiftUI
     @Published var errorMessage: String? = nil
     @Published var alertItem: AlertItem?
     
-    private let networkManager = NetworkManager.shared
+    private let libraryManager: LibraryServiceProtocol
+    init(libraryManager:LibraryServiceProtocol = NetworkManager.shared){
+        self.libraryManager = libraryManager
+    }
     
     func loadLibraryData() {
         getPlaylists()
@@ -30,7 +33,7 @@ import SwiftUI
         
         Task {
             do {
-                let fetchedPlaylists = try await networkManager.getPlaylistsFavorite()
+                let fetchedPlaylists = try await libraryManager.getPlaylistsFavorite()
                 playlists = FavoritePlaylistItem.toPlaylists(fetchedPlaylists)
                 isLoading = false
             } catch {
@@ -45,7 +48,7 @@ import SwiftUI
         
         Task {
             do {
-                let fetchedArtists = try await networkManager.getArtistsFavorite()
+                let fetchedArtists = try await libraryManager.getArtistsFavorite()
                 artists = FavoriteArtistItem.toArtists(fetchedArtists)
                 isLoading = false
             } catch {
@@ -60,7 +63,7 @@ import SwiftUI
         
         Task {
             do {
-                let fetchedAlbums = try await networkManager.getAlbumsFavorite()
+                let fetchedAlbums = try await libraryManager.getAlbumsFavorite()
                 albums = FavoriteAlbumItem.toAlbums(fetchedAlbums)
                 isLoading = false
             } catch {

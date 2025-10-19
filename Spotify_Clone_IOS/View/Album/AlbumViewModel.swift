@@ -29,8 +29,12 @@ import Foundation
         return String(format: "%d:%02d", minutes, seconds)
     }
 
+    private let albumManager: AlbumArtistServiceProtocol
+    init(albumManager:AlbumArtistServiceProtocol = NetworkManager.shared){
+        self.albumManager = albumManager
+    }
     
-    private let networkManager = NetworkManager.shared
+    
     
     // MARK: - Albums
     
@@ -39,7 +43,7 @@ import Foundation
         
         Task {
             do {
-                try await networkManager.postAddFavoriteAlbum(slug: slug)
+                try await albumManager.postAddFavoriteAlbum(slug: slug)
                 
                 // if successful (204) - track liked
                 isAlbumLiked = true
@@ -63,7 +67,7 @@ import Foundation
         
         Task {
             do {
-                try await networkManager.deleteAlbumsFavorite(slug: slug)
+                try await albumManager.deleteAlbumsFavorite(slug: slug)
 
                 isAlbumLiked = false
                 isLoading = false
@@ -81,7 +85,7 @@ import Foundation
     
         Task {
             do {
-                let fetchedAlbum = try await networkManager.getAlbumBySlug(slug: slug)
+                let fetchedAlbum = try await albumManager.getAlbumBySlug(slug: slug)
                 album = fetchedAlbum
                 isLoading = false
                 
@@ -98,7 +102,7 @@ import Foundation
         Task {
             do {
                 
-                let fetchedTracks = try await networkManager.getTracksBySlugAlbum(slug: slug)
+                let fetchedTracks = try await albumManager.getTracksBySlugAlbum(slug: slug)
                 tracks = fetchedTracks
                 isLoading = false
             } catch {
@@ -115,7 +119,7 @@ import Foundation
         
         Task {
             do {
-                let fetchedTracks = try await networkManager.getTracksBySlugArtist(slug: slug)
+                let fetchedTracks = try await albumManager.getTracksBySlugArtist(slug: slug)
                 tracksByArtist = fetchedTracks
                 isLoading = false
             } catch {

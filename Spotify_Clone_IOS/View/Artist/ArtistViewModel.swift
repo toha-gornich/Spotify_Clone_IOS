@@ -23,14 +23,18 @@ import Foundation
     
     @Published var album: Album = Album.empty
     
-    private let networkManager = NetworkManager.shared
+    
+    private let artistManager: AlbumArtistServiceProtocol
+    init(artistManager:AlbumArtistServiceProtocol = NetworkManager.shared){
+        self.artistManager = artistManager
+    }
     
     func getArtistsBySlug(slug: String) {
         isLoading = true
         
         Task {
             do {
-                let fetchedArtist = try await networkManager.getArtistsBySlug(slug: slug)
+                let fetchedArtist = try await artistManager.getArtistsBySlug(slug: slug)
                 artist = fetchedArtist
                 
 
@@ -47,31 +51,24 @@ import Foundation
     
     func checkFollowStatus(userId: String) async {
         do {
-            try await networkManager.postFollowArtist(userId: userId)
+            try await artistManager.postFollowArtist(userId: userId)
             
             await MainActor.run {
                 isFollowing = true
                 
             }
             
-            try? await networkManager.postUnfollowArtist(userId: userId)
-            await MainActor.run {
+            try? await artistManager.postUnfollowArtist(userId: userId)
+            
                 isFollowing = false
 
-            }
-            
         } catch FavoriteError.alreadyLiked {
-            await MainActor.run {
+            
                 isFollowing = true
 
-            }
             
         } catch {
-
-            await MainActor.run {
                 isFollowing = false
-
-            }
         }
     }
 
@@ -81,26 +78,17 @@ import Foundation
         
         Task {
             do {
-                try await networkManager.postFollowArtist(userId: userId)
-                
-                await MainActor.run {
+                try await artistManager.postFollowArtist(userId: userId)
                     isLoading = false
-
-                }
                 
             } catch FavoriteError.alreadyLiked {
-                await MainActor.run {
                     isFollowing = true
                     isLoading = false
-                    
-                }
                 
             } catch {
-                await MainActor.run {
                     isFollowing = false
                     isLoading = false
                     handleError(error)
-                }
             }
         }
     }
@@ -111,18 +99,18 @@ import Foundation
         
         Task {
             do {
-                try await networkManager.postUnfollowArtist(userId: userId)
+                try await artistManager.postUnfollowArtist(userId: userId)
                 
-                await MainActor.run {
+                
                     isLoading = false
-                }
+                
                 
             } catch {
-                await MainActor.run {
+                
                     isFollowing = true
                     isLoading = false
                     handleError(error)
-                }
+                
             }
         }
     }
@@ -134,7 +122,7 @@ import Foundation
         
         Task {
             do {
-                try await networkManager.postAddFavoriteArtist(slug: slug)
+                try await artistManager.postAddFavoriteArtist(slug: slug)
                 
                 // if successful (204) - track liked
                 isTrackLiked = true
@@ -158,7 +146,7 @@ import Foundation
         
         Task {
             do {
-                try await networkManager.deleteArtistFavorite(slug: slug)
+                try await artistManager.deleteArtistFavorite(slug: slug)
 
                 isTrackLiked = false
                 isLoading = false
@@ -177,7 +165,7 @@ import Foundation
         
         Task {
             do {
-                let fetchedArtists = try await networkManager.getArtists()
+                let fetchedArtists = try await artistManager.getArtists()
                
                 artists = fetchedArtists
                 isLoading = false
@@ -195,7 +183,7 @@ import Foundation
         
         Task {
             do {
-                let fetchedTracks = try await networkManager.getTracks()
+                let fetchedTracks = try await artistManager.getTracks()
                 popTracks = fetchedTracks
                 isLoading = false
             } catch {
@@ -210,7 +198,7 @@ import Foundation
         
         Task {
             do {
-                let fetchedTracks = try await networkManager.getTracksBySlugArtist(slug: slug)
+                let fetchedTracks = try await artistManager.getTracksBySlugArtist(slug: slug)
                 tracks = fetchedTracks
                 isLoading = false
             } catch {
@@ -226,7 +214,7 @@ import Foundation
         
         Task {
             do {
-                let fetchedAlbums = try await networkManager.getAlbums()
+                let fetchedAlbums = try await artistManager.getAlbums()
                 albums = fetchedAlbums
                 isLoading = false
             } catch {
@@ -241,7 +229,7 @@ import Foundation
         
         Task {
             do {
-                let fetchedAlbums = try await networkManager.getAlbumsBySlugArtist(slug: slug)
+                let fetchedAlbums = try await artistManager.getAlbumsBySlugArtist(slug: slug)
                 albums = fetchedAlbums
                 isLoading = false
             } catch {

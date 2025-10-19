@@ -18,7 +18,12 @@ final class ArtistAlbumsViewModel: ObservableObject {
     @Published var showEditAlbum = false
     @Published var showOnlyPrivateAlbums = false
     
-    private let networkManager = NetworkManager.shared
+    
+    private let albumService: MyAlbumsServiceProtocol
+    
+    init(albumService:MyAlbumsServiceProtocol = NetworkManager.shared){
+        self.albumService = albumService
+    }
     
     enum AlbumFilter: String, CaseIterable {
         case all = "All"
@@ -46,7 +51,7 @@ final class ArtistAlbumsViewModel: ObservableObject {
         if !searchText.isEmpty {
             result = result.filter {
                 $0.title.localizedCaseInsensitiveContains(searchText) 
-//                $0.genreName.localizedCaseInsensitiveContains(searchText)
+
             }
         }
         
@@ -62,7 +67,7 @@ final class ArtistAlbumsViewModel: ObservableObject {
     
         Task {
             do {
-                let fetchedAlbums = try await networkManager.getAlbumsMy()
+                let fetchedAlbums = try await albumService.getAlbumsMy()
                 albums = fetchedAlbums
                 isLoading = false
                 
@@ -78,7 +83,7 @@ final class ArtistAlbumsViewModel: ObservableObject {
     
         Task {
             do {
-                try await networkManager.deleteAlbumsMy(slug: slug)
+                try await albumService.deleteAlbumsMy(slug: slug)
                 getAlbumsMy()
                 isLoading = false
                 
@@ -98,7 +103,7 @@ final class ArtistAlbumsViewModel: ObservableObject {
         
         Task {
             do {
-                _ = try await networkManager.patchAlbumBySlugMy(slug: album.slug, isPrivate: !album.isPrivate)
+                _ = try await albumService.patchAlbumBySlugMy(slug: album.slug, isPrivate: !album.isPrivate)
                 getAlbumsMy()
                 isLoading = false
                 

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+
 @MainActor final class HomeViewModel: ObservableObject {
     @Published var tracks: [Track] = []
     @Published var artists: [Artist] = []
@@ -16,14 +17,18 @@ import SwiftUI
     @Published var selectTab: Int = 0
     @Published var alertItem: AlertItem?
     
-    private let networkManager = NetworkManager.shared
+    private let homeService: HomeServiceProtocol
+    
+    init(homeService: HomeServiceProtocol = NetworkManager.shared){
+        self.homeService = homeService
+    }
     
     func getTracks() {
         isLoading = true
         
         Task {
             do {
-                tracks = try await NetworkManager.shared.getTracks()
+                tracks = try await homeService.getTracks()
                 isLoading = false
             } catch {
                 handleError(error)
@@ -37,7 +42,7 @@ import SwiftUI
         
         Task {
             do {
-                artists = try await NetworkManager.shared.getArtists()
+                artists = try await homeService.getArtists()
                 isLoading = false
             } catch {
                 handleError(error)
@@ -51,7 +56,7 @@ import SwiftUI
         
         Task {
             do {
-                albums = try await NetworkManager.shared.getAlbums()
+                albums = try await homeService.getAlbums()
                 isLoading = false
             } catch {
                 handleError(error)
@@ -65,7 +70,7 @@ import SwiftUI
         
         Task {
             do {
-                playlists = try await NetworkManager.shared.getPlaylists()
+                playlists = try await homeService.getPlaylists()
                 isLoading = false
             } catch {
                 handleError(error)

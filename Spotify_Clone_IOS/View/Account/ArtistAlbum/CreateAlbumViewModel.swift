@@ -23,7 +23,6 @@ final class CreateAlbumViewModel: ObservableObject {
     
     @Published var genres: [Genre] = []
     
-    
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     @Published var showSuccessAlert: Bool = false
@@ -32,12 +31,18 @@ final class CreateAlbumViewModel: ObservableObject {
     @Published var alertItem: AlertItem?
     
     private var cancellables = Set<AnyCancellable>()
-    private let networkManager = NetworkManager.shared
+    
+    private let createAlbumService: CreateAlbumServiceProtocol
+    
+    init(createAlbumService: CreateAlbumServiceProtocol = NetworkManager.shared){
+        self.createAlbumService = createAlbumService
+        loadInitialData()
+    }
     
     
     var isFormValid: Bool {
         return !albumTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-               !albumDescription.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        !albumDescription.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
     var imageFileName: String {
@@ -46,13 +51,6 @@ final class CreateAlbumViewModel: ObservableObject {
         }
         return "No image selected"
     }
-    
-    
-    init() {
-        loadInitialData()
-    }
-    
-    
     
     func loadInitialData() {
         loadGenres()
@@ -63,7 +61,7 @@ final class CreateAlbumViewModel: ObservableObject {
         
         Task {
             do {
-                genres = try await networkManager.getGenres()
+                genres = try await createAlbumService.getGenres()
                 isLoading = false
             } catch {
                 handleError(error)
@@ -86,27 +84,25 @@ final class CreateAlbumViewModel: ObservableObject {
                 dateFormatter.dateFormat = "yyyy-MM-dd"
                 let releaseDateString = dateFormatter.string(from: releaseDate)
                 
-                _ = try await networkManager.postCreateAlbum(
+                _ = try await createAlbumService.postCreateAlbum(
                     title: albumTitle,
                     description: albumDescription,
-
+                    
                     releaseDate: releaseDateString,
                     isPrivate: isPrivate,
                     imageData: imageData
                 )
                 
-                await MainActor.run {
-                    isLoading = false
-                    showSuccessAlert = true
-                    completion(true)
-                }
+                
+                isLoading = false
+                showSuccessAlert = true
+                completion(true)
+                
             } catch {
-                await MainActor.run {
-                    isLoading = false
-                    errorMessage = error.localizedDescription
-                    showErrorAlert = true
-                    completion(false)
-                }
+                isLoading = false
+                errorMessage = error.localizedDescription
+                showErrorAlert = true
+                completion(false)
             }
         }
     }
