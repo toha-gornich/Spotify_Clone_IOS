@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var greeting = ""
     @StateObject private var homeVM = HomeViewModel()
     @EnvironmentObject var mainVM: MainViewModel
 
@@ -28,7 +29,7 @@ struct HomeView: View {
                             .frame(width: 25, height: 25)
                     }
                     
-                    Text("Good morning")
+                    Text(greeting)
                         .font(.customFont(.bold, fontSize: 18))
                         .foregroundColor(.primaryText)
                     
@@ -159,7 +160,22 @@ struct HomeView: View {
         }
         .onAppear {
             mainVM.isTabBarVisible = true
+            updateGreeting()
         }
         
     }
+    
+    private func updateGreeting() {
+            let hour = Calendar.current.component(.hour, from: Date())
+            
+            if hour >= 5 && hour < 12 {
+                greeting = "Good morning"
+            } else if hour >= 12 && hour < 17 {
+                greeting = "Good day"
+            } else if hour >= 17 && hour < 21 {
+                greeting = "Good evening"
+            } else {
+                greeting = "Good night"
+            }
+        }
 }

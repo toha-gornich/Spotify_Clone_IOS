@@ -37,14 +37,26 @@ import SwiftUI
         isLoading = true
         
         do {
-            var fetchedUser: UserMe = UserMe.empty()
-            if userId == nil{
-                fetchedUser = try await profileManager.getUserMe()
+            let userMe = try await profileManager.getUserMe()
+            
+            
+            if let userId = userId {
+                print("fdsfsdfdsf")
+                print(String(userMe.id))
+                print(userId)
+                if String(userMe.id) == userId {
+                    // Це мій профіль, використовуємо userMe
+                    user = userMe
+                } else {
+                    // Це чужий профіль, робимо запит
+                    user = try await profileManager.getUser(userId: userId)
+                }
+            } else {
+                // Якщо userId немає, показуємо свій профіль
+                user = userMe
             }
-            else{
-                fetchedUser = try await profileManager.getUser(userId: userId!)
-            }
-            user = fetchedUser
+
+            // Тепер user доступний
             color = Color(hex: user.color!)
             name = user.displayName!
             playlistsCount = String(user.playlistsCount)

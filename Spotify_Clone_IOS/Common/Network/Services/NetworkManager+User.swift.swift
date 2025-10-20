@@ -43,8 +43,10 @@ extension NetworkManager: UserServiceProtocol {
     }
     
     func getUser(userId: String) async throws -> UserMe {
-        guard let url = URL(string: Constants.API.userURL + "\(userId)/") else {
-            print("❌ getUserMe - Invalid URL: \(Constants.API.userMeURL)")
+        
+        print("user user" + userId)
+        guard let url = URL(string: Constants.API.regUserURL + "\(userId)/") else {
+            print("❌ getUser - Invalid URL: \(Constants.API.userMeURL)")
             throw APError.invalidURL
         }
         
@@ -52,9 +54,9 @@ extension NetworkManager: UserServiceProtocol {
             let (data, response) = try await URLSession.shared.data(from: url)
             
             if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
-                print("❌ getUserMe - HTTP error \(httpResponse.statusCode)")
+                print("❌ getUser - HTTP error \(httpResponse.statusCode)")
                 if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ getUserMe - Response: \(responseString)")
+                    print("❌ getUser - Response: \(responseString)")
                 }
                 throw APError.invalidResponse
             }
@@ -63,14 +65,14 @@ extension NetworkManager: UserServiceProtocol {
                 let decoder = JSONDecoder()
                 return try decoder.decode(UserMe.self, from: data)
             } catch {
-                print("❌ getUserMe - Failed to decode response: \(error)")
+                print("❌ getUser - Failed to decode response: \(error)")
                 if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ getUserMe - Raw response: \(responseString)")
+                    print("❌ getUser - Raw response: \(responseString)")
                 }
                 throw APError.invalidData
             }
         } catch {
-            print("❌ getUserMe - Network error: \(error)")
+            print("❌ getUser - Network error: \(error)")
             throw error
         }
     }

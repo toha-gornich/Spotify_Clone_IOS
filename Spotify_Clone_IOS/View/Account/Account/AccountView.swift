@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
-
+import Combine
 struct AccountView: View {
     @StateObject private var accountVM = AccountViewModel()
+    @EnvironmentObject var playerManager: AudioPlayerManager
+
     
     var body: some View {
         ScrollView {
@@ -252,7 +254,6 @@ struct AccountView: View {
                         
                         Button(action: {
                             accountVM.deleteAccount()
-                            accountVM.showGreeting = true
                         }) {
                             HStack {
                                 if accountVM.isDeletingAccount {
@@ -276,6 +277,14 @@ struct AccountView: View {
                             .cornerRadius(8)
                             .scaleEffect(accountVM.canDeleteAccount ? 1.0 : 0.95)
                             .opacity(accountVM.canDeleteAccount ? 1.0 : 0.6)
+                        }
+                        .onReceive(Just(accountVM.successfullyDeleteAccount)) { _ in
+                            if accountVM.successfullyDeleteAccount {
+                                DispatchQueue.main.async {
+                                    playerManager.dismissPlayer()
+                                    accountVM.showGreeting = true
+                                }
+                            }
                         }
                         .disabled(!accountVM.canDeleteAccount || accountVM.isDeletingAccount)
                         .fullScreenCover(isPresented: $accountVM.showGreeting) {

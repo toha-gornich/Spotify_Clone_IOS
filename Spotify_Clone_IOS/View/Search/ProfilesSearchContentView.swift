@@ -33,7 +33,7 @@ struct ProfilesSearchContentView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 15) {
                 ForEach(limitedItems) { user in
-                    NavigationLink(destination: ProfileView()
+                    NavigationLink(destination: ProfileView(userId: String(user.id))
                         .environmentObject(mainVM)
                         .environmentObject(playerManager)) {
                         ArtistItemView(user: user)

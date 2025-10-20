@@ -23,5 +23,9 @@
 		<string>CircularStd-Book.otf</string>
 		<string>CircularStd-Medium.otf</string>
 	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
 </dict>
 </plist>

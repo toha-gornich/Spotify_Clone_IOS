@@ -7,7 +7,7 @@
 
 import SwiftUI
 struct MainView: View {
-    @EnvironmentObject var mainVM: MainViewModel 
+    @EnvironmentObject var mainVM: MainViewModel
     @EnvironmentObject var playerManager: AudioPlayerManager
     
     var body: some View {
@@ -18,18 +18,21 @@ struct MainView: View {
                     HomeView()
                         .navigationBarHidden(true)
                         .environmentObject(playerManager)
+                        .environmentObject(mainVM)
                 }
             } else if (mainVM.selectTab == 1) {
                 NavigationView {
                     GenresView()
                         .navigationBarHidden(true)
                         .environmentObject(playerManager)
+                        .environmentObject(mainVM)
                 }
             } else if (mainVM.selectTab == 2) {
                 NavigationView {
                     LibraryView()
                         .navigationBarHidden(true)
                         .environmentObject(playerManager)
+                        .environmentObject(mainVM)
                 }
             }
             
@@ -85,6 +88,8 @@ struct MainView: View {
             
             
             SideMenuView(isShowing: $mainVM.isShowMenu)
+                .environmentObject(mainVM)
+                .environmentObject(playerManager)
                 .zIndex(3)
         }
         .frame(width: .screenWidth, height: .screenHeight)
@@ -100,5 +105,5 @@ struct MainView: View {
 #Preview {
     MainView()
         .environmentObject(AudioPlayerManager())
-        .environmentObject(MainViewModel.share)
+        .environmentObject(MainViewModel())
 }

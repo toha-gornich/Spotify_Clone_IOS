@@ -4,7 +4,6 @@
 //
 //  Created by Горніч Антон on 22.09.2025.
 //
-
 import SwiftUI
 import AVFoundation
 import MediaPlayer
@@ -42,7 +41,67 @@ class AudioPlayerManager: NSObject, ObservableObject {
     private var player: AVPlayer?
     private var timeObserver: Any?
     private var originalPlaylist: [Track] = []
+    private var artworkCache: [String: UIImage] = [:]
     
+    override init() {
+        super.init()
+        setupRemoteCommandCenter()
+        setupAudioSession()
+    }
+    
+    // MARK: - Remote Command Center Setup
+    private func setupRemoteCommandCenter() {
+        let commandCenter = MPRemoteCommandCenter.shared()
+        
+        // Play command
+        commandCenter.playCommand.isEnabled = true
+        commandCenter.playCommand.addTarget { [weak self] _ in
+            self?.togglePlayPause()
+            return .success
+        }
+        
+        // Pause command
+        commandCenter.pauseCommand.isEnabled = true
+        commandCenter.pauseCommand.addTarget { [weak self] _ in
+            self?.togglePlayPause()
+            return .success
+        }
+        
+        // Next track command
+        commandCenter.nextTrackCommand.isEnabled = true
+        commandCenter.nextTrackCommand.addTarget { [weak self] _ in
+            self?.nextTrack()
+            return .success
+        }
+        
+        // Previous track command
+        commandCenter.previousTrackCommand.isEnabled = true
+        commandCenter.previousTrackCommand.addTarget { [weak self] _ in
+            self?.previousTrack()
+            return .success
+        }
+        
+        // Change playback position command
+        commandCenter.changePlaybackPositionCommand.isEnabled = true
+        commandCenter.changePlaybackPositionCommand.addTarget { [weak self] event in
+            guard let event = event as? MPChangePlaybackPositionCommandEvent else {
+                return .commandFailed
+            }
+            self?.seek(to: event.positionTime)
+            return .success
+        }
+    }
+    
+    // MARK: - Audio Session Setup
+    private func setupAudioSession() {
+        do {
+            let audioSession = AVAudioSession.sharedInstance()
+            try audioSession.setCategory(.playback, mode: .default, options: [])
+            try audioSession.setActive(true)
+        } catch {
+            print("Failed to set up audio session: \(error.localizedDescription)")
+        }
+    }
     
     func play(track: Track?, from playlist: [Track] = []) {
         if track == nil {
@@ -98,7 +157,6 @@ class AudioPlayerManager: NSObject, ObservableObject {
             return
         }
         
-        
         player?.pause()
         removeTimeObserver()
         
@@ -114,7 +172,6 @@ class AudioPlayerManager: NSObject, ObservableObject {
         if sheetState == .hidden {
             sheetState = .mini
         }
-        
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.playerState = .playing
@@ -139,8 +196,6 @@ class AudioPlayerManager: NSObject, ObservableObject {
         
         updateNowPlayingPlaybackRate()
     }
-    
-    
     
     func nextTrack() {
         if repeatMode == .one {
@@ -173,7 +228,6 @@ class AudioPlayerManager: NSObject, ObservableObject {
             playCurrentTrack()
         }
     }
-    
     
     func toggleShuffle() {
         isShuffleEnabled.toggle()
@@ -210,7 +264,6 @@ class AudioPlayerManager: NSObject, ObservableObject {
         }
     }
     
-    
     func showFullPlayer() {
         sheetState = .full
     }
@@ -226,14 +279,14 @@ class AudioPlayerManager: NSObject, ObservableObject {
         sheetState = .hidden
     }
     
-    
     func seek(to time: TimeInterval) {
         let cmTime = CMTime(seconds: time, preferredTimescale: 1)
         player?.seek(to: cmTime)
         currentTime = time
+        updateNowPlayingPlaybackRate()
     }
     
-    
+    // MARK: - Now Playing Info
     private func setupNowPlayingInfo(for track: Track) {
         var nowPlayingInfo = [String: Any]()
         nowPlayingInfo[MPMediaItemPropertyTitle] = track.title
@@ -244,6 +297,52 @@ class AudioPlayerManager: NSObject, ObservableObject {
         nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = playerState == .playing ? 1.0 : 0.0
         
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+        
+        // Завантажуємо artwork асинхронно
+        loadArtworkImageAsync(for: track) { image in
+            guard let image = image else { return }
+            var info = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [:]
+            let artwork = MPMediaItemArtwork(boundsSize: image.size) { _ in image }
+            info[MPMediaItemPropertyArtwork] = artwork
+            MPNowPlayingInfoCenter.default().nowPlayingInfo = info
+        }
+    }
+    
+    private func loadArtworkImageAsync(for track: Track, completion: @escaping (UIImage?) -> Void) {
+            // Отримуємо URL картинки з треку
+            let imageURLString = track.album.image
+            guard let imageURL = URL(string: imageURLString) else {
+                completion(getPlaceholderImage())
+                return
+            }
+            
+            // Перевіряємо кеш (використовуємо String як ключ)
+            let cacheKey = String(track.id)
+            if let cachedImage = artworkCache[cacheKey] {
+                completion(cachedImage)
+                return
+            }
+            
+            // Завантажуємо зображення
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                if let data = try? Data(contentsOf: imageURL),
+                   let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self?.artworkCache[cacheKey] = image
+                        completion(image)
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        completion(self?.getPlaceholderImage())
+                    }
+                }
+            }
+        }
+    
+    private func getPlaceholderImage() -> UIImage? {
+        let config = UIImage.SymbolConfiguration(pointSize: 200, weight: .light)
+        return UIImage(systemName: "music.note", withConfiguration: config)?
+            .withTintColor(.systemGray3, renderingMode: .alwaysOriginal)
     }
     
     private func updateNowPlayingPlaybackRate() {
@@ -286,7 +385,6 @@ class AudioPlayerManager: NSObject, ObservableObject {
         }
     }
     
-    
     func isPlaying(track: Track) -> Bool {
         return currentTrack?.id == track.id && playerState == .playing
     }
@@ -298,7 +396,6 @@ class AudioPlayerManager: NSObject, ObservableObject {
     func isCurrentTrack(_ track: Track) -> Bool {
         return currentTrack?.id == track.id
     }
-    
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "status", let player = object as? AVPlayer {
@@ -323,10 +420,17 @@ class AudioPlayerManager: NSObject, ObservableObject {
         }
     }
     
-    
     deinit {
         removeTimeObserver()
         player?.removeObserver(self, forKeyPath: "status")
         NotificationCenter.default.removeObserver(self)
+        
+        // Вимкнути команди при знищенні
+        let commandCenter = MPRemoteCommandCenter.shared()
+        commandCenter.playCommand.isEnabled = false
+        commandCenter.pauseCommand.isEnabled = false
+        commandCenter.nextTrackCommand.isEnabled = false
+        commandCenter.previousTrackCommand.isEnabled = false
+        commandCenter.changePlaybackPositionCommand.isEnabled = false
     }
 }

@@ -31,6 +31,7 @@ struct CountryData {
     @Published var showImagePicker = false
     @Published var isDeletingAccount = false
     @Published var showGreeting = false
+    @Published var successfullyDeleteAccount = false
     
     private let userService: UserServiceProtocol
     init(userService: UserServiceProtocol = NetworkManager.shared){
@@ -131,28 +132,25 @@ struct CountryData {
             isDeletingAccount = true
         }
         
-
         Task {
             do {
                 try await userService.deleteUserMe(password: password)
                 
-                await MainActor.run {
-                    withAnimation(.easeInOut(duration: 0.1)) {
-                        isDeletingAccount = false
-                    }
+                withAnimation(.easeInOut(duration: 0.1)) {
+                    isDeletingAccount = false
                 }
                 
+                successfullyDeleteAccount = true
+                logOut()
+    
+                
             } catch {
-                await MainActor.run {
-                    withAnimation(.easeInOut(duration: 0.1)) {
-                        isDeletingAccount = false
-                    }
-                    handleError(error)
+                withAnimation(.easeInOut(duration: 0.1)) {
+                    isDeletingAccount = false
                 }
+                handleError(error)
             }
         }
-        
-        logOut()
     }
 
     func getUserMe() {
@@ -189,11 +187,11 @@ struct CountryData {
     }
     
     func logOut() {
+        // clear auth token
         UserDefaults.standard.removeObject(forKey: "auth_token")
         
-        
+        // Clear cache URLs
         URLCache.shared.removeAllCachedResponses()
-        
     }
     
     var canUpdateProfile: Bool {

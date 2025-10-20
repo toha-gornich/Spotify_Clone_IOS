@@ -100,7 +100,7 @@ protocol AlbumServiceProtocol {
     func deleteAlbumsFavorite(slug: String) async throws
 }
 
-// MARK: - My Albums Service Protocol (для артиста)
+// MARK: - My Albums Service Protocol
 protocol MyAlbumsServiceProtocol {
     func getAlbumsMy() async throws -> [AlbumMy]
     func postCreateAlbum(
@@ -152,17 +152,17 @@ protocol ImageServiceProtocol {
     func downloadImage(fromURLString urlString: String, completed: @escaping (UIImage?) -> Void)
 }
 
-// MARK: - Композитні протоколи (для зручності)
+// MARK: - Composite protocols
 
-// Для Library екрану (плейлісти, артисти, альбоми)
+
 typealias LibraryServiceProtocol = PlaylistServiceProtocol & ArtistServiceProtocol & AlbumServiceProtocol
 
-// for Home screen (tracks, genres, artists, playlists)
 typealias HomeServiceProtocol = TrackServiceProtocol & PlaylistServiceProtocol & ArtistServiceProtocol & AlbumServiceProtocol
 
 typealias AlbumArtistServiceProtocol = AlbumServiceProtocol & TrackServiceProtocol & ArtistServiceProtocol
 
 typealias CreateAlbumServiceProtocol = GenreServiceProtocol & MyAlbumsServiceProtocol
+
 typealias EditAlbumServiceProtocol = MyAlbumsServiceProtocol & AlbumServiceProtocol
 
 typealias CreateTrackServiceProtocol = GenreServiceProtocol & MyAlbumsServiceProtocol & MyTracksServiceProtocol & LicenseServiceProtocol

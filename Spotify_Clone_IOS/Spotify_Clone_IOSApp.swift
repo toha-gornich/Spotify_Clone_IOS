@@ -10,7 +10,7 @@ import SwiftUI
 struct Spotify_Clone_IOSApp: App {
     private let networkManager = NetworkManager.shared
     @StateObject private var playerManager = AudioPlayerManager()
-    @StateObject private var mainVM = MainViewModel.share
+    @StateObject private var mainVM = MainViewModel()
     @State private var isTokenValid = false
     @State private var isLoading = true
     @State private var showActivationAlert = false
@@ -24,8 +24,6 @@ struct Spotify_Clone_IOSApp: App {
                         ProgressView("Loading...")
                     } else if isTokenValid {
                         MainView()
-                            .environmentObject(playerManager)
-                            .environmentObject(mainVM)
                     } else {
                         GreetingView()
                     }
@@ -44,6 +42,8 @@ struct Spotify_Clone_IOSApp: App {
                     Text(activationMessage)
                 }
             }
+            .environmentObject(playerManager)
+            .environmentObject(mainVM)
             .overlay(
                 Group {
                     if playerManager.sheetState == .mini {
@@ -51,7 +51,6 @@ struct Spotify_Clone_IOSApp: App {
                             Spacer()
                             
                             MiniPlayerView(playerManager: playerManager)
-
                                 .padding(.bottom, mainVM.isTabBarVisible ? 45 : 0)
                                 .transition(.move(edge: .bottom).combined(with: .opacity))
                                 .animation(.easeInOut(duration: 0.3), value: playerManager.sheetState)
@@ -63,6 +62,8 @@ struct Spotify_Clone_IOSApp: App {
             )
             .sheet(isPresented: .constant(playerManager.sheetState == .full)) {
                 FullPlayerView(playerManager: playerManager)
+                    .environmentObject(playerManager)
+                    .environmentObject(mainVM)
             }
         }
     }
@@ -95,9 +96,7 @@ struct Spotify_Clone_IOSApp: App {
     }
     
     private func handleDeepLink(url: URL) {
-        
         if url.scheme == "com.cl.appauth" && url.path.contains("/account/auth/activate/") {
-
             let pathComponents = url.pathComponents
             if let uidIndex = pathComponents.firstIndex(of: "activate"),
                uidIndex + 1 < pathComponents.count {
@@ -115,18 +114,17 @@ struct Spotify_Clone_IOSApp: App {
     private func activateAccount(uid: String, token: String) {
         Task {
             do {
-                
                 let activationRequest = AccountActivationRequest(uid: uid, token: token)
                 try await networkManager.postActivateAccount(activationRequest: activationRequest)
                 
                 await MainActor.run {
-                    activationMessage = "Обліковий запис успішно активовано!"
+                    activationMessage = "Account successfully activated!"
                     showActivationAlert = true
                     verifyToken()
                 }
             } catch {
                 await MainActor.run {
-                    activationMessage = "Помилка активації: \(error.localizedDescription)"
+                    activationMessage = "Activation error: \(error.localizedDescription)"
                     showActivationAlert = true
                 }
             }

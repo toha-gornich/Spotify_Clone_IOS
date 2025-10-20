@@ -244,7 +244,6 @@ struct ProfileView: View {
 
 #Preview {
     NavigationView{
-        
         ProfileView()
     }
 }

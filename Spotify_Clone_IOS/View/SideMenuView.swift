@@ -12,6 +12,7 @@ struct SideMenuView: View {
     @State private var showAccount = false
     @State private var showProfile = false
     @State private var selectedAccountTab: UserDashboardView.AccountTab = .account
+    @EnvironmentObject var playerManager: AudioPlayerManager
     
     var edgeTransition: AnyTransition = .move(edge: .leading)
     
@@ -102,6 +103,7 @@ struct SideMenuView: View {
                                 .background(Color.elementBg)
                             
                             MenuItemView(icon: "rectangle.portrait.and.arrow.right", title: "Log out") {
+                                playerManager.dismissPlayer()
                                 logOut()
                                 showGreeting = true
                             }
@@ -131,7 +133,6 @@ struct SideMenuView: View {
     
         func logOut() {
             UserDefaults.standard.removeObject(forKey: "auth_token")
-            
             
             URLCache.shared.removeAllCachedResponses()
             

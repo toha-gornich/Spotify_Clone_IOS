@@ -7,6 +7,7 @@
 import Foundation
 
 extension NetworkManager: AlbumServiceProtocol {
+
     func getAlbumsFavorite() async throws -> [FavoriteAlbumItem] {
         guard let url = URL(string: Constants.API.albumsFavoriteURL) else {
             print("❌ [getAlbumsFavorite] Invalid URL")
