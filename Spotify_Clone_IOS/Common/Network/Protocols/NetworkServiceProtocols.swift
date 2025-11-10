@@ -134,6 +134,13 @@ protocol PlaylistServiceProtocol {
     func postMyPlaylist() async throws -> PlaylistDetail
     func postTrackToPlaylist(slug: String, trackSlug: String) async throws
     func deleteTrackFromPlaylist(slug: String, trackSlug: String) async throws
+    func patchPlaylist(
+        slug: String,
+        title: String?,
+        description: String?,
+        isPrivate: Bool?,
+        imageData: Data?
+    ) async throws -> PatchPlaylistResponse
 }
 
 // MARK: - Genre Service Protocol

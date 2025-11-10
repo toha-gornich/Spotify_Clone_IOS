@@ -434,4 +434,89 @@ extension NetworkManager: PlaylistServiceProtocol {
             throw error
         }
     }
+    
+    func patchPlaylist(
+        slug: String,
+        title: String? = nil,
+        description: String? = nil,
+        isPrivate: Bool? = nil,
+        imageData: Data? = nil
+    ) async throws -> PatchPlaylistResponse{
+        guard let url = URL(string: Constants.API.playlistsMyURL + "\(slug)/") else {
+            print("❌ patchPlaylist - Invalid URL: \(Constants.API.playlistsMyURL + "\(slug)/")")
+            throw APError.invalidURL
+        }
+        
+        let boundary = "Boundary-\(UUID().uuidString)"
+        var request = URLRequest(url: url)
+        request.httpMethod = "PATCH"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        var body = Data()
+        
+        func addFormField(name: String, value: String) {
+            if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "\(value)\r\n".data(using: .utf8) { body.append(data) }
+        }
+        
+        // Add text fields
+        if let title = title {
+            addFormField(name: "title", value: title)
+        }
+        
+        if let description = description {
+            addFormField(name: "description", value: description)
+        }
+        
+        if let isPrivate = isPrivate {
+            addFormField(name: "is_private", value: "\(isPrivate)")
+        }
+        
+        // Add image if provided
+        if let imageData = imageData {
+            if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "Content-Disposition: form-data; name=\"image\"; filename=\"playlist_image.jpg\"\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "Content-Type: image/jpeg\r\n\r\n".data(using: .utf8) { body.append(data) }
+            body.append(imageData)
+            if let data = "\r\n".data(using: .utf8) { body.append(data) }
+        }
+        
+        // Close boundary
+        if let data = "--\(boundary)--\r\n".data(using: .utf8) { body.append(data) }
+        request.httpBody = body
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ patchPlaylist - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ patchPlaylist - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ patchPlaylist - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let result = try decoder.decode(PatchPlaylistResponse.self, from: data)
+                print("✅ patchPlaylist - Successfully updated playlist: \(result.title)")
+                return result
+            } catch {
+                print("❌ patchPlaylist - Failed to decode response: \(error)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ patchPlaylist - Raw response: \(responseString)")
+                }
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ patchPlaylist - Network error: \(error)")
+            throw error
+        }
+    }
 }

@@ -89,6 +89,29 @@ class MyPlaylistViewModel: ObservableObject {
         }
     }
     
+    func patchPlaylist(
+        title: String,
+        description: String,
+        isPrivate: Bool,
+        imageData: Data?
+    ) async -> Bool  {
+        do {
+            _ = try await playlistManager.patchPlaylist(
+                slug: playlist.slug,
+                title: title,
+                description: description,
+                isPrivate: isPrivate,
+                imageData: imageData
+            )
+
+//            self.playlist = updatedPlaylist
+            
+            return true
+        } catch {
+            print("❌ Failed to update playlist: \(error)")
+            return false
+        }
+    }
 
     func addTrack(_ trackSlug: String) async -> Bool {
         do {

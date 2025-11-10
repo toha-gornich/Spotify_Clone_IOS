@@ -94,6 +94,7 @@ struct LibraryView: View {
                 LoadingView()
             }
         }
+        
         .frame(width: .screenWidth, height: .screenHeight)
         .background(Color.bg)
         .navigationTitle("")

@@ -8,6 +8,7 @@
 import Foundation
 
 
+
 // MARK: - Main Response Model
 struct PlaylistResponse: Codable {
     let count: Int
@@ -129,5 +130,22 @@ struct PlaylistDetail: Codable, Identifiable {
             createdAt: "",
             updatedAt: ""
         )
+    }
+}
+
+struct PatchPlaylistResponse: Codable, Identifiable {
+    let id: Int
+    let slug: String
+    let title: String
+    let description: String?
+    let image: String?
+    let genre: Genre?
+    let releaseDate: String
+    let isPrivate: Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case id, slug, title, description, image, genre
+        case releaseDate = "release_date"
+        case isPrivate = "is_private"
     }
 }

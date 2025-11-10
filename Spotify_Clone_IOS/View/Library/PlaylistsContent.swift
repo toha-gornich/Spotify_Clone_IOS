@@ -37,5 +37,6 @@ struct PlaylistsContent: View {
             }
         }
         .padding(.horizontal, 20)
+        
     }
 }

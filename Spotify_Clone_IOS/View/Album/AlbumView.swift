@@ -221,18 +221,22 @@ struct AlbumView: View {
                                 Spacer()
                                 // Play button (this one will hide when scrolled)
                                 Button(action: {
-                                    let trackToPlay = albumVM.tracks[0]
-                                    playerManager.play(track: trackToPlay)
+                                    if let trackToPlay = albumVM.tracks.first {
+                                        playerManager.play(track: trackToPlay)
+                                    } else {
+                                        print("⚠️ No tracks to play")
+                                    }
                                 }) {
                                     Image(systemName: playerManager.playerState == .playing ? "pause.fill" : "play.fill")
                                         .font(.title3)
                                         .foregroundColor(.black)
                                         .frame(width: 44, height: 44)
-                                        .background(Color.green)
+                                        .background(albumVM.tracks.isEmpty ? Color.gray.opacity(0.5) : Color.green)
                                         .clipShape(Circle())
                                 }
+                                .disabled(albumVM.tracks.isEmpty)
                                 .opacity(showTitleInNavBar ? 0 : 1)
-                                
+
                             }
                             
                             TrackListView(tracks: albumVM.tracks).environmentObject(mainVM)
