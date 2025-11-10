@@ -22,10 +22,14 @@ import Foundation
     
 
     var totalDuration: String {
-        let totalSeconds = playlist.tracks.reduce(0) { $0 + $1.durationInSeconds }
-        let minutes = Int(totalSeconds) / 60
-        let seconds = Int(totalSeconds) % 60
-        return String(format: "%d:%02d", minutes, seconds)
+        if let track = playlist.tracks {
+            let totalSeconds = track.reduce(0) { $0 + $1.durationInSeconds }
+            let minutes = Int(totalSeconds) / 60
+            let seconds = Int(totalSeconds) % 60
+            return String(format: "%d:%02d", minutes, seconds)
+        }else{
+            return"-1"
+        }
     }
     
     private let playlistManager: PlaylistServiceProtocol
@@ -89,6 +93,7 @@ import Foundation
         }
     }
     
+
     
     private func handleError(_ error: Error) {
         if let apError = error as? APError {

@@ -6,24 +6,269 @@
 //
 import Foundation
 extension NetworkManager: PlaylistServiceProtocol {
-    func getPlaylists() async throws ->[Playlist] {
-        guard let url = URL(string: Constants.API.playlistsURL) else {
-            print("❌ [getPlaylists] Invalid URL")
+    func postTrackToPlaylist(slug: String, trackSlug: String) async throws {
+        guard let url = URL(string: Constants.API.playlistsURL + "\(slug)/add/tracks/" + "\(trackSlug)/") else {
+                print("❌ postTrackToPlaylist - Invalid URL: \(Constants.API.playlistsURL + "\(slug)/tracks/" + "\(trackSlug)")")
+                throw APError.invalidURL
+            }
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            let body: [String: Any] = ["track_id": trackSlug]
+            
+            do {
+                request.httpBody = try JSONSerialization.data(withJSONObject: body)
+            } catch {
+                print("❌ postTrackToPlaylist - Failed to serialize body: \(error)")
+                throw APError.invalidData
+            }
+            
+            var lastError: Error?
+            
+            for attempt in 1...3 {
+                do {
+                    let (data, response) = try await URLSession.shared.data(for: request)
+                    
+                    guard let httpResponse = response as? HTTPURLResponse else {
+                        print("❌ postTrackToPlaylist - Invalid response type")
+                        throw APError.invalidResponse
+                    }
+                    
+                    guard (200...299).contains(httpResponse.statusCode) else {
+                        if let responseString = String(data: data, encoding: .utf8) {
+                            if responseString.contains("database is locked") {
+                                if attempt < 3 {
+                                    print("⚠️ postTrackToPlaylist - Database locked, retry \(attempt)/3")
+                                    try await Task.sleep(nanoseconds: UInt64(attempt) * 500_000_000)
+                                    continue
+                                }
+                            }
+                            print("❌ postTrackToPlaylist - HTTP \(httpResponse.statusCode): \(responseString)")
+                            
+                            // Handle specific error cases
+                            if httpResponse.statusCode == 400 {
+                                print("⚠️ postTrackToPlaylist - Track already in playlist")
+                            }
+                        }
+                        throw APError.invalidResponse
+                    }
+                    
+                    
+                    return
+                    
+                } catch {
+                    lastError = error
+                    if attempt < 3 {
+                        try await Task.sleep(nanoseconds: 500_000_000)
+                        continue
+                    }
+                    print("❌ postTrackToPlaylist - Network error: \(error)")
+                }
+            }
+            
+            throw lastError ?? APError.invalidResponse
+        }
+    
+    func deleteTrackFromPlaylist(slug: String, trackSlug: String) async throws {
+            let urlString = Constants.API.playlistsURL + "\(slug)/add/tracks/\(trackSlug)/"
+            guard let url = URL(string: urlString) else {
+                print("❌ deleteTrackFromPlaylist - Invalid URL: \(urlString)")
+                throw APError.invalidURL
+            }
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "DELETE"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            var lastError: Error?
+            
+            for attempt in 1...3 {
+                do {
+                    let (data, response) = try await URLSession.shared.data(for: request)
+                    
+                    guard let httpResponse = response as? HTTPURLResponse else {
+                        throw APError.invalidResponse
+                    }
+                    
+                    // Check if successful (200-299) OR if it's the specific 404 case where track was actually deleted
+                    if (200...299).contains(httpResponse.statusCode) {
+                        return
+                    } else if httpResponse.statusCode == 404 {
+                        // Backend quirk: returns 404 even when track is deleted successfully
+                        if let responseString = String(data: data, encoding: .utf8),
+                           (responseString.contains("Track not in playlist") || responseString.contains("not in playlist")) {
+                            // Treat as success - let refresh determine actual state
+                            return
+                        }
+                        // Real 404 error
+                        throw APError.invalidResponse
+                    } else {
+                        if let responseString = String(data: data, encoding: .utf8),
+                           responseString.contains("database is locked"),
+                           attempt < 3 {
+                            try await Task.sleep(nanoseconds: UInt64(attempt) * 500_000_000)
+                            continue
+                        }
+                        throw APError.invalidResponse
+                    }
+                    
+                } catch {
+                    lastError = error
+                    if attempt < 3 {
+                        try await Task.sleep(nanoseconds: 500_000_000)
+                        continue
+                    }
+                }
+            }
+            
+            throw lastError ?? APError.invalidResponse
+        }
+    
+    func deletePlaylist(slug: String) async throws {
+        guard let url = URL(string: Constants.API.playlistsMyURL + "\(slug)/") else {
+            print("❌ deletePlaylist - Invalid URL: \(Constants.API.playlistsMyURL + "\(slug)/")")
             throw APError.invalidURL
         }
         
-        let (data, response) = try await URLSession.shared.data(from: url)
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
-            print("❌ [getPlaylists] Response error: \(httpResponse.statusCode)")
+        var lastError: Error?
+        
+        for attempt in 1...3 {
+            do {
+                let (data, response) = try await URLSession.shared.data(for: request)
+                
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    print("❌ deletePlaylist - Invalid response type")
+                    throw APError.invalidResponse
+                }
+                
+                guard (200...299).contains(httpResponse.statusCode) else {
+                    if let responseString = String(data: data, encoding: .utf8) {
+                        if responseString.contains("database is locked") {
+                            if attempt < 3 {
+                                print("⚠️ deletePlaylist - Database locked, retry \(attempt)/3")
+                                try await Task.sleep(nanoseconds: UInt64(attempt) * 500_000_000)
+                                continue
+                            }
+                        }
+                        print("❌ deletePlaylist - HTTP \(httpResponse.statusCode): \(responseString)")
+                    }
+                    throw APError.invalidResponse
+                }
+                
+                
+                return
+                
+            } catch {
+                lastError = error
+                if attempt < 3 {
+                    try await Task.sleep(nanoseconds: 500_000_000)
+                    continue
+                }
+                print("❌ deletePlaylist - Network error: \(error)")
+            }
         }
         
-        do{
-            let decoder = JSONDecoder()
-            return try decoder.decode(PlaylistResponse.self, from: data).results
-        } catch{
-            print("❌ [getPlaylists] JSON decoding failed: \(error.localizedDescription)")
-            throw APError.invalidData
+        throw lastError ?? APError.invalidResponse
+    }
+    
+    
+    func postMyPlaylist() async throws -> PlaylistDetail {
+        guard let url = URL(string: Constants.API.myPlaylistCreateURL) else {
+            print("❌ postMyPlaylist - Invalid URL: \(Constants.API.myPlaylistCreateURL)")
+            throw APError.invalidURL
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ postMyPlaylist - Invalid response type")
+                throw APError.invalidResponse
+            }
+
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ postMyPlaylist - HTTP error \(httpResponse.statusCode)")
+                throw APError.invalidResponse
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                decoder.keyDecodingStrategy = .convertFromSnakeCase
+                let result = try decoder.decode(PlaylistDetail.self, from: data)
+                return result
+            } catch {
+                print("❌ postMyPlaylist - Failed to decode response: \(error)")
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ postMyPlaylist - Network error: \(error)")
+            throw error
+        }
+    }
+    
+    func getPlaylists() async throws -> [Playlist] {
+        guard let url = URL(string: Constants.API.playlistsURL) else {
+            print("❌ [getPlaylists] Invalid URL: \(Constants.API.playlistsURL)")
+            throw APError.invalidURL
+        }
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode != 200 {
+                    print("❌ [getPlaylists] Status code: \(httpResponse.statusCode)")
+                }
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let playlistResponse = try decoder.decode(PlaylistResponse.self, from: data)
+                return playlistResponse.results
+                
+            } catch DecodingError.keyNotFound(let key, let context) {
+                print("❌ [getPlaylists] Missing key '\(key.stringValue)' - \(context.debugDescription)")
+                print("   Coding path: \(context.codingPath.map { $0.stringValue }.joined(separator: " -> "))")
+                throw APError.invalidData
+                
+            } catch DecodingError.typeMismatch(let type, let context) {
+                print("❌ [getPlaylists] Type mismatch for type '\(type)' - \(context.debugDescription)")
+                print("   Coding path: \(context.codingPath.map { $0.stringValue }.joined(separator: " -> "))")
+                throw APError.invalidData
+                
+            } catch DecodingError.valueNotFound(let type, let context) {
+                print("❌ [getPlaylists] Value not found for type '\(type)' - \(context.debugDescription)")
+                print("   Coding path: \(context.codingPath.map { $0.stringValue }.joined(separator: " -> "))")
+                throw APError.invalidData
+                
+            } catch DecodingError.dataCorrupted(let context) {
+                print("❌ [getPlaylists] Data corrupted - \(context.debugDescription)")
+                print("   Coding path: \(context.codingPath.map { $0.stringValue }.joined(separator: " -> "))")
+                throw APError.invalidData
+                
+            } catch {
+                print("❌ [getPlaylists] Decoding error: \(error.localizedDescription)")
+                throw APError.invalidData
+            }
+            
+        } catch let error as APError {
+            print("❌ [getPlaylists] APError: \(error)")
+            throw error
+            
+        } catch {
+            print("❌ [getPlaylists] Network error: \(error.localizedDescription)")
+            throw APError.unableToComplete
         }
     }
     
@@ -136,7 +381,7 @@ extension NetworkManager: PlaylistServiceProtocol {
             
             switch httpResponse.statusCode {
             case 200...299:
-                print("✅ postAddFavoritePlaylist - Successfully added: \(slug)")
+                
                 return
                 
             case 400, 409:

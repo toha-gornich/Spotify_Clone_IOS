@@ -57,7 +57,7 @@ struct Playlist: Codable, Identifiable {
    let title: String
    let image: String
    let color: String
-   let trackSlug: String
+   let trackSlug: String?
    let user: User
    let genre: Genre?
    let isPrivate: Bool
@@ -89,18 +89,18 @@ struct PlaylistDetail: Codable, Identifiable {
     let id: Int
     let slug: String
     let title: String
-    let description: String
+    let description: String?
     let image: String
     let color: String
     let user: User
-    let tracks: [Track]
+    let tracks: [Track]?
     let genre: Genre?
-    let releaseDate: String
-    let isPrivate: Bool
-    let duration: String
-    let favoriteCount: Int
-    let createdAt: String
-    let updatedAt: String
+    let releaseDate: String?
+    let isPrivate: Bool?
+    let duration: String?
+    let favoriteCount: Int?
+    let createdAt: String?
+    let updatedAt: String?
     
     enum CodingKeys: String, CodingKey {
         case id, slug, title, description, image, color, user, tracks, genre, duration

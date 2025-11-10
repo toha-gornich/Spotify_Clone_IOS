@@ -11,7 +11,8 @@ import Foundation
 struct Constants {
 
     struct API{
-        static let baseURL = "http://192.168.0.159:8080/api/v1/"
+//        static let baseURL = "http://192.168.0.159:8080/api/v1/"
+        static let baseURL = "https://placentary-entirely-dulcie.ngrok-free.dev/api/v1/"
         
         static let createTokenURL = baseURL + "auth/jwt/create/"
         static let verifyTokenURL = baseURL + "auth/jwt/verify/"
@@ -46,6 +47,8 @@ struct Constants {
         static let searchAlbumsURL = baseURL + "albums/?search="
         
         static let playlistsURL = baseURL + "playlists/"
+        static let playlistsMyURL = baseURL + "playlists/my/"
+        static let myPlaylistCreateURL = baseURL + "playlists/my/"
         static let playlistsFavoriteURL = baseURL + "playlists/favorite/"
         static let playlistsByGenreURL = baseURL + "playlists/?genre__slug="
         static let playlistsByIdUserURL = baseURL + "playlists/?user__id="

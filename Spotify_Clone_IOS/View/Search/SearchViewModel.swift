@@ -16,10 +16,14 @@ import SwiftUI
     @Published var errorMessage: String? = nil
     @Published var selectTab: Int = 0
     @Published var alertItem: AlertItem?
-    
+    @Published var user = UserMy.empty()
     private let searchManager: SearchServiceProtocol
-    init(searchManager:SearchServiceProtocol = NetworkManager.shared ){
+    private let userManager: UserServiceProtocol
+    
+    init(searchManager:SearchServiceProtocol = NetworkManager.shared, userManager:UserServiceProtocol = NetworkManager.shared ){
         self.searchManager = searchManager
+        self.userManager = userManager
+        getUserMe()
     }
     
 
@@ -109,6 +113,23 @@ import SwiftUI
             }
         }
     }
+    
+    func getUserMe() {
+        isLoading = true
+    
+        Task {
+            do {
+                user = try await userManager.getProfileMy()
+                isLoading = false
+                
+            } catch {
+                handleError(error)
+                isLoading = false
+                
+            }
+        }
+    }
+    
     
     private func handleError(_ error: Error) {
         if let appError = error as? APError {

@@ -32,7 +32,7 @@ extension ArtistItemView {
     }
     
     init(user: User) {
-        self.init(displayName: user.displayName, imageURL: user.image)
+        self.init(displayName: (user.displayName ?? "name"), imageURL: (user.image) ?? "image not found")
     }
 }
 

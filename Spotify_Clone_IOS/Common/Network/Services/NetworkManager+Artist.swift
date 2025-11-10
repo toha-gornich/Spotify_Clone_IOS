@@ -30,7 +30,7 @@ extension NetworkManager: ArtistServiceProtocol {
         
         switch httpResponse.statusCode {
         case 200...299:
-            print("✅ postFollowArtist - Successfully followed user: \(userId)")
+            
             return
             
         case 400, 409:
@@ -71,7 +71,7 @@ extension NetworkManager: ArtistServiceProtocol {
         
         switch httpResponse.statusCode {
         case 200...299:
-            print("✅ postUnfollowArtist - Successfully unfollowed user: \(userId)")
+            
             return
             
         case 400, 409:

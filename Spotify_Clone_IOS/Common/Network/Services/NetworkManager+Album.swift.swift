@@ -53,7 +53,7 @@ extension NetworkManager: AlbumServiceProtocol {
             
             switch httpResponse.statusCode {
             case 200...299:
-                print("✅ postAddFavoriteAlbum - Successfully added: \(slug)")
+                
                 return
                 
             case 400, 409:

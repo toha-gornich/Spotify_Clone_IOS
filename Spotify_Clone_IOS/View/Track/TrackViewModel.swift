@@ -163,11 +163,7 @@ import Foundation
     }
     
     
-//    func playCurrentTrack() {
-//        guard let track = currentTrack else { return }
-//        playerManager.play(track: track)
-//    }
-//    
+
     
     func handleError(_ error: Error) {
         if let apError = error as? APError {

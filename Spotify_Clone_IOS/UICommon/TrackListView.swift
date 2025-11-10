@@ -6,15 +6,27 @@
 //
 
 import SwiftUI
+import SwiftUI
 
 struct TrackListView: View {
     let tracks: [Track]
     let onMoreOptions: ((Int) -> Void)?
+    let onDeleteTrack: ((String) async -> Void)?
+    
     @EnvironmentObject var playerManager: AudioPlayerManager
     @EnvironmentObject var mainVM: MainViewModel
-    init(tracks: [Track], onMoreOptions: ((Int) -> Void)? = nil) {
+    
+    @State private var showingDeleteAlert = false
+    @State private var trackToDelete: Track?
+    
+    init(
+        tracks: [Track],
+        onMoreOptions: ((Int) -> Void)? = nil,
+        onDeleteTrack: ((String) async -> Void)? = nil
+    ) {
         self.tracks = tracks
         self.onMoreOptions = onMoreOptions
+        self.onDeleteTrack = onDeleteTrack
     }
     
     var body: some View {
@@ -64,7 +76,8 @@ struct TrackListView: View {
                         
                         // Track info
                         VStack(alignment: .leading, spacing: 2) {
-                            NavigationLink(destination: TrackView(slugTrack: tracks[index].slug).environmentObject(mainVM)
+                            NavigationLink(destination: TrackView(slugTrack: tracks[index].slug)
+                                .environmentObject(mainVM)
                                 .environmentObject(playerManager)) {
                                 Text(tracks[index].title)
                                     .font(.subheadline)
@@ -72,7 +85,8 @@ struct TrackListView: View {
                                     .lineLimit(1)
                                     .truncationMode(.tail)
                             }
-                            NavigationLink(destination: ArtistView(slugArtist: tracks[index].artist.slug).environmentObject(mainVM)
+                            NavigationLink(destination: ArtistView(slugArtist: tracks[index].artist.slug)
+                                .environmentObject(mainVM)
                                 .environmentObject(playerManager)) {
                                 Text(tracks[index].artist.displayName)
                                     .font(.caption)
@@ -81,8 +95,6 @@ struct TrackListView: View {
                             }
                         }
                         
-                        
-                        
                         Spacer()
                         
                         // Duration
@@ -90,13 +102,31 @@ struct TrackListView: View {
                             .font(.caption)
                             .foregroundColor(.gray)
                         
-                        // More options button
-                        Button(action: {
-                            onMoreOptions?(index)
-                        }) {
+                        // More options button with menu
+                        Menu {
+                            if onDeleteTrack != nil {
+                                Button(role: .destructive, action: {
+                                    trackToDelete = tracks[index]
+                                    showingDeleteAlert = true
+                                }) {
+                                    Label("Remove from Playlist", systemImage: "trash")
+                                }
+                            }
+                            
+                            // Call custom handler if provided
+                            if onMoreOptions != nil {
+                                Button(action: {
+                                    onMoreOptions?(index)
+                                }) {
+                                    Label("More Options", systemImage: "ellipsis.circle")
+                                }
+                            }
+                        } label: {
                             Image(systemName: "ellipsis")
                                 .font(.caption)
                                 .foregroundColor(.gray)
+                                .frame(width: 30, height: 30)
+                                .contentShape(Rectangle())
                         }
                     }
                     .padding(.vertical, 8)
@@ -110,6 +140,22 @@ struct TrackListView: View {
                 }
             }
         }
+        .alert("Remove Track", isPresented: $showingDeleteAlert) {
+            Button("Cancel", role: .cancel) {
+                trackToDelete = nil
+            }
+            Button("Remove", role: .destructive) {
+                if let track = trackToDelete {
+                    Task {
+                        await onDeleteTrack?(track.slug)
+                        trackToDelete = nil
+                    }
+                }
+            }
+        } message: {
+            if let track = trackToDelete {
+                Text("Are you sure you want to remove '\(track.title)' from this playlist?")
+            }
+        }
     }
 }
-

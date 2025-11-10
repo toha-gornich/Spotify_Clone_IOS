@@ -130,6 +130,10 @@ protocol PlaylistServiceProtocol {
     func getPlaylistsFavorite() async throws -> [FavoritePlaylistItem]
     func postAddFavoritePlaylist(slug: String) async throws
     func deletePlaylistFavorite(slug: String) async throws
+    func deletePlaylist(slug: String) async throws
+    func postMyPlaylist() async throws -> PlaylistDetail
+    func postTrackToPlaylist(slug: String, trackSlug: String) async throws
+    func deleteTrackFromPlaylist(slug: String, trackSlug: String) async throws
 }
 
 // MARK: - Genre Service Protocol
@@ -155,9 +159,10 @@ protocol ImageServiceProtocol {
 // MARK: - Composite protocols
 
 
-typealias LibraryServiceProtocol = PlaylistServiceProtocol & ArtistServiceProtocol & AlbumServiceProtocol
+typealias PlaylistsServiceProtocol = PlaylistServiceProtocol & UserServiceProtocol
+typealias LibraryServiceProtocol = PlaylistServiceProtocol & ArtistServiceProtocol & AlbumServiceProtocol & PlaylistServiceProtocol & UserServiceProtocol
 
-typealias HomeServiceProtocol = TrackServiceProtocol & PlaylistServiceProtocol & ArtistServiceProtocol & AlbumServiceProtocol
+typealias HomeServiceProtocol = TrackServiceProtocol & PlaylistServiceProtocol & ArtistServiceProtocol & AlbumServiceProtocol & UserServiceProtocol
 
 typealias AlbumArtistServiceProtocol = AlbumServiceProtocol & TrackServiceProtocol & ArtistServiceProtocol
 

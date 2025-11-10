@@ -134,7 +134,7 @@ extension NetworkManager: LicenseServiceProtocol {
             
             do {
                 let license = try decoder.decode(License.self, from: data)
-                print("✅ postCreateLicense - License created successfully: \(license.name)")
+                
                 return license
             } catch {
                 print("❌ postCreateLicense - Decoding error: \(error)")

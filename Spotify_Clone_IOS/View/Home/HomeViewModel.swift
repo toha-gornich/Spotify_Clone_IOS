@@ -12,6 +12,7 @@ import SwiftUI
     @Published var artists: [Artist] = []
     @Published var albums: [Album] = []
     @Published var playlists: [Playlist] = []
+    @Published var user = UserMy.empty()
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
     @Published var selectTab: Int = 0
@@ -75,6 +76,21 @@ import SwiftUI
             } catch {
                 handleError(error)
                 isLoading = false
+            }
+        }
+    }
+    func getUserMe() {
+        isLoading = true
+    
+        Task {
+            do {
+                user = try await homeService.getProfileMy()
+                isLoading = false
+                
+            } catch {
+                handleError(error)
+                isLoading = false
+                
             }
         }
     }

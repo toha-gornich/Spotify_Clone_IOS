@@ -111,15 +111,30 @@ struct HomeView: View {
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 15) {
                                 ForEach(homeVM.playlists.indices, id: \.self) { index in
-                                    let sObj = homeVM.playlists[index]
-                                    NavigationLink(destination: PlaylistView(slugPlaylist: sObj.slug).environmentObject(mainVM).environmentObject(playerManager)) {
-                                        MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
+                                    NavigationLink(destination: {
+                                        if homeVM.playlists[index].user.displayName == homeVM.user.displayName {
+                                            MyPlaylistView(slugPlaylist: homeVM.playlists[index].slug)
+                                                .environmentObject(mainVM)
+                                                .environmentObject(playerManager)
+                                        } else {
+                                            PlaylistView(slugPlaylist: homeVM.playlists[index].slug)
+                                                .environmentObject(mainVM)
+                                                .environmentObject(playerManager)
+                                        }
+                                    }) {
+                                        MediaItemCell(
+                                            imageURL: homeVM.playlists[index].image,
+                                            title: homeVM.playlists[index].title,
+                                            width: 140,
+                                            height: 140
+                                        )
                                     }
                                 }
                             }
                         }
-                        .task {
-                            homeVM.getPlaylists()
+                        .onAppear {
+                             homeVM.getUserMe()
+                             homeVM.getPlaylists()
                         }
                         
                         ViewAllSection(title: "Popular tracks") {}

@@ -35,13 +35,27 @@ struct PlaylistsSearchContentView: View {
             GridItem(.flexible()),
             GridItem(.flexible())
         ], spacing: 10) {
-            ForEach(0..<limitedItems.count, id: \.self) { index in
-                let sObj = limitedItems[index] // ✅ Використовуйте limitedItems замість searchVM.playlists
-                NavigationLink(destination: PlaylistView(slugPlaylist: sObj.slug)
-                    .environmentObject(mainVM)
-                    .environmentObject(playerManager)
-                ) {
-                    MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
+            ForEach(limitedItems, id: \.id) { sObj in
+//                let sObj = limitedItems[index]
+                NavigationLink(destination: {
+                    if sObj.user.displayName == searchVM.user.displayName {
+                        
+                        MyPlaylistView(slugPlaylist: sObj.slug)
+                            .environmentObject(mainVM)
+                            .environmentObject(playerManager)
+                    } else {
+                        
+                        PlaylistView(slugPlaylist: sObj.slug)
+                            .environmentObject(mainVM)
+                            .environmentObject(playerManager)
+                    }
+                }) {
+                    MediaItemCell(
+                        imageURL: sObj.image,
+                        title: sObj.title,
+                        width: 140,
+                        height: 140
+                    )
                 }
             }
         }

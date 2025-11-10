@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LibraryView: View {
+    @State private var showCreatePlaylist = false
     @StateObject private var libraryVM = LibraryViewModel()
     @EnvironmentObject var mainVM: MainViewModel
     @EnvironmentObject var playerManager: AudioPlayerManager
@@ -27,12 +28,21 @@ struct LibraryView: View {
                     
                     Spacer()
                     
+                    
+
                     Button {
-                        print("Add new item")
+                        showCreatePlaylist = true
+                        libraryVM.createPlaylist()
+                        
                     } label: {
                         Image(systemName: "plus")
                             .font(.system(size: 24))
                             .foregroundColor(.primaryText)
+                    }
+                    .navigationDestination(isPresented: $showCreatePlaylist) {
+                        MyPlaylistView(slugPlaylist: libraryVM.playlist.slug)
+                            .environmentObject(playerManager)
+                            .environmentObject(mainVM)
                     }
                 }
                 .padding(.top, .topInsets)
@@ -65,6 +75,7 @@ struct LibraryView: View {
                             PlaylistsContent(playlists: libraryVM.playlists)
                                 .environmentObject(playerManager)
                                 .environmentObject(mainVM)
+                                .environmentObject(libraryVM) 
                         } else if libraryVM.selectedTab == 1 {
                             ArtistsContent(artists: libraryVM.artists)
                                 .environmentObject(playerManager)
@@ -99,136 +110,7 @@ struct LibraryView: View {
         }
         .onAppear {
             mainVM.isTabBarVisible = true
+            libraryVM.getUserMe()
         }
-    }
-}
-
-// MARK: - Tab Button
-struct TabButtonLibrary: View {
-    let title: String
-    let isSelected: Bool
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            Text(title)
-                .font(.customFont(.medium, fontSize: 14))
-                .foregroundColor(isSelected ? .primaryText : .secondaryText)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(
-                    isSelected ? Color.primaryText.opacity(0.15) : Color.clear
-                )
-                .cornerRadius(16)
-        }
-    }
-}
-
-// MARK: - Playlists Content
-struct PlaylistsContent: View {
-    let playlists: [Playlist]
-    @EnvironmentObject var playerManager: AudioPlayerManager
-    @EnvironmentObject var mainVM: MainViewModel
-    
-    var body: some View {
-        LazyVStack(spacing: 8) {
-            ForEach(playlists, id: \.slug) { playlist in
-                NavigationLink(destination: PlaylistView(slugPlaylist: playlist.slug)
-                    .environmentObject(mainVM)
-                    .environmentObject(playerManager)) {
-                    LibraryItemRow(
-                        imageURL: playlist.image,
-                        title: playlist.title,
-                        subtitle: playlist.user.displayName
-                    )
-                }
-            }
-        }
-        .padding(.horizontal, 20)
-    }
-}
-
-// MARK: - Artists Content
-struct ArtistsContent: View {
-    let artists: [ArtistTrack]
-    @EnvironmentObject var playerManager: AudioPlayerManager
-    @EnvironmentObject var mainVM: MainViewModel
-    
-    var body: some View {
-        LazyVStack(spacing: 8) {
-            ForEach(artists, id: \.slug) { artist in
-                NavigationLink(destination: ArtistView(slugArtist: artist.slug)
-                    .environmentObject(mainVM)
-                    .environmentObject(playerManager)) {
-                    LibraryItemRow(
-                        imageURL: artist.image,
-                        title: artist.displayName,
-                        subtitle: "Artist"
-                    )
-                }
-            }
-        }
-        .padding(.horizontal, 20)
-    }
-}
-
-// MARK: - Albums Content
-struct AlbumsContent: View {
-    let albums: [Album]
-    @EnvironmentObject var playerManager: AudioPlayerManager
-    @EnvironmentObject var mainVM: MainViewModel
-    
-    var body: some View {
-        LazyVStack(spacing: 8) {
-            ForEach(albums, id: \.slug) { album in
-                NavigationLink(destination: AlbumView(slugAlbum: album.slug)
-                    .environmentObject(mainVM)
-                    .environmentObject(playerManager)) {
-                    LibraryItemRow(
-                        imageURL: album.image,
-                        title: album.title,
-                        subtitle: album.artist.displayName
-                    )
-                }
-            }
-        }
-        .padding(.horizontal, 20)
-    }
-}
-
-
-// MARK: - Library Item Row
-struct LibraryItemRow: View {
-    let imageURL: String
-    let title: String
-    let subtitle: String
-    
-    var body: some View {
-        HStack(spacing: 12) {
-            AsyncImage(url: URL(string: imageURL)) { image in
-                image
-                    .resizable()
-                    .scaledToFill()
-            } placeholder: {
-                Color.gray.opacity(0.3)
-            }
-            .frame(width: 56, height: 56)
-            .cornerRadius(4)
-            
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .font(.customFont(.medium, fontSize: 16))
-                    .foregroundColor(.primaryText)
-                    .lineLimit(1)
-                
-                Text(subtitle)
-                    .font(.customFont(.regular, fontSize: 14))
-                    .foregroundColor(.secondaryText)
-                    .lineLimit(1)
-            }
-            
-            Spacer()
-        }
-        .padding(.vertical, 8)
     }
 }

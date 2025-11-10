@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-
 struct PlaylistView: View {
     let slugPlaylist: String
     @Environment(\.dismiss) private var dismiss
@@ -29,8 +28,8 @@ struct PlaylistView: View {
     
     // Calculate overlay opacity based on scroll offset
     private var overlayOpacity: CGFloat {
-        let fadeThreshold: CGFloat = 50 // Start fading after scrolling 50 points
-        let maxFade: CGFloat = 150 // Complete fade at 150 points
+        let fadeThreshold: CGFloat = 50
+        let maxFade: CGFloat = 150
         
         if scrollOffset < -fadeThreshold {
             let fadeProgress = abs(scrollOffset + fadeThreshold) / (maxFade - fadeThreshold)
@@ -70,7 +69,6 @@ struct PlaylistView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: imageHeight)
                 
-                
                 Spacer()
             }
             .ignoresSafeArea()
@@ -103,19 +101,21 @@ struct PlaylistView: View {
                     
                     Spacer()
                     
-                    // Play button in navigation bar
-                    Button(action: {
-                        let trackToPlay = playlistVM.tracks[0]
-                        playerManager.play(track: trackToPlay, from: playlistVM.tracks)
-                    }) {
-                        Image(systemName: playerManager.playerState == .playing ? "pause.fill" : "play.fill")
-                            .font(.title3)
-                            .foregroundColor(.black)
-                            .frame(width: 44, height: 44)
-                            .background(Color.green)
-                            .clipShape(Circle())
+                    // Play button in navigation bar - only show if tracks exist
+                    if let tracks = playlistVM.playlist.tracks, !tracks.isEmpty {
+                        Button(action: {
+                            let trackToPlay = tracks[0]
+                            playerManager.play(track: trackToPlay, from: tracks)
+                        }) {
+                            Image(systemName: playerManager.playerState == .playing ? "pause.fill" : "play.fill")
+                                .font(.title3)
+                                .foregroundColor(.black)
+                                .frame(width: 44, height: 44)
+                                .background(Color.green)
+                                .clipShape(Circle())
+                        }
+                        .opacity(showTitleInNavBar ? 1 : 0)
                     }
-                    .opacity(showTitleInNavBar ? 1 : 0)
                 }
                 .padding(.horizontal, 16)
                 .padding(.bottom, 24)
@@ -124,7 +124,6 @@ struct PlaylistView: View {
                     Color.bg
                         .opacity(showTitleInNavBar ? 1 : 0)
                 )
-                
                 
                 Spacer()
             }
@@ -141,7 +140,6 @@ struct PlaylistView: View {
                         // Artist title section with gradient overlay
                         VStack {
                             HStack {
-                                
                                 Text(playlistVM.playlist.title)
                                     .font(.largeTitle)
                                     .fontWeight(.bold)
@@ -150,60 +148,37 @@ struct PlaylistView: View {
                                 Spacer()
                             }
                             .padding(.horizontal, 16)
-                            
-                            
                         }
                         
                         // Content section
                         LazyVStack(alignment: .leading, spacing: 16) {
                             
-                            // Playlist info section
-                            if !playlistVM.playlist.description.isEmpty {
-                                Text(playlistVM.playlist.description)
+                            // Playlist description - only if exists and not empty
+                            if let description = playlistVM.playlist.description, !description.isEmpty {
+                                Text(description)
                                     .font(.caption)
                                     .foregroundColor(.gray)
                             }
                             
                             // Playlist genre
-                            if let playlistName = playlistVM.playlist.genre?.name{
-                                Text(playlistName)
+                            if let genreName = playlistVM.playlist.genre?.name {
+                                Text(genreName)
                                     .font(.title3)
                                     .fontWeight(.bold)
                                     .foregroundColor(.gray)
                             }
                             
-
                             HStack(spacing: 12) {
-                                
-                                // User  image
-                                SpotifyRemoteImage(urlString: playlistVM.playlist.user.image)
+                                // User image
+                                SpotifyRemoteImage(urlString: playlistVM.playlist.user.image ?? "")
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: 40, height: 40)
                                     .clipShape(Circle())
                                 
                                 VStack(alignment: .leading, spacing: 2) {
-                                    
                                     HStack(spacing: 8) {
-                                        
                                         HStack(spacing: 4) {
-                                            Circle()
-                                                .fill(Color.gray)
-                                                .frame(width: 6, height: 6)
-                                            
-                                            Text(playlistVM.playlist.user.displayName)
-                                                .font(.caption)
-                                                .foregroundColor(.white)
-                                            Circle()
-                                                .fill(Color.gray)
-                                                .frame(width: 6, height: 6)
-                                            Text("\(String(playlistVM.playlist.favoriteCount)) saves")
-                                                .font(.caption)
-                                                .foregroundColor(.white)
-                                            
-                                            Circle()
-                                                .fill(Color.gray)
-                                                .frame(width: 6, height: 6)
-                                            Text("\(String(playlistVM.playlist.tracks.count)) songs")
+                                            Text(playlistVM.playlist.user.displayName ?? "Unknown")
                                                 .font(.caption)
                                                 .foregroundColor(.white)
                                             
@@ -211,9 +186,27 @@ struct PlaylistView: View {
                                                 .fill(Color.gray)
                                                 .frame(width: 6, height: 6)
                                             
-                                            Text("\(playlistVM.totalDuration)")
+                                            Text("\(playlistVM.playlist.favoriteCount ?? 0) saves")
                                                 .font(.caption)
-                                                .foregroundColor(.gray)
+                                                .foregroundColor(.white)
+                                            
+                                            Circle()
+                                                .fill(Color.gray)
+                                                .frame(width: 6, height: 6)
+                                            
+                                            Text("\(playlistVM.playlist.tracks?.count ?? 0) songs")
+                                                .font(.caption)
+                                                .foregroundColor(.white)
+                                            
+                                            if let tracks = playlistVM.playlist.tracks, !tracks.isEmpty {
+                                                Circle()
+                                                    .fill(Color.gray)
+                                                    .frame(width: 6, height: 6)
+                                                
+                                                Text(playlistVM.totalDuration)
+                                                    .font(.caption)
+                                                    .foregroundColor(.gray)
+                                            }
                                         }
                                     }
                                 }
@@ -221,11 +214,9 @@ struct PlaylistView: View {
                                 Spacer()
                             }
                             
-                            
                             HStack(spacing: 16) {
-                                
                                 Button(action: {
-                                    if playlistVM.isPlaylistLiked{
+                                    if playlistVM.isPlaylistLiked {
                                         playlistVM.deletePlaylistFavorite(slug: slugPlaylist)
                                     } else {
                                         playlistVM.postPlaylistFavorite(slug: slugPlaylist)
@@ -245,24 +236,29 @@ struct PlaylistView: View {
                                 
                                 Spacer()
                                 
-                                
-                                Button(action: {
-                                    let trackToPlay = playlistVM.tracks[0]
-                                    playerManager.play(track: trackToPlay, from: playlistVM.tracks)
-                                }) {
-                                    Image(systemName: playerManager.playerState == .playing ? "pause.fill" : "play.fill")
-                                        .font(.title3)
-                                        .foregroundColor(.black)
-                                        .frame(width: 44, height: 44)
-                                        .background(Color.green)
-                                        .clipShape(Circle())
+                                // Play button - only show if tracks exist
+                                if let tracks = playlistVM.playlist.tracks, !tracks.isEmpty {
+                                    Button(action: {
+                                        let trackToPlay = tracks[0]
+                                        playerManager.play(track: trackToPlay, from: tracks)
+                                    }) {
+                                        Image(systemName: playerManager.playerState == .playing ? "pause.fill" : "play.fill")
+                                            .font(.title3)
+                                            .foregroundColor(.black)
+                                            .frame(width: 44, height: 44)
+                                            .background(Color.green)
+                                            .clipShape(Circle())
+                                    }
+                                    .opacity(showTitleInNavBar ? 0 : 1)
                                 }
-                                .opacity(showTitleInNavBar ? 0 : 1)
-                                
                             }
                             
-                            TrackListView(tracks: playlistVM.playlist.tracks).environmentObject(playerManager).environmentObject(mainVM)
-                            
+                            // Track list - only if tracks exist
+                            if let tracks = playlistVM.playlist.tracks {
+                                TrackListView(tracks: tracks)
+                                    .environmentObject(playerManager)
+                                    .environmentObject(mainVM)
+                            }
                         }
                         .background(Color.bg)
                         .padding(.horizontal, 16)
@@ -286,26 +282,22 @@ struct PlaylistView: View {
             }
             .zIndex(1)
         }
-        
         .navigationBarHidden(true)
         .task {
-            playlistVM.postPlaylistFavorite(slug: slugPlaylist)
             playlistVM.getPlaylistBySlug(slug: slugPlaylist)
         }
-        
+        .onAppear{
+            mainVM.isTabBarVisible = false
+        }
     }
+    
     private func updateScrollOffset(_ offset: CGFloat) {
         scrollOffset = offset
         
-        // Show navigation bar when scrolled down enough to cover the image
         let shouldShow = offset < -imageHeight + 30
         
         if shouldShow != showTitleInNavBar {
             showTitleInNavBar = shouldShow
         }
     }
-}
-#Preview {
-    MainView()
-    
 }

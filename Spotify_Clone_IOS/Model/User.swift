@@ -11,12 +11,12 @@ import Foundation
 
 struct User: Codable, Identifiable {
     let id: Int
-    let displayName: String
-    let typeProfile: String
+    let displayName: String?
+    let typeProfile: String?
     let artistSlug: String?
-    let image: String
-    let followersCount: Int
-    let isPremium: Bool
+    let image: String?
+    let followersCount: Int?
+    let isPremium: Bool?
     
     enum CodingKeys: String, CodingKey {
         case id, image

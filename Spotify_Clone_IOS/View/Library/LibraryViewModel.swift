@@ -11,6 +11,8 @@ import SwiftUI
 @MainActor final class LibraryViewModel: ObservableObject {
     @Published var playlists: [Playlist] = []
     @Published var artists: [ArtistTrack] = []
+    @Published var playlist = PlaylistDetail.empty
+    @Published var user = UserMy.empty()
     @Published var albums: [Album] = []
     @Published var selectedTab: Int = 0
     @Published var isLoading: Bool = false
@@ -26,6 +28,20 @@ import SwiftUI
         getPlaylists()
         getArtists()
         getAlbums()
+    }
+    func createPlaylist() {
+        isLoading = true
+        
+        Task {
+            do {
+                playlist = try await libraryManager.postMyPlaylist()
+                isLoading = false
+            } catch {
+                handleError(error)
+                isLoading = false
+            }
+        }
+
     }
     
     func getPlaylists() {
@@ -73,6 +89,21 @@ import SwiftUI
         }
     }
     
+    func getUserMe() {
+        isLoading = true
+    
+        Task {
+            do {
+                user = try await libraryManager.getProfileMy()
+                isLoading = false
+                
+            } catch {
+                handleError(error)
+                isLoading = false
+                
+            }
+        }
+    }
     private func handleError(_ error: Error) {
         if let apError = error as? APError {
             switch apError {
