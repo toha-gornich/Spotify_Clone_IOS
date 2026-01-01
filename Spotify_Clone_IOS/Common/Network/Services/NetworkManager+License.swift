@@ -8,10 +8,7 @@ import Foundation
 
 extension NetworkManager: LicenseServiceProtocol {
     func getLicenses() async throws ->[License] {
-        guard let url = URL(string: Constants.API.artistMeLicensesURL) else {
-            print("❌ [getLicenses] Invalid URL")
-            throw APError.invalidURL
-        }
+        let url = LicenseEndpoint.myLicenses.url
         
         let (data, response) = try await URLSession.shared.data(from: url)
         
@@ -29,10 +26,8 @@ extension NetworkManager: LicenseServiceProtocol {
     }
 
     func patchLicenseById(id: String, name: String?, text: String?) async throws -> License {
-        guard let url = URL(string: Constants.API.artistMeLicensesURL + "\(id)/") else {
-            print("❌ patchLicenseById - Invalid URL: \(Constants.API.artistMeLicensesURL + "\(id)/")")
-            throw APError.invalidURL
-        }
+        
+        let url = LicenseEndpoint.byID(id).url
         
         var parameters: [String: Any] = [:]
         
@@ -92,10 +87,7 @@ extension NetworkManager: LicenseServiceProtocol {
     }
     
     func postCreateLicense(name: String, text: String) async throws -> License {
-        guard let url = URL(string: Constants.API.artistMeLicensesURL) else {
-            print("❌ postCreateLicense - Invalid URL: \(Constants.API.artistMeLicensesURL)")
-            throw APError.invalidURL
-        }
+        let url = LicenseEndpoint.myLicenses.url
         
         let parameters: [String: Any] = [
             "name": name,
@@ -150,10 +142,8 @@ extension NetworkManager: LicenseServiceProtocol {
     }
     
     func getLicenseById(id: String) async throws -> License {
-        guard let url = URL(string: Constants.API.artistMeLicensesURL + "\(id)/") else {
-            print("❌ getLicenseById - Invalid URL: \(Constants.API.artistMeLicensesURL + "\(id)/")")
-            throw APError.invalidURL
-        }
+        
+        let url = LicenseEndpoint.getById(id).url
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -192,10 +182,8 @@ extension NetworkManager: LicenseServiceProtocol {
     }
 
     func deleteLicenseById(id: String) async throws {
-        guard let url = URL(string: Constants.API.artistMeLicensesURL + "\(id)/") else {
-            print("❌ deleteLicenseById - Invalid URL: \(Constants.API.artistMeLicensesURL + "\(id)/")")
-            throw APError.invalidURL
-        }
+        
+        let url = LicenseEndpoint.deleteById(id).url
         
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"

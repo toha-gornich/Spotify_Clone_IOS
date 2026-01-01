@@ -6,9 +6,7 @@
 //
 
 import Foundation
-
 extension NetworkManager: MyAlbumsServiceProtocol {
-    
     
     func patchAlbumBySlugMy(
         slug: String,
@@ -18,10 +16,7 @@ extension NetworkManager: MyAlbumsServiceProtocol {
         isPrivate: Bool? = nil,
         imageData: Data? = nil
     ) async throws -> Album {
-        guard let url = URL(string: Constants.API.albumsMyURL + "\(slug)/") else {
-            print("❌ patchAlbumMyBySlug - Invalid URL: \(Constants.API.albumsMyURL + "\(slug)/")")
-            throw APError.invalidURL
-        }
+        let url = MyAlbumEndpoint.update(slug).url
         
         let boundary = "Boundary-\(UUID().uuidString)"
         var request = URLRequest(url: url)
@@ -31,9 +26,9 @@ extension NetworkManager: MyAlbumsServiceProtocol {
         var body = Data()
         
         func addFormField(name: String, value: String) {
-            body.append("--\(boundary)\r\n".data(using: .utf8)!)
-            body.append("Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n".data(using: .utf8)!)
-            body.append("\(value)\r\n".data(using: .utf8)!)
+            if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "\(value)\r\n".data(using: .utf8) { body.append(data) }
         }
         
         if let title = title {
@@ -50,41 +45,51 @@ extension NetworkManager: MyAlbumsServiceProtocol {
         }
         
         if let imageData = imageData {
-            body.append("--\(boundary)\r\n".data(using: .utf8)!)
-            body.append("Content-Disposition: form-data; name=\"image\"; filename=\"album_image.jpg\"\r\n".data(using: .utf8)!)
-            body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+            if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "Content-Disposition: form-data; name=\"image\"; filename=\"album_image.jpg\"\r\n".data(using: .utf8) { body.append(data) }
+            if let data = "Content-Type: image/jpeg\r\n\r\n".data(using: .utf8) { body.append(data) }
             body.append(imageData)
-            body.append("\r\n".data(using: .utf8)!)
+            if let data = "\r\n".data(using: .utf8) { body.append(data) }
         }
         
-        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+        if let data = "--\(boundary)--\r\n".data(using: .utf8) { body.append(data) }
         request.httpBody = body
         
-        let (data, response) = try await URLSession.shared.data(for: request)
-        
-        guard let httpResponse = response as? HTTPURLResponse else {
-            print("❌ patchAlbumMyBySlug - Invalid response type")
-            throw APError.invalidResponse
-        }
-        
-        guard (200...299).contains(httpResponse.statusCode) else {
-            print("❌ patchAlbumMyBySlug - HTTP error \(httpResponse.statusCode)")
-            if let responseString = String(data: data, encoding: .utf8) {
-                print("❌ patchAlbumMyBySlug - Response: \(responseString)")
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ patchAlbumMyBySlug - Invalid response type")
+                throw APError.invalidResponse
             }
-            throw APError.invalidResponse
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ patchAlbumMyBySlug - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ patchAlbumMyBySlug - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let result = try decoder.decode(Album.self, from: data)
+                return result
+            } catch {
+                print("❌ patchAlbumMyBySlug - Failed to decode response: \(error)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ patchAlbumMyBySlug - Raw response: \(responseString)")
+                }
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ patchAlbumMyBySlug - Network error: \(error)")
+            throw error
         }
-        
-        let decoder = JSONDecoder()
-        let result = try decoder.decode(Album.self, from: data)
-        return result
     }
     
     func deleteAlbumsMy(slug: String) async throws {
-        guard let url = URL(string: Constants.API.albumsMyURL + "\(slug)/") else {
-            print("❌ deleteAlbumsMy - Invalid URL: \(Constants.API.albumsMyURL + "\(slug)/")")
-            throw APError.invalidURL
-        }
+        let url = MyAlbumEndpoint.delete(slug).url
         
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
@@ -110,34 +115,41 @@ extension NetworkManager: MyAlbumsServiceProtocol {
             throw error
         }
     }
-
     
     func getAlbumsMy() async throws -> [AlbumMy] {
-        print("getAlbumsMy")
-        guard let url = URL(string: Constants.API.albumsMyURL) else {
-            print("❌ [getAlbumsMy] Invalid URL")
-            throw APError.invalidURL
-        }
-        
-        let (data, response) = try await URLSession.shared.data(from: url)
-        
-        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
-            print("❌ [getAlbumsMy] Response error: \(httpResponse.statusCode)")
-        }
+        let url = MyAlbumEndpoint.list.url
         
         do {
-            let decoder = JSONDecoder()
-            return try decoder.decode(AlbumMyResponse.self, from: data).results
-        } catch {
-            print("❌ [getAlbumsMy] JSON decoding failed: \(error.localizedDescription)")
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("📦 [getAlbumsMy] Raw JSON: \(jsonString)")
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getAlbumsMy - Invalid response type")
+                throw APError.invalidResponse
             }
-            throw APError.invalidData
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ getAlbumsMy - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getAlbumsMy - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                return try decoder.decode(AlbumMyResponse.self, from: data).results
+            } catch {
+                print("❌ getAlbumsMy - Failed to decode response: \(error)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getAlbumsMy - Raw response: \(responseString)")
+                }
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ getAlbumsMy - Network error: \(error)")
+            throw error
         }
     }
-    
-    
     
     func postCreateAlbum(
         title: String,
@@ -146,10 +158,7 @@ extension NetworkManager: MyAlbumsServiceProtocol {
         isPrivate: Bool,
         imageData: Data?
     ) async throws -> AlbumMy {
-        guard let url = URL(string: Constants.API.albumsMyURL) else {
-            print("❌ postCreateAlbum - Invalid URL: \(Constants.API.albumsMyURL)")
-            throw APError.invalidURL
-        }
+        let url = MyAlbumEndpoint.create.url
         
         let boundary = "Boundary-\(UUID().uuidString)"
         var request = URLRequest(url: url)
@@ -164,12 +173,10 @@ extension NetworkManager: MyAlbumsServiceProtocol {
             if let data = "\(value)\r\n".data(using: .utf8) { body.append(data) }
         }
         
-        
         addFormField(name: "title", value: title)
         addFormField(name: "description", value: description)
         addFormField(name: "release_date", value: releaseDate)
         addFormField(name: "is_private", value: isPrivate ? "true" : "false")
-        
         
         if let imageData = imageData {
             if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
@@ -201,7 +208,6 @@ extension NetworkManager: MyAlbumsServiceProtocol {
             do {
                 let decoder = JSONDecoder()
                 let result = try decoder.decode(AlbumMy.self, from: data)
-                
                 return result
             } catch {
                 print("❌ postCreateAlbum - Failed to decode response: \(error)")

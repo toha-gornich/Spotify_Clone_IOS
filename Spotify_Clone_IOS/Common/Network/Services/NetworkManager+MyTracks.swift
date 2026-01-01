@@ -7,19 +7,19 @@
 import Foundation
 
 extension NetworkManager: MyTracksServiceProtocol {
-
     
-
     func getTracksMy() async throws -> [TracksMy] {
-        guard let url = URL(string: Constants.API.tracksMyURL) else {
-            print("❌ getTracksMy - Invalid URL: \(Constants.API.tracksMyURL)")
-            throw APError.invalidURL
-        }
+        let url = MyTrackEndpoint.list.url
         
         do {
             let (data, response) = try await URLSession.shared.data(from: url)
             
-            if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getTracksMy - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
                 print("❌ getTracksMy - HTTP error \(httpResponse.statusCode)")
                 if let responseString = String(data: data, encoding: .utf8) {
                     print("❌ getTracksMy - Response: \(responseString)")
@@ -53,10 +53,7 @@ extension NetworkManager: MyTracksServiceProtocol {
         imageData: Data?,
         audioData: Data?
     ) async throws -> Track {
-        guard let url = URL(string: Constants.API.tracksCreateMyURL) else {
-            print("❌ postCreateTrack - Invalid URL: \(Constants.API.tracksCreateMyURL)")
-            throw APError.invalidURL
-        }
+        let url = MyTrackEndpoint.create.url
         
         let boundary = "Boundary-\(UUID().uuidString)"
         var request = URLRequest(url: url)
@@ -71,7 +68,6 @@ extension NetworkManager: MyTracksServiceProtocol {
             if let data = "\(value)\r\n".data(using: .utf8) { body.append(data) }
         }
         
-        // Додаємо текстові поля
         addFormField(name: "title", value: title)
         addFormField(name: "album", value: String(albumId))
         addFormField(name: "genre", value: String(genreId))
@@ -79,7 +75,6 @@ extension NetworkManager: MyTracksServiceProtocol {
         addFormField(name: "release_date", value: releaseDate)
         addFormField(name: "is_private", value: isPrivate ? "true" : "false")
         
-        // Додаємо зображення (поле "image")
         if let imageData = imageData {
             if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
             if let data = "Content-Disposition: form-data; name=\"image\"; filename=\"track_image.jpg\"\r\n".data(using: .utf8) { body.append(data) }
@@ -88,7 +83,6 @@ extension NetworkManager: MyTracksServiceProtocol {
             if let data = "\r\n".data(using: .utf8) { body.append(data) }
         }
         
-        // Додаємо аудіо файл (поле "file")
         if let audioData = audioData {
             if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
             if let data = "Content-Disposition: form-data; name=\"file\"; filename=\"track_audio.mp3\"\r\n".data(using: .utf8) { body.append(data) }
@@ -134,15 +128,17 @@ extension NetworkManager: MyTracksServiceProtocol {
     }
     
     func getTrackMyBySlug(slug: String) async throws -> TracksMyBySlug {
-        guard let url = URL(string: Constants.API.tracksMyURL + "\(slug)/") else {
-            print("❌ getTrackMyBySlug - Invalid URL: \(Constants.API.tracksMyURL + "\(slug)/")")
-            throw APError.invalidURL
-        }
+        let url = MyTrackEndpoint.byID(slug).url
         
         do {
             let (data, response) = try await URLSession.shared.data(from: url)
             
-            if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getTrackMyBySlug - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
                 print("❌ getTrackMyBySlug - HTTP error \(httpResponse.statusCode)")
                 if let responseString = String(data: data, encoding: .utf8) {
                     print("❌ getTrackMyBySlug - Response: \(responseString)")
@@ -177,10 +173,7 @@ extension NetworkManager: MyTracksServiceProtocol {
         imageData: Data? = nil,
         audioData: Data? = nil
     ) async throws -> TracksMyBySlug {
-        guard let url = URL(string: Constants.API.tracksMyURL + "\(slug)/") else {
-            print("❌ patchTrackMyBySlug - Invalid URL: \(Constants.API.tracksMyURL + "\(slug)/")")
-            throw APError.invalidURL
-        }
+        let url = MyTrackEndpoint.update(slug).url
         
         let boundary = "Boundary-\(UUID().uuidString)"
         var request = URLRequest(url: url)
@@ -194,7 +187,6 @@ extension NetworkManager: MyTracksServiceProtocol {
             if let data = "Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n".data(using: .utf8) { body.append(data) }
             if let data = "\(value)\r\n".data(using: .utf8) { body.append(data) }
         }
-        
         
         if let title = title {
             addFormField(name: "title", value: title)
@@ -215,7 +207,6 @@ extension NetworkManager: MyTracksServiceProtocol {
             addFormField(name: "release_date", value: releaseDate)
         }
         
-        // Image
         if let imageData = imageData {
             if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
             if let data = "Content-Disposition: form-data; name=\"image\"; filename=\"track_image.jpg\"\r\n".data(using: .utf8) { body.append(data) }
@@ -224,7 +215,6 @@ extension NetworkManager: MyTracksServiceProtocol {
             if let data = "\r\n".data(using: .utf8) { body.append(data) }
         }
         
-        // File (audio)
         if let audioData = audioData {
             if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
             if let data = "Content-Disposition: form-data; name=\"file\"; filename=\"track.mp3\"\r\n".data(using: .utf8) { body.append(data) }
@@ -270,10 +260,7 @@ extension NetworkManager: MyTracksServiceProtocol {
     }
     
     func patchTracksMy(slug: String, isPrivate: Bool, retryCount: Int = 0) async throws {
-        guard let url = URL(string: Constants.API.tracksMyURL + "\(slug)/") else {
-            print("❌ patchTracksMy - Invalid URL: \(Constants.API.tracksMyURL + "\(slug)/")")
-            throw APError.invalidURL
-        }
+        let url = MyTrackEndpoint.update(slug).url
         
         var request = URLRequest(url: url)
         request.httpMethod = "PATCH"
@@ -295,7 +282,7 @@ extension NetworkManager: MyTracksServiceProtocol {
                 if let responseString = String(data: data, encoding: .utf8),
                    responseString.contains("database is locked") {
                     print("⏳ patchTracksMy - Database locked, retrying in 1 second... (attempt \(retryCount + 1)/3)")
-                    try await Task.sleep(nanoseconds: 1_000_000_000) // 1 секунда
+                    try await Task.sleep(nanoseconds: 1_000_000_000)
                     return try await patchTracksMy(slug: slug, isPrivate: isPrivate, retryCount: retryCount + 1)
                 }
             }
@@ -308,7 +295,6 @@ extension NetworkManager: MyTracksServiceProtocol {
                 throw APError.invalidResponse
             }
             
-            
         } catch {
             print("❌ patchTracksMy - Network error: \(error)")
             throw error
@@ -316,10 +302,7 @@ extension NetworkManager: MyTracksServiceProtocol {
     }
 
     func deleteTracksMy(slug: String) async throws {
-        guard let url = URL(string: Constants.API.tracksMyURL + "\(slug)/") else {
-            print("❌ deleteTracksMy - Invalid URL: \(Constants.API.tracksMyURL + "\(slug)/")")
-            throw APError.invalidURL
-        }
+        let url = MyTrackEndpoint.delete(slug).url
         
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"

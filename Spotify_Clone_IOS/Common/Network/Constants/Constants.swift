@@ -232,6 +232,8 @@ enum LicenseEndpoint {
     case list
     case myLicenses
     case byID(String)
+    case getById(String)
+    case deleteById(String)
     
     var path: String {
         switch self {
@@ -241,6 +243,8 @@ enum LicenseEndpoint {
             return "artists/me/license/"
         case .byID(let id):
             return "licenses/\(id)/"
+        case .getById(let id), .deleteById(let id):
+            return "artists/me/license/\(id)/"
         }
     }
     
