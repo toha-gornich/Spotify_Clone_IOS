@@ -365,8 +365,10 @@ enum SearchEndpoint {
 
 // MARK: - Track Endpoints
 enum TrackEndpoint {
-    case list
+    case tracks
     case liked
+    case likeTrack(String)
+    case albumsFavorite
     case my
     case createMy
     case bySlug(String)
@@ -379,10 +381,14 @@ enum TrackEndpoint {
     
     var path: String {
         switch self {
-        case .list:
+        case .tracks:
             return "tracks/"
         case .liked:
             return "tracks/like/"
+        case .likeTrack(let slug):
+            return "tracks/\(slug)/like/"
+        case .albumsFavorite:
+            return "albums/favorite/"
         case .my, .createMy:
             return "tracks/my/"
         case .bySlug(let slug):
@@ -412,6 +418,8 @@ enum UserEndpoint {
     case byID(String)
     case updateProfile
     case search(String)
+    case followers(String)
+    case following(String)
     
     var path: String {
         switch self {
@@ -423,6 +431,10 @@ enum UserEndpoint {
             return "users/\(id)/"
         case .search(let query):
             return "users/profiles/?search=\(query)"
+        case .followers(let userId):
+            return "users/\(userId)/followers/"
+        case .following(let userId):
+            return "users/\(userId)/following/"
         }
     }
     

@@ -7,128 +7,219 @@
 import Foundation
 
 extension NetworkManager: TrackServiceProtocol {
-
     
-    func getTracks() async throws ->[Track] {
-        print("getTracks")
-        guard let url = URL(string: Constants.API.tracksURL) else {
-            throw APError.invalidURL
+    func getTracks() async throws -> [Track] {
+        let url = TrackEndpoint.tracks.url
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getTracks - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ getTracks - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getTracks - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                return try decoder.decode(TracksResponse.self, from: data).results
+            } catch {
+                print("❌ getTracks - Failed to decode response: \(error)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getTracks - Raw response: \(responseString)")
+                }
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ getTracks - Network error: \(error)")
+            throw error
         }
-        
-        let (data, _) = try await URLSession.shared.data(from: url)
-        
-        do{
-            let decoder = JSONDecoder()
-            return try decoder.decode(TracksResponse.self, from: data).results
-        } catch{
-            throw APError.invalidData
-        }
-        
-        
     }
 
-    func getTrackBySlug(slug:String) async throws -> TrackDetail {
-        print("getTrackBySlug")
-        guard let url = URL(string: Constants.API.trackBySlugURL + "\(slug)/") else {
-            throw APError.invalidURL
-        }
+    func getTrackBySlug(slug: String) async throws -> TrackDetail {
+        let url = TrackEndpoint.bySlug(slug).url
         
-        let (data, _) = try await URLSession.shared.data(from: url)
-        
-        do{
-            let decoder = JSONDecoder()
-            return try decoder.decode(TrackDetail.self, from: data)
-        } catch{
-            throw APError.invalidData
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getTrackBySlug - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ getTrackBySlug - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getTrackBySlug - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                return try decoder.decode(TrackDetail.self, from: data)
+            } catch {
+                print("❌ getTrackBySlug - Failed to decode response: \(error)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getTrackBySlug - Raw response: \(responseString)")
+                }
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ getTrackBySlug - Network error: \(error)")
+            throw error
         }
-         
     }
     
     func getTracksBySlugArtist(slug: String) async throws -> [Track] {
-        print("getTracksBySlugArtist")
-       let fullURL = Constants.API.tracksBySlugArtistURL + "\(slug)"
-       
-       guard let url = URL(string: fullURL) else {
-           throw APError.invalidURL
-       }
-       
-       do {
-           let (data, _) = try await URLSession.shared.data(from: url)
-           let decoder = JSONDecoder()
-           let tracks = try decoder.decode(TracksResponse.self, from: data).results
-           return tracks
-       } catch {
-           throw APError.invalidData
-       }
+        let url = TrackEndpoint.byArtist(slug).url
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getTracksBySlugArtist - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ getTracksBySlugArtist - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getTracksBySlugArtist - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                return try decoder.decode(TracksResponse.self, from: data).results
+            } catch {
+                print("❌ getTracksBySlugArtist - Failed to decode response: \(error)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getTracksBySlugArtist - Raw response: \(responseString)")
+                }
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ getTracksBySlugArtist - Network error: \(error)")
+            throw error
+        }
     }
     
     func getTracksBySlugGenre(slug: String) async throws -> [Track] {
-        print("getTracksBySlugGenre")
-       let fullURL = Constants.API.tracksBySlugGenreURL + "\(slug)"
-       
-       guard let url = URL(string: fullURL) else {
-           throw APError.invalidURL
-       }
-       
-       do {
-           let (data, _) = try await URLSession.shared.data(from: url)
-           let decoder = JSONDecoder()
-           let tracks = try decoder.decode(TracksResponse.self, from: data).results
-           return tracks
-       } catch {
-           throw APError.invalidData
-       }
+        let url = TrackEndpoint.byGenre(slug).url
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getTracksBySlugGenre - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ getTracksBySlugGenre - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getTracksBySlugGenre - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                return try decoder.decode(TracksResponse.self, from: data).results
+            } catch {
+                print("❌ getTracksBySlugGenre - Failed to decode response: \(error)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getTracksBySlugGenre - Raw response: \(responseString)")
+                }
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ getTracksBySlugGenre - Network error: \(error)")
+            throw error
+        }
     }
     
     func getTracksBySlugAlbum(slug: String) async throws -> [Track] {
-        print("getTracksBySlugAlbum")
+        let url = TrackEndpoint.byAlbum(slug).url
         
-        guard let url = URL(string: Constants.API.tracksBySlugAlbumURL + "\(slug)") else {
-            throw APError.invalidURL
-        }
-         
-        
-        let (data, _) = try await URLSession.shared.data(from: url)
-        
-        do{
-            let decoder = JSONDecoder()
-            return try decoder.decode(TracksResponse.self, from: data).results
-        } catch{
-            throw APError.invalidData
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getTracksBySlugAlbum - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ getTracksBySlugAlbum - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getTracksBySlugAlbum - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                return try decoder.decode(TracksResponse.self, from: data).results
+            } catch {
+                print("❌ getTracksBySlugAlbum - Failed to decode response: \(error)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getTracksBySlugAlbum - Raw response: \(responseString)")
+                }
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ getTracksBySlugAlbum - Network error: \(error)")
+            throw error
         }
     }
     
     func getTracksLiked() async throws -> [Track] {
-        guard let url = URL(string: Constants.API.albumsFavoriteURL) else {
-            print("❌ [getTracksLiked] Invalid URL")
-            throw APError.invalidURL
-        }
-        
-        let (data, response) = try await URLSession.shared.data(from: url)
-        
-        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
-            print("❌ [getTracksLiked] Response error: \(httpResponse.statusCode)")
-        }
+        let url = TrackEndpoint.liked.url
         
         do {
-            let decoder = JSONDecoder()
-            return try decoder.decode(TracksResponse.self, from: data).results
-        } catch {
-            print("❌ [getTracksLiked] JSON decoding failed: \(error.localizedDescription)")
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("📦 [getTracksLiked] Raw JSON: \(jsonString)")
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getTracksLiked - Invalid response type")
+                throw APError.invalidResponse
             }
-            throw APError.invalidData
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ getTracksLiked - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getTracksLiked - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                return try decoder.decode(TracksResponse.self, from: data).results
+            } catch {
+                print("❌ getTracksLiked - Failed to decode response: \(error)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getTracksLiked - Raw response: \(responseString)")
+                }
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ getTracksLiked - Network error: \(error)")
+            throw error
         }
     }
     
     func postLikeTrack(slug: String) async throws {
-        let urlString = "\(Constants.API.tracksURL)" + "\(slug)/like/"
-        
-        guard let url = URL(string: urlString) else {
-            print("❌ postLikeTrack - Invalid URL: \(urlString)")
-            throw FavoriteError.invalidURL
-        }
+        let url = TrackEndpoint.like(slug).url
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -142,7 +233,7 @@ extension NetworkManager: TrackServiceProtocol {
             }
             
             switch httpResponse.statusCode {
-            case 200:
+            case 200...299:
                 return
                 
             case 400, 409:
@@ -166,10 +257,7 @@ extension NetworkManager: TrackServiceProtocol {
     }
     
     func deleteTrackLike(slug: String) async throws {
-        guard let url = URL(string: Constants.API.tracksURL + "\(slug)/like/") else {
-            print("❌ deleteTrackLike - Invalid URL: \(Constants.API.tracksURL + "\(slug)/like/")")
-            throw APError.invalidURL
-        }
+        let url = TrackEndpoint.unlike(slug).url
         
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
@@ -184,7 +272,7 @@ extension NetworkManager: TrackServiceProtocol {
             }
             
             guard (200...299).contains(httpResponse.statusCode) else {
-                print("❌ deleteAlbumDeleteTrackLikesFavorite - HTTP error \(httpResponse.statusCode)")
+                print("❌ deleteTrackLike - HTTP error \(httpResponse.statusCode)")
                 if let responseString = String(data: data, encoding: .utf8) {
                     print("❌ deleteTrackLike - Response: \(responseString)")
                 }

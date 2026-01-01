@@ -15,7 +15,12 @@ extension NetworkManager: UserServiceProtocol {
         do {
             let (data, response) = try await URLSession.shared.data(from: url)
             
-            if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getUserMe - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
                 print("❌ getUserMe - HTTP error \(httpResponse.statusCode)")
                 if let responseString = String(data: data, encoding: .utf8) {
                     print("❌ getUserMe - Response: \(responseString)")
@@ -40,17 +45,18 @@ extension NetworkManager: UserServiceProtocol {
     }
     
     func getUser(userId: String) async throws -> UserMe {
-        
-        print("user user" + userId)
-        guard let url = URL(string: Constants.API.regUserURL + "\(userId)/") else {
-            print("❌ getUser - Invalid URL: \(Constants.API.userMeURL)")
-            throw APError.invalidURL
-        }
+        print("user user: \(userId)")
+        let url = UserEndpoint.byID(userId).url
         
         do {
             let (data, response) = try await URLSession.shared.data(from: url)
             
-            if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getUser - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
                 print("❌ getUser - HTTP error \(httpResponse.statusCode)")
                 if let responseString = String(data: data, encoding: .utf8) {
                     print("❌ getUser - Response: \(responseString)")
@@ -75,18 +81,20 @@ extension NetworkManager: UserServiceProtocol {
     }
     
     func getProfileMy() async throws -> UserMy {
-        guard let url = URL(string: Constants.API.userMeURL) else {
-            print("❌ getUserMe - Invalid URL: \(Constants.API.profilesMyURL)")
-            throw APError.invalidURL
-        }
+        let url = UserEndpoint.profileMe.url
         
         do {
             let (data, response) = try await URLSession.shared.data(from: url)
             
-            if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
-                print("❌ getUserMe - HTTP error \(httpResponse.statusCode)")
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getProfileMy - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ getProfileMy - HTTP error \(httpResponse.statusCode)")
                 if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ getUserMe - Response: \(responseString)")
+                    print("❌ getProfileMy - Response: \(responseString)")
                 }
                 throw APError.invalidResponse
             }
@@ -95,23 +103,20 @@ extension NetworkManager: UserServiceProtocol {
                 let decoder = JSONDecoder()
                 return try decoder.decode(UserMy.self, from: data)
             } catch {
-                print("❌ getUserMe - Failed to decode response: \(error)")
+                print("❌ getProfileMy - Failed to decode response: \(error)")
                 if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ getUserMe - Raw response: \(responseString)")
+                    print("❌ getProfileMy - Raw response: \(responseString)")
                 }
                 throw APError.invalidData
             }
         } catch {
-            print("❌ getUserMe - Network error: \(error)")
+            print("❌ getProfileMy - Network error: \(error)")
             throw error
         }
     }
 
     func putUserMe(user: UpdateUserMe, imageData: Data? = nil) async throws -> UserMy {
-        guard let url = URL(string: Constants.API.profilesMyURL) else {
-            print("❌ putUserMe - Invalid URL: \(Constants.API.profilesMyURL)")
-            throw APError.invalidURL
-        }
+        let url = UserEndpoint.updateProfile.url
         
         let boundary = "Boundary-\(UUID().uuidString)"
         var request = URLRequest(url: url)
@@ -175,10 +180,7 @@ extension NetworkManager: UserServiceProtocol {
     }
 
     func deleteUserMe(password: String) async throws {
-        guard let url = URL(string: Constants.API.userMeURL) else {
-            print("❌ deleteUserMe - Invalid URL: \(Constants.API.userMeURL)")
-            throw APError.invalidURL
-        }
+        let url = UserEndpoint.me.url
         
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
@@ -211,16 +213,17 @@ extension NetworkManager: UserServiceProtocol {
     }
     
     func getFollowers(userId: String) async throws -> [User] {
-        
-        guard let url = URL(string: "\(Constants.API.userURL)\(userId)/followers/") else {
-            print("❌ getFollowers - Invalid URL: \(Constants.API.userURL)\(userId)/followers")
-            throw APError.invalidURL
-        }
+        let url = UserEndpoint.followers(userId).url
         
         do {
             let (data, response) = try await URLSession.shared.data(from: url)
             
-            if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getFollowers - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
                 print("❌ getFollowers - HTTP error \(httpResponse.statusCode)")
                 if let responseString = String(data: data, encoding: .utf8) {
                     print("❌ getFollowers - Response: \(responseString)")
@@ -245,15 +248,17 @@ extension NetworkManager: UserServiceProtocol {
     }
 
     func getFollowing(userId: String) async throws -> [User] {
-        guard let url = URL(string: "\(Constants.API.userURL)\(userId)/following/") else {
-            print("❌ getFollowing - Invalid URL: \(Constants.API.userURL)\(userId)/following/")
-            throw APError.invalidURL
-        }
+        let url = UserEndpoint.following(userId).url
         
         do {
             let (data, response) = try await URLSession.shared.data(from: url)
             
-            if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getFollowing - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
                 print("❌ getFollowing - HTTP error \(httpResponse.statusCode)")
                 if let responseString = String(data: data, encoding: .utf8) {
                     print("❌ getFollowing - Response: \(responseString)")
