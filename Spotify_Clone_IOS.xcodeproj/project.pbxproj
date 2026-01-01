@@ -6,6 +6,26 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		622CFC682EC27FF200BB19F4 /* TrackViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC662EC27FF200BB19F4 /* TrackViewModelTests.swift */; };
+		622CFC6C2EC27FFB00BB19F4 /* Spotify_Clone_IOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC692EC27FFB00BB19F4 /* Spotify_Clone_IOSUITests.swift */; };
+		622CFC6D2EC27FFB00BB19F4 /* Spotify_Clone_IOSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC6A2EC27FFB00BB19F4 /* Spotify_Clone_IOSUITestsLaunchTests.swift */; };
+		622CFC7F2EC2849800BB19F4 /* TrackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC7E2EC2849800BB19F4 /* TrackTests.swift */; };
+		622CFC812EC2849F00BB19F4 /* TrackDetailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC802EC2849F00BB19F4 /* TrackDetailTests.swift */; };
+		622CFC832EC284A500BB19F4 /* AlbumTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC822EC284A500BB19F4 /* AlbumTests.swift */; };
+		622CFC852EC284AA00BB19F4 /* AlbumMyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC842EC284AA00BB19F4 /* AlbumMyTests.swift */; };
+		622CFC872EC284B000BB19F4 /* ArtistTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC862EC284B000BB19F4 /* ArtistTests.swift */; };
+		622CFC892EC284B500BB19F4 /* UserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC882EC284B500BB19F4 /* UserTests.swift */; };
+		622CFC8B2EC284BA00BB19F4 /* GenreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC8A2EC284BA00BB19F4 /* GenreTests.swift */; };
+		622CFC8D2EC284BE00BB19F4 /* PlaylistTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC8C2EC284BE00BB19F4 /* PlaylistTests.swift */; };
+		622CFC8F2EC284C300BB19F4 /* PlaylistDetailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC8E2EC284C300BB19F4 /* PlaylistDetailTests.swift */; };
+		622CFC912EC284C700BB19F4 /* LicenseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC902EC284C700BB19F4 /* LicenseTests.swift */; };
+		622CFC932EC284CC00BB19F4 /* AuthModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC922EC284CC00BB19F4 /* AuthModelsTests.swift */; };
+		622CFC952EC284D100BB19F4 /* ResponseModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC942EC284D100BB19F4 /* ResponseModelsTests.swift */; };
+		622CFC972EC284D500BB19F4 /* FavoriteModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC962EC284D500BB19F4 /* FavoriteModelsTests.swift */; };
+		622CFC992EC7659600BB19F4 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC982EC7659600BB19F4 /* Test.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		627246C32DDB84AE000C8562 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,6 +44,23 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		622CFC662EC27FF200BB19F4 /* TrackViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackViewModelTests.swift; sourceTree = "<group>"; };
+		622CFC692EC27FFB00BB19F4 /* Spotify_Clone_IOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spotify_Clone_IOSUITests.swift; sourceTree = "<group>"; };
+		622CFC6A2EC27FFB00BB19F4 /* Spotify_Clone_IOSUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spotify_Clone_IOSUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		622CFC7E2EC2849800BB19F4 /* TrackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTests.swift; sourceTree = "<group>"; };
+		622CFC802EC2849F00BB19F4 /* TrackDetailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackDetailTests.swift; sourceTree = "<group>"; };
+		622CFC822EC284A500BB19F4 /* AlbumTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumTests.swift; sourceTree = "<group>"; };
+		622CFC842EC284AA00BB19F4 /* AlbumMyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumMyTests.swift; sourceTree = "<group>"; };
+		622CFC862EC284B000BB19F4 /* ArtistTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistTests.swift; sourceTree = "<group>"; };
+		622CFC882EC284B500BB19F4 /* UserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTests.swift; sourceTree = "<group>"; };
+		622CFC8A2EC284BA00BB19F4 /* GenreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreTests.swift; sourceTree = "<group>"; };
+		622CFC8C2EC284BE00BB19F4 /* PlaylistTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistTests.swift; sourceTree = "<group>"; };
+		622CFC8E2EC284C300BB19F4 /* PlaylistDetailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistDetailTests.swift; sourceTree = "<group>"; };
+		622CFC902EC284C700BB19F4 /* LicenseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseTests.swift; sourceTree = "<group>"; };
+		622CFC922EC284CC00BB19F4 /* AuthModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthModelsTests.swift; sourceTree = "<group>"; };
+		622CFC942EC284D100BB19F4 /* ResponseModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseModelsTests.swift; sourceTree = "<group>"; };
+		622CFC962EC284D500BB19F4 /* FavoriteModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteModelsTests.swift; sourceTree = "<group>"; };
+		622CFC982EC7659600BB19F4 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		627246B22DDB84AD000C8562 /* Spotify_Clone_IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spotify_Clone_IOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		627246C22DDB84AE000C8562 /* Spotify_Clone_IOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Spotify_Clone_IOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		627246CC2DDB84AE000C8562 /* Spotify_Clone_IOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Spotify_Clone_IOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -62,9 +99,90 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		622CFC672EC27FF200BB19F4 /* Spotify_Clone_IOSTests */ = {
+			isa = PBXGroup;
+			children = (
+				622CFC6E2EC2833600BB19F4 /* Tests */,
+				622CFC662EC27FF200BB19F4 /* TrackViewModelTests.swift */,
+			);
+			path = Spotify_Clone_IOSTests;
+			sourceTree = "<group>";
+		};
+		622CFC6B2EC27FFB00BB19F4 /* Spotify_Clone_IOSUITests */ = {
+			isa = PBXGroup;
+			children = (
+				622CFC692EC27FFB00BB19F4 /* Spotify_Clone_IOSUITests.swift */,
+				622CFC6A2EC27FFB00BB19F4 /* Spotify_Clone_IOSUITestsLaunchTests.swift */,
+			);
+			path = Spotify_Clone_IOSUITests;
+			sourceTree = "<group>";
+		};
+		622CFC6E2EC2833600BB19F4 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				622CFC732EC2836A00BB19F4 /* Mocks */,
+				622CFC722EC2836300BB19F4 /* ViewModels */,
+				622CFC712EC2835C00BB19F4 /* Services */,
+				622CFC702EC2835100BB19F4 /* Network */,
+				622CFC6F2EC2834700BB19F4 /* Models */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		622CFC6F2EC2834700BB19F4 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				622CFC882EC284B500BB19F4 /* UserTests.swift */,
+				622CFC862EC284B000BB19F4 /* ArtistTests.swift */,
+				622CFC842EC284AA00BB19F4 /* AlbumMyTests.swift */,
+				622CFC822EC284A500BB19F4 /* AlbumTests.swift */,
+				622CFC802EC2849F00BB19F4 /* TrackDetailTests.swift */,
+				622CFC962EC284D500BB19F4 /* FavoriteModelsTests.swift */,
+				622CFC942EC284D100BB19F4 /* ResponseModelsTests.swift */,
+				622CFC922EC284CC00BB19F4 /* AuthModelsTests.swift */,
+				622CFC902EC284C700BB19F4 /* LicenseTests.swift */,
+				622CFC8E2EC284C300BB19F4 /* PlaylistDetailTests.swift */,
+				622CFC8C2EC284BE00BB19F4 /* PlaylistTests.swift */,
+				622CFC8A2EC284BA00BB19F4 /* GenreTests.swift */,
+				622CFC7E2EC2849800BB19F4 /* TrackTests.swift */,
+				622CFC982EC7659600BB19F4 /* Test.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		622CFC702EC2835100BB19F4 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		622CFC712EC2835C00BB19F4 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		622CFC722EC2836300BB19F4 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		622CFC732EC2836A00BB19F4 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
 		627246A92DDB84AD000C8562 = {
 			isa = PBXGroup;
 			children = (
+				622CFC6B2EC27FFB00BB19F4 /* Spotify_Clone_IOSUITests */,
+				622CFC672EC27FF200BB19F4 /* Spotify_Clone_IOSTests */,
 				627246B42DDB84AD000C8562 /* Spotify_Clone_IOS */,
 				627246B32DDB84AD000C8562 /* Products */,
 			);
@@ -225,6 +343,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				622CFC812EC2849F00BB19F4 /* TrackDetailTests.swift in Sources */,
+				622CFC932EC284CC00BB19F4 /* AuthModelsTests.swift in Sources */,
+				622CFC992EC7659600BB19F4 /* Test.swift in Sources */,
+				622CFC8D2EC284BE00BB19F4 /* PlaylistTests.swift in Sources */,
+				622CFC682EC27FF200BB19F4 /* TrackViewModelTests.swift in Sources */,
+				622CFC872EC284B000BB19F4 /* ArtistTests.swift in Sources */,
+				622CFC952EC284D100BB19F4 /* ResponseModelsTests.swift in Sources */,
+				622CFC912EC284C700BB19F4 /* LicenseTests.swift in Sources */,
+				622CFC892EC284B500BB19F4 /* UserTests.swift in Sources */,
+				622CFC7F2EC2849800BB19F4 /* TrackTests.swift in Sources */,
+				622CFC8F2EC284C300BB19F4 /* PlaylistDetailTests.swift in Sources */,
+				622CFC852EC284AA00BB19F4 /* AlbumMyTests.swift in Sources */,
+				622CFC832EC284A500BB19F4 /* AlbumTests.swift in Sources */,
+				622CFC8B2EC284BA00BB19F4 /* GenreTests.swift in Sources */,
+				622CFC972EC284D500BB19F4 /* FavoriteModelsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,6 +365,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				622CFC6C2EC27FFB00BB19F4 /* Spotify_Clone_IOSUITests.swift in Sources */,
+				622CFC6D2EC27FFB00BB19F4 /* Spotify_Clone_IOSUITestsLaunchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

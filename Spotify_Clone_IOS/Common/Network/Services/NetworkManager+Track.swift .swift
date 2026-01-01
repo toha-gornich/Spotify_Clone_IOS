@@ -184,7 +184,7 @@ extension NetworkManager: TrackServiceProtocol {
             }
             
             guard (200...299).contains(httpResponse.statusCode) else {
-                print("❌ deleteAlbumdeleteTrackLikesFavorite - HTTP error \(httpResponse.statusCode)")
+                print("❌ deleteAlbumDeleteTrackLikesFavorite - HTTP error \(httpResponse.statusCode)")
                 if let responseString = String(data: data, encoding: .utf8) {
                     print("❌ deleteTrackLike - Response: \(responseString)")
                 }

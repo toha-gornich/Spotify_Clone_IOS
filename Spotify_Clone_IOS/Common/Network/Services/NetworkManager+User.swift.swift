@@ -10,10 +10,7 @@ import Foundation
 
 extension NetworkManager: UserServiceProtocol {
     func getUserMe() async throws -> UserMe {
-        guard let url = URL(string: Constants.API.userMeURL) else {
-            print("❌ getUserMe - Invalid URL: \(Constants.API.userMeURL)")
-            throw APError.invalidURL
-        }
+        let url = UserEndpoint.me.url
         
         do {
             let (data, response) = try await URLSession.shared.data(from: url)
