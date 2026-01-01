@@ -9,9 +9,9 @@ import Foundation
 
 
 struct Constants {
-
+    
     struct API{
-//        static let baseURL = "http://192.168.0.159:8080/api/v1/"
+        //        static let baseURL = "http://192.168.0.159:8080/api/v1/"
         static let baseURL = "https://placentary-entirely-dulcie.ngrok-free.dev/api/v1/"
         
         static let createTokenURL = baseURL + "auth/jwt/create/"
@@ -61,7 +61,7 @@ struct Constants {
         static let searchProfilesURL = baseURL + "users/profiles/?search="
         
     }
-
+    
 }
 
 // MARK: - Configuration
@@ -299,11 +299,15 @@ enum PlaylistEndpoint {
     case my
     case create
     case favorite
+    case addFavorite(String)
+    case removeFavorite(String)
+    case addTrack(String, String)
     case byGenre(String)
     case byUser(Int)
     case bySlug(String)
     case search(String)
     case update(String)
+    case deleteTrack(String, String)
     case delete(String)
     
     var path: String {
@@ -312,8 +316,14 @@ enum PlaylistEndpoint {
             return "playlists/"
         case .my, .create:
             return "playlists/my/"
+        case .update(let slug):
+            return "playlists/my/\(slug)"
         case .favorite:
             return "playlists/favorite/"
+        case .addFavorite(let slug), .removeFavorite(let slug):
+            return "playlists/\(slug)/favorite/"
+        case .addTrack(let slug, let trackSlug):
+            return "playlists\(slug)/add/tracks/\(trackSlug)/"
         case .byGenre(let slug):
             return "playlists/?genre__slug=\(slug)"
         case .byUser(let id):
@@ -322,8 +332,10 @@ enum PlaylistEndpoint {
             return "playlists/\(slug)/"
         case .search(let query):
             return "playlists/?search=\(query)"
-        case .update(let id), .delete(let id):
+        case .delete(let id):
             return "playlists/\(id)/"
+        case .deleteTrack(let slug, let trackSlug):
+            return "playlists\(slug)/add/tracks/\(trackSlug)/"
         }
     }
     
