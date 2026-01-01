@@ -9,36 +9,42 @@ import Foundation
 extension NetworkManager: AlbumServiceProtocol {
 
     func getAlbumsFavorite() async throws -> [FavoriteAlbumItem] {
-        guard let url = URL(string: Constants.API.albumsFavoriteURL) else {
-            print("❌ [getAlbumsFavorite] Invalid URL")
-            throw APError.invalidURL
-        }
-        
-        let (data, response) = try await URLSession.shared.data(from: url)
-        
-        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
-            print("❌ [getAlbumsFavorite] Response error: \(httpResponse.statusCode)")
-        }
+        let url = AlbumEndpoint.favorite.url
         
         do {
-            let decoder = JSONDecoder()
-            return try decoder.decode(AlbumFavoriteResponse.self, from: data).results
-        } catch {
-            print("❌ [getAlbumsFavorite] JSON decoding failed: \(error.localizedDescription)")
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("📦 [getAlbumsFavorite] Raw JSON: \(jsonString)")
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getAlbumsFavorite - Invalid response type")
+                throw APError.invalidResponse
             }
-            throw APError.invalidData
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ getAlbumsFavorite - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getAlbumsFavorite - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                return try decoder.decode(AlbumFavoriteResponse.self, from: data).results
+            } catch {
+                print("❌ getAlbumsFavorite - Failed to decode response: \(error)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getAlbumsFavorite - Raw response: \(responseString)")
+                }
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ getAlbumsFavorite - Network error: \(error)")
+            throw error
         }
     }
     
     func postAddFavoriteAlbum(slug: String) async throws {
-        let urlString = Constants.API.albumsURL + "\(slug)/favorite/"
-        
-        guard let url = URL(string: urlString) else {
-            print("❌ postAddFavoriteAlbum - Invalid URL: \(urlString)")
-            throw FavoriteError.invalidURL
-        }
+        let url = AlbumEndpoint.addFavorite(slug).url
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -53,7 +59,6 @@ extension NetworkManager: AlbumServiceProtocol {
             
             switch httpResponse.statusCode {
             case 200...299:
-                
                 return
                 
             case 400, 409:
@@ -77,10 +82,7 @@ extension NetworkManager: AlbumServiceProtocol {
     }
     
     func deleteAlbumsFavorite(slug: String) async throws {
-        guard let url = URL(string: Constants.API.albumsURL + "\(slug)/favorite/") else {
-            print("❌ deleteAlbumsFavorite - Invalid URL: \(Constants.API.albumsURL + "\(slug)/favorite/")")
-            throw APError.invalidURL
-        }
+        let url = AlbumEndpoint.removeFavorite(slug).url
         
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
@@ -108,78 +110,107 @@ extension NetworkManager: AlbumServiceProtocol {
     }
     
     func getAlbums() async throws -> [Album] {
-        print("getAlbums")
-        guard let url = URL(string: Constants.API.albumsURL) else {
-            print("❌ [getAlbums] Invalid URL")
-            throw APError.invalidURL
-        }
-        
-        let (data, response) = try await URLSession.shared.data(from: url)
-        
-        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
-            print("❌ [getAlbums] Response error: \(httpResponse.statusCode)")
-        }
+        let url = AlbumEndpoint.list.url
         
         do {
-            let decoder = JSONDecoder()
-            return try decoder.decode(AlbumResponse.self, from: data).results
-        } catch {
-            print("❌ [getAlbums] JSON decoding failed: \(error.localizedDescription)")
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("📦 [getAlbums] Raw JSON: \(jsonString)")
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getAlbums - Invalid response type")
+                throw APError.invalidResponse
             }
-            throw APError.invalidData
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ getAlbums - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getAlbums - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                return try decoder.decode(AlbumResponse.self, from: data).results
+            } catch {
+                print("❌ getAlbums - Failed to decode response: \(error)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getAlbums - Raw response: \(responseString)")
+                }
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ getAlbums - Network error: \(error)")
+            throw error
         }
     }
 
     func getAlbumBySlug(slug: String) async throws -> Album {
-        print("getAlbumBySlug")
-        guard let url = URL(string: Constants.API.albumsBySlugURL + "\(slug)") else {
-            print("❌ [getAlbumBySlug] Invalid URL")
-            throw APError.invalidURL
-        }
-        
-        let (data, response) = try await URLSession.shared.data(from: url)
-        
-        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
-            print("❌ [getAlbumBySlug] Response error: \(httpResponse.statusCode)")
-        }
+        let url = AlbumEndpoint.bySlug(slug).url
         
         do {
-            let decoder = JSONDecoder()
-            return try decoder.decode(Album.self, from: data)
-        } catch {
-            print("❌ [getAlbumBySlug] JSON decoding failed: \(error.localizedDescription)")
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("📦 [getAlbumBySlug] Raw JSON: \(jsonString)")
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getAlbumBySlug - Invalid response type")
+                throw APError.invalidResponse
             }
-            throw APError.invalidData
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ getAlbumBySlug - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getAlbumBySlug - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                return try decoder.decode(Album.self, from: data)
+            } catch {
+                print("❌ getAlbumBySlug - Failed to decode response: \(error)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getAlbumBySlug - Raw response: \(responseString)")
+                }
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ getAlbumBySlug - Network error: \(error)")
+            throw error
         }
     }
 
     func getAlbumsBySlugArtist(slug: String) async throws -> [Album] {
-        print("getAlbumsBySlugArtist")
-        guard let url = URL(string: Constants.API.albumsBySlugArtistURL + "\(slug)") else {
-            print("❌ [getAlbumsBySlugArtist] Invalid URL")
-            throw APError.invalidURL
-        }
-        
-        let (data, response) = try await URLSession.shared.data(from: url)
-        
-        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
-            print("❌ [getAlbumsBySlugArtist] Response error: \(httpResponse.statusCode)")
-        }
+        let url = AlbumEndpoint.byArtist(slug).url
         
         do {
-            let decoder = JSONDecoder()
-            return try decoder.decode(AlbumResponse.self, from: data).results
-        } catch {
-            print("❌ [getAlbumsBySlugArtist] JSON decoding failed: \(error.localizedDescription)")
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("📦 [getAlbumsBySlugArtist] Raw JSON: \(jsonString)")
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getAlbumsBySlugArtist - Invalid response type")
+                throw APError.invalidResponse
             }
-            throw APError.invalidData
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ getAlbumsBySlugArtist - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getAlbumsBySlugArtist - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                return try decoder.decode(AlbumResponse.self, from: data).results
+            } catch {
+                print("❌ getAlbumsBySlugArtist - Failed to decode response: \(error)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getAlbumsBySlugArtist - Raw response: \(responseString)")
+                }
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ getAlbumsBySlugArtist - Network error: \(error)")
+            throw error
         }
     }
-    
 }

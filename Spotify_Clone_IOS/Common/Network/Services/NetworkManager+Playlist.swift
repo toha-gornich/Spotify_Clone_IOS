@@ -176,11 +176,6 @@ extension NetworkManager: PlaylistServiceProtocol {
         
         let url = PlaylistEndpoint.create.url
         
-        guard let url = URL(string: Constants.API.myPlaylistCreateURL) else {
-            print("❌ postMyPlaylist - Invalid URL: \(Constants.API.myPlaylistCreateURL)")
-            throw APError.invalidURL
-        }
-        
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -216,11 +211,6 @@ extension NetworkManager: PlaylistServiceProtocol {
     
     func getPlaylists() async throws -> [Playlist] {
         let url = PlaylistEndpoint.list.url
-        
-        guard let url = URL(string: Constants.API.playlistsURL) else {
-            print("❌ [getPlaylists] Invalid URL: \(Constants.API.playlistsURL)")
-            throw APError.invalidURL
-        }
         
         do {
             let (data, response) = try await URLSession.shared.data(from: url)

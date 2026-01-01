@@ -1,0 +1,23 @@
+//
+//  AppEnvironment.swift
+//  Spotify_Clone_IOS
+//
+//  Created by Горніч Антон on 01.01.2026.
+//
+
+
+import Foundation
+
+enum AppEnvironment: String {
+    case development
+    case production
+    
+    var baseURL: URL {
+        switch self {
+        case .development:
+            return URL(string: "https://placentary-entirely-dulcie.ngrok-free.dev/api/v1/")!
+        case .production:
+            return URL(string: "https://placentary-entirely-dulcie.ngrok-free.dev/api/v1/")!
+        }
+    }
+}

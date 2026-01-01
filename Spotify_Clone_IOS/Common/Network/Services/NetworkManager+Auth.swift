@@ -7,13 +7,9 @@
 
 import Foundation
 
-
 extension NetworkManager: AuthServiceProtocol {
     func postRegUser(regUser: RegUser) async throws -> RegUserResponse {
-        guard let url = URL(string: Constants.API.regUserURL) else {
-            print("❌ postRegUser - Invalid URL: \(Constants.API.regUserURL)")
-            throw APError.invalidURL
-        }
+        let url = AuthEndpoint.registerUser.url
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -60,10 +56,7 @@ extension NetworkManager: AuthServiceProtocol {
     }
 
     func postLogin(loginRequest: LoginRequest) async throws -> LoginResponse {
-        guard let url = URL(string: Constants.API.createTokenURL) else {
-            print("❌ postLogin - Invalid URL: \(Constants.API.createTokenURL)")
-            throw APError.invalidURL
-        }
+        let url = AuthEndpoint.createToken.url
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -110,10 +103,7 @@ extension NetworkManager: AuthServiceProtocol {
     }
 
     func postVerifyToken(tokenVerifyRequest: TokenVerifyRequest) async throws {
-        guard let url = URL(string: Constants.API.verifyTokenURL) else {
-            print("❌ postVerifyToken - Invalid URL: \(Constants.API.verifyTokenURL)")
-            throw APError.invalidURL
-        }
+        let url = AuthEndpoint.verifyToken.url
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -149,10 +139,7 @@ extension NetworkManager: AuthServiceProtocol {
     }
 
     func postActivateAccount(activationRequest: AccountActivationRequest) async throws {
-        guard let url = URL(string: Constants.API.activationEmailURL) else {
-            print("❌ postActivateAccount - Invalid URL: \(Constants.API.activationEmailURL)")
-            throw APError.invalidURL
-        }
+        let url = AuthEndpoint.activationEmail.url
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -177,9 +164,9 @@ extension NetworkManager: AuthServiceProtocol {
                 throw APError.invalidResponse
             }
         } catch {
-            print("❌ postActivateAccount - Error: \(error)")
+            print("❌ postActivateAccount - Network error: \(error)")
             throw error
         }
     }
-    
 }
+

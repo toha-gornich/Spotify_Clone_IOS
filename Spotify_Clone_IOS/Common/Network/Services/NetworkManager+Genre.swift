@@ -8,10 +8,7 @@ import Foundation
 
 extension NetworkManager: GenreServiceProtocol {
     func getGenres() async throws -> [Genre] {
-        guard let url = URL(string: Constants.API.genresURL) else {
-            print("❌ [getGenres] Invalid URL")
-            throw APError.invalidURL
-        }
+        let url = GenreEndpoint.list.url
         
         let (data, response) = try await URLSession.shared.data(from: url)
         
@@ -30,10 +27,8 @@ extension NetworkManager: GenreServiceProtocol {
     }
 
     func getGenreBySlug(slug:String) async throws -> Genre {
-        guard let url = URL(string: Constants.API.genresBySlugURL + "\(slug)/") else {
-            print("❌ [getGenreBySlug] Invalid URL for slug: \(slug)")
-            throw APError.invalidURL
-        }
+        let url = GenreEndpoint.bySlug(slug).url
+
         
         let (data, response) = try await URLSession.shared.data(from: url)
         

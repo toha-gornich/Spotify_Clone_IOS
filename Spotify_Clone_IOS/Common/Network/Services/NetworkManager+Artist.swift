@@ -5,159 +5,199 @@
 //  Created by Горніч Антон on 19.10.2025.
 //
 import Foundation
-
 extension NetworkManager: ArtistServiceProtocol {
     func postFollowArtist(userId: String) async throws {
-        print("userid" + userId)
-        let urlString = "\(Constants.API.userURL)\(userId)/follow/"
-        
-        guard let url = URL(string: urlString) else {
-            print("❌ postFollowArtist - Invalid URL: \(urlString)")
-            throw FavoriteError.invalidURL
-        }
+        print("userid: \(userId)")
+        let url = UserEndpoint.follow(userId).url
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         
-        let (data, response) = try await URLSession.shared.data(for: request)
-        
-        guard let httpResponse = response as? HTTPURLResponse else {
-            print("❌ postFollowArtist - Invalid response type")
-            throw FavoriteError.invalidResponse
-        }
-        
-        print("📡 postFollowArtist - HTTP Status Code: \(httpResponse.statusCode)")
-        
-        switch httpResponse.statusCode {
-        case 200...299:
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
             
-            return
-            
-        case 400, 409:
-            print("ℹ️ postFollowArtist - Already following user: \(userId)")
-            if let responseString = String(data: data, encoding: .utf8) {
-                print("📄 Response: \(responseString)")
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ postFollowArtist - Invalid response type")
+                throw FavoriteError.invalidResponse
             }
-            throw FavoriteError.alreadyLiked
             
-        default:
-            print("❌ postFollowArtist - HTTP error \(httpResponse.statusCode)")
-            if let responseString = String(data: data, encoding: .utf8) {
-                print("📄 Response: \(responseString)")
+            print("📡 postFollowArtist - HTTP Status Code: \(httpResponse.statusCode)")
+            
+            switch httpResponse.statusCode {
+            case 200...299:
+                return
+                
+            case 400, 409:
+                print("ℹ️ postFollowArtist - Already following user: \(userId)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ postFollowArtist - Response: \(responseString)")
+                }
+                throw FavoriteError.alreadyLiked
+                
+            default:
+                print("❌ postFollowArtist - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ postFollowArtist - Response: \(responseString)")
+                }
+                throw FavoriteError.invalidResponse
             }
-            throw FavoriteError.invalidResponse
+        } catch let error as FavoriteError {
+            throw error
+        } catch {
+            print("❌ postFollowArtist - Network error: \(error)")
+            throw error
         }
     }
     
     func postUnfollowArtist(userId: String) async throws {
-        let urlString = "\(Constants.API.userURL)\(userId)/unfollow/"
-        
-        guard let url = URL(string: urlString) else {
-            print("❌ postUnfollowArtist - Invalid URL: \(urlString)")
-            throw FavoriteError.invalidURL
-        }
+        let url = UserEndpoint.unfollow(userId).url
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         
-        let (data, response) = try await URLSession.shared.data(for: request)
-        
-        guard let httpResponse = response as? HTTPURLResponse else {
-            print("❌ postUnfollowArtist - Invalid response type")
-            throw FavoriteError.invalidResponse
-        }
-        
-        print("📡 postUnfollowArtist - HTTP Status Code: \(httpResponse.statusCode)")
-        
-        switch httpResponse.statusCode {
-        case 200...299:
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
             
-            return
-            
-        case 400, 409:
-            print("ℹ️ postUnfollowArtist - Not following user: \(userId)")
-            if let responseString = String(data: data, encoding: .utf8) {
-                print("📄 Response: \(responseString)")
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ postUnfollowArtist - Invalid response type")
+                throw FavoriteError.invalidResponse
             }
-            throw FavoriteError.alreadyLiked
             
-        default:
-            print("❌ postUnfollowArtist - HTTP error \(httpResponse.statusCode)")
-            if let responseString = String(data: data, encoding: .utf8) {
-                print("📄 Response: \(responseString)")
+            print("📡 postUnfollowArtist - HTTP Status Code: \(httpResponse.statusCode)")
+            
+            switch httpResponse.statusCode {
+            case 200...299:
+                return
+                
+            case 400, 409:
+                print("ℹ️ postUnfollowArtist - Not following user: \(userId)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ postUnfollowArtist - Response: \(responseString)")
+                }
+                throw FavoriteError.alreadyLiked
+                
+            default:
+                print("❌ postUnfollowArtist - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ postUnfollowArtist - Response: \(responseString)")
+                }
+                throw FavoriteError.invalidResponse
             }
-            throw FavoriteError.invalidResponse
+        } catch let error as FavoriteError {
+            throw error
+        } catch {
+            print("❌ postUnfollowArtist - Network error: \(error)")
+            throw error
         }
     }
 
-    
-    func getArtistsBySlug(slug:String) async throws -> Artist {
-        print("getArtistsBySlug")
-        guard let url = URL(string: Constants.API.artistsURL + "\(slug)/") else {
-            throw APError.invalidURL
-        }
+    func getArtistsBySlug(slug: String) async throws -> Artist {
+        let url = ArtistEndpoint.bySlug(slug).url
         
-        let (data, _) = try await URLSession.shared.data(from: url)
-        
-        do{
-            let decoder = JSONDecoder()
-            return try decoder.decode(Artist.self, from: data)
-        } catch{
-            throw APError.invalidData
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getArtistsBySlug - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ getArtistsBySlug - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getArtistsBySlug - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                return try decoder.decode(Artist.self, from: data)
+            } catch {
+                print("❌ getArtistsBySlug - Failed to decode response: \(error)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getArtistsBySlug - Raw response: \(responseString)")
+                }
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ getArtistsBySlug - Network error: \(error)")
+            throw error
         }
-         
     }
 
-    func getArtists() async throws ->[Artist] {
-        print("getArtists")
-        guard let url = URL(string: Constants.API.artistsURL) else {
-            throw APError.invalidURL
+    func getArtists() async throws -> [Artist] {
+        let url = ArtistEndpoint.list.url
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getArtists - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ getArtists - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getArtists - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                return try decoder.decode(ArtistResponse.self, from: data).results
+            } catch {
+                print("❌ getArtists - Failed to decode response: \(error)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getArtists - Raw response: \(responseString)")
+                }
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ getArtists - Network error: \(error)")
+            throw error
         }
-        
-        let (data, _) = try await URLSession.shared.data(from: url)
-        
-        do{
-            let decoder = JSONDecoder()
-            return try decoder.decode(ArtistResponse.self, from: data).results
-        } catch{
-            throw APError.invalidData
-        }
-        
-        
     }
     
     func getArtistsFavorite() async throws -> [FavoriteArtistItem] {
-        guard let url = URL(string: Constants.API.artistsFavoriteURL) else {
-            print("❌ [getArtistsFavorite] Invalid URL")
-            throw APError.invalidURL
-        }
-        
-        let (data, response) = try await URLSession.shared.data(from: url)
-        
-        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
-            print("❌ [getArtistsFavorite] Response error: \(httpResponse.statusCode)")
-        }
+        let url = ArtistEndpoint.favorite.url
         
         do {
-            let decoder = JSONDecoder()
-
-            return try decoder.decode(ArtistFavoriteResponse.self, from: data).results
-        } catch {
-            print("❌ [getArtistsFavorite] JSON decoding failed: \(error.localizedDescription)")
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("📦 [getArtistsFavorite] Raw JSON: \(jsonString)")
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getArtistsFavorite - Invalid response type")
+                throw APError.invalidResponse
             }
-            throw APError.invalidData
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                print("❌ getArtistsFavorite - HTTP error \(httpResponse.statusCode)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getArtistsFavorite - Response: \(responseString)")
+                }
+                throw APError.invalidResponse
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                return try decoder.decode(ArtistFavoriteResponse.self, from: data).results
+            } catch {
+                print("❌ getArtistsFavorite - Failed to decode response: \(error)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("❌ getArtistsFavorite - Raw response: \(responseString)")
+                }
+                throw APError.invalidData
+            }
+        } catch {
+            print("❌ getArtistsFavorite - Network error: \(error)")
+            throw error
         }
     }
     
     func postAddFavoriteArtist(slug: String) async throws {
-        let urlString = Constants.API.artistsURL + "\(slug)/favorite/"
-        
-        guard let url = URL(string: urlString) else {
-            print("❌ postAddFavoriteArtist - Invalid URL: \(urlString)")
-            throw FavoriteError.invalidURL
-        }
+        let url = ArtistEndpoint.addFavorite(slug).url
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -172,7 +212,6 @@ extension NetworkManager: ArtistServiceProtocol {
             
             switch httpResponse.statusCode {
             case 200...299:
-                
                 return
                 
             case 400, 409:
@@ -196,10 +235,7 @@ extension NetworkManager: ArtistServiceProtocol {
     }
     
     func deleteArtistFavorite(slug: String) async throws {
-        guard let url = URL(string: Constants.API.artistsURL + "\(slug)/favorite/") else {
-            print("❌ deleteArtistFavorite - Invalid URL: \(Constants.API.artistsURL + "\(slug)/favorite/")")
-            throw APError.invalidURL
-        }
+        let url = ArtistEndpoint.removeFavorite(slug).url
         
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
@@ -227,15 +263,17 @@ extension NetworkManager: ArtistServiceProtocol {
     }
     
     func getArtistMe() async throws -> Artist {
-        guard let url = URL(string: Constants.API.artistMeURL) else {
-            print("❌ getArtistMe - Invalid URL: \(Constants.API.profilesMyURL)")
-            throw APError.invalidURL
-        }
+        let url = ArtistEndpoint.me.url
         
         do {
             let (data, response) = try await URLSession.shared.data(from: url)
             
-            if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("❌ getArtistMe - Invalid response type")
+                throw APError.invalidResponse
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
                 print("❌ getArtistMe - HTTP error \(httpResponse.statusCode)")
                 if let responseString = String(data: data, encoding: .utf8) {
                     print("❌ getArtistMe - Response: \(responseString)")
@@ -260,10 +298,7 @@ extension NetworkManager: ArtistServiceProtocol {
     }
     
     func putArtistMe(artist: UpdateArtist, imageData: Data? = nil) async throws -> Artist {
-        guard let url = URL(string: Constants.API.artistMeURL) else {
-            print("❌ putArtistMe - Invalid URL: \(Constants.API.profilesMyURL)")
-            throw APError.invalidURL
-        }
+        let url = ArtistEndpoint.me.url
         
         let boundary = "Boundary-\(UUID().uuidString)"
         var request = URLRequest(url: url)
@@ -325,8 +360,4 @@ extension NetworkManager: ArtistServiceProtocol {
             throw error
         }
     }
-    
-    
-    
-    
 }
