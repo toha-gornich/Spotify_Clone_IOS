@@ -45,6 +45,7 @@ extension NetworkManager: ArtistServiceProtocol {
             throw error
         } catch {
             print("❌ postFollowArtist - Network error: \(error)")
+            
             throw error
         }
     }
