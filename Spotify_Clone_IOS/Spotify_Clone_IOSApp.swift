@@ -41,6 +41,7 @@ struct Spotify_Clone_IOSApp: App {
                 } message: {
                     Text(activationMessage)
                 }
+                
             }
             .environmentObject(playerManager)
             .environmentObject(mainVM)
