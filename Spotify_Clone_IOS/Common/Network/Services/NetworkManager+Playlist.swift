@@ -282,6 +282,7 @@ extension NetworkManager: PlaylistServiceProtocol {
     }
     
     func getPlaylistsBySlug(slug:String) async throws -> PlaylistDetail {
+        print("getPlaylistsBySlug")
         
         let url = PlaylistEndpoint.bySlug(slug).url
         

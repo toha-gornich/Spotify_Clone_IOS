@@ -41,6 +41,6 @@ enum UserEndpoint {
     }
     
     var url: URL {
-        return APIConfiguration.shared.environment.baseURL.appendingPathComponent(path)
+        return APIConfiguration.shared.environment.baseURL.appendingPathComponentRaw(path)
     }
 }

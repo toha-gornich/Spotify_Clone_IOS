@@ -80,6 +80,7 @@ extension NetworkManager: TrackServiceProtocol {
     
     func getTracksBySlugArtist(slug: String) async throws -> [Track] {
         let url = TrackEndpoint.byArtist(slug).url
+        print(url.path())
         
         do {
             let (data, response) = try await URLSession.shared.data(from: url)

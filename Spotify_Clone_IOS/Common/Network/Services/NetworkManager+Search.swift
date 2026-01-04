@@ -8,6 +8,7 @@ import Foundation
 
 extension NetworkManager: SearchServiceProtocol {
     func searchTracks(searchText: String) async throws -> [Track] {
+        print("searchTracks")
         let url = SearchEndpoint.tracks(searchText).url
         
         do {

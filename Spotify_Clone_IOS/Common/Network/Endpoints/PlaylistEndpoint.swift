@@ -37,7 +37,7 @@ enum PlaylistEndpoint {
         case .addFavorite(let slug), .removeFavorite(let slug):
             return "playlists/\(slug)/favorite/"
         case .addTrack(let slug, let trackSlug):
-            return "playlists\(slug)/add/tracks/\(trackSlug)/"
+            return "playlists/\(slug)/add/tracks/\(trackSlug)/"
         case .byGenre(let slug):
             return "playlists/?genre__slug=\(slug)"
         case .byUser(let id):
@@ -49,11 +49,11 @@ enum PlaylistEndpoint {
         case .delete(let id):
             return "playlists/\(id)/"
         case .deleteTrack(let slug, let trackSlug):
-            return "playlists\(slug)/add/tracks/\(trackSlug)/"
+            return "playlists/\(slug)/add/tracks/\(trackSlug)/"
         }
     }
     
     var url: URL {
-        return APIConfiguration.shared.environment.baseURL.appendingPathComponent(path)
+        return APIConfiguration.shared.environment.baseURL.appendingPathComponentRaw(path)
     }
 }
