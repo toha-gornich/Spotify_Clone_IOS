@@ -94,10 +94,14 @@ struct GreetingView: View {
             }
             .navigationBarHidden(true)
             .navigationDestination(isPresented: $showSignUp) {
-                SignUpView()
+                NavigationStack{
+                    SignUpView()
+                }
             }
             .navigationDestination(isPresented: $showLogin) {
-                LoginView()
+                NavigationStack{
+                    LoginView()
+                }
             }
         }
     }
@@ -105,5 +109,7 @@ struct GreetingView: View {
 
 
 #Preview {
-    GreetingView()
+    NavigationStack{
+        GreetingView()
+    }
 }

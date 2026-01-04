@@ -9,13 +9,12 @@
 import SwiftUI
 
 struct AuthView: View {
-    var hideBackButton: Bool = false
-    @Environment(\.dismiss) private var dismiss
+//    var hideBackButton: Bool = false
     @StateObject private var viewModel = AuthViewModel()
     @FocusState private var isEmailFocused: Bool
     @FocusState private var isPasswordFocused: Bool
     @State private var showMainView = false
-    
+    @State private var isShowingSignUp = false
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -26,20 +25,20 @@ struct AuthView: View {
                 VStack(spacing: 0) {
                     // Header
                     HStack {
-                        if !hideBackButton {
-                            Button(action: {
-                                dismiss()
-                            }) {
-                                Image(systemName: "chevron.left")
-                                    .font(.title2)
-                                    .foregroundColor(.white)
-                                    .padding()
-                            }
-                        } else {
-                            // Invisible spacer when back button is hidden
-                            Color.clear
-                                .frame(width: 44, height: 44)
-                        }
+//                        if !hideBackButton {
+//                            Button(action: {
+//                                dismiss()
+//                            }) {
+//                                Image(systemName: "chevron.left")
+//                                    .font(.title2)
+//                                    .foregroundColor(.white)
+//                                    .padding()
+//                            }
+//                        } else {
+//                            // Invisible spacer when back button is hidden
+//                            Color.clear
+//                                .frame(width: 44, height: 44)
+//                        }
                         
                         Spacer()
                         
@@ -194,7 +193,7 @@ struct AuthView: View {
                                     .foregroundColor(.white.opacity(0.7))
                                 
                                 Button(action: {
-                                    handleSignUp()
+                                    isShowingSignUp = true
                                 }) {
                                     Text("Sign up for Spotify")
                                         .font(.system(size: 16, weight: .medium))
@@ -244,10 +243,16 @@ struct AuthView: View {
                 dismissButton: alertItem.dismissButton
             )
         }
-        .navigationDestination(isPresented: $showMainView) {
-            MainView()
+        .fullScreenCover(isPresented: $showMainView) {
+            NavigationStack{
+                MainView()
+            }
         }
-        
+        .fullScreenCover(isPresented: $isShowingSignUp) {
+            NavigationStack{
+                SignUpView()
+            }
+        }
     }
     
     // MARK: - Action Methodуs
@@ -269,12 +274,9 @@ struct AuthView: View {
 //        }
     }
     
-    private func handleSignUp() {
-        if !hideBackButton {
-            dismiss() // Go back to sign up flow
-        }
-        print("Navigate to sign up")
-    }
+//    private func handleSignUp() {
+//      
+//    }
     
     private func handleResendActivation() {
 //        Task {
@@ -284,9 +286,8 @@ struct AuthView: View {
 }
 
 #Preview {
-    AuthView()
+    NavigationStack{
+        AuthView()
+    }
 }
 
-#Preview("Auth View Hidden Back Button") {
-    AuthView(hideBackButton: true)
-}

@@ -156,7 +156,9 @@ struct UsernameRegView: View {
         }
         .fullScreenCover(isPresented: $showAuthView) {
             // CHANGED: Pass a flag to hide back button
-            AuthView(hideBackButton: true)
+            NavigationStack{
+                AuthView()
+            }
         }
         .alert(item: $registrationData.alertItem) { alertItem in
             Alert(title: alertItem.title,

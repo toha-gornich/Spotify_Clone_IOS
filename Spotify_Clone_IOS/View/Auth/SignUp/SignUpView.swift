@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SignUpView: View {
-    @Environment(\.dismiss) private var dismiss
+    
     @State private var showEmailReg = false
     @State private var showLogin = false
 
@@ -21,20 +21,6 @@ struct SignUpView: View {
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
-                    // Header with back button
-                    HStack {
-                        Button(action: {
-                            dismiss()
-                        }) {
-                            Image(systemName: "chevron.left")
-                                .font(.title2)
-                                .foregroundColor(.white)
-                                .padding()
-                        }
-                        
-                        Spacer()
-                    }
-                    .padding(.top, 10)
                         
                         Spacer()
                         

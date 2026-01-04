@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LoginView: View {
-    @Environment(\.dismiss) private var dismiss
+        
     
     var body: some View {
         GeometryReader { geometry in
@@ -18,20 +18,6 @@ struct LoginView: View {
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
-                    // Header with back button
-                    HStack {
-                        Button(action: {
-                            dismiss()
-                        }) {
-                            Image(systemName: "chevron.left")
-                                .font(.title2)
-                                .foregroundColor(.white)
-                                .padding()
-                        }
-                        
-                        Spacer()
-                    }
-                    .padding(.top, 10)
                     
                     Spacer()
                     
@@ -180,7 +166,7 @@ struct LoginView: View {
 }
 
 #Preview {
-    NavigationView{
+    NavigationStack{
         LoginView()
     }
 }

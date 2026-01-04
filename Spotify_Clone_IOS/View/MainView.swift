@@ -103,7 +103,9 @@ struct MainView: View {
 }
 
 #Preview {
-    MainView()
-        .environmentObject(AudioPlayerManager())
-        .environmentObject(MainViewModel())
+    NavigationStack{
+        MainView()
+            .environmentObject(AudioPlayerManager())
+            .environmentObject(MainViewModel())
+    }
 }
