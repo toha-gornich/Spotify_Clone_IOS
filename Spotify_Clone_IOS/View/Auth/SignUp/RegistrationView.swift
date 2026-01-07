@@ -12,6 +12,7 @@ import SwiftUI
 // MARK: - Email Registration View
 struct EmailRegView: View {
     
+    
     @Environment(\.dismiss) private var dismiss
     @StateObject private var registrationData = RegistrationData()
     @FocusState private var isEmailFocused: Bool
