@@ -243,7 +243,6 @@ extension NetworkManager: TrackServiceProtocol {
                 
             default:
                 print("❌ postLikeTrack - HTTP error \(httpResponse.statusCode)")
-                if let responseString = String(data: data, encoding: .utf8) {}
                 throw FavoriteError.invalidResponse
             }
             

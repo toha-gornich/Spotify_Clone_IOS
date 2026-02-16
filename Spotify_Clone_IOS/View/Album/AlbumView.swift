@@ -265,8 +265,6 @@ struct AlbumView: View {
                                         .foregroundColor(.gray)
                                 }
                             }
-//                            .padding(.top, 24)
-//                            .padding(.bottom, 16)
                             
                             // Title for albums
                             if !albumVM.album.artist.displayName.isEmpty {

@@ -47,7 +47,7 @@ enum PlaylistEndpoint {
         case .search(let query):
             return "playlists/?search=\(query)"
         case .delete(let id):
-            return "playlists/\(id)/"
+            return "playlists/my/\(id)/"
         case .deleteTrack(let slug, let trackSlug):
             return "playlists/\(slug)/add/tracks/\(trackSlug)/"
         }

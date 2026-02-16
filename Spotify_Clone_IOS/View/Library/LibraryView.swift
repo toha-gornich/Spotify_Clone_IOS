@@ -28,21 +28,19 @@ struct LibraryView: View {
                     
                     Spacer()
                     
-                    
-
                     Button {
-                        showCreatePlaylist = true
                         libraryVM.createPlaylist()
-                        
                     } label: {
                         Image(systemName: "plus")
                             .font(.system(size: 24))
                             .foregroundColor(.primaryText)
                     }
-                    .navigationDestination(isPresented: $showCreatePlaylist) {
-                        MyPlaylistView(slugPlaylist: libraryVM.playlist.slug)
-                            .environmentObject(playerManager)
-                            .environmentObject(mainVM)
+                    .navigationDestination(isPresented: $libraryVM.showNewPlaylist) {
+                        if !libraryVM.playlist.slug.isEmpty {
+                            MyPlaylistView(slugPlaylist: libraryVM.playlist.slug)
+                                .environmentObject(playerManager)
+                                .environmentObject(mainVM)
+                        }
                     }
                 }
                 .padding(.top, .topInsets)
@@ -72,18 +70,47 @@ struct LibraryView: View {
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 0) {
                         if libraryVM.selectedTab == 0 {
-                            PlaylistsContent(playlists: libraryVM.playlists)
-                                .environmentObject(playerManager)
-                                .environmentObject(mainVM)
-                                .environmentObject(libraryVM) 
+                            if libraryVM.playlists.isEmpty && !libraryVM.isLoading {
+                                EmptyLibraryView(
+                                    icon: "music.note.list",
+                                    title: "No playlists yet",
+                                    subtitle: "Create your first playlist",
+                                    actionTitle: "Create Playlist",
+                                    action: {
+                                        showCreatePlaylist = true
+                                        libraryVM.createPlaylist()
+                                    }
+                                ).padding(.top, 50)
+                            } else {
+                                PlaylistsContent(playlists: libraryVM.playlists)
+                                    .environmentObject(playerManager)
+                                    .environmentObject(mainVM)
+                                    .environmentObject(libraryVM)
+                            }
                         } else if libraryVM.selectedTab == 1 {
-                            ArtistsContent(artists: libraryVM.artists)
-                                .environmentObject(playerManager)
-                                .environmentObject(mainVM)
+                            if libraryVM.artists.isEmpty && !libraryVM.isLoading {
+                                EmptyLibraryView(
+                                    icon: "person.2",
+                                    title: "No artists yet",
+                                    subtitle: "Follow artists to see them here"
+                                ).padding(.top, 50)
+                            } else {
+                                ArtistsContent(artists: libraryVM.artists)
+                                    .environmentObject(playerManager)
+                                    .environmentObject(mainVM)
+                            }
                         } else {
-                            AlbumsContent(albums: libraryVM.albums)
-                                .environmentObject(playerManager)
-                                .environmentObject(mainVM)
+                            if libraryVM.albums.isEmpty && !libraryVM.isLoading {
+                                EmptyLibraryView(
+                                    icon: "square.stack",
+                                    title: "No albums yet",
+                                    subtitle: "Save albums to see them here"
+                                ).padding(.top, 50)
+                            } else {
+                                AlbumsContent(albums: libraryVM.albums)
+                                    .environmentObject(playerManager)
+                                    .environmentObject(mainVM)
+                            }
                         }
                     }
                     .padding(.bottom, 100)
@@ -94,7 +121,6 @@ struct LibraryView: View {
                 LoadingView()
             }
         }
-        
         .frame(width: .screenWidth, height: .screenHeight)
         .background(Color.bg)
         .navigationTitle("")
@@ -115,3 +141,5 @@ struct LibraryView: View {
         }
     }
 }
+
+

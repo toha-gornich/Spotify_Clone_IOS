@@ -18,6 +18,7 @@ import SwiftUI
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
     @Published var alertItem: AlertItem?
+    @Published var showNewPlaylist = false 
     
     private let libraryManager: LibraryServiceProtocol
     init(libraryManager:LibraryServiceProtocol = NetworkManager.shared){
@@ -31,11 +32,13 @@ import SwiftUI
     }
     func createPlaylist() {
         isLoading = true
+        showNewPlaylist = false
         
         Task {
             do {
                 playlist = try await libraryManager.postMyPlaylist()
                 isLoading = false
+                showNewPlaylist = true
             } catch {
                 handleError(error)
                 isLoading = false

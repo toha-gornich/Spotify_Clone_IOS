@@ -16,6 +16,7 @@ struct MainView: View {
     
     var body: some View {
         ZStack {
+            // TabView
             TabView(selection: $mainVM.selectTab) {
                 HomeView(homeVM: homeVM)
                     .tag(0)
@@ -31,7 +32,7 @@ struct MainView: View {
             .tabViewStyle(.page(indexDisplayMode: .never))
             .ignoresSafeArea()
             
-            // Custom tab bar
+            // Tab Bar
             VStack {
                 Spacer()
                 
@@ -75,12 +76,6 @@ struct MainView: View {
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
             }
-            .zIndex(2)
-            
-            SideMenuView(isShowing: $mainVM.isShowMenu)
-                .environmentObject(mainVM)
-                .environmentObject(playerManager)
-                .zIndex(3)
         }
         .environmentObject(mainVM)
         .environmentObject(playerManager)

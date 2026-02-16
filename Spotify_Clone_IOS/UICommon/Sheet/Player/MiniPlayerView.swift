@@ -6,14 +6,15 @@
 //
 
 import SwiftUI
-
 struct MiniPlayerView: View {
     @ObservedObject var playerManager: AudioPlayerManager
     
     var body: some View {
-        HStack {
+        HStack(spacing: 12) {
+            // Album artwork
             SpotifyRemoteImage(urlString: playerManager.currentTrack!.album.image)
                 .frame(width: 50, height: 50)
+                .cornerRadius(4)
             
             // Track Info
             VStack(alignment: .leading, spacing: 2) {
@@ -24,7 +25,7 @@ struct MiniPlayerView: View {
                 
                 Text(playerManager.currentTrack?.artistName ?? "")
                     .font(.system(size: 14))
-                    .foregroundColor(.gray)
+                    .foregroundColor(.white.opacity(0.7))
                     .lineLimit(1)
             }
             
@@ -41,12 +42,13 @@ struct MiniPlayerView: View {
             .frame(width: 44, height: 44)
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 6)
+        .padding(.vertical, 8)
         .frame(maxWidth: .infinity)
         .background(
             Color(hex: playerManager.currentTrack!.album.color)
         )
-        .cornerRadius(12)
+        .cornerRadius(8)
+        .shadow(color: .black.opacity(0.3), radius: 8, x: 0, y: 2)
         .onTapGesture {
             playerManager.showFullPlayer()
         }

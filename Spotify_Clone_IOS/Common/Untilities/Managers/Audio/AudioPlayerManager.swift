@@ -316,14 +316,14 @@ class AudioPlayerManager: NSObject, ObservableObject {
                 return
             }
             
-            // Перевіряємо кеш (використовуємо String як ключ)
+            // Перевіряємо кеш
             let cacheKey = String(track.id)
             if let cachedImage = artworkCache[cacheKey] {
                 completion(cachedImage)
                 return
             }
             
-            // Завантажуємо зображення
+            // Loading image
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                 if let data = try? Data(contentsOf: imageURL),
                    let image = UIImage(data: data) {

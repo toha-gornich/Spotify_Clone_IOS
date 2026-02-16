@@ -36,9 +36,6 @@ extension NetworkManager: ArtistServiceProtocol {
                 
             default:
                 print("❌ postFollowArtist - HTTP error \(httpResponse.statusCode)")
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ postFollowArtist - Response: \(responseString)")
-                }
                 throw FavoriteError.invalidResponse
             }
         } catch let error as FavoriteError {
@@ -221,8 +218,6 @@ extension NetworkManager: ArtistServiceProtocol {
                 
             default:
                 print("❌ postAddFavoriteArtist - HTTP error \(httpResponse.statusCode)")
-                if let responseString = String(data: data, encoding: .utf8) {
-                }
                 throw FavoriteError.invalidResponse
             }
             

@@ -18,54 +18,73 @@ struct Spotify_Clone_IOSApp: App {
     
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                Group {
-                    if isLoading {
-                        ProgressView("Loading...")
-                    } else if isTokenValid {
-                        MainView()
-                    } else {
-                        GreetingView()
+            ZStack {
+                NavigationStack {
+                    Group {
+                        if isLoading {
+                            ProgressView("Loading...")
+                        } else if isTokenValid {
+                            MainView()
+                        } else {
+                            GreetingView()
+                        }
+                    }
+                    .environmentObject(playerManager)
+                    .environmentObject(mainVM)
+                    .onAppear {
+                        verifyToken()
+                    }
+                    .onOpenURL { url in
+                        handleDeepLink(url: url)
+                    }
+                    .alert("Activation", isPresented: $showActivationAlert) {
+                        Button("OK") { }
+                    } message: {
+                        Text(activationMessage)
                     }
                 }
                 .environmentObject(playerManager)
                 .environmentObject(mainVM)
-                .onAppear {
-                    verifyToken()
-                }
-                .onOpenURL { url in
-                    handleDeepLink(url: url)
-                }
-                .alert("Activation", isPresented: $showActivationAlert) {
-                    Button("OK") { }
-                } message: {
-                    Text(activationMessage)
+                .overlay(
+                    Group {
+                        if playerManager.sheetState == .mini, let _ = playerManager.currentTrack {
+                            VStack {
+                                Spacer()
+                                
+                                MiniPlayerView(playerManager: playerManager)
+                                    .padding(.horizontal, 8)
+                                    .padding(.bottom, miniPlayerBottomPadding())
+                                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                                    .animation(.easeInOut(duration: 0.3), value: mainVM.isTabBarVisible)
+                            }
+                            .allowsHitTesting(true)
+                        }
+                    },
+                    alignment: .bottom
+                )
+                .zIndex(100)
+                .sheet(isPresented: .constant(playerManager.sheetState == .full)) {
+                    FullPlayerView(playerManager: playerManager)
+                        .environmentObject(playerManager)
+                        .environmentObject(mainVM)
                 }
                 
-            }
-            .environmentObject(playerManager)
-            .environmentObject(mainVM)
-            .overlay(
-                Group {
-                    if playerManager.sheetState == .mini {
-                        VStack {
-                            Spacer()
-                            
-                            MiniPlayerView(playerManager: playerManager)
-                                .padding(.bottom, mainVM.isTabBarVisible ? 45 : 0)
-                                .transition(.move(edge: .bottom).combined(with: .opacity))
-                                .animation(.easeInOut(duration: 0.3), value: playerManager.sheetState)
-                        }
-                        .allowsHitTesting(true)
-                    }
-                },
-                alignment: .bottom
-            )
-            .sheet(isPresented: .constant(playerManager.sheetState == .full)) {
-                FullPlayerView(playerManager: playerManager)
-                    .environmentObject(playerManager)
+                // Side Menu - поверх всього
+                SideMenuView(isShowing: $mainVM.isShowMenu)
                     .environmentObject(mainVM)
+                    .environmentObject(playerManager)
+                    .zIndex(1000)
             }
+        }
+    }
+    
+    // Обчислюємо відступ для MiniPlayer
+    private func miniPlayerBottomPadding() -> CGFloat {
+        if mainVM.isTabBarVisible {
+            // Коли Tab Bar видимий (Home, Search, Library)
+            return .bottomInsets + 8 // висота tab bar + safe area + відступ
+        } else {
+            return 0
         }
     }
     
