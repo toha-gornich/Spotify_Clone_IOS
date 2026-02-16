@@ -10,33 +10,28 @@ struct MainView: View {
     @EnvironmentObject var mainVM: MainViewModel
     @EnvironmentObject var playerManager: AudioPlayerManager
     
+    @StateObject private var homeVM = HomeViewModel()
+    @StateObject private var genresVM = GenresViewModel()
+    @StateObject private var libraryVM = LibraryViewModel()
+    
     var body: some View {
         ZStack {
-            
-            if (mainVM.selectTab == 0) {
-                NavigationView {
-                    HomeView()
-                        .navigationBarHidden(true)
-                        .environmentObject(playerManager)
-                        .environmentObject(mainVM)
-                }
-            } else if (mainVM.selectTab == 1) {
-                NavigationView {
-                    GenresView()
-                        .navigationBarHidden(true)
-                        .environmentObject(playerManager)
-                        .environmentObject(mainVM)
-                }
-            } else if (mainVM.selectTab == 2) {
-                NavigationView {
-                    LibraryView()
-                        .navigationBarHidden(true)
-                        .environmentObject(playerManager)
-                        .environmentObject(mainVM)
-                }
+            TabView(selection: $mainVM.selectTab) {
+                HomeView(homeVM: homeVM)
+                    .tag(0)
+                
+                GenresView()
+                    .environmentObject(genresVM)
+                    .tag(1)
+                
+                LibraryView()
+                    .environmentObject(libraryVM)
+                    .tag(2)
             }
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .ignoresSafeArea()
             
-            
+            // Custom tab bar
             VStack {
                 Spacer()
                 
@@ -50,17 +45,13 @@ struct MainView: View {
                         
                         Spacer()
                         
-                        TabButton(title: "Search", icon: "search_tab_f",
-                                  iconUnfocus: "search_tab", isSelect:
-                                    mainVM.selectTab == 1) {
+                        TabButton(title: "Search", icon: "search_tab_f", iconUnfocus: "search_tab", isSelect: mainVM.selectTab == 1) {
                             mainVM.selectTab = 1
                         }
                         
                         Spacer()
                         
-                        TabButton(title: "Library", icon: "library_tab_f",
-                                  iconUnfocus: "library_tab", isSelect:
-                                    mainVM.selectTab == 2) {
+                        TabButton(title: "Library", icon: "library_tab_f", iconUnfocus: "library_tab", isSelect: mainVM.selectTab == 2) {
                             mainVM.selectTab = 2
                         }
                         
@@ -86,26 +77,17 @@ struct MainView: View {
             }
             .zIndex(2)
             
-            
             SideMenuView(isShowing: $mainVM.isShowMenu)
                 .environmentObject(mainVM)
                 .environmentObject(playerManager)
                 .zIndex(3)
         }
+        .environmentObject(mainVM)
+        .environmentObject(playerManager)
         .frame(width: .screenWidth, height: .screenHeight)
         .background(Color.bg)
-        .navigationTitle("")
-        .navigationBarBackButtonHidden()
-        .navigationBarHidden(true)
-        .navigationViewStyle(.stack)
-        .ignoresSafeArea()
-    }
-}
-
-#Preview {
-    NavigationStack{
-        MainView()
-            .environmentObject(AudioPlayerManager())
-            .environmentObject(MainViewModel())
+        .onAppear {
+            homeVM.loadAllDataIfNeeded()
+        }
     }
 }

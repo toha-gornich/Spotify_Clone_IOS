@@ -26,13 +26,6 @@ import Foundation
     var playableTrack: Track {
             return track.toTrack()
         }
-    
-//    var totalDuration: String {
-//        let totalSeconds = tracks.reduce(0) { $0 + $1.durationInSeconds }
-//        let minutes = Int(totalSeconds) / 60
-//        let seconds = Int(totalSeconds) % 60
-//        return String(format: "%d:%02d", minutes, seconds)
-//    }
 
     
     private let trackManager: TrackScreenServiceProtocol

@@ -9,7 +9,7 @@ import SwiftUI
 struct PlaylistView: View {
     let slugPlaylist: String
     @Environment(\.dismiss) private var dismiss
-    @StateObject private var playlistVM = PlaylistViewModel()
+    @StateObject  var playlistVM = PlaylistViewModel()
     @EnvironmentObject var playerManager: AudioPlayerManager
     @EnvironmentObject var mainVM: MainViewModel
     @State private var scrollOffset: CGFloat = 0

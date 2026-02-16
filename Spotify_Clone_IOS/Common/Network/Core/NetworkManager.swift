@@ -8,7 +8,6 @@
 import SwiftUI
 
 
-
 final class NetworkManager {
     
     // MARK: - Singleton

@@ -222,7 +222,6 @@ extension NetworkManager: ArtistServiceProtocol {
             default:
                 print("❌ postAddFavoriteArtist - HTTP error \(httpResponse.statusCode)")
                 if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ postAddFavoriteArtist - Response: \(responseString)")
                 }
                 throw FavoriteError.invalidResponse
             }
