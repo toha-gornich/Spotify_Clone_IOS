@@ -53,10 +53,10 @@ class MyPlaylistViewModel: ObservableObject {
             }
             
             do {
-                let fetchedTracks = try await searchManager.searchTracks(searchText: searchText)
+                let fetchedTracks = try await searchManager.searchTracks(searchText: searchText, page: 1)
                 
                 if !Task.isCancelled {
-                    searchResults = fetchedTracks
+                    searchResults = fetchedTracks.results
                 }
                 isSearching = false
                 

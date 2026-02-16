@@ -35,27 +35,19 @@ import SwiftUI
     
     
     func getTracks(forceRefresh: Bool = false) {
-        print("🔵 getTracks called")
-        print("🔵 tracksLoaded: \(tracksLoaded)")
-        print("🔵 shouldRefreshCache: \(shouldRefreshCache())")
-        
         guard !tracksLoaded || forceRefresh || shouldRefreshCache() else {
-            print("✅ Tracks already loaded, skipping")
             return
         }
         
-        print("🔴 Starting tracks request")
         isLoading = true
         
         Task {
             do {
                 tracks = try await homeService.getTracks()
-                print("✅ Tracks loaded: \(tracks.count)")
                 tracksLoaded = true
                 updateRefreshDate()
                 isLoading = false
             } catch {
-                print("❌ Tracks error: \(error)")
                 handleError(error)
                 isLoading = false
             }
@@ -137,9 +129,6 @@ import SwiftUI
     // MARK: - Cache Management
     
     func loadAllDataIfNeeded() {
-        print("🟡 loadAllDataIfNeeded called")
-        print("🟡 tracksLoaded: \(tracksLoaded)")
-        print("🟡 artistsLoaded: \(artistsLoaded)")
         getTracks()
         getArtists()
         getAlbums()

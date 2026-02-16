@@ -7,45 +7,64 @@
 
 
 import SwiftUI
-
 struct AlbumsSearchContentView: View {
     @EnvironmentObject var mainVM: MainViewModel
     @EnvironmentObject var playerManager: AudioPlayerManager
     @ObservedObject var searchVM: SearchViewModel
     let maxItems6: Bool
     let padding: Int
+    let onLoadMore: (() -> Void)?
+    let isLoading: Bool
     
     private var limitedItems: [Album] {
-        if maxItems6{
+        if maxItems6 {
             Array(searchVM.albums.prefix(6))
-        }else {
+        } else {
             Array(searchVM.albums)
         }
-        
     }
     
-    init(searchVM: SearchViewModel, maxItems6: Bool = false, padding: Int = 70) {
+    init(
+        searchVM: SearchViewModel,
+        maxItems6: Bool = false,
+        padding: Int = 70,
+        onLoadMore: (() -> Void)? = nil,
+        isLoading: Bool = false
+    ) {
         self.searchVM = searchVM
         self.maxItems6 = maxItems6
         self.padding = padding
+        self.onLoadMore = onLoadMore
+        self.isLoading = isLoading
     }
     
     var body: some View {
-        
+        VStack {
             LazyVGrid(columns: [
                 GridItem(.flexible()),
                 GridItem(.flexible())
             ], spacing: 10) {
-                ForEach(0..<limitedItems.count, id: \.self) { index in
-                    let sObj = searchVM.albums[index]
-                    NavigationLink(destination: AlbumView(slugAlbum: sObj.slug).environmentObject(mainVM)
-                        .environmentObject(playerManager)
-) {
-                        MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
+                ForEach(Array(limitedItems.enumerated()), id: \.offset) { index, album in
+                    NavigationLink(destination: AlbumView(slugAlbum: album.slug)
+                        .environmentObject(mainVM)
+                        .environmentObject(playerManager)) {
+                        MediaItemCell(imageURL: album.image, title: album.title, width: 140, height: 140)
+                    }
+                    .onAppear {
+                        if index == limitedItems.count - 2 && !maxItems6 {
+                            onLoadMore?()
+                        }
                     }
                 }
-                
             }
-            .padding(.bottom, CGFloat(padding))
+            
+            // Loading indicator
+            if isLoading && !maxItems6 {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    .padding()
+            }
+        }
+        .padding(.bottom, CGFloat(padding))
     }
 }

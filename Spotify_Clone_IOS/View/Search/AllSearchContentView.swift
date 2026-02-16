@@ -63,12 +63,6 @@ struct AllSearchContentView: View {
                 }
             }
         }
-//        .onAppear {
-//            if !mainVM.isTabBarVisible {
-//                mainVM.isTabBarVisible = false
-//                print("Genres " + String(mainVM.isTabBarVisible))
-//            }
-//        }
 
 
         .padding(.bottom, 100)

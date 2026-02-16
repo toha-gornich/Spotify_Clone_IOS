@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
+import Combine
+
 struct SearchView: View {
     @State var searchText: String
     @State private var searchQuery = ""
-    @State private var searchTimer: Timer?
-    @State private var currentSearchText: String = ""
     @State private var selectedTab: SearchTab = .all
+    @StateObject private var searchDebouncer = SearchTextDebouncer()
     
     @StateObject private var searchVM = SearchViewModel()
     @EnvironmentObject var mainVM: MainViewModel
@@ -21,10 +22,9 @@ struct SearchView: View {
     @State private var isShowingSearchResults = false
     @State private var hasInitialized = false
     @FocusState private var isSearchFieldFocused: Bool
-
     
     private var availableTabs: [SearchTab] {
-        guard !currentSearchText.isEmpty else { return [] }
+        guard !searchQuery.isEmpty else { return [] }
         
         var tabs: [SearchTab] = []
         
@@ -34,11 +34,9 @@ struct SearchView: View {
         let hasArtists = !searchVM.artists.isEmpty
         let hasPlaylists = !searchVM.playlists.isEmpty
         
-
         if hasSongs || hasAlbums || hasArtists || hasPlaylists {
             tabs.append(.all)
         }
-        
         
         if hasSongs { tabs.append(.songs) }
         if hasAlbums { tabs.append(.albums) }
@@ -70,19 +68,23 @@ struct SearchView: View {
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
         .ignoresSafeArea(.keyboard, edges: .bottom)
-        .onAppear {mainVM.isTabBarVisible = true
+        .onAppear {
+            mainVM.isTabBarVisible = true
             if !hasInitialized {
-                currentSearchText = searchText
+                searchDebouncer.searchText = searchText
                 hasInitialized = true
                 
                 if !searchText.isEmpty {
-                    performSearch()
+                    performSearch(with: searchText)
                 }
             }
         }
-//        .onDisappear {
-//            mainVM.isTabBarVisible = true
-//        }
+        .onChange(of: searchDebouncer.debouncedSearchText) { newValue in
+            if !newValue.isEmpty && newValue != searchQuery {
+                print("🔍 Debounced search triggered for: '\(newValue)'")
+                performSearch(with: newValue)
+            }
+        }
     }
     
     private var searchHeaderView: some View {
@@ -91,20 +93,16 @@ struct SearchView: View {
             HStack(spacing: 12) {
                 // Search field with magnifying glass
                 HStack {
-                    Button(action: {
-                        performSearch()
-                    }) {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(.white.opacity(0.7))
-                            .font(.system(size: 18))
-                    }
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.white.opacity(0.7))
+                        .font(.system(size: 18))
 
-                    TextField("", text: $currentSearchText)
+                    TextField("", text: $searchDebouncer.searchText)
                         .focused($isSearchFieldFocused)
                         .foregroundColor(.white)
                         .font(.customFont(.regular, fontSize: 16))
                         .tint(.white)
-                        .placeholder(when: currentSearchText.isEmpty) {
+                        .placeholder(when: searchDebouncer.searchText.isEmpty) {
                             Text("What do you want to listen to?")
                                 .foregroundColor(.white.opacity(0.7))
                                 .font(.customFont(.regular, fontSize: 16))
@@ -113,25 +111,25 @@ struct SearchView: View {
                         }
                         .onSubmit {
                             print("Press Enter")
-                            searchTimer?.invalidate()
-                            performSearch()
-                            isSearchFieldFocused = false
-                        }
-                        .onChange(of: currentSearchText) { newValue in
-                            searchTimer?.invalidate()
-                            
-                            if !newValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                                searchTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
-                                    performSearch()
-                                }
+                            let trimmed = searchDebouncer.searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+                            if !trimmed.isEmpty {
+                                performSearch(with: trimmed)
                             }
+                            isSearchFieldFocused = false
                         }
                     
                     // Clear button container
                     HStack {
-                        if !currentSearchText.isEmpty {
+                        if !searchDebouncer.searchText.isEmpty {
                             Button(action: {
-                                currentSearchText = ""
+                                searchDebouncer.searchText = ""
+                                searchQuery = ""
+                                // Очищаємо результати пошуку
+                                searchVM.tracks = []
+                                searchVM.artists = []
+                                searchVM.albums = []
+                                searchVM.playlists = []
+                                searchVM.profiles = []
                             }) {
                                 Image(systemName: "xmark.circle.fill")
                                     .foregroundColor(.white.opacity(1))
@@ -203,25 +201,57 @@ struct SearchView: View {
                     switch selectedTab {
                     case .all:
                         AllSearchContentView(selectedTab: $selectedTab, searchVM: searchVM)
-                            .padding(.bottom, 100).environmentObject(mainVM)
-                            .environmentObject(playerManager)
-                    case .songs:
-                        TrackListViewImage(tracks: searchVM.tracks)
-                            .padding(.top, 20).environmentObject(mainVM)
-                            .environmentObject(playerManager)
-                    case .albums:
-                        AlbumsSearchContentView(searchVM: searchVM).environmentObject(mainVM)
-                            .environmentObject(playerManager)
-                            .padding(.top, 20)
-                    case .artists:
-                        ArtistsSearchContentView(searchVM: searchVM).environmentObject(mainVM)
-                            .environmentObject(playerManager)
-                            .padding(.top, 20)
-                    case .playlists:
-                        PlaylistsSearchContentView(searchVM: searchVM)
-                            .padding(.top, 20)
+                            .padding(.bottom, 100)
                             .environmentObject(mainVM)
                             .environmentObject(playerManager)
+                        
+                    case .songs:
+                        TrackListViewImage(
+                            tracks: searchVM.tracks,
+                            onLoadMore: {
+                                searchVM.loadMoreTracks()
+                            },
+                            isLoading: searchVM.isLoadingMoreTracks
+                        )
+                        .padding(.top, 20)
+                        .environmentObject(mainVM)
+                        .environmentObject(playerManager)
+                        
+                    case .albums:
+                        AlbumsSearchContentView(
+                            searchVM: searchVM,
+                            onLoadMore: {
+                                searchVM.loadMoreAlbums()
+                            },
+                            isLoading: searchVM.isLoadingMoreAlbums
+                        )
+                        .environmentObject(mainVM)
+                        .environmentObject(playerManager)
+                        .padding(.top, 20)
+                        
+                    case .artists:
+                        ArtistsSearchContentView(
+                            searchVM: searchVM,
+                            onLoadMore: {
+                                searchVM.loadMoreArtists()
+                            },
+                            isLoading: searchVM.isLoadingMoreArtists
+                        )
+                        .environmentObject(mainVM)
+                        .environmentObject(playerManager)
+                        .padding(.top, 20)
+                        
+                    case .playlists:
+                        PlaylistsSearchContentView(
+                            searchVM: searchVM,
+                            onLoadMore: {
+                                searchVM.loadMorePlaylists()
+                            },
+                            isLoading: searchVM.isLoadingMorePlaylists
+                        )
+                        .padding(.top, 20)
+                        .environmentObject(mainVM)
+                        .environmentObject(playerManager)
                     }
                 } else {
                     EmptySearchView()
@@ -229,58 +259,38 @@ struct SearchView: View {
             }
             .padding(.bottom, 120)
         }
+        .id(selectedTab)
         .onTapGesture {
-            
             isSearchFieldFocused = false
         }
-        
     }
     
-    private func performSearch() {
-        guard !currentSearchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+    private func performSearch(with text: String) {
+        guard !text.isEmpty else {
+            print("⚠️ SearchView - Empty search text, skipping")
             return
         }
         
-        searchQuery = currentSearchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard text != searchQuery else {
+            print("⚠️ SearchView - Same search query, skipping")
+            return
+        }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            isShowingSearchResults = true
-            print("Search: \(searchQuery)")
-            
-            searchVM.searchTracks(searchText: currentSearchText)
-            searchVM.searchArtists(searchText: currentSearchText)
-            searchVM.searchAlbums(searchText: currentSearchText)
-            searchVM.searchPlaylists(searchText: currentSearchText)
-            searchVM.searchProfiles(searchText: currentSearchText)
-        }
+        searchQuery = text
+        isShowingSearchResults = true
+        
+        print("🔍 SearchView - Performing search for: '\(searchQuery)'")
+        
+        searchVM.searchTracks(searchText: searchQuery)
+        searchVM.searchArtists(searchText: searchQuery)
+        searchVM.searchAlbums(searchText: searchQuery)
+        searchVM.searchPlaylists(searchText: searchQuery)
+        searchVM.searchProfiles(searchText: searchQuery)
     }
-}
-// Extension for placeholder functionality
-extension View {
-    func placeholder<Content: View>(
-        when shouldShow: Bool,
-        alignment: Alignment = .leading,
-        @ViewBuilder placeholder: () -> Content) -> some View {
-            
-            ZStack(alignment: alignment) {
-                placeholder().opacity(shouldShow ? 1 : 0)
-                self
-            }
-        }
 }
 
 #Preview {
     MainView()
 }
 
-
-
-enum SearchTab: String, CaseIterable {
-    case all = "All"
-    case songs = "Songs"
-    case albums = "Albums"
-    case artists = "Artists"
-    case playlists = "Playlists"
-    
-}
 

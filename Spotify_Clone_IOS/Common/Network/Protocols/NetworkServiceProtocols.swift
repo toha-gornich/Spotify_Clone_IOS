@@ -151,11 +151,11 @@ protocol GenreServiceProtocol {
 
 // MARK: - Search Service Protocol
 protocol SearchServiceProtocol {
-    func searchTracks(searchText: String) async throws -> [Track]
-    func searchArtists(searchText: String) async throws -> [Artist]
-    func searchAlbums(searchText: String) async throws -> [Album]
-    func searchPlaylists(searchText: String) async throws -> [Playlist]
-    func searchProfiles(searchText: String) async throws -> [User]
+    func searchTracks(searchText: String, page: Int) async throws -> TracksResponse
+    func searchArtists(searchText: String, page: Int) async throws -> ArtistResponse
+    func searchAlbums(searchText: String, page: Int) async throws -> AlbumResponse
+    func searchPlaylists(searchText: String, page: Int) async throws -> PlaylistResponse
+    func searchProfiles(searchText: String, page: Int) async throws -> UserResponse
 }
 
 // MARK: - Image Service Protocol

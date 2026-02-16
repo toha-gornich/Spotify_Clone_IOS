@@ -24,6 +24,7 @@
 		622CFC952EC284D100BB19F4 /* ResponseModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC942EC284D100BB19F4 /* ResponseModelsTests.swift */; };
 		622CFC972EC284D500BB19F4 /* FavoriteModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC962EC284D500BB19F4 /* FavoriteModelsTests.swift */; };
 		622CFC992EC7659600BB19F4 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC982EC7659600BB19F4 /* Test.swift */; };
+		6251EB2D2F438F7E00DD4E57 /* SearchTextDebouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6251EB2C2F438F7E00DD4E57 /* SearchTextDebouncer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,7 @@
 		622CFC942EC284D100BB19F4 /* ResponseModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseModelsTests.swift; sourceTree = "<group>"; };
 		622CFC962EC284D500BB19F4 /* FavoriteModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteModelsTests.swift; sourceTree = "<group>"; };
 		622CFC982EC7659600BB19F4 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
+		6251EB2C2F438F7E00DD4E57 /* SearchTextDebouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTextDebouncer.swift; sourceTree = "<group>"; };
 		627246B22DDB84AD000C8562 /* Spotify_Clone_IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spotify_Clone_IOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		627246C22DDB84AE000C8562 /* Spotify_Clone_IOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Spotify_Clone_IOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		627246CC2DDB84AE000C8562 /* Spotify_Clone_IOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Spotify_Clone_IOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -185,6 +187,7 @@
 				622CFC672EC27FF200BB19F4 /* Spotify_Clone_IOSTests */,
 				627246B42DDB84AD000C8562 /* Spotify_Clone_IOS */,
 				627246B32DDB84AD000C8562 /* Products */,
+				6251EB2C2F438F7E00DD4E57 /* SearchTextDebouncer.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -336,6 +339,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6251EB2D2F438F7E00DD4E57 /* SearchTextDebouncer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
