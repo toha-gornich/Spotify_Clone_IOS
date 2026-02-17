@@ -107,7 +107,7 @@ struct TrackView: View {
                         let trackToPlay = trackVM.playableTrack
                         playerManager.play(track: trackToPlay)
                     }) {
-                        Image(systemName: playerManager.playerState == .playing ? "pause.fill" : "play.fill")
+                        Image(systemName: playerManager.isPlaying(track: trackVM.playableTrack) ? "pause.fill" : "play.fill")
                             .font(.title3)
                             .foregroundColor(.black)
                             .frame(width: 44, height: 44)
