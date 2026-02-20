@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SearchCardView: View {
-    @State var genre: Genre
+    var genre: Genre
     var body: some View {
         ZStack(alignment: .topLeading) {
             RoundedRectangle(cornerRadius: 12)

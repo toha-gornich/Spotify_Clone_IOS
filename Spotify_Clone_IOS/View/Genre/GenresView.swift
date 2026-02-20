@@ -11,7 +11,6 @@ struct GenresView: View {
     
     @State private var searchText = ""
     @State private var searchQuery = ""
-    @Environment(\.dismiss) private var dismiss
     @State private var isShowingSearchResults = false
     @StateObject private var genreVM = GenresViewModel()
     @EnvironmentObject var playerManager: AudioPlayerManager
@@ -68,7 +67,7 @@ struct GenresView: View {
                         if !searchText.isEmpty {
                             Button(action: {
                                 searchText = ""
-                                // Скидаємо результати пошуку при очищенні
+                                
                                 isShowingSearchResults = false
                             }) {
                                 Image(systemName: "xmark.circle.fill")

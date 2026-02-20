@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+
 struct MainView: View {
     @EnvironmentObject var mainVM: MainViewModel
     @EnvironmentObject var playerManager: AudioPlayerManager
@@ -21,9 +22,11 @@ struct MainView: View {
                 HomeView(homeVM: homeVM)
                     .tag(0)
                 
-                GenresView()
-                    .environmentObject(genresVM)
-                    .tag(1)
+                NavigationStack{
+                    GenresView()
+                        .environmentObject(genresVM)
+                }
+                .tag(1)
                 
                 LibraryView()
                     .environmentObject(libraryVM)
@@ -31,6 +34,7 @@ struct MainView: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .ignoresSafeArea()
+            
             
             // Tab Bar
             VStack {

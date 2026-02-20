@@ -221,13 +221,27 @@ struct GenreDetailsView: View {
             }
             .zIndex(1)
         }
-        .navigationBarHidden(true)
+//        .navigationBarHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
+
         .task {
             genresVM.getGenreBySlug(slug: slugGenre)
         }
         .onAppear {
             mainVM.isTabBarVisible = false
         }
+//        .gesture(
+//            DragGesture()
+//                .onEnded { gesture in
+//                    let isSwipeRight = gesture.translation.width > 100
+//                    let startedFromLeftEdge = gesture.startLocation.x < 30
+//                    
+//                    if isSwipeRight && startedFromLeftEdge {
+//                        dismiss()
+//                    }
+//                }
+//        )
+
     }
     
     private func updateScrollOffset(_ offset: CGFloat) {
