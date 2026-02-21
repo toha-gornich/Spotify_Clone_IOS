@@ -9,25 +9,21 @@
 import SwiftUI
 
 struct PlaylistsContent: View {
-    let playlists: [Playlist]
-    @EnvironmentObject var playerManager: AudioPlayerManager
-    @EnvironmentObject var mainVM: MainViewModel
-    @EnvironmentObject var libraryVM: LibraryViewModel
+    @EnvironmentObject var router:Router
+    let libraryVM: LibraryViewModel
     
     var body: some View {
         LazyVStack(spacing: 8) {
-            ForEach(playlists, id: \.slug) { playlist in
-                NavigationLink(destination: {
-                    if playlist.user.displayName == libraryVM.user.displayName {
-                        MyPlaylistView(slugPlaylist: playlist.slug)
-                            .environmentObject(mainVM)
-                            .environmentObject(playerManager)
+            ForEach(libraryVM.playlists, id: \.slug) { playlist in
+                let isMyPlaylist = playlist.user.displayName == libraryVM.user.displayName
+                
+                Button() {
+                    if isMyPlaylist {
+                        router.navigateTo(AppRoute.myPlaylist(slugPlaylist: playlist.slug))
                     } else {
-                        PlaylistView(slugPlaylist: playlist.slug)
-                            .environmentObject(mainVM)
-                            .environmentObject(playerManager)
+                        router.navigateTo(AppRoute.playlist(slugPlaylist: playlist.slug))
                     }
-                }) {
+                } label: {
                     LibraryItemRow(
                         imageURL: playlist.image,
                         title: playlist.title,

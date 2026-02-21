@@ -250,20 +250,11 @@ struct MyPlaylistView: View {
                                 
                                 Spacer()
                                 
-                                Button(action: {
-                                    if let tracks = playlistVM.playlist.tracks, !tracks.isEmpty {
-                                        playerManager.play(track: tracks[0], from: tracks)
-                                    }
-                                }) {
-                                    Image(systemName: playerManager.playerState == .playing ? "pause.fill" : "play.fill")
-                                        .font(.title3)
-                                        .foregroundColor(.black)
-                                        .frame(width: 44, height: 44)
-                                        .background((playlistVM.playlist.tracks?.isEmpty ?? true) ? Color.gray.opacity(0.3) : Color.green)
-                                        .clipShape(Circle())
-                                }
-                                .disabled(playlistVM.playlist.tracks?.isEmpty ?? true)
-                                .opacity(showTitleInNavBar ? 0 : 1)
+                                PlayButton(
+                                    track: playlistVM.playlist.tracks?.first,
+                                    tracks: playlistVM.playlist.tracks,
+                                    showTitleInNavBar: !showTitleInNavBar
+                                )
                             }
                             
                             Divider()
@@ -389,10 +380,6 @@ struct MyPlaylistView: View {
             }
             
             .zIndex(1)
-        }
-        
-        .onAppear{
-            mainVM.isTabBarVisible = false
         }
         .task {
              playlistVM.getPlaylist(slugPlaylist)

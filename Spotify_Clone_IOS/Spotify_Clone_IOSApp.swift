@@ -19,29 +19,27 @@ struct Spotify_Clone_IOSApp: App {
     var body: some Scene {
         WindowGroup {
             ZStack {
-                NavigationStack {
-                    Group {
-                        if isLoading {
-                            ProgressView("Loading...")
-                        } else if isTokenValid {
-                            MainView()
-                        } else {
-                            GreetingView()
-                        }
+                Group {
+                    if isLoading {
+                        ProgressView("Loading...")
+                    } else if isTokenValid {
+                        MainView()
+                    } else {
+                        GreetingView()
                     }
-                    .environmentObject(playerManager)
-                    .environmentObject(mainVM)
-                    .onAppear {
-                        verifyToken()
-                    }
-                    .onOpenURL { url in
-                        handleDeepLink(url: url)
-                    }
-                    .alert("Activation", isPresented: $showActivationAlert) {
-                        Button("OK") { }
-                    } message: {
-                        Text(activationMessage)
-                    }
+                }
+                .environmentObject(playerManager)
+                .environmentObject(mainVM)
+                .onAppear {
+                    verifyToken()
+                }
+                .onOpenURL { url in
+                    handleDeepLink(url: url)
+                }
+                .alert("Activation", isPresented: $showActivationAlert) {
+                    Button("OK") { }
+                } message: {
+                    Text(activationMessage)
                 }
                 .environmentObject(playerManager)
                 .environmentObject(mainVM)
@@ -53,9 +51,9 @@ struct Spotify_Clone_IOSApp: App {
                                 
                                 MiniPlayerView(playerManager: playerManager)
                                     .padding(.horizontal, 8)
-                                    .padding(.bottom, miniPlayerBottomPadding())
+                                    .padding(.bottom, 85)
                                     .transition(.move(edge: .bottom).combined(with: .opacity))
-                                    .animation(.easeInOut(duration: 0.3), value: mainVM.isTabBarVisible)
+
                             }
                             .allowsHitTesting(true)
                         }
@@ -69,22 +67,11 @@ struct Spotify_Clone_IOSApp: App {
                         .environmentObject(mainVM)
                 }
                 
-                // Side Menu - поверх всього
                 SideMenuView(isShowing: $mainVM.isShowMenu)
                     .environmentObject(mainVM)
                     .environmentObject(playerManager)
                     .zIndex(1000)
             }
-        }
-    }
-    
-    // Обчислюємо відступ для MiniPlayer
-    private func miniPlayerBottomPadding() -> CGFloat {
-        if mainVM.isTabBarVisible {
-            // Коли Tab Bar видимий (Home, Search, Library)
-            return .bottomInsets + 8 // висота tab bar + safe area + відступ
-        } else {
-            return 0
         }
     }
     

@@ -8,10 +8,10 @@
 import SwiftUI
 struct ProfileView: View {    
     @Environment(\.dismiss) private var dismiss
-    @State var userId: String? = nil
+    var userId: String? = nil
     @StateObject private var profileVM = ProfileViewModel()
     @EnvironmentObject var playerManager: AudioPlayerManager
-    @EnvironmentObject var mainVM: MainViewModel
+    @EnvironmentObject var router: Router
     @State private var selectedPlaylistSlug: String?
     
     var body: some View {
@@ -145,9 +145,9 @@ struct ProfileView: View {
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     LazyHStack(spacing: 15) {
                                         ForEach(profileVM.followers) { user in
-                                            NavigationLink(destination: ProfileView()
-                                                .environmentObject(mainVM)
-                                                .environmentObject(playerManager)) {
+                                            Button(){
+                                                router.navigateTo(AppRoute.profile(profileId: String(user.id)))
+                                            }label: {
                                                 ArtistItemView(user: user)
                                             }
                                         }
@@ -177,9 +177,9 @@ struct ProfileView: View {
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     LazyHStack(spacing: 15) {
                                         ForEach(profileVM.following) { user in
-                                            NavigationLink(destination: ProfileView(userId: String(user.id))
-                                                .environmentObject(mainVM)
-                                                .environmentObject(playerManager)) {
+                                            Button(){
+                                                router.navigateTo(AppRoute.profile(profileId: String(user.id)))
+                                            }label: {
                                                 ArtistItemView(user: user)
                                             }
                                         }

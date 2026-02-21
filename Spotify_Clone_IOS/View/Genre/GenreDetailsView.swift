@@ -227,9 +227,7 @@ struct GenreDetailsView: View {
         .task {
             genresVM.getGenreBySlug(slug: slugGenre)
         }
-        .onAppear {
-            mainVM.isTabBarVisible = false
-        }
+
 //        .gesture(
 //            DragGesture()
 //                .onEnded { gesture in
@@ -257,5 +255,5 @@ struct GenreDetailsView: View {
 }
 
 #Preview {
-    MainView()
+//    MainView()
 }

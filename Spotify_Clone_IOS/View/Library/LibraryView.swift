@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct LibraryView: View {
+    @EnvironmentObject var router: Router
     @State private var showCreatePlaylist = false
-    @StateObject private var libraryVM = LibraryViewModel()
-    @EnvironmentObject var mainVM: MainViewModel
+    @ObservedObject var libraryVM: LibraryViewModel
     @EnvironmentObject var playerManager: AudioPlayerManager
     
     var body: some View {
@@ -35,11 +35,9 @@ struct LibraryView: View {
                             .font(.system(size: 24))
                             .foregroundColor(.primaryText)
                     }
-                    .navigationDestination(isPresented: $libraryVM.showNewPlaylist) {
-                        if !libraryVM.playlist.slug.isEmpty {
-                            MyPlaylistView(slugPlaylist: libraryVM.playlist.slug)
-                                .environmentObject(playerManager)
-                                .environmentObject(mainVM)
+                    .onChange(of: libraryVM.playlist.slug) { slug in
+                        if !slug.isEmpty {
+                            router.navigateTo(AppRoute.myPlaylist(slugPlaylist: slug))
                         }
                     }
                 }
@@ -82,10 +80,8 @@ struct LibraryView: View {
                                     }
                                 ).padding(.top, 50)
                             } else {
-                                PlaylistsContent(playlists: libraryVM.playlists)
-                                    .environmentObject(playerManager)
-                                    .environmentObject(mainVM)
-                                    .environmentObject(libraryVM)
+                                PlaylistsContent(libraryVM: libraryVM)
+
                             }
                         } else if libraryVM.selectedTab == 1 {
                             if libraryVM.artists.isEmpty && !libraryVM.isLoading {
@@ -96,8 +92,6 @@ struct LibraryView: View {
                                 ).padding(.top, 50)
                             } else {
                                 ArtistsContent(artists: libraryVM.artists)
-                                    .environmentObject(playerManager)
-                                    .environmentObject(mainVM)
                             }
                         } else {
                             if libraryVM.albums.isEmpty && !libraryVM.isLoading {
@@ -108,8 +102,6 @@ struct LibraryView: View {
                                 ).padding(.top, 50)
                             } else {
                                 AlbumsContent(albums: libraryVM.albums)
-                                    .environmentObject(playerManager)
-                                    .environmentObject(mainVM)
                             }
                         }
                     }
@@ -136,7 +128,6 @@ struct LibraryView: View {
             libraryVM.loadLibraryData()
         }
         .onAppear {
-            mainVM.isTabBarVisible = true
             libraryVM.getUserMe()
         }
     }

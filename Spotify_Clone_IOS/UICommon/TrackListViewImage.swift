@@ -8,8 +8,8 @@
 import SwiftUI
 struct TrackListViewImage: View {
 let tracks: [Track]
-@EnvironmentObject var mainVM: MainViewModel
 @EnvironmentObject var playerManager: AudioPlayerManager
+@EnvironmentObject var router: Router
 let onMoreOptions: ((Int) -> Void)?
 let maxItems6: Bool
 let padding: Int
@@ -87,9 +87,10 @@ var body: some View {
                         .frame(width: 30, alignment: .leading)
                     
                     // Track info
-                    NavigationLink(destination: TrackView(slugTrack: track.slug)
-                        .environmentObject(mainVM)
-                        .environmentObject(playerManager)) {
+                    
+                    Button(){
+                        router.navigateTo(AppRoute.track(slugTrack: track.slug))
+                    }label: {
                         HStack(spacing: 8) {
                             SpotifyRemoteImage(urlString: track.album.image)
                                 .aspectRatio(contentMode: .fill)

@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    @EnvironmentObject var router:Router
     @State private var greeting = ""
     @ObservedObject var homeVM: HomeViewModel
     @EnvironmentObject var mainVM: MainViewModel
@@ -63,7 +64,9 @@ struct HomeView: View {
                             LazyHStack(spacing: 15) {
                                 ForEach(homeVM.artists.indices, id: \.self) { index in
                                     let sObj = homeVM.artists[index]
-                                    NavigationLink(destination: ArtistView(slugArtist: sObj.slug)) {
+                                    Button(){
+                                        router.navigateTo(AppRoute.artist(slugArtist: sObj.slug))}
+                                    label: {
                                         ArtistItemView(artist: sObj)
                                     }
                                 }
@@ -76,7 +79,10 @@ struct HomeView: View {
                             LazyHStack(spacing: 15) {
                                 ForEach(homeVM.albums.indices, id: \.self) { index in
                                     let sObj = homeVM.albums[index]
-                                    NavigationLink(destination: AlbumView(slugAlbum: sObj.slug)) {
+                                    Button(){
+                                        router.navigateTo(AppRoute.album(slugAlbum: sObj.slug))
+                                    }
+                                    label:{
                                         MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
                                     }
                                 }
@@ -89,7 +95,9 @@ struct HomeView: View {
                             LazyHStack(spacing: 15) {
                                 ForEach(homeVM.playlists.indices, id: \.self) { index in
                                     let playlist = homeVM.playlists[index]
-                                    NavigationLink(destination: playlistDestination(for: playlist)) {
+                                    Button(){
+                                        router.navigateTo(AppRoute.playlist(slugPlaylist: playlist.slug))
+                                    }label: {
                                         MediaItemCell(
                                             imageURL: playlist.image,
                                             title: playlist.title,
@@ -107,7 +115,9 @@ struct HomeView: View {
                             LazyHStack(spacing: 15) {
                                 ForEach(homeVM.tracks.indices, id: \.self) { index in
                                     let sObj = homeVM.tracks[index]
-                                    NavigationLink(destination: TrackView(slugTrack: sObj.slug)) {
+                                    Button(){
+                                        router.navigateTo(AppRoute.track(slugTrack: sObj.slug))
+                                    }label:{
                                         MediaItemCell(imageURL: sObj.album.image, title: sObj.slug, width: 140, height: 140)
                                     }
                                 }
@@ -135,7 +145,6 @@ struct HomeView: View {
                   dismissButton: alertItem.dismissButton)
         }
         .onAppear {
-            mainVM.isTabBarVisible = true
             updateGreeting()
         }
     }

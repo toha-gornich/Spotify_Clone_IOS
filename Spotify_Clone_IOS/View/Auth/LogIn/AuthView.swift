@@ -229,7 +229,7 @@ struct AuthView: View {
         }
         .fullScreenCover(isPresented: $showMainView) {
             NavigationStack{
-                MainView()
+//                MainView()
             }
         }
         .fullScreenCover(isPresented: $isShowingSignUp) {

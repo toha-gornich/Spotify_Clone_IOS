@@ -7,10 +7,9 @@
 
 import SwiftUI
 struct TrackView: View {
+    @EnvironmentObject var router:Router
     let slugTrack: String
-    @Environment(\.dismiss) private var dismiss
     @StateObject private var trackVM = TrackViewModel()
-    @EnvironmentObject var mainVM: MainViewModel
     @EnvironmentObject var playerManager: AudioPlayerManager
     @State private var scrollOffset: CGFloat = 0
     @State private var showTitleInNavBar = false
@@ -77,20 +76,7 @@ struct TrackView: View {
             // Custom Navigation Bar overlay
             VStack {
                 HStack {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.white)
-                            .font(.title2)
-                            .frame(width: 44, height: 44)
-                            .background(
-                                Circle()
-                                    .fill(Color.bg)
-                            )
-                            .background(.ultraThinMaterial, in: Circle())
-                            .clipShape(Circle())
-                    }
+                    BackButton()
                     
                     Spacer()
                     
@@ -102,19 +88,11 @@ struct TrackView: View {
                     
                     Spacer()
                     
-//                    PlayButton
-                    Button(action: {
-                        let trackToPlay = trackVM.playableTrack
-                        playerManager.play(track: trackToPlay)
-                    }) {
-                        Image(systemName: playerManager.isPlaying(track: trackVM.playableTrack) ? "pause.fill" : "play.fill")
-                            .font(.title3)
-                            .foregroundColor(.black)
-                            .frame(width: 44, height: 44)
-                            .background(Color.green)
-                            .clipShape(Circle())
-                    }
-                    .opacity(showTitleInNavBar ? 1 : 0)
+                    PlayButton(
+                        track: trackVM.tracks.first,
+                        tracks: trackVM.tracks,
+                        showTitleInNavBar: showTitleInNavBar
+                    )
                 }
                 .padding(.horizontal, 16)
                 .padding(.bottom, 24)
@@ -174,7 +152,10 @@ struct TrackView: View {
                                         }
                                         
                                         // Artist name
-                                        NavigationLink(destination: ArtistView(slugArtist: trackVM.track.artist.slug).environmentObject(mainVM).environmentObject(playerManager)) {
+                                        Button(){
+                                            router.navigateTo(AppRoute.artist(slugArtist: trackVM.track.artist.slug))
+                                        }
+                                        label:{
                                             Text(trackVM.track.artist.displayName)
                                                 .font(.subheadline)
                                                 .foregroundColor(.white)
@@ -185,8 +166,10 @@ struct TrackView: View {
                                                 .fill(Color.gray)
                                                 .frame(width: 6, height: 6)
                                         }
-                                        
-                                        NavigationLink(destination: AlbumView(slugAlbum: trackVM.track.album.slug).environmentObject(mainVM).environmentObject(playerManager)) {
+                                        Button(){
+                                            router.navigateTo(AppRoute.album(slugAlbum: trackVM.track.album.slug))
+                                        }
+                                        label:{
                                             Text(trackVM.track.album.title)
                                                 .font(.subheadline)
                                                 .foregroundColor(.white)
@@ -251,18 +234,12 @@ struct TrackView: View {
                                 .disabled(trackVM.isLoading)
                                 
                                 Spacer()
-                                Button(action: {
-                                    let trackToPlay = trackVM.playableTrack
-                                    playerManager.play(track: trackToPlay, from: trackVM.tracks)
-                                }) {
-                                    Image(systemName: playerManager.isPlaying(track: trackVM.playableTrack) ? "pause.fill" : "play.fill")
-                                        .font(.title3)
-                                        .foregroundColor(.black)
-                                        .frame(width: 44, height: 44)
-                                        .background(Color.green)
-                                        .clipShape(Circle())
-                                }
-                                .opacity(showTitleInNavBar ? 0 : 1)
+                                
+                                PlayButton(
+                                    track: trackVM.tracks.first,
+                                    tracks: trackVM.tracks,
+                                    showTitleInNavBar: !showTitleInNavBar
+                                )
                                 
                             }
                             
@@ -277,7 +254,8 @@ struct TrackView: View {
                                     .font(.subheadline)
                                     .foregroundColor(.gray)
                                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                TrackListView(tracks: Array(trackVM.tracks.prefix(5))).environmentObject(mainVM).environmentObject(playerManager)
+                                TrackListView(tracks: Array(trackVM.tracks.prefix(5)))
+                                    .environmentObject(playerManager)
                                     .task(id: trackVM.track.genre.slug) {
                                         if !trackVM.track.genre.slug.isEmpty {
                                             trackVM.getTracksBySlugGenre(slug: trackVM.track.genre.slug)
@@ -297,7 +275,8 @@ struct TrackView: View {
                                     .foregroundColor(.primaryText)
                                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                                 
-                                TrackListViewImage(tracks: Array(trackVM.tracksByArtist.prefix(5))).environmentObject(mainVM).environmentObject(playerManager)
+                                TrackListViewImage(tracks: Array(trackVM.tracksByArtist.prefix(5)))
+                                    .environmentObject(playerManager)
                                     .task(id: trackVM.track.artist.slug) {
                                         if !trackVM.track.artist.slug.isEmpty {
                                             trackVM.getTrackBySlugArtist(slug: trackVM.track.artist.slug)
@@ -322,7 +301,11 @@ struct TrackView: View {
                                     LazyHStack(spacing: 15) {
                                         ForEach(trackVM.albums.indices, id: \.self) { index in
                                             let sObj = trackVM.albums[index]
-                                            NavigationLink(destination: AlbumView(slugAlbum: sObj.slug).environmentObject(mainVM).environmentObject(playerManager)) {
+                                            
+                                            Button(){
+                                                router.navigateTo(AppRoute.album(slugAlbum: sObj.slug))
+                                            }
+                                            label:{
                                                 MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
                                             }
                                         }
@@ -342,10 +325,12 @@ struct TrackView: View {
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     LazyHStack(spacing: 15) {
                                         ForEach(trackVM.artists.indices, id: \.self) { index in
-                                            
                                             let sObj = trackVM.artists[index]
                                             
-                                            NavigationLink(destination: ArtistView(slugArtist: sObj.slug).environmentObject(mainVM).environmentObject(playerManager)) {
+                                            Button(){
+                                                router.navigateTo(AppRoute.artist(slugArtist: sObj.slug))
+                                            }
+                                            label:{
                                                 ArtistItemView(artist: sObj)
                                             }
                                         }
@@ -408,7 +393,6 @@ struct TrackView: View {
             
         }
         .onAppear {
-            mainVM.isTabBarVisible = false
             trackVM.postTrackFavorite(slug: slugTrack)
         }
         

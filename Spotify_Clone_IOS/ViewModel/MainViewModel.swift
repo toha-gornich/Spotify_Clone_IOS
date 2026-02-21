@@ -12,5 +12,4 @@ final class MainViewModel: ObservableObject {
     
     @Published var selectTab: Int = 0
     @Published var isShowMenu: Bool = false
-    @Published var isTabBarVisible: Bool = true
 }

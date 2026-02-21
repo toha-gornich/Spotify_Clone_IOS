@@ -7,10 +7,10 @@
 
 import SwiftUI
 struct AlbumView: View {
+    
     let slugAlbum: String
-    @Environment(\.dismiss) private var dismiss
     @StateObject private var albumVM = AlbumViewModel()
-    @EnvironmentObject var mainVM: MainViewModel
+    @EnvironmentObject var router: Router
     @EnvironmentObject var playerManager: AudioPlayerManager
     @State private var scrollOffset: CGFloat = 0
     @State private var showTitleInNavBar = false
@@ -77,20 +77,7 @@ struct AlbumView: View {
             // Custom Navigation Bar overlay
             VStack {
                 HStack {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.white)
-                            .font(.title2)
-                            .frame(width: 44, height: 44)
-                            .background(
-                                Circle()
-                                    .fill(Color.bg)
-                            )
-                            .background(.ultraThinMaterial, in: Circle())
-                            .clipShape(Circle())
-                    }
+                    BackButton()
                     
                     Spacer()
                     
@@ -103,18 +90,11 @@ struct AlbumView: View {
                     Spacer()
                     
                     // Play button in navigation bar
-                    Button(action: {
-                        let trackToPlay = albumVM.tracks[0]
-                        playerManager.play(track: trackToPlay)
-                    }) {
-                        Image(systemName: playerManager.playerState == .playing ? "pause.fill" : "play.fill")
-                            .font(.title3)
-                            .foregroundColor(.black)
-                            .frame(width: 44, height: 44)
-                            .background(Color.green)
-                            .clipShape(Circle())
-                    }
-                    .opacity(showTitleInNavBar ? 1 : 0)
+                    PlayButton(
+                        track: albumVM.tracks.first,
+                        tracks: albumVM.tracks,
+                        showTitleInNavBar: showTitleInNavBar
+                    )
                 }
                 .padding(.horizontal, 16)
                 .padding(.bottom, 24)
@@ -178,8 +158,9 @@ struct AlbumView: View {
                                         }
                                         
                                         // Artist name
-                                        NavigationLink(destination: ArtistView(slugArtist: albumVM.album.artist.slug).environmentObject(mainVM)
-                                            .environmentObject(playerManager)) {
+                                        Button(){
+                                            router.navigateTo(AppRoute.artist(slugArtist:albumVM.album.artist.slug ))
+                                        }label: {
                                             Text(albumVM.album.artist.displayName)
                                                 .font(.subheadline)
                                                 .foregroundColor(.white)
@@ -219,28 +200,15 @@ struct AlbumView: View {
                                 
                                 
                                 Spacer()
-                                // Play button (this one will hide when scrolled)
-                                Button(action: {
-                                    if let trackToPlay = albumVM.tracks.first {
-                                        playerManager.play(track: trackToPlay)
-                                    } else {
-                                        print("⚠️ No tracks to play")
-                                    }
-                                }) {
-                                    Image(systemName: playerManager.playerState == .playing ? "pause.fill" : "play.fill")
-                                        .font(.title3)
-                                        .foregroundColor(.black)
-                                        .frame(width: 44, height: 44)
-                                        .background(albumVM.tracks.isEmpty ? Color.gray.opacity(0.5) : Color.green)
-                                        .clipShape(Circle())
-                                }
-                                .disabled(albumVM.tracks.isEmpty)
-                                .opacity(showTitleInNavBar ? 0 : 1)
-
+                                
+                                PlayButton(
+                                    track: albumVM.tracks.first,
+                                    tracks: albumVM.tracks,
+                                    showTitleInNavBar: showTitleInNavBar
+                                )
                             }
                             
-                            TrackListView(tracks: albumVM.tracks).environmentObject(mainVM)
-                                .environmentObject(playerManager)
+                            TrackListView(tracks: albumVM.tracks)
                             .task(id: albumVM.album.slug) {
                                 if !albumVM.album.slug.isEmpty {
                                     albumVM.getTracksBySlugAlbum(slug: albumVM.album.slug)
@@ -280,18 +248,16 @@ struct AlbumView: View {
                                         
                                         VStack {
                                             if !sObj.artist.image.isEmpty {
-                                                SpotifyRemoteImage(urlString: sObj.album.image)
-                                                    .frame(width: 140, height: 140)
-                                                    .clipShape(Circle())
+                                                Button(){
+                                                    router.navigateTo(AppRoute.artist(slugArtist: sObj.slug))
+                                                }label: {
+                                                    SpotifyRemoteImage(urlString: sObj.album.image)
+                                                        .frame(width: 140, height: 140)
+                                                        .clipShape(Circle())
+                                                }
                                             } else {
                                                 // Placeholder під час завантаження
-                                                Circle()
-                                                    .fill(Color.gray.opacity(0.3))
-                                                    .frame(width: 140, height: 140)
-                                                    .overlay(
-                                                        ProgressView()
-                                                            .progressViewStyle(CircularProgressViewStyle())
-                                                    )
+                                                CircularLoaderView()
                                             }
                                             
                                             Text(sObj.title)
@@ -342,7 +308,6 @@ struct AlbumView: View {
             
         }
         .onAppear {
-            mainVM.isTabBarVisible = false
             albumVM.postAlbumFavorite(slug: slugAlbum)
         }
         
@@ -359,6 +324,6 @@ struct AlbumView: View {
     }
 }
 #Preview {
-    MainView()
+//    MainView()
     
 }

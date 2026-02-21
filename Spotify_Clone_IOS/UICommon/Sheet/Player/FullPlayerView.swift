@@ -7,20 +7,23 @@
 
 import SwiftUI
 
-
 struct FullPlayerView: View {
     @ObservedObject var playerManager: AudioPlayerManager
-    @Environment(\.presentationMode) var presentationMode
-    
+    @State private var seekValue: Double = 0
+    @State private var isDragging = false
+
     var body: some View {
         ZStack {
             LinearGradient(
-                gradient: Gradient(colors: [Color(hex:playerManager.currentTrack!.album.color), Color(hex:playerManager.currentTrack!.album.color).opacity(0.5)]),
+                gradient: Gradient(colors: [
+                    Color(hex: playerManager.currentTrack?.album.color ?? "1C1C1E"),
+                    Color(hex: playerManager.currentTrack?.album.color ?? "1C1C1E").opacity(0.5)
+                ]),
                 startPoint: .top,
                 endPoint: .bottom
             )
             .ignoresSafeArea()
-            
+
             VStack(spacing: 0) {
                 // Top Controls
                 HStack {
@@ -31,15 +34,16 @@ struct FullPlayerView: View {
                             .font(.system(size: 20, weight: .medium))
                             .foregroundColor(.white)
                     }
-                    
+
                     Spacer()
-                    
+
                     Text(playerManager.currentTrack?.title ?? "")
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(.white)
-                    
+                        .lineLimit(1)
+
                     Spacer()
-                    
+
                     Button(action: {}) {
                         Image(systemName: "ellipsis")
                             .font(.system(size: 20))
@@ -48,51 +52,82 @@ struct FullPlayerView: View {
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 20)
-                
+
                 Spacer()
-                
-                SpotifyRemoteImage(urlString: playerManager.currentTrack!.album.image)
-                    .frame(width: 300, height: 300)
-                    .cornerRadius(12)
-                    .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
-                
+
+                // Album Image
+                if let track = playerManager.currentTrack {
+                    SpotifyRemoteImage(urlString: track.album.image)
+                        .frame(width: 300, height: 300)
+                        .cornerRadius(12)
+                        .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
+                        .scaleEffect(playerManager.playerState == .playing ? 1.0 : 0.85)
+                        .animation(.spring(response: 0.4, dampingFraction: 0.7), value: playerManager.playerState)
+                }
+
                 Spacer()
-                
+
                 // Track Info
                 VStack(spacing: 8) {
                     Text(playerManager.currentTrack?.title ?? "")
                         .font(.system(size: 24, weight: .bold))
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
-                    
+
                     Text(playerManager.currentTrack?.artistName ?? "")
                         .font(.system(size: 18))
                         .foregroundColor(.white.opacity(0.8))
                 }
                 .padding(.horizontal, 40)
-                
+
                 Spacer()
-                
-                // Progress Bar
+
+                // Slider + Time
                 VStack(spacing: 8) {
-                    ProgressView(value: playerManager.currentTime, total: playerManager.duration)
-                        .progressViewStyle(LinearProgressViewStyle(tint: .white))
-                        .background(Color.white.opacity(0.3))
-                    
+                    Slider(
+                        value: Binding(
+                            get: {
+                                // Під час перетягування — показуємо seekValue, інакше — currentTime
+                                isDragging ? seekValue : playerManager.currentTime
+                            },
+                            set: { newValue in
+                                seekValue = newValue
+                                // Тільки оновлюємо UI під час перетягування
+                                playerManager.updateSeekTime(newValue)
+                            }
+                        ),
+                        in: 0...max(playerManager.duration, 1)
+                    )
+                    .accentColor(.white)
+                    .simultaneousGesture(
+                        DragGesture(minimumDistance: 0)
+                            .onChanged { _ in
+                                if !isDragging {
+                                    isDragging = true
+                                    seekValue = playerManager.currentTime
+                                }
+                            }
+                            .onEnded { _ in
+                                // Тільки тут робимо справжній seek
+                                playerManager.seek(to: seekValue)
+                                isDragging = false
+                            }
+                    )
+
                     HStack {
-                        Text(timeString(from: playerManager.currentTime))
+                        Text(timeString(from: isDragging ? seekValue : playerManager.currentTime))
                             .font(.system(size: 12))
                             .foregroundColor(.white.opacity(0.7))
-                        
+
                         Spacer()
-                        
-                        Text("-\(timeString(from: playerManager.duration - playerManager.currentTime))")
+
+                        Text("-\(timeString(from: playerManager.duration - (isDragging ? seekValue : playerManager.currentTime)))")
                             .font(.system(size: 12))
                             .foregroundColor(.white.opacity(0.7))
                     }
                 }
                 .padding(.horizontal, 40)
-                
+
                 // Player Controls
                 HStack(spacing: 28) {
                     Button(action: {
@@ -102,7 +137,7 @@ struct FullPlayerView: View {
                             .font(.system(size: 20))
                             .foregroundColor(playerManager.isShuffleEnabled ? .green : .white)
                     }
-                    
+
                     Button(action: {
                         playerManager.previousTrack()
                     }) {
@@ -110,7 +145,7 @@ struct FullPlayerView: View {
                             .font(.system(size: 30))
                             .foregroundColor(.white)
                     }
-                    
+
                     Button(action: {
                         playerManager.togglePlayPause()
                     }) {
@@ -118,7 +153,7 @@ struct FullPlayerView: View {
                             .font(.system(size: 80))
                             .foregroundColor(.white)
                     }
-                    
+
                     Button(action: {
                         playerManager.nextTrack()
                     }) {
@@ -126,16 +161,18 @@ struct FullPlayerView: View {
                             .font(.system(size: 30))
                             .foregroundColor(.white)
                     }
-                    
-                    Button(action: {}) {
-                        Image(systemName: "timer")
+
+                    Button(action: {
+                        playerManager.toggleRepeat()
+                    }) {
+                        Image(systemName: repeatIcon)
                             .font(.system(size: 20))
-                            .foregroundColor(.white)
+                            .foregroundColor(playerManager.repeatMode == .off ? .white : .green)
                     }
                 }
                 .padding(.top, 20)
                 .padding(.horizontal, 16)
-                
+
                 // Bottom Controls
                 HStack(spacing: 60) {
                     Button(action: {}) {
@@ -143,13 +180,13 @@ struct FullPlayerView: View {
                             .font(.system(size: 20))
                             .foregroundColor(.white)
                     }
-                    
+
                     Button(action: {}) {
                         Image(systemName: "square.and.arrow.up")
                             .font(.system(size: 20))
                             .foregroundColor(.white)
                     }
-                    
+
                     Button(action: {}) {
                         Image(systemName: "line.3.horizontal")
                             .font(.system(size: 20))
@@ -158,24 +195,40 @@ struct FullPlayerView: View {
                 }
                 .padding(.top, 30)
                 .padding(.bottom, 40)
-                
             }
         }
-
         .gesture(
             DragGesture()
                 .onEnded { value in
-                    // Якщо свайп вниз більше 100 пікселів
                     if value.translation.height > 100 {
                         playerManager.sheetState = .mini
                     }
                 }
         )
+        // Alert для помилок завантаження
+        .alert("Помилка", isPresented: Binding(
+            get: { playerManager.errorMessage != nil },
+            set: { if !$0 { playerManager.errorMessage = nil } }
+        )) {
+            Button("OK") { playerManager.errorMessage = nil }
+        } message: {
+            Text(playerManager.errorMessage ?? "")
+        }
     }
-    
+
+    // Іконка repeat залежно від режиму
+    private var repeatIcon: String {
+        switch playerManager.repeatMode {
+        case .off: return "repeat"
+        case .all: return "repeat"
+        case .one: return "repeat.1"
+        }
+    }
+
     private func timeString(from timeInterval: TimeInterval) -> String {
-        let minutes = Int(timeInterval) / 60
-        let seconds = Int(timeInterval) % 60
+        let safeInterval = max(0, timeInterval)
+        let minutes = Int(safeInterval) / 60
+        let seconds = Int(safeInterval) % 60
         return String(format: "%d:%02d", minutes, seconds)
     }
 }

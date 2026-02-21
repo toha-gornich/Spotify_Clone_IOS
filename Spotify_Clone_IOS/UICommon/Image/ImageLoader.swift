@@ -28,8 +28,13 @@ final class ImageLoader: ObservableObject{
 
 struct RemoteImage: View {
     var image: Image?
-    var body: some View{
-        image?.resizable() ?? Image("img_3").resizable()
+    
+    var body: some View {
+        if let image = image {
+            image.resizable()
+        } else {
+            ShimmerView()
+        }
     }
 }
 

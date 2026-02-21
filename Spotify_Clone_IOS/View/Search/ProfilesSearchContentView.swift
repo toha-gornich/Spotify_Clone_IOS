@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ProfilesSearchContentView: View {
     @ObservedObject var searchVM: SearchViewModel
-    @EnvironmentObject var mainVM: MainViewModel
+    @EnvironmentObject var router: Router
     @EnvironmentObject var playerManager: AudioPlayerManager
     let maxItems6: Bool
     let padding: Int
@@ -33,9 +33,9 @@ struct ProfilesSearchContentView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 15) {
                 ForEach(limitedItems) { user in
-                    NavigationLink(destination: ProfileView(userId: String(user.id))
-                        .environmentObject(mainVM)
-                        .environmentObject(playerManager)) {
+                    Button(){
+                        router.navigateTo(AppRoute.profile(profileId: String(user.id)))
+                    }label: {
                         ArtistItemView(user: user)
                     }
                 }

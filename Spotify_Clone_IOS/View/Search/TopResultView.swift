@@ -9,11 +9,12 @@ import SwiftUI
 
 struct TopResultView: View {
     let track: Track
-    @EnvironmentObject var mainVM: MainViewModel
     @EnvironmentObject var playerManager: AudioPlayerManager
+    @EnvironmentObject var router: Router
     var body: some View {
-        NavigationLink(destination: TrackView(slugTrack: track.slug).environmentObject(mainVM)
-            .environmentObject(playerManager)){
+        Button(){
+            router.navigateTo(AppRoute.track(slugTrack: track.slug))
+        }label: {
             HStack(spacing: 12) {
                 AsyncImage(url: URL(string: track.album.image)) { image in
                     image

@@ -10,15 +10,14 @@ import SwiftUI
 
 struct ArtistsContent: View {
     let artists: [ArtistTrack]
-    @EnvironmentObject var playerManager: AudioPlayerManager
-    @EnvironmentObject var mainVM: MainViewModel
+    @EnvironmentObject var router:Router
     
     var body: some View {
         LazyVStack(spacing: 8) {
             ForEach(artists, id: \.slug) { artist in
-                NavigationLink(destination: ArtistView(slugArtist: artist.slug)
-                    .environmentObject(mainVM)
-                    .environmentObject(playerManager)) {
+                Button(){
+                    router.navigateTo(AppRoute.artist(slugArtist: artist.slug))
+                }label: {
                     LibraryItemRow(
                         imageURL: artist.image,
                         title: artist.displayName,

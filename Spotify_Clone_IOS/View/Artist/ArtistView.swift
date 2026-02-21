@@ -8,10 +8,9 @@
 import SwiftUI
 struct ArtistView: View {
     @State var  slugArtist: String
-    @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject var mainVM: MainViewModel
     @StateObject private var artistVM = ArtistViewModel()
     @EnvironmentObject var playerManager: AudioPlayerManager
+    @EnvironmentObject var router: Router
     @State private var scrollOffset: CGFloat = 0
     @State private var showTitleInNavBar = false
     
@@ -64,20 +63,7 @@ struct ArtistView: View {
             // Custom Navigation Bar overlay
             VStack {
                 HStack {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.white)
-                            .font(.title2)
-                            .frame(width: 44, height: 44)
-                            .background(
-                                Circle()
-                                    .fill(Color.bg)
-                            )
-                            .background(.ultraThinMaterial, in: Circle())
-                            .clipShape(Circle())
-                    }
+                    BackButton()
                     
                     Spacer()
                     
@@ -89,19 +75,13 @@ struct ArtistView: View {
                     
                     Spacer()
                     
-                    // Play button in navigation bar
-                    Button(action: {
-                        let trackToPlay = artistVM.tracks[0]
-                        playerManager.play(track: trackToPlay, from: artistVM.tracks)
-                    }) {
-                        Image(systemName: playerManager.playerState == .playing ? "pause.fill" : "play.fill")
-                            .font(.title3)
-                            .foregroundColor(.black)
-                            .frame(width: 44, height: 44)
-                            .background(Color.green)
-                            .clipShape(Circle())
-                    }
-                    .opacity(showTitleInNavBar ? 1 : 0)
+                    
+                    PlayButton(
+                        track: artistVM.tracks.first,
+                        tracks: artistVM.tracks,
+                        showTitleInNavBar: showTitleInNavBar
+                    )
+                    
                 }
                 .padding(.horizontal, 16)
                 .padding(.bottom, 25)
@@ -192,18 +172,11 @@ struct ArtistView: View {
                                 .disabled(artistVM.isLoading)
                                 Spacer()
                                 
-                                Button(action: {
-                                    let trackToPlay = artistVM.tracks.first
-                                    playerManager.play(track: trackToPlay, from: artistVM.tracks)
-                                }) {
-                                    Image(systemName: playerManager.playerState == .playing ? "pause.fill" : "play.fill")
-                                        .font(.title3)
-                                        .foregroundColor(.black)
-                                        .frame(width: 44, height: 44)
-                                        .background(Color.green)
-                                        .clipShape(Circle())
-                                }
-                                .opacity(showTitleInNavBar ? 0 : 1)
+                                PlayButton(
+                                    track: artistVM.tracks.first,
+                                    tracks: artistVM.tracks,
+                                    showTitleInNavBar: !showTitleInNavBar
+                                )
                                 
                             }
                             
@@ -214,13 +187,19 @@ struct ArtistView: View {
                                 
                                 // Vertical list for all tracks by slug artist
                                 LazyVStack(spacing: 0) {
-                                    ForEach(0..<min(4,artistVM.tracks.count), id: \.self) { index in
-                                        TrackRowCell(
-                                            track: artistVM.tracks[index],
-                                            index: index + 1
-                                        )
+                                    ForEach(0..<min(4, artistVM.tracks.count), id: \.self) { index in
+                                        let sObj = artistVM.tracks[index]
                                         
-                                        // Track separator
+                                        Button() {
+                                            router.navigateTo(AppRoute.track(slugTrack: sObj.slug))
+                                        } label: {
+                                            TrackRowCell(
+                                                track: sObj,
+                                                index: index + 1
+                                            )
+                                        }
+                                        
+                                        // Винеси дивайдер сюди, поза button
                                         if index < artistVM.tracks.count - 1 {
                                             Divider()
                                                 .background(Color.gray.opacity(0.2))
@@ -241,7 +220,13 @@ struct ArtistView: View {
                                 LazyHStack(spacing: 15) {
                                     ForEach(artistVM.albums.indices, id: \.self) { index in
                                         let sObj = artistVM.albums[index]
-                                        MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
+                                        
+                                        Button(){
+                                            router.navigateTo(AppRoute.album(slugAlbum: sObj.slug))
+                                        }
+                                        label:{
+                                            MediaItemCell(imageURL: sObj.image, title: sObj.title, width: 140, height: 140)
+                                        }
                                     }
                                 }
                             }
@@ -258,7 +243,12 @@ struct ArtistView: View {
                                 LazyHStack(spacing: 15) {
                                     ForEach(artistVM.tracks.indices.reversed(), id: \.self) { index in
                                         let sObj = artistVM.tracks[index]
-                                        MediaItemCell(imageURL: sObj.album.image, title: sObj.title, width: 140, height: 140)
+                                        Button(){
+                                            router.navigateTo(AppRoute.track(slugTrack: sObj.slug))
+                                        }
+                                        label:{
+                                            MediaItemCell(imageURL: sObj.album.image, title: sObj.title, width: 140, height: 140)
+                                        }
                                     }
                                 }
                             }
@@ -272,9 +262,10 @@ struct ArtistView: View {
                                     ForEach(artistVM.artists.indices, id: \.self) { index in
                                         
                                         let sObj = artistVM.artists[index]
-                                        
-                                        NavigationLink(destination: ArtistView(slugArtist: sObj.slug).environmentObject(mainVM)
-                                            .environmentObject(playerManager)) {
+                                        Button(){
+                                            router.navigateTo(AppRoute.artist(slugArtist: sObj.slug))
+                                        }
+                                        label:{
                                             ArtistItemView(artist: sObj)
                                         }
                                     }
@@ -342,7 +333,6 @@ struct ArtistView: View {
         }
         
         .onAppear {
-            mainVM.isTabBarVisible = false
             artistVM.postArtistFavorite(slug: slugArtist)
         }
     }
@@ -360,6 +350,6 @@ struct ArtistView: View {
 }
 
 #Preview {
-    MainView()
+//    MainView()
     
 }

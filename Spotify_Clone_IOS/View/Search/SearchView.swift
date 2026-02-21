@@ -11,13 +11,12 @@ import Combine
 struct SearchView: View {
     @State var searchText: String
     @State private var searchQuery = ""
+    @EnvironmentObject var router: Router
     @State private var selectedTab: SearchTab = .all
     @StateObject private var searchDebouncer = SearchTextDebouncer()
     
     @StateObject private var searchVM = SearchViewModel()
-    @EnvironmentObject var mainVM: MainViewModel
     @EnvironmentObject var playerManager: AudioPlayerManager
-    @Environment(\.dismiss) private var dismiss
     
     @State private var isShowingSearchResults = false
     @State private var hasInitialized = false
@@ -69,7 +68,6 @@ struct SearchView: View {
         .toolbar(.hidden, for: .navigationBar)
         .ignoresSafeArea(.keyboard, edges: .bottom)
         .onAppear {
-            mainVM.isTabBarVisible = true
             if !hasInitialized {
                 searchDebouncer.searchText = searchText
                 hasInitialized = true
@@ -150,7 +148,7 @@ struct SearchView: View {
                 
                 // Cancel button
                 Button(action: {
-                    dismiss()
+                    router.goBack()
                 }) {
                     Text("Cancel")
                         .foregroundColor(.white)
@@ -202,8 +200,6 @@ struct SearchView: View {
                     case .all:
                         AllSearchContentView(selectedTab: $selectedTab, searchVM: searchVM)
                             .padding(.bottom, 100)
-                            .environmentObject(mainVM)
-                            .environmentObject(playerManager)
                         
                     case .songs:
                         TrackListViewImage(
@@ -214,8 +210,6 @@ struct SearchView: View {
                             isLoading: searchVM.isLoadingMoreTracks
                         )
                         .padding(.top, 20)
-                        .environmentObject(mainVM)
-                        .environmentObject(playerManager)
                         
                     case .albums:
                         AlbumsSearchContentView(
@@ -225,8 +219,6 @@ struct SearchView: View {
                             },
                             isLoading: searchVM.isLoadingMoreAlbums
                         )
-                        .environmentObject(mainVM)
-                        .environmentObject(playerManager)
                         .padding(.top, 20)
                         
                     case .artists:
@@ -237,8 +229,6 @@ struct SearchView: View {
                             },
                             isLoading: searchVM.isLoadingMoreArtists
                         )
-                        .environmentObject(mainVM)
-                        .environmentObject(playerManager)
                         .padding(.top, 20)
                         
                     case .playlists:
@@ -250,8 +240,6 @@ struct SearchView: View {
                             isLoading: searchVM.isLoadingMorePlaylists
                         )
                         .padding(.top, 20)
-                        .environmentObject(mainVM)
-                        .environmentObject(playerManager)
                     }
                 } else {
                     EmptySearchView()
@@ -290,7 +278,7 @@ struct SearchView: View {
 }
 
 #Preview {
-    MainView()
+//    MainView()
 }
 
 

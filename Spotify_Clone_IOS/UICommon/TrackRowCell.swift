@@ -57,9 +57,6 @@ struct TrackRowCell: View {
         
         .padding(.vertical, 8)
         .background(Color.clear)
-        .onTapGesture {
-            
-        }
     }
     
     private func formatDuration(_ seconds: Int) -> String {

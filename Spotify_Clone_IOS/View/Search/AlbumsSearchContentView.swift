@@ -8,7 +8,7 @@
 
 import SwiftUI
 struct AlbumsSearchContentView: View {
-    @EnvironmentObject var mainVM: MainViewModel
+    @EnvironmentObject var router: Router
     @EnvironmentObject var playerManager: AudioPlayerManager
     @ObservedObject var searchVM: SearchViewModel
     let maxItems6: Bool
@@ -45,9 +45,9 @@ struct AlbumsSearchContentView: View {
                 GridItem(.flexible())
             ], spacing: 10) {
                 ForEach(Array(limitedItems.enumerated()), id: \.offset) { index, album in
-                    NavigationLink(destination: AlbumView(slugAlbum: album.slug)
-                        .environmentObject(mainVM)
-                        .environmentObject(playerManager)) {
+                    Button(){
+                        router.navigateTo(AppRoute.album(slugAlbum: album.slug))
+                    }label: {
                         MediaItemCell(imageURL: album.image, title: album.title, width: 140, height: 140)
                     }
                     .onAppear {

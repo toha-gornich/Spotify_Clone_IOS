@@ -10,8 +10,8 @@ import SwiftUI
 
 struct PlaylistsSearchContentView: View {
     @ObservedObject var searchVM: SearchViewModel
-    @EnvironmentObject var mainVM: MainViewModel
     @EnvironmentObject var playerManager: AudioPlayerManager
+    @EnvironmentObject var router: Router
     let maxItems6: Bool
     let padding: Int
     let onLoadMore: (() -> Void)?
@@ -46,17 +46,15 @@ struct PlaylistsSearchContentView: View {
                 GridItem(.flexible())
             ], spacing: 10) {
                 ForEach(Array(limitedItems.enumerated()), id: \.offset) { index, playlist in
-                    NavigationLink(destination: {
-                        if playlist.user.displayName == searchVM.user.displayName {
-                            MyPlaylistView(slugPlaylist: playlist.slug)
-                                .environmentObject(mainVM)
-                                .environmentObject(playerManager)
-                        } else {
-                            PlaylistView(slugPlaylist: playlist.slug)
-                                .environmentObject(mainVM)
-                                .environmentObject(playerManager)
+                    let isMyPlaylist = playlist.user.displayName == searchVM.user.displayName
+                    
+                    Button(){
+                        if isMyPlaylist{
+                            router.navigateTo(AppRoute.myPlaylist(slugPlaylist: playlist.slug))
+                        }else{
+                            router.navigateTo(AppRoute.playlist(slugPlaylist: playlist.slug))
                         }
-                    }) {
+                    }label: {
                         MediaItemCell(
                             imageURL: playlist.image,
                             title: playlist.title,

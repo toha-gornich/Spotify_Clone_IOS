@@ -14,7 +14,7 @@ struct TrackListView: View {
     let onDeleteTrack: ((String) async -> Void)?
     
     @EnvironmentObject var playerManager: AudioPlayerManager
-    @EnvironmentObject var mainVM: MainViewModel
+    @EnvironmentObject var router: Router
     
     @State private var showingDeleteAlert = false
     @State private var trackToDelete: Track?
@@ -67,6 +67,7 @@ struct TrackListView: View {
                     .padding(.bottom, 8)
                 
                 ForEach(0..<tracks.count, id: \.self) { index in
+                    let sObj = tracks[index]
                     HStack(spacing: 12) {
                         // Track number
                         Text("\(index + 1)")
@@ -76,18 +77,20 @@ struct TrackListView: View {
                         
                         // Track info
                         VStack(alignment: .leading, spacing: 2) {
-                            NavigationLink(destination: TrackView(slugTrack: tracks[index].slug)
-                                .environmentObject(mainVM)
-                                .environmentObject(playerManager)) {
+                            
+                            Button(){
+                                router.navigateTo(AppRoute.track(slugTrack: sObj.slug))
+                            }label: {
                                 Text(tracks[index].title)
                                     .font(.subheadline)
                                     .foregroundColor(.white)
                                     .lineLimit(1)
                                     .truncationMode(.tail)
                             }
-                            NavigationLink(destination: ArtistView(slugArtist: tracks[index].artist.slug)
-                                .environmentObject(mainVM)
-                                .environmentObject(playerManager)) {
+                            
+                            Button(){
+                                router.navigateTo(AppRoute.artist(slugArtist: sObj.artist.slug))
+                            }label: {
                                 Text(tracks[index].artist.displayName)
                                     .font(.caption)
                                     .foregroundColor(.gray)

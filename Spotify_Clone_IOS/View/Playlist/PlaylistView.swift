@@ -8,10 +8,8 @@
 import SwiftUI
 struct PlaylistView: View {
     let slugPlaylist: String
-    @Environment(\.dismiss) private var dismiss
     @StateObject  var playlistVM = PlaylistViewModel()
     @EnvironmentObject var playerManager: AudioPlayerManager
-    @EnvironmentObject var mainVM: MainViewModel
     @State private var scrollOffset: CGFloat = 0
     @State private var showTitleInNavBar = false
     
@@ -76,20 +74,7 @@ struct PlaylistView: View {
             // Custom Navigation Bar overlay
             VStack {
                 HStack {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.white)
-                            .font(.title2)
-                            .frame(width: 44, height: 44)
-                            .background(
-                                Circle()
-                                    .fill(Color.bg)
-                            )
-                            .background(.ultraThinMaterial, in: Circle())
-                            .clipShape(Circle())
-                    }
+                    BackButton()
                     
                     Spacer()
                     
@@ -101,21 +86,11 @@ struct PlaylistView: View {
                     
                     Spacer()
                     
-                    // Play button in navigation bar - only show if tracks exist
-                    if let tracks = playlistVM.playlist.tracks, !tracks.isEmpty {
-                        Button(action: {
-                            let trackToPlay = tracks[0]
-                            playerManager.play(track: trackToPlay, from: tracks)
-                        }) {
-                            Image(systemName: playerManager.playerState == .playing ? "pause.fill" : "play.fill")
-                                .font(.title3)
-                                .foregroundColor(.black)
-                                .frame(width: 44, height: 44)
-                                .background(Color.green)
-                                .clipShape(Circle())
-                        }
-                        .opacity(showTitleInNavBar ? 1 : 0)
-                    }
+                    PlayButton(
+                        track: playlistVM.tracks.first,
+                        tracks: playlistVM.tracks,
+                        showTitleInNavBar: showTitleInNavBar
+                    )
                 }
                 .padding(.horizontal, 16)
                 .padding(.bottom, 24)
@@ -236,28 +211,17 @@ struct PlaylistView: View {
                                 
                                 Spacer()
                                 
-                                // Play button - only show if tracks exist
-                                if let tracks = playlistVM.playlist.tracks, !tracks.isEmpty {
-                                    Button(action: {
-                                        let trackToPlay = tracks[0]
-                                        playerManager.play(track: trackToPlay, from: tracks)
-                                    }) {
-                                        Image(systemName: playerManager.playerState == .playing ? "pause.fill" : "play.fill")
-                                            .font(.title3)
-                                            .foregroundColor(.black)
-                                            .frame(width: 44, height: 44)
-                                            .background(Color.green)
-                                            .clipShape(Circle())
-                                    }
-                                    .opacity(showTitleInNavBar ? 0 : 1)
-                                }
+                                PlayButton(
+                                    track: playlistVM.tracks.first,
+                                    tracks: playlistVM.tracks,
+                                    showTitleInNavBar: !showTitleInNavBar
+                                )
                             }
                             
                             // Track list - only if tracks exist
                             if let tracks = playlistVM.playlist.tracks {
                                 TrackListView(tracks: tracks)
                                     .environmentObject(playerManager)
-                                    .environmentObject(mainVM)
                             }
                         }
                         .background(Color.bg)
@@ -285,9 +249,6 @@ struct PlaylistView: View {
         .navigationBarHidden(true)
         .task {
             playlistVM.getPlaylistBySlug(slug: slugPlaylist)
-        }
-        .onAppear{
-            mainVM.isTabBarVisible = false
         }
     }
     
