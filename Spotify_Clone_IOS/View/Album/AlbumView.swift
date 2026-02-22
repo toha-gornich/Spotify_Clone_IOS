@@ -78,7 +78,6 @@ struct AlbumView: View {
             VStack {
                 HStack {
                     BackButton()
-                    
                     Spacer()
                     
                     Text(showTitleInNavBar ? albumVM.album.title : "")
@@ -204,7 +203,7 @@ struct AlbumView: View {
                                 PlayButton(
                                     track: albumVM.tracks.first,
                                     tracks: albumVM.tracks,
-                                    showTitleInNavBar: showTitleInNavBar
+                                    showTitleInNavBar: !showTitleInNavBar
                                 )
                             }
                             
@@ -303,6 +302,7 @@ struct AlbumView: View {
         }
         
         .navigationBarHidden(true)
+        .swipeBack(router: router)
         .task {
             albumVM.getAlbumBySlug(slug: slugAlbum)
             

@@ -14,6 +14,7 @@ struct GenreDetailsView: View {
     @ObservedObject var genresVM: GenresViewModel
     @EnvironmentObject var mainVM: MainViewModel
     @EnvironmentObject var playerManager: AudioPlayerManager
+    @EnvironmentObject var router: Router
     
     @State private var scrollOffset: CGFloat = 0
     @State private var showTitleInNavBar = false
@@ -74,24 +75,9 @@ struct GenreDetailsView: View {
             // Back button with blur circle
             VStack {
                 HStack {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        ZStack {
-                            // Blur circle background (appears on scroll)
-                            Circle()
-                                .fill(.gray)
-                                .opacity(showTitleInNavBar ? 1 : 0)
-                                .animation(.easeInOut(duration: 0.3), value: showTitleInNavBar)
-                            
-                            Image(systemName: "chevron.left")
-                                .foregroundColor(.white)
-                                .font(.title2)
-                        }
-                        .frame(width: 44, height: 44)
-                    }
+                    BackButton()
                     .padding(.leading, 16)
-                    .padding(.top, 8)
+//                    .padding(.top, 8)
                     
                     Spacer()
                 }
@@ -221,24 +207,13 @@ struct GenreDetailsView: View {
             }
             .zIndex(1)
         }
-//        .navigationBarHidden(true)
+        .navigationBarHidden(true)
+        .swipeBack(router: router)
         .toolbar(.hidden, for: .navigationBar)
 
         .task {
             genresVM.getGenreBySlug(slug: slugGenre)
         }
-
-//        .gesture(
-//            DragGesture()
-//                .onEnded { gesture in
-//                    let isSwipeRight = gesture.translation.width > 100
-//                    let startedFromLeftEdge = gesture.startLocation.x < 30
-//                    
-//                    if isSwipeRight && startedFromLeftEdge {
-//                        dismiss()
-//                    }
-//                }
-//        )
 
     }
     

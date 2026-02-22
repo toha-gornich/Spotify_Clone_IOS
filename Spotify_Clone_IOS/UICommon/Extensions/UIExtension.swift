@@ -160,11 +160,7 @@ extension Color{
     }
 }
 
-extension View{
-    func cornerRadius(_ radius: CGFloat, corner: UIRectCorner) -> some View {
-        clipShape(RoundedCorner(radius: radius, corner: corner))
-    }
-}
+
 
 struct RoundedCorner: Shape{
     var radius: CGFloat = .infinity

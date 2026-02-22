@@ -8,20 +8,21 @@
 import SwiftUI
 
 struct GenresView: View {
-    
     @State private var searchText = ""
     @State private var searchQuery = ""
     @ObservedObject var genreVM: GenresViewModel
     @EnvironmentObject var mainVM: MainViewModel
     @EnvironmentObject var router: Router
     @EnvironmentObject var playerManager: AudioPlayerManager
-    
+
     var body: some View {
         ZStack {
-            VStack {
+            Color.bg.ignoresSafeArea()
+
+            VStack(spacing: 0) {
+                // Header
                 HStack(spacing: 15) {
                     Button {
-                        print("open Menu")
                         mainVM.isShowMenu = true
                     } label: {
                         Image("settings")
@@ -29,44 +30,38 @@ struct GenresView: View {
                             .scaledToFit()
                             .frame(width: 25, height: 25)
                     }
-                    
+
                     Text("Search")
                         .font(.customFont(.bold, fontSize: 18))
                         .foregroundColor(.primaryText)
-                    
+
                     Spacer()
-                    
+
                     if genreVM.isLoading {
-                        ProgressView()
-                            .scaleEffect(0.8)
+                        ProgressView().scaleEffect(0.8)
                     }
                 }
-                .padding(.top, .topInsets)
                 .padding(.horizontal, 20)
-                
+
                 // Search Field
                 HStack {
-                    // Magnifying glass button
-                    Button(action: {
-                        performSearch()
-                    }) {
+                    Button(action: { performSearch() }) {
                         Image(systemName: "magnifyingglass")
                             .foregroundColor(.gray)
                             .font(.system(size: 18))
                     }
-                    
-                    TextField("What do you want to listen to?", text: $searchText)
-                        .foregroundColor(.black)
-                        .font(.customFont(.regular, fontSize: 16))
-                        .onSubmit {
-                            performSearch()
-                        }
-                    
-                    // Clear button
+
+                    TextField("", text: $searchText, prompt: Text("What do you want to listen to?")
+                        .foregroundColor(.gray.opacity(0.6))
+                    )
+                    .foregroundColor(.black)
+                    .font(.customFont(.regular, fontSize: 16))
+                    .onSubmit { performSearch() }
+
                     if !searchText.isEmpty {
                         Button(action: {
                             searchText = ""
-                            router.navigateTo(AppRoute.search(searchText: searchQuery))
+                            searchQuery = ""
                         }) {
                             Image(systemName: "xmark.circle.fill")
                                 .foregroundColor(.gray)
@@ -80,7 +75,8 @@ struct GenresView: View {
                 .cornerRadius(10)
                 .padding(.horizontal, 20)
                 .padding(.vertical, 6)
-                
+
+                // Grid
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVGrid(columns: [
                         GridItem(.flexible()),
@@ -88,14 +84,13 @@ struct GenresView: View {
                     ], spacing: 10) {
                         ForEach(0..<genreVM.genres.count, id: \.self) { index in
                             let sObj = genreVM.genres[index]
-                            Button(){
-                                router.navigateTo(AppRoute.genreDetails(slugGenre: sObj.slug))}
-                            label: {
+                            Button() {
+                                router.navigateTo(AppRoute.genreDetails(slugGenre: sObj.slug))
+                            } label: {
                                 if index == 0 {
-                                    SearchCardView(genre: genreVM.genres[index])
-                                        .gridCellColumns(2)
+                                    SearchCardView(genre: sObj).gridCellColumns(2)
                                 } else {
-                                    SearchCardView(genre: genreVM.genres[index])
+                                    SearchCardView(genre: sObj)
                                 }
                             }
                         }
@@ -103,34 +98,28 @@ struct GenresView: View {
                     .padding(.horizontal, 20)
                     .padding(.bottom, 100)
                 }
-                .task {
-                    genreVM.getGenres()
-                }
+                .task { genreVM.getGenres() }
             }
         }
-        .frame(width: .screenWidth, height: .screenHeight)
-        .background(Color.bg)
-        .navigationTitle("")
-        .navigationBarBackButtonHidden()
+        .hideKeyboard()
+        .ignoresSafeArea(.keyboard, edges: .bottom)
         .navigationBarHidden(true)
-        .ignoresSafeArea()
+        .navigationBarBackButtonHidden()
         .alert(item: $genreVM.alertItem) { alertItem in
-            Alert(title: alertItem.title,
-                  message: alertItem.message,
-                  dismissButton: alertItem.dismissButton)
+            Alert(
+                title: alertItem.title,
+                message: alertItem.message,
+                dismissButton: alertItem.dismissButton
+            )
         }
     }
-    
+
     private func performSearch() {
-        guard !searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            return
-        }
-        
-        searchQuery = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-        
+        let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        searchQuery = trimmed
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             router.navigateTo(AppRoute.search(searchText: searchQuery))
-            print("Search: \(searchQuery)")
         }
     }
 }

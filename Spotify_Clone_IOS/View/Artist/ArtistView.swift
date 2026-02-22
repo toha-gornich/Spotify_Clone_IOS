@@ -327,7 +327,9 @@ struct ArtistView: View {
             }
             .zIndex(1)
         }
+        
         .navigationBarHidden(true)
+        .swipeBack(router: router)
         .task {
             artistVM.getArtistsBySlug(slug: slugArtist)
         }

@@ -26,6 +26,8 @@ struct BackButton:View{
                 .background(.ultraThinMaterial, in: Circle())
                 .clipShape(Circle())
         }
+//        .padding(.leading, 16)
+//        .padding(.top, 16)
     }
     
 }

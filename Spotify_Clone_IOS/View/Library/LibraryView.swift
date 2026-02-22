@@ -14,6 +14,7 @@ struct LibraryView: View {
     @EnvironmentObject var playerManager: AudioPlayerManager
     
     var body: some View {
+        
         ZStack {
             VStack(spacing: 0) {
                 // Header
@@ -129,6 +130,7 @@ struct LibraryView: View {
         }
         .onAppear {
             libraryVM.getUserMe()
+            print("fsdfsdf")
         }
     }
 }

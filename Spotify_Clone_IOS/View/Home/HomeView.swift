@@ -125,7 +125,7 @@ struct HomeView: View {
                         }
                     }
                     .padding(.horizontal)
-                    .padding(.bottom, 100)
+                    .padding(.bottom, 150)
                 }
                 .refreshable {
                     homeVM.refreshAllData()
@@ -138,7 +138,8 @@ struct HomeView: View {
         .navigationTitle("")
         .navigationBarBackButtonHidden()
         .navigationBarHidden(true)
-        .ignoresSafeArea()
+//        .ignoresSafeArea()
+        .ignoresSafeArea(.container, edges: .top)
         .alert(item: $homeVM.alertItem) { alertItem in
             Alert(title: alertItem.title,
                   message: alertItem.message,

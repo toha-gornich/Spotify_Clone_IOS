@@ -10,6 +10,7 @@ struct PlaylistView: View {
     let slugPlaylist: String
     @StateObject  var playlistVM = PlaylistViewModel()
     @EnvironmentObject var playerManager: AudioPlayerManager
+    @EnvironmentObject var router: Router
     @State private var scrollOffset: CGFloat = 0
     @State private var showTitleInNavBar = false
     
@@ -247,6 +248,7 @@ struct PlaylistView: View {
             .zIndex(1)
         }
         .navigationBarHidden(true)
+        .swipeBack(router: router)
         .task {
             playlistVM.getPlaylistBySlug(slug: slugPlaylist)
         }

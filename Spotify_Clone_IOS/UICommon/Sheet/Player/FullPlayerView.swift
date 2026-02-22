@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftUI
 
 struct FullPlayerView: View {
     @ObservedObject var playerManager: AudioPlayerManager
@@ -87,12 +88,12 @@ struct FullPlayerView: View {
                     Slider(
                         value: Binding(
                             get: {
-                                // Під час перетягування — показуємо seekValue, інакше — currentTime
+                                // While dragging — show seekValue, otherwise — currentTime
                                 isDragging ? seekValue : playerManager.currentTime
                             },
                             set: { newValue in
                                 seekValue = newValue
-                                // Тільки оновлюємо UI під час перетягування
+                                // Only update UI while dragging, no actual seek yet
                                 playerManager.updateSeekTime(newValue)
                             }
                         ),
@@ -108,7 +109,7 @@ struct FullPlayerView: View {
                                 }
                             }
                             .onEnded { _ in
-                                // Тільки тут робимо справжній seek
+                                // Actual seek only when finger is released
                                 playerManager.seek(to: seekValue)
                                 isDragging = false
                             }
@@ -205,8 +206,8 @@ struct FullPlayerView: View {
                     }
                 }
         )
-        // Alert для помилок завантаження
-        .alert("Помилка", isPresented: Binding(
+        // Alert for loading errors
+        .alert("Error", isPresented: Binding(
             get: { playerManager.errorMessage != nil },
             set: { if !$0 { playerManager.errorMessage = nil } }
         )) {
@@ -216,7 +217,7 @@ struct FullPlayerView: View {
         }
     }
 
-    // Іконка repeat залежно від режиму
+    // Repeat icon based on current mode
     private var repeatIcon: String {
         switch playerManager.repeatMode {
         case .off: return "repeat"

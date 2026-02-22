@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+
 @main
 struct Spotify_Clone_IOSApp: App {
     private let networkManager = NetworkManager.shared
@@ -15,7 +16,8 @@ struct Spotify_Clone_IOSApp: App {
     @State private var isLoading = true
     @State private var showActivationAlert = false
     @State private var activationMessage = ""
-    
+    @State private var keyboardHeight: CGFloat = 0
+
     var body: some Scene {
         WindowGroup {
             ZStack {
@@ -30,43 +32,43 @@ struct Spotify_Clone_IOSApp: App {
                 }
                 .environmentObject(playerManager)
                 .environmentObject(mainVM)
-                .onAppear {
-                    verifyToken()
-                }
-                .onOpenURL { url in
-                    handleDeepLink(url: url)
-                }
+                .onAppear { verifyToken() }
+                .onOpenURL { handleDeepLink(url: $0) }
                 .alert("Activation", isPresented: $showActivationAlert) {
                     Button("OK") { }
                 } message: {
                     Text(activationMessage)
                 }
-                .environmentObject(playerManager)
-                .environmentObject(mainVM)
                 .overlay(
                     Group {
                         if playerManager.sheetState == .mini, let _ = playerManager.currentTrack {
                             VStack {
                                 Spacer()
-                                
                                 MiniPlayerView(playerManager: playerManager)
                                     .padding(.horizontal, 8)
-                                    .padding(.bottom, 85)
+                                    .padding(.bottom, keyboardHeight > 0 ? 8 : 50)
                                     .transition(.move(edge: .bottom).combined(with: .opacity))
-
+                                    .animation(.easeInOut(duration: 0.25), value: keyboardHeight)
                             }
                             .allowsHitTesting(true)
                         }
                     },
                     alignment: .bottom
                 )
+                .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { notification in
+                    let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect
+                    keyboardHeight = frame?.height ?? 0
+                }
+                .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+                    keyboardHeight = 0
+                }
                 .zIndex(100)
                 .sheet(isPresented: .constant(playerManager.sheetState == .full)) {
                     FullPlayerView(playerManager: playerManager)
                         .environmentObject(playerManager)
                         .environmentObject(mainVM)
                 }
-                
+
                 SideMenuView(isShowing: $mainVM.isShowMenu)
                     .environmentObject(mainVM)
                     .environmentObject(playerManager)
@@ -74,56 +76,41 @@ struct Spotify_Clone_IOSApp: App {
             }
         }
     }
-    
+
     private func verifyToken() {
         let token = UserDefaults.standard.string(forKey: "auth_token")
-        
+
         Task {
-            if token?.isEmpty != false {
-                await MainActor.run {
-                    isTokenValid = false
-                    isLoading = false
-                }
+            guard token?.isEmpty == false else {
+                await MainActor.run { isTokenValid = false; isLoading = false }
                 return
             }
-            
+
             do {
                 try await networkManager.postVerifyToken(tokenVerifyRequest: TokenVerifyRequest(token: token!))
-                await MainActor.run {
-                    isTokenValid = true
-                    isLoading = false
-                }
+                await MainActor.run { isTokenValid = true; isLoading = false }
             } catch {
-                await MainActor.run {
-                    isTokenValid = false
-                    isLoading = false
-                }
+                await MainActor.run { isTokenValid = false; isLoading = false }
             }
         }
     }
-    
+
     private func handleDeepLink(url: URL) {
-        if url.scheme == "com.cl.appauth" && url.path.contains("/account/auth/activate/") {
-            let pathComponents = url.pathComponents
-            if let uidIndex = pathComponents.firstIndex(of: "activate"),
-               uidIndex + 1 < pathComponents.count {
-                
-                let uid = pathComponents[uidIndex + 1]
-                let token = url.lastPathComponent
-                
-                print("uid  " + uid)
-                print("token  " + token)
-                activateAccount(uid: uid, token: token)
-            }
-        }
+        guard url.scheme == "com.cl.appauth",
+              url.path.contains("/account/auth/activate/"),
+              let uidIndex = url.pathComponents.firstIndex(of: "activate"),
+              uidIndex + 1 < url.pathComponents.count
+        else { return }
+
+        let uid = url.pathComponents[uidIndex + 1]
+        let token = url.lastPathComponent
+        activateAccount(uid: uid, token: token)
     }
-    
+
     private func activateAccount(uid: String, token: String) {
         Task {
             do {
-                let activationRequest = AccountActivationRequest(uid: uid, token: token)
-                try await networkManager.postActivateAccount(activationRequest: activationRequest)
-                
+                try await networkManager.postActivateAccount(activationRequest: AccountActivationRequest(uid: uid, token: token))
                 await MainActor.run {
                     activationMessage = "Account successfully activated!"
                     showActivationAlert = true

@@ -247,6 +247,7 @@ struct SearchView: View {
             }
             .padding(.bottom, 120)
         }
+        .hideKeyboard()
         .id(selectedTab)
         .onTapGesture {
             isSearchFieldFocused = false

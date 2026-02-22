@@ -388,6 +388,7 @@ struct TrackView: View {
         }
         
         .navigationBarHidden(true)
+        .swipeBack(router: router)
         .task {
             trackVM.getTrackBySlug(slug: slugTrack)
             

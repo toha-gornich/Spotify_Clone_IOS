@@ -18,21 +18,28 @@ struct ProfileView: View {
         VStack(spacing: 0) {
             
             ScrollView {
-                HStack {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.white)
-                            .font(.title2)
-                            .frame(width: 44, height: 44)
-                    }
-                    
+//                HStack {
+//                    Button(action: {
+//                        dismiss()
+//                    }) {
+//                        Image(systemName: "chevron.left")
+//                            .foregroundColor(.white)
+//                            .font(.title2)
+//                            .frame(width: 44, height: 44)
+//                    }
+//                    
+//                    Spacer()
+//                }
+//                .padding(.horizontal, 16ř
+//                .padding(.top, 10)
+//                .background(Color.white.opacity(0))
+                
+                HStack{
+                    BackButton()
+                        .padding(.leading, 16)
+                        .padding(.top, 16)
                     Spacer()
                 }
-                .padding(.horizontal, 16)
-                .padding(.top, 10)
-                .background(Color.white.opacity(0))
                 
                 VStack(spacing: 24) {
                     HStack(spacing: 16) {
@@ -233,6 +240,7 @@ struct ProfileView: View {
             .ignoresSafeArea()
         )
         .navigationBarHidden(true)
+        .swipeBack(router: router)
         .onAppear {
             Task {
                 await profileVM.getUserMe(userId: userId)

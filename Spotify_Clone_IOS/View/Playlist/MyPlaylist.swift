@@ -13,7 +13,8 @@ struct MyPlaylistView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var playlistVM = MyPlaylistViewModel()
     @EnvironmentObject var playerManager: AudioPlayerManager
-    @EnvironmentObject var mainVM: MainViewModel
+//    @EnvironmentObject var mainVM: MainViewModel
+    @EnvironmentObject var router: Router
     
     @State var slugPlaylist: String = ""
     @State private var searchText: String = ""
@@ -99,20 +100,7 @@ struct MyPlaylistView: View {
             // Custom Navigation Bar overlay
             VStack {
                 HStack {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.white)
-                            .font(.title2)
-                            .frame(width: 44, height: 44)
-                            .background(
-                                Circle()
-                                    .fill(Color.bg)
-                            )
-                            .background(.ultraThinMaterial, in: Circle())
-                            .clipShape(Circle())
-                    }
+                    BackButton()
                     
                     Spacer()
                     
@@ -356,8 +344,6 @@ struct MyPlaylistView: View {
                                 )
                                 .padding(.bottom, 50)
                                 .padding(.horizontal)
-                                .environmentObject(playerManager)
-                                .environmentObject(mainVM)
                             }
                             .padding(.top, 16)
                         }
@@ -413,6 +399,7 @@ struct MyPlaylistView: View {
             Text("Are you sure you want to delete this playlist? This action cannot be undone.")
         }
         .navigationBarHidden(true)
+        .swipeBack(router: router)
     }
     
     private func updateScrollOffset(_ offset: CGFloat) {
