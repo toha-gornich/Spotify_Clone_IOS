@@ -307,9 +307,7 @@ struct AlbumView: View {
             albumVM.getAlbumBySlug(slug: slugAlbum)
             
         }
-        .onAppear {
-            albumVM.postAlbumFavorite(slug: slugAlbum)
-        }
+
         
     }
     private func updateScrollOffset(_ offset: CGFloat) {

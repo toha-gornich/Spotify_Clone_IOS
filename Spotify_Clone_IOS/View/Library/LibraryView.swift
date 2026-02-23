@@ -130,7 +130,6 @@ struct LibraryView: View {
         }
         .onAppear {
             libraryVM.getUserMe()
-            print("fsdfsdf")
         }
     }
 }

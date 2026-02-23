@@ -11,6 +11,7 @@ import Foundation
     @Published var tracks: [Track] = []
     @Published var albums: [Album] = []
     @Published var playlists: [Playlist] = []
+    @Published var lickedPlaylists: [FavoritePlaylistItem] = []
     @Published var playlist: PlaylistDetail = PlaylistDetail.empty
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
@@ -33,9 +34,20 @@ import Foundation
     }
     
     private let playlistManager: PlaylistServiceProtocol
+    
     init(playlistManager: PlaylistServiceProtocol = NetworkManager.shared){
         self.playlistManager = playlistManager
     }
+    
+    func getPlaylistLicked() async {
+        do {
+            lickedPlaylists = try await playlistManager.getPlaylistsFavorite()
+            isPlaylistLiked = lickedPlaylists.contains { $0.playlist.slug == playlist.slug }
+        } catch {
+            handleError(error)
+        }
+    }
+    
     
     func postPlaylistFavorite(slug: String) {
         isLoading = true
@@ -86,6 +98,7 @@ import Foundation
             do {
                 playlist = try await playlistManager.getPlaylistsBySlug(slug: slug)
                 isLoading = false
+                await getPlaylistLicked()
             } catch {
                 handleError(error)
                 isLoading = false

@@ -129,32 +129,12 @@ struct ArtistView: View {
                             
                             HStack(spacing: 16) {
                                 
-                                
-                                Button(action: {
-                                    if artistVM.isTrackLiked {
-                                        artistVM.deleteArtistFavorite(slug: slugArtist)
-                                    } else {
-                                        artistVM.postArtistFavorite(slug: slugArtist)
-                                    }
-                                }) {
-                                    Image(systemName: artistVM.isTrackLiked ? "checkmark" : "plus")
-                                        .font(.title2)
-                                        .foregroundColor(artistVM.isTrackLiked ? .green : .white)
-                                        .frame(width: 44, height: 44)
-                                        .background(Color.clear)
-                                        .overlay(
-                                            Circle()
-                                                .stroke(artistVM.isTrackLiked ? Color.green : Color.gray, lineWidth: 1)
-                                        )
-                                }
-                                .disabled(artistVM.isLoading)
-                                
                                 // Follow button
                                 Button(action: {
                                     if artistVM.isFollowing {
-                                        artistVM.unfollowArtist(userId:  String(artistVM.artist.id))
+                                        artistVM.unfollowArtist(slug:  String(artistVM.artist.slug))
                                     } else {
-                                        artistVM.followArtist(userId: String(artistVM.artist.id))
+                                        artistVM.followArtist(slug: String(artistVM.artist.slug))
                                     }
                                 }) {
                                     Text(artistVM.isFollowing ? "Following" : "Follow")
@@ -332,10 +312,6 @@ struct ArtistView: View {
         .swipeBack(router: router)
         .task {
             artistVM.getArtistsBySlug(slug: slugArtist)
-        }
-        
-        .onAppear {
-            artistVM.postArtistFavorite(slug: slugArtist)
         }
     }
     

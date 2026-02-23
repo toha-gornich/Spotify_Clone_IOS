@@ -18,79 +18,73 @@ import Foundation
     @Published var playlists: [Playlist] = []
     @Published var isLoading: Bool = false
     @Published var isTrackLiked: Bool = false
-    
     @Published var errorMessage: String? = nil
     @Published var selectTab: Int = 0
     @Published var alertItem: AlertItem?
+    
+    private var likedTracks: [Track] = []
     
     var playableTrack: Track {
             return track.toTrack()
         }
 
-    
     private let trackManager: TrackScreenServiceProtocol
     init(trackManager:TrackScreenServiceProtocol = NetworkManager.shared ){
         self.trackManager = trackManager
     }
     
-    func getTrackBySlug(slug: String) {
+    func getTrackBySlug(slug: String) async {
         isLoading = true
-        
-        Task {
-            do {
-                
-                let fetchedTrack = try await trackManager.getTrackBySlug(slug: slug)
-                track = fetchedTrack
-                isLoading = false
-            } catch {
-                handleError(error)
-                isLoading = false
-            }
+        do {
+            let fetchedTrack = try await trackManager.getTrackBySlug(slug: slug)
+            track = fetchedTrack
+            currentTrack = fetchedTrack.toTrack()
+            await getTracksLiked()
+            isLoading = false
+        } catch {
+            handleError(error)
+            isLoading = false
         }
     }
     
 
     func postTrackFavorite(slug: String) {
-        isLoading = true
-        
+        isTrackLiked = true
         Task {
             do {
                 try await trackManager.postLikeTrack(slug: slug)
-                
-                // if successful (204) - track liked
-                isTrackLiked = true
-                isLoading = false
-                
+                await getTracksLiked() 
             } catch FavoriteError.alreadyLiked {
-                // Track liked
                 isTrackLiked = true
-                isLoading = false
-                
             } catch {
-                // Another error
                 isTrackLiked = false
                 handleError(error)
-                isLoading = false
             }
         }
     }
+
     func deleteTrackFavorite(slug: String) {
-        isLoading = true
-        
+        isTrackLiked = false
         Task {
             do {
                 try await trackManager.deleteTrackLike(slug: slug)
-
-                isTrackLiked = false
-                isLoading = false
-
-                
+                await getTracksLiked()
             } catch {
+                isTrackLiked = true
                 handleError(error)
-                isLoading = false
             }
         }
     }
+    
+    func getTracksLiked() async {
+        do {
+            likedTracks = try await trackManager.getTracksLiked()
+            isTrackLiked = likedTracks.contains { $0.slug == currentTrack?.slug }
+        } catch {
+            handleError(error)
+        }
+    }
+    
     func getTrackBySlugArtist(slug: String) {
         isLoading = true
         

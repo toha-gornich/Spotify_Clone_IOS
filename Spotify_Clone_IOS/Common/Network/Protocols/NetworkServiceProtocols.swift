@@ -34,9 +34,11 @@ protocol TrackServiceProtocol {
     func getTracksBySlugArtist(slug: String) async throws -> [Track]
     func getTracksBySlugGenre(slug: String) async throws -> [Track]
     func getTracksBySlugAlbum(slug: String) async throws -> [Track]
+//    func getTrackFavorites() async throws
     func getTracksLiked() async throws -> [Track]
     func postLikeTrack(slug: String) async throws
     func deleteTrackLike(slug: String) async throws
+    
 }
 
 // MARK: - My Tracks Service Protocol 

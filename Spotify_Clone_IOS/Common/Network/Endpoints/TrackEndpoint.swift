@@ -28,7 +28,7 @@ enum TrackEndpoint {
         case .tracks:
             return "tracks/"
         case .liked:
-            return "tracks/like/"
+            return "tracks/liked/"
         case .likeTrack(let slug):
             return "tracks/\(slug)/like/"
         case .albumsFavorite:

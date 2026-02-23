@@ -19,12 +19,17 @@ import Foundation
     @Published var selectTab: Int = 0
     @Published var alertItem: AlertItem?
     @Published var isTrackLiked: Bool = false
-    @Published var isFollowing: Bool = false
-    
+    @Published var isFollowing: Bool = false {
+        didSet {
+            print("isFollowing changed: \(oldValue) → \(isFollowing)")
+        }
+    }
     @Published var album: Album = Album.empty
     
+    private var lickedArtists: [FavoriteArtistItem] = []
     
     private let artistManager: AlbumArtistServiceProtocol
+    
     init(artistManager:AlbumArtistServiceProtocol = NetworkManager.shared){
         self.artistManager = artistManager
     }
@@ -36,9 +41,7 @@ import Foundation
             do {
                 let fetchedArtist = try await artistManager.getArtistsBySlug(slug: slug)
                 artist = fetchedArtist
-                
-
-                await checkFollowStatus(userId: String(artist.id))
+                await getArtistFollowers()
                 
                 isLoading = false
             } catch {
@@ -47,117 +50,58 @@ import Foundation
             }
         }
     }
-
     
-    func checkFollowStatus(userId: String) async {
+    func getArtistFollowers() async {
         do {
-            try await artistManager.postFollowArtist(userId: userId)
-            
-            await MainActor.run {
-                isFollowing = true
-                
-            }
-            
-            try? await artistManager.postUnfollowArtist(userId: userId)
-            
-                isFollowing = false
-
-        } catch FavoriteError.alreadyLiked {
-            
-                isFollowing = true
-
-            
+            lickedArtists = try await artistManager.getArtistsFavorite()
+            isFollowing = lickedArtists.contains { $0.artist.slug == artist.slug }
         } catch {
-                isFollowing = false
+            handleError(error)
         }
     }
-
-    func followArtist(userId: String) {
+    
+    func followArtist(slug: String) {
         isFollowing = true
         isLoading = true
         
         Task {
             do {
-                try await artistManager.postFollowArtist(userId: userId)
-                    isLoading = false
+                try await artistManager.postAddFavoriteArtist(slug: slug)
+                isLoading = false
                 
             } catch FavoriteError.alreadyLiked {
-                    isFollowing = true
-                    isLoading = false
+                isFollowing = true
+                isLoading = false
                 
             } catch {
-                    isFollowing = false
-                    isLoading = false
-                    handleError(error)
+                isFollowing = false
+                isLoading = false
+                handleError(error)
             }
         }
     }
-
-    func unfollowArtist(userId: String) {
+    
+    func unfollowArtist(slug: String) {
         isFollowing = false
         isLoading = true
         
         Task {
             do {
-                try await artistManager.postUnfollowArtist(userId: userId)
-                
-                
-                    isLoading = false
-                
-                
-            } catch {
-                
-                    isFollowing = true
-                    isLoading = false
-                    handleError(error)
-                
-            }
-        }
-    }
-    
-
-    
-    func postArtistFavorite(slug: String) {
-        isLoading = true
-        
-        Task {
-            do {
-                try await artistManager.postAddFavoriteArtist(slug: slug)
-                
-                // if successful (204) - track liked
-                isTrackLiked = true
-                isLoading = false
-                
-            } catch FavoriteError.alreadyLiked {
-                // Track liked
-                isTrackLiked = true
-                isLoading = false
-                
-            } catch {
-                // Another error
-                isTrackLiked = false
-                handleError(error)
-                isLoading = false
-            }
-        }
-    }
-    func deleteArtistFavorite(slug: String) {
-        isLoading = true
-        
-        Task {
-            do {
                 try await artistManager.deleteArtistFavorite(slug: slug)
-
-                isTrackLiked = false
+                
+                isFollowing = false
                 isLoading = false
-
                 
             } catch {
-                handleError(error)
+                
+                isFollowing = true
                 isLoading = false
+                handleError(error)
+                
             }
         }
     }
+
     
     
     func getArtists() {
@@ -166,7 +110,7 @@ import Foundation
         Task {
             do {
                 let fetchedArtists = try await artistManager.getArtists()
-               
+                
                 artists = fetchedArtists
                 isLoading = false
             } catch {
@@ -175,8 +119,8 @@ import Foundation
             }
         }
     }
-
-
+    
+    
     
     func getTracks() {
         isLoading = true
@@ -240,7 +184,7 @@ import Foundation
     }
     
     
-
+    
     
     private func handleError(_ error: Error) {
         if let apError = error as? APError {

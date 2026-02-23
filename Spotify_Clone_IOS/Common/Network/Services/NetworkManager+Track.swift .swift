@@ -226,7 +226,7 @@ extension NetworkManager: TrackServiceProtocol {
         request.httpMethod = "POST"
         
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+            let (_, response) = try await URLSession.shared.data(for: request)
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 print("❌ postLikeTrack - Invalid response type")

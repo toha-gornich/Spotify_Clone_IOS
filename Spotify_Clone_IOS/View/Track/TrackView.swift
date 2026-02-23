@@ -225,13 +225,11 @@ struct TrackView: View {
                                         .font(.title2)
                                         .foregroundColor(trackVM.isTrackLiked ? .green : .white)
                                         .frame(width: 44, height: 44)
-                                        .background(Color.clear)
                                         .overlay(
                                             Circle()
                                                 .stroke(trackVM.isTrackLiked ? Color.green : Color.gray, lineWidth: 1)
                                         )
                                 }
-                                .disabled(trackVM.isLoading)
                                 
                                 Spacer()
                                 
@@ -390,11 +388,7 @@ struct TrackView: View {
         .navigationBarHidden(true)
         .swipeBack(router: router)
         .task {
-            trackVM.getTrackBySlug(slug: slugTrack)
-            
-        }
-        .onAppear {
-            trackVM.postTrackFavorite(slug: slugTrack)
+            await trackVM.getTrackBySlug(slug: slugTrack)
         }
         
     }

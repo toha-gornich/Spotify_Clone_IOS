@@ -13,6 +13,7 @@ import Foundation
     @Published var artist: Artist = Artist.empty
     @Published var album: Album = Album.empty
     @Published var albums: [Album] = []
+    @Published var albumsFavorite: [FavoriteAlbumItem] = []
     @Published var playlists: [Playlist] = []
     @Published var isLoading: Bool = false
     @Published var isAlbumLiked: Bool = false
@@ -62,6 +63,16 @@ import Foundation
             }
         }
     }
+    
+    func getAlbumLicked() async {
+        do {
+            albumsFavorite = try await albumManager.getAlbumsFavorite()
+            isAlbumLiked = albumsFavorite.contains { $0.album.slug == album.slug }
+        } catch {
+            handleError(error)
+        }
+    }
+    
     func deleteAlbumFavorite(slug: String) {
         isLoading = true
         
@@ -88,6 +99,7 @@ import Foundation
                 let fetchedAlbum = try await albumManager.getAlbumBySlug(slug: slug)
                 album = fetchedAlbum
                 isLoading = false
+                await getAlbumLicked()
                 
             } catch {
                 handleError(error)
@@ -96,6 +108,7 @@ import Foundation
             }
         }
     }
+    
     func getTracksBySlugAlbum(slug: String) {
         isLoading = true
         
