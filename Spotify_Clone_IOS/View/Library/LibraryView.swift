@@ -127,8 +127,6 @@ struct LibraryView: View {
         }
         .task {
             libraryVM.loadLibraryData()
-        }
-        .onAppear {
             libraryVM.getUserMe()
         }
     }
