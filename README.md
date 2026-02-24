@@ -1,82 +1,82 @@
 # 🎵 Spotify Clone iOS
 
-> Мобільний клієнт для сервісу потокового аудіо, натхненний Spotify.  
-> Додаток взаємодіє з кастомним REST API для управління музичним контентом, плейлистами та автентифікацією користувачів.
+> A mobile client for an audio streaming service, inspired by Spotify.  
+> The app communicates with a custom REST API to manage music content, playlists, and user authentication.
 
 ---
 
-## 🚀 Особливості
+## 🚀 Features
 
-- **iOS Client** — побудований на Swift з використанням UIKit / SwiftUI.
-- **Backend Integration** — повна інтеграція з [Spotify Clone API](https://github.com/MafanNam/Spotify_Clone_API).
-- **Auth** — реєстрація та логін користувачів через JWT.
-- **Music Player** — відтворення треків у реальному часі.
-- **Library** — управління альбомами, артистами та персональними плейлистами.
-- **Search** — пошук музики за назвою або виконавцем.
+- **iOS Client** — built with Swift using UIKit / SwiftUI.
+- **Backend Integration** — full integration with the [Spotify Clone API](https://github.com/MafanNam/Spotify_Clone_API).
+- **Auth** — user registration and login via JWT.
+- **Music Player** — real-time track playback.
+- **Library** — manage albums, artists, and personal playlists.
+- **Search** — find music by title or artist.
 
 ---
 
-## 🛠 Технологічний стек
+## 🛠 Tech Stack
 
-| Шар | Інструменти |
+| Layer | Tools |
 |---|---|
-| Мова / UI | Swift 5, UIKit / SwiftUI |
-| Мережа | URLSession / Alamofire |
-| Зображення | Kingfisher / SDWebImage |
-| Аудіо | AVFoundation |
-| Мін. версія | iOS 15.0+ |
+| Language / UI | Swift 5, UIKit / SwiftUI |
+| Networking | URLSession / Alamofire |
+| Image Loading | Kingfisher / SDWebImage |
+| Audio | AVFoundation |
+| Min. Version | iOS 15.0+ |
 
 ---
 
-## ⚙️ Налаштування та запуск
+## ⚙️ Setup & Run
 
-### 1. Бекенд (API)
+### 1. Backend (API)
 
-Перш ніж запускати iOS-додаток, переконайтеся, що бекенд запущено.  
-Можна використовувати локальну версію або розгорнуту:
+Before running the iOS app, make sure the backend is up and running.  
+You can use a local instance or the deployed version:
 
-🔗 **Репозиторій API:** [MafanNam/Spotify_Clone_API](https://github.com/MafanNam/Spotify_Clone_API)
+🔗 **API Repository:** [MafanNam/Spotify_Clone_API](https://github.com/MafanNam/Spotify_Clone_API)
 
-### 2. Клонування репозиторію
+### 2. Clone the Repository
 
 ```bash
 git clone https://github.com/toha-gornich/Spotify_Clone_IOS.git
 cd Spotify_Clone_IOS
 ```
 
-### 3. Конфігурація API URL
+### 3. Configure the API URL
 
-Знайдіть файл конфігурації (`Constants.swift` або `NetworkManager.swift`) та змініть `baseURL` на свою адресу:
+Find the configuration file (`Constants.swift` or `NetworkManager.swift`) and update `baseURL` with your address:
 
 ```swift
-// Наприклад:
+// Example:
 let baseURL = "https://spotify-api-production-6731.up.railway.app"
 ```
 
-### 4. Запуск у Xcode
+### 4. Run in Xcode
 
-1. Відкрийте файл `.xcodeproj` або `.xcworkspace`.
-2. Виберіть симулятор (наприклад, iPhone 14 / 15).
-3. Натисніть **Cmd + R** для запуску.
+1. Open the `.xcodeproj` or `.xcworkspace` file.
+2. Select a simulator (e.g., iPhone 14 / 15).
+3. Press **Cmd + R** to build and run.
 
 ---
 
-## 📸 Скріншоти
+## 📸 Screenshots
 
-| Головна | Плеєр | Бібліотека |
+| Home | Player | Library |
 |:---:|:---:|:---:|
-| ![Головна](screenshots/home.png) | ![Плеєр](screenshots/player.png) | ![Бібліотека](screenshots/library.png) |
+| ![Home](screenshots/home.png) | ![Player](screenshots/player.png) | ![Library](screenshots/library.png) |
 
-> 📌 *Додайте скріншоти до папки `screenshots/` у корені проєкту.*
-
----
-
-## 👨‍💻 Автор
-
-**Антон Горніч** — [GitHub Profile](https://github.com/toha-gornich)
+> 📌 *Add your screenshots to the `screenshots/` folder in the project root.*
 
 ---
 
-## 📄 Ліцензія
+## 👨‍💻 Author
 
-Цей проєкт ліцензується відповідно до ліцензії **MIT** — подробиці див. у файлі [LICENSE](LICENSE).
+**Anton Gornich** — [GitHub Profile](https://github.com/toha-gornich)
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
