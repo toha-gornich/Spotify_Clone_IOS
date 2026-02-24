@@ -12,7 +12,6 @@ struct AuthView: View {
     @StateObject private var viewModel = AuthViewModel()
     @FocusState private var isEmailFocused: Bool
     @FocusState private var isPasswordFocused: Bool
-    @State private var showMainView = false
     @State private var isShowingSignUp = false
     var body: some View {
         
@@ -227,11 +226,6 @@ struct AuthView: View {
                 dismissButton: alertItem.dismissButton
             )
         }
-        .fullScreenCover(isPresented: $showMainView) {
-            NavigationStack{
-//                MainView()
-            }
-        }
         .fullScreenCover(isPresented: $isShowingSignUp) {
             NavigationStack{
                 SignUpView()
@@ -244,14 +238,12 @@ struct AuthView: View {
         Task {
             let success = await viewModel.login()
             if success {
-                // Navigate to MainView on successful login
                 await MainActor.run {
-                    showMainView = true
+                    NotificationCenter.default.post(name: .userDidLogin, object: nil)
                 }
             }
         }
     }
-    
     private func handleForgotPassword() {
         //        Task {
         //            await viewModel.forgotPassword()

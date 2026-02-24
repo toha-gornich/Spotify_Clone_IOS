@@ -169,7 +169,7 @@ protocol ImageServiceProtocol {
 
 
 typealias PlaylistsServiceProtocol = PlaylistServiceProtocol & UserServiceProtocol
-typealias LibraryServiceProtocol = PlaylistServiceProtocol & ArtistServiceProtocol & AlbumServiceProtocol & PlaylistServiceProtocol & UserServiceProtocol
+typealias LibraryServiceProtocol = PlaylistServiceProtocol & ArtistServiceProtocol & AlbumServiceProtocol & PlaylistServiceProtocol & UserServiceProtocol & TrackServiceProtocol
 
 typealias HomeServiceProtocol = TrackServiceProtocol & PlaylistServiceProtocol & ArtistServiceProtocol & AlbumServiceProtocol & UserServiceProtocol
 

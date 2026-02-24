@@ -85,34 +85,27 @@ import Foundation
         }
     }
     
-    func getTrackBySlugArtist(slug: String) {
+    func getTracksBySlugGenre(slug: String) async {
         isLoading = true
-        
-        Task {
-            do {
-                
-                let fetchedTrack = try await trackManager.getTracksBySlugArtist(slug: slug)
-                tracksByArtist = fetchedTrack
-                isLoading = false
-            } catch {
-                handleError(error)
-                isLoading = false
-            }
+        do {
+            let fetchedTracks = try await trackManager.getTracksBySlugGenre(slug: slug)
+            self.tracks = fetchedTracks
+            isLoading = false
+        } catch {
+            handleError(error)
+            isLoading = false
         }
     }
-    
-    func getTracksBySlugGenre(slug: String) {
+
+    func getTrackBySlugArtist(slug: String) async {
         isLoading = true
-        
-        Task {
-            do {
-                let fetchedTracks = try await trackManager.getTracksBySlugGenre(slug: slug)
-                tracks = fetchedTracks
-                isLoading = false
-            } catch {
-                handleError(error)
-                isLoading = false
-            }
+        do {
+            let fetchedTrack = try await trackManager.getTracksBySlugArtist(slug: slug)
+            self.tracksByArtist = fetchedTrack
+            isLoading = false
+        } catch {
+            handleError(error)
+            isLoading = false
         }
     }
     

@@ -9,6 +9,7 @@
 import SwiftUI
 
 @MainActor final class LibraryViewModel: ObservableObject {
+    @Published var likedTracks: [Track] = []
     @Published var playlists: [Playlist] = []
     @Published var artists: [ArtistTrack] = []
     @Published var playlist = PlaylistDetail.empty
@@ -26,6 +27,7 @@ import SwiftUI
     }
     
     func loadLibraryData() {
+        getLikedTracks()
         getPlaylists()
         getArtists()
         getAlbums()
@@ -45,6 +47,19 @@ import SwiftUI
             }
         }
 
+    }
+    
+    func getLikedTracks() {
+        isLoading = true
+        Task {
+            do {
+                likedTracks = try await libraryManager.getTracksLiked()
+                isLoading = false
+            } catch {
+                handleError(error)
+                isLoading = false
+            }
+        }
     }
     
     func getPlaylists() {

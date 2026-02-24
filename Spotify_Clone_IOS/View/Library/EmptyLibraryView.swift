@@ -51,5 +51,6 @@ struct EmptyLibraryView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 40)
+        .padding(.top, 50)
     }
 }

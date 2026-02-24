@@ -34,6 +34,9 @@ struct Spotify_Clone_IOSApp: App {
                 .environmentObject(mainVM)
                 .onAppear { verifyToken() }
                 .onOpenURL { handleDeepLink(url: $0) }
+                .onReceive(NotificationCenter.default.publisher(for: .userDidLogin)) { _ in
+                    isTokenValid = true
+                }
                 .alert("Activation", isPresented: $showActivationAlert) {
                     Button("OK") { }
                 } message: {
@@ -79,13 +82,11 @@ struct Spotify_Clone_IOSApp: App {
 
     private func verifyToken() {
         let token = UserDefaults.standard.string(forKey: "auth_token")
-
         Task {
             guard token?.isEmpty == false else {
                 await MainActor.run { isTokenValid = false; isLoading = false }
                 return
             }
-
             do {
                 try await networkManager.postVerifyToken(tokenVerifyRequest: TokenVerifyRequest(token: token!))
                 await MainActor.run { isTokenValid = true; isLoading = false }
@@ -129,4 +130,8 @@ struct Spotify_Clone_IOSApp: App {
 struct AccountActivationRequest: Codable {
     let uid: String
     let token: String
+}
+
+extension Notification.Name {
+    static let userDidLogin = Notification.Name("userDidLogin")
 }

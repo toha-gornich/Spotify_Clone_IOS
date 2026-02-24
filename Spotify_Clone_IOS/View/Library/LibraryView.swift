@@ -47,23 +47,26 @@ struct LibraryView: View {
                 .padding(.bottom, 15)
                 
                 // Tab Selector
-                HStack(spacing: 15) {
-                    TabButtonLibrary(title: "Playlists", isSelected: libraryVM.selectedTab == 0) {
-                        libraryVM.selectedTab = 0
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 15) {
+                        TabButtonLibrary(title: "Playlists", isSelected: libraryVM.selectedTab == 0) {
+                            libraryVM.selectedTab = 0
+                        }
+                        
+                        TabButtonLibrary(title: "Artists", isSelected: libraryVM.selectedTab == 1) {
+                            libraryVM.selectedTab = 1
+                        }
+                        
+                        TabButtonLibrary(title: "Albums", isSelected: libraryVM.selectedTab == 2) {
+                            libraryVM.selectedTab = 2
+                        }
+                        TabButtonLibrary(title: "Tracks",    isSelected: libraryVM.selectedTab == 3) { libraryVM.selectedTab = 3 }
+                        
+                        Spacer()
                     }
-                    
-                    TabButtonLibrary(title: "Artists", isSelected: libraryVM.selectedTab == 1) {
-                        libraryVM.selectedTab = 1
-                    }
-                    
-                    TabButtonLibrary(title: "Albums", isSelected: libraryVM.selectedTab == 2) {
-                        libraryVM.selectedTab = 2
-                    }
-                    
-                    Spacer()
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 10)
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 10)
                 
                 // Content
                 ScrollView(showsIndicators: false) {
@@ -79,10 +82,9 @@ struct LibraryView: View {
                                         showCreatePlaylist = true
                                         libraryVM.createPlaylist()
                                     }
-                                ).padding(.top, 50)
+                                )
                             } else {
                                 PlaylistsContent(libraryVM: libraryVM)
-
                             }
                         } else if libraryVM.selectedTab == 1 {
                             if libraryVM.artists.isEmpty && !libraryVM.isLoading {
@@ -90,23 +92,35 @@ struct LibraryView: View {
                                     icon: "person.2",
                                     title: "No artists yet",
                                     subtitle: "Follow artists to see them here"
-                                ).padding(.top, 50)
+                                )
                             } else {
                                 ArtistsContent(artists: libraryVM.artists)
                             }
-                        } else {
+                        } else if libraryVM.selectedTab == 2 {
                             if libraryVM.albums.isEmpty && !libraryVM.isLoading {
                                 EmptyLibraryView(
                                     icon: "square.stack",
                                     title: "No albums yet",
                                     subtitle: "Save albums to see them here"
-                                ).padding(.top, 50)
+                                )
                             } else {
                                 AlbumsContent(albums: libraryVM.albums)
                             }
+                        } else if libraryVM.selectedTab == 3 {
+                            if libraryVM.likedTracks.isEmpty && !libraryVM.isLoading {
+                                EmptyLibraryView(
+                                    icon: "heart",
+                                    title: "No liked tracks yet",
+                                    subtitle: "Like tracks to see them here"
+                                )
+                            } else {
+                                TrackListView(tracks: libraryVM.likedTracks)
+                                    .padding(.horizontal)
+                            }
                         }
+            
                     }
-                    .padding(.bottom, 100)
+                    .padding(.bottom, 200)
                 }
             }
             
