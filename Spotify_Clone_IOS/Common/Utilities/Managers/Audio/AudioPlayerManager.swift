@@ -39,6 +39,7 @@ class AudioPlayerManager: NSObject, ObservableObject {
     @Published var isShuffleEnabled: Bool = false
     @Published var repeatMode: RepeatMode = .off
     @Published var errorMessage: String?
+    @Published var isSeeking = false
 
     private var player: AVQueuePlayer?
     private var timeObserver: Any?
@@ -48,7 +49,6 @@ class AudioPlayerManager: NSObject, ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private var currentItemObservation: NSKeyValueObservation?
     private var currentItemChangeObservation: NSKeyValueObservation?
-    private var isSeeking = false
 
     override init() {
         super.init()
@@ -278,14 +278,14 @@ class AudioPlayerManager: NSObject, ObservableObject {
     func updateSeekTime(_ time: TimeInterval) { currentTime = time }
 
     func seek(to time: TimeInterval) {
-        guard !isSeeking else { return }
-        isSeeking = true
         let cmTime = CMTime(seconds: time, preferredTimescale: 1000)
-        player?.seek(to: cmTime, toleranceBefore: .zero, toleranceAfter: .zero) { [weak self] _ in
-            self?.isSeeking = false
-            self?.updateNowPlayingPlaybackRate()
-        }
         currentTime = time
+        player?.seek(to: cmTime, toleranceBefore: .zero, toleranceAfter: .zero) { [weak self] _ in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                self?.isSeeking = false
+                self?.updateNowPlayingPlaybackRate()
+            }
+        }
     }
 
     // MARK: - Now Playing Info
@@ -338,9 +338,11 @@ class AudioPlayerManager: NSObject, ObservableObject {
         guard let player else { return }
         let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
         timeObserver = player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
+            guard let self else { return }
             guard time.isValid && !time.isIndefinite else { return }
-            self?.currentTime = time.seconds
-            self?.updateNowPlayingPlaybackRate()
+            guard !self.isSeeking else { return }
+            self.currentTime = time.seconds
+            self.updateNowPlayingPlaybackRate()
         }
     }
 

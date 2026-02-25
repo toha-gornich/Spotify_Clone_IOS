@@ -14,6 +14,7 @@ struct ArtistItemView: View {
     var body: some View {
         VStack {
             SpotifyRemoteImage(urlString: imageURL)
+                .scaledToFill()
                 .frame(width: 140, height: 140)
                 .clipShape(Circle())
             

@@ -132,13 +132,11 @@ struct HomeView: View {
                 }
             }
         }
-//        .id(homeVM.tracks.count)
         .frame(width: .screenWidth, height: .screenHeight)
         .background(Color.bg)
         .navigationTitle("")
         .navigationBarBackButtonHidden()
         .navigationBarHidden(true)
-//        .ignoresSafeArea()
         .ignoresSafeArea(.container, edges: .top)
         .alert(item: $homeVM.alertItem) { alertItem in
             Alert(title: alertItem.title,

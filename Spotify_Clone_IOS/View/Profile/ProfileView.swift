@@ -6,7 +6,8 @@
 //
 
 import SwiftUI
-struct ProfileView: View {    
+
+struct ProfileView: View {
     @Environment(\.dismiss) private var dismiss
     var userId: String? = nil
     @StateObject private var profileVM = ProfileViewModel()

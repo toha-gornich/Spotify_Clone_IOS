@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-
 struct TrackView: View {
     @EnvironmentObject var router: Router
     let slugTrack: String
@@ -15,29 +14,47 @@ struct TrackView: View {
     @State private var scrollOffset: CGFloat = 0
     @State private var showTitleInNavBar = false
 
-    private let imageHeight: CGFloat = 250
+    private let imageHeight: CGFloat = 300
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .top) {
             Color.bg.ignoresSafeArea()
 
-            ScrollableHeroView(imageURL: trackVM.track.album.image, color: albumColor, imageHeight: imageHeight, overlayOpacity: overlayOpacity)
+            // Hero image — reacts to scroll offset (stretches on pull-down)
+            ScrollableHeroView(
+                imageURL: trackVM.track.album.image,
+                color: albumColor,
+                imageHeight: imageHeight,
+                scrollOffset: scrollOffset
+            )
+            .zIndex(0)
 
+            //Navigation bar — fades in title when image scrolls out of view
             DetailNavBar(title: trackVM.track.title, showTitle: showTitleInNavBar, backgroundColor: .bg) {
                 PlayButton(
                     track: trackVM.track.toTrack(),
                     tracks: [trackVM.track.toTrack()] + trackVM.tracks.filter { $0.id != trackVM.track.id },
-                    showTitleInNavBar: showTitleInNavBar)
+                    showTitleInNavBar: showTitleInNavBar
+                )
             }
+            .zIndex(2)
 
+            // 3. Scrollable content sits on top of hero
             GeometryReader { outerGeometry in
                 ScrollView {
                     VStack(spacing: 0) {
-                        Color.clear.frame(height: imageHeight)
+                        // Transparent spacer so hero image is visible beneath
+                        Color.clear.frame(height: imageHeight - 20)
 
+                        // Main content with gradient background blending into hero
                         mainContentSection
                     }
-                    .background(ScrollOffsetReader(outerGeometry: outerGeometry) { updateScrollOffset($0) })
+                    .background(
+                        ScrollOffsetReader(outerGeometry: outerGeometry) { offset in
+                            self.scrollOffset = offset
+                            updateScrollOffset(offset)
+                        }
+                    )
                 }
             }
             .zIndex(1)
@@ -52,7 +69,8 @@ struct TrackView: View {
 
 // MARK: - Subviews
 extension TrackView {
-    
+
+    // Main content block with gradient background transitioning from artist color to bg
     private var mainContentSection: some View {
         VStack(alignment: .leading, spacing: 20) {
             titleSection
@@ -62,21 +80,37 @@ extension TrackView {
             artistPopularSection
             footerSection
         }
-        .background(Color.bg)
         .padding(.horizontal, 16)
-        .padding(.top, 8)
+        .padding(.top, 10)
         .padding(.bottom, 150)
+        .background(
+            VStack(spacing: 0) {
+                // Gradient fades from artist color into background
+                LinearGradient(
+                    colors: [albumColor.opacity(0.6), Color.bg],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .frame(height: 400)
+                Color.bg
+            }
+            .offset(y: -20) // Overlap hero edge for seamless blend
+            .ignoresSafeArea(.all, edges: .horizontal)
+        )
     }
 
+    // Track title — hidden once nav bar title is visible
     private var titleSection: some View {
         HStack {
             Text(trackVM.track.title)
-                .font(.largeTitle).fontWeight(.bold).foregroundColor(.white)
+                .font(.system(size: 44, weight: .bold))
+                .foregroundColor(.white)
                 .opacity(showTitleInNavBar ? 0 : 1)
             Spacer()
         }
     }
 
+    // Artist avatar, name, duration and play count
     private var artistInfoSection: some View {
         HStack(spacing: 12) {
             SpotifyRemoteImage(urlString: trackVM.track.artist.image)
@@ -100,22 +134,25 @@ extension TrackView {
         }
     }
 
+    // Like button on the left, play button on the right
     private var actionButtonsSection: some View {
         HStack(spacing: 16) {
             FavoriteButton(isLiked: trackVM.isTrackLiked, isLoading: trackVM.isLoading) {
-                trackVM.isTrackLiked ? trackVM.deleteTrackFavorite(slug: slugTrack) : trackVM.postTrackFavorite(slug: slugTrack)
+                trackVM.isTrackLiked
+                    ? trackVM.deleteTrackFavorite(slug: slugTrack)
+                    : trackVM.postTrackFavorite(slug: slugTrack)
             }
             Spacer()
-//            PlayButton(track: trackVM.tracks.first, tracks: trackVM.tracks, showTitleInNavBar: !showTitleInNavBar)
-            // Виклик у Навбарі та в тілі екрана
             PlayButton(
-                track: trackVM.track.toTrack(), // Передаємо сам цей трек
-                tracks: [trackVM.track.toTrack()] + trackVM.tracks, // Формуємо чергу: цей трек + рекомендовані
-                showTitleInNavBar: !showTitleInNavBar // або !showTitleInNavBar залежно від місця
+                track: trackVM.track.toTrack(),
+                tracks: [trackVM.track.toTrack()] + trackVM.tracks,
+                showTitleInNavBar: !showTitleInNavBar
             )
+            .scaleEffect(1.2)
         }
     }
 
+    // Up to 5 genre-based recommended tracks
     private var recommendedSection: some View {
         VStack(alignment: .leading) {
             Text("Recommended").font(.headline).foregroundColor(.white)
@@ -129,6 +166,7 @@ extension TrackView {
         }
     }
 
+    // Up to 5 popular tracks by the same artist
     private var artistPopularSection: some View {
         VStack(alignment: .leading) {
             Text("Popular by \(trackVM.track.artist.displayName)").font(.headline).foregroundColor(.white)
@@ -142,6 +180,7 @@ extension TrackView {
         }
     }
 
+    // Release date and copyright info
     private var footerSection: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(trackVM.track.formattedCreatedDate).font(.caption).foregroundColor(.gray)
@@ -152,41 +191,39 @@ extension TrackView {
 
 // MARK: - Logic Helpers
 extension TrackView {
+
+    // Derives artist color from track's album; falls back to default bg color
     private var albumColor: Color {
         let colorString = trackVM.track.album.color
         return colorString.isEmpty ? Color.bg : Color(hex: colorString)
     }
 
-    private var overlayOpacity: CGFloat {
-        scrollOffset < -50 ? min(abs(scrollOffset + 50) / 100, 1.0) : 0
-    }
-
+    // Updates scroll position and toggles nav bar title visibility
     private func updateScrollOffset(_ offset: CGFloat) {
-        scrollOffset = offset
-        let shouldShow = offset < -imageHeight + 30
-        if shouldShow != showTitleInNavBar { showTitleInNavBar = shouldShow }
+        let threshold: CGFloat = -imageHeight + 80
+        if (offset < threshold) != showTitleInNavBar {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                showTitleInNavBar.toggle()
+            }
+        }
     }
 
+    // Loads track data, then starts playback if this track isn't already playing
     private func loadTrackAndPlay() async {
-        // 1. Чекаємо на деталі треку
         await trackVM.getTrackBySlug(slug: slugTrack)
-        
-        // 2. ЯВНО ЧЕКАЄМО на рекомендації (тепер це можливо завдяки async)
+
         if !trackVM.track.genre.slug.isEmpty {
             await trackVM.getTracksBySlugGenre(slug: trackVM.track.genre.slug)
         }
-        
+
         let trackToPlay = trackVM.track.toTrack()
-        
-        // Перевірка на "той самий трек"
+
+        // Skip playback setup if this track is already active
         if playerManager.currentTrack?.id == trackToPlay.id { return }
-        
-        // 3. Формуємо чергу (поточний + завантажені рекомендації)
-        // Фільтруємо, щоб не було дублікатів самого себе в списку
+
         let filteredRecommendations = trackVM.tracks.filter { $0.id != trackToPlay.id }
         let fullQueue = [trackToPlay] + filteredRecommendations
-        
+
         playerManager.play(track: trackToPlay, from: fullQueue)
     }
 }
-

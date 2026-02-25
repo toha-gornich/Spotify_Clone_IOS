@@ -88,13 +88,10 @@ struct FullPlayerView: View {
                     Slider(
                         value: Binding(
                             get: {
-                                // While dragging — show seekValue, otherwise — currentTime
                                 isDragging ? seekValue : playerManager.currentTime
                             },
                             set: { newValue in
                                 seekValue = newValue
-                                // Only update UI while dragging, no actual seek yet
-                                playerManager.updateSeekTime(newValue)
                             }
                         ),
                         in: 0...max(playerManager.duration, 1)
@@ -106,10 +103,10 @@ struct FullPlayerView: View {
                                 if !isDragging {
                                     isDragging = true
                                     seekValue = playerManager.currentTime
+                                    playerManager.isSeeking = true
                                 }
                             }
                             .onEnded { _ in
-                                // Actual seek only when finger is released
                                 playerManager.seek(to: seekValue)
                                 isDragging = false
                             }

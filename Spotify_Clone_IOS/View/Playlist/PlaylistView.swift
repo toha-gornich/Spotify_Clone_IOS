@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-
 struct PlaylistView: View {
     let slugPlaylist: String
     @StateObject var playlistVM = PlaylistViewModel()
@@ -15,7 +14,7 @@ struct PlaylistView: View {
     @State private var scrollOffset: CGFloat = 0
     @State private var showTitleInNavBar = false
 
-    private let imageHeight: CGFloat = 250
+    private let imageHeight: CGFloat = 300
 
     private var playlistColor: Color {
         let colorString = playlistVM.playlist.color
@@ -23,79 +22,105 @@ struct PlaylistView: View {
         return Color.bg
     }
 
-    private var overlayOpacity: CGFloat {
-        scrollOffset < -50 ? min(abs(scrollOffset + 50) / 100, 1.0) : 0
-    }
-
     var body: some View {
-        ZStack {
+        ZStack(alignment: .top) {
             Color.bg.ignoresSafeArea()
 
-            ScrollableHeroView(imageURL: playlistVM.playlist.image, color: playlistColor, imageHeight: imageHeight, overlayOpacity: overlayOpacity)
+            // 1. Герой реагує на scrollOffset
+            ScrollableHeroView(
+                imageURL: playlistVM.playlist.image,
+                color: playlistColor,
+                imageHeight: imageHeight,
+                scrollOffset: scrollOffset
+            )
+            .zIndex(0)
 
+            // 2. Навігаційний бар
             DetailNavBar(title: playlistVM.playlist.title, showTitle: showTitleInNavBar, backgroundColor: .bg) {
                 PlayButton(track: playlistVM.tracks.first, tracks: playlistVM.tracks, showTitleInNavBar: showTitleInNavBar)
             }
+            .zIndex(2)
 
+            // 3. Скролований контент
             GeometryReader { outerGeometry in
                 ScrollView {
                     VStack(spacing: 0) {
-                        Color.clear.frame(height: imageHeight)
+                        Color.clear.frame(height: imageHeight - 20)
 
-                        HStack {
+                        VStack(alignment: .leading, spacing: 12) {
                             Text(playlistVM.playlist.title)
-                                .font(.largeTitle).fontWeight(.bold).foregroundColor(.white)
+                                .font(.system(size: 44, weight: .bold))
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 16)
                                 .opacity(showTitleInNavBar ? 0 : 1)
-                            Spacer()
-                        }
-                        .padding(.horizontal, 16)
 
-                        LazyVStack(alignment: .leading, spacing: 16) {
-                            if let description = playlistVM.playlist.description, !description.isEmpty {
-                                Text(description).font(.caption).foregroundColor(.gray)
-                            }
+                            LazyVStack(alignment: .leading, spacing: 16) {
+                                if let description = playlistVM.playlist.description, !description.isEmpty {
+                                    Text(description).font(.caption).foregroundColor(.gray)
+                                }
 
-                            if let genreName = playlistVM.playlist.genre?.name {
-                                Text(genreName).font(.title3).fontWeight(.bold).foregroundColor(.gray)
-                            }
+                                if let genreName = playlistVM.playlist.genre?.name {
+                                    Text(genreName).font(.title3).fontWeight(.bold).foregroundColor(.gray)
+                                }
 
-                            HStack(spacing: 12) {
-                                SpotifyRemoteImage(urlString: playlistVM.playlist.user.image ?? "")
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 40, height: 40).clipShape(Circle())
+                                HStack(spacing: 12) {
+                                    SpotifyRemoteImage(urlString: playlistVM.playlist.user.image ?? "")
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 40, height: 40).clipShape(Circle())
 
-                                HStack(spacing: 4) {
-                                    Text(playlistVM.playlist.user.displayName ?? "Unknown").font(.caption).foregroundColor(.white)
-                                    Circle().fill(Color.gray).frame(width: 6, height: 6)
-                                    Text("\(playlistVM.playlist.favoriteCount ?? 0) saves").font(.caption).foregroundColor(.white)
-                                    Circle().fill(Color.gray).frame(width: 6, height: 6)
-                                    Text("\(playlistVM.playlist.tracks?.count ?? 0) songs").font(.caption).foregroundColor(.white)
-                                    if let tracks = playlistVM.playlist.tracks, !tracks.isEmpty {
+                                    HStack(spacing: 4) {
+                                        Text(playlistVM.playlist.user.displayName ?? "Unknown").font(.caption).foregroundColor(.white)
                                         Circle().fill(Color.gray).frame(width: 6, height: 6)
-                                        Text(playlistVM.totalDuration).font(.caption).foregroundColor(.gray)
+                                        Text("\(playlistVM.playlist.favoriteCount ?? 0) saves").font(.caption).foregroundColor(.white)
+                                        Circle().fill(Color.gray).frame(width: 6, height: 6)
+                                        Text("\(playlistVM.playlist.tracks?.count ?? 0) songs").font(.caption).foregroundColor(.white)
+                                        if let tracks = playlistVM.playlist.tracks, !tracks.isEmpty {
+                                            Circle().fill(Color.gray).frame(width: 6, height: 6)
+                                            Text(playlistVM.totalDuration).font(.caption).foregroundColor(.gray)
+                                        }
                                     }
+                                    Spacer()
                                 }
-                                Spacer()
-                            }
 
-                            HStack(spacing: 16) {
-                                FavoriteButton(isLiked: playlistVM.isPlaylistLiked, isLoading: playlistVM.isLoading) {
-                                    playlistVM.isPlaylistLiked ? playlistVM.deletePlaylistFavorite(slug: slugPlaylist) : playlistVM.postPlaylistFavorite(slug: slugPlaylist)
+                                HStack(spacing: 16) {
+                                    FavoriteButton(isLiked: playlistVM.isPlaylistLiked, isLoading: playlistVM.isLoading) {
+                                        playlistVM.isPlaylistLiked
+                                            ? playlistVM.deletePlaylistFavorite(slug: slugPlaylist)
+                                            : playlistVM.postPlaylistFavorite(slug: slugPlaylist)
+                                    }
+                                    Spacer()
+                                    PlayButton(track: playlistVM.tracks.first, tracks: playlistVM.tracks, showTitleInNavBar: !showTitleInNavBar)
+                                        .scaleEffect(1.2)
                                 }
-                                Spacer()
-                                PlayButton(track: playlistVM.tracks.first, tracks: playlistVM.tracks, showTitleInNavBar: !showTitleInNavBar)
-                            }
 
-                            if let tracks = playlistVM.playlist.tracks {
-                                TrackListView(tracks: tracks).environmentObject(playerManager)
+                                if let tracks = playlistVM.playlist.tracks {
+                                    TrackListView(tracks: tracks).environmentObject(playerManager)
+                                }
                             }
+                            .padding(.horizontal, 16)
+                            .padding(.top, 10)
+                            .padding(.bottom, 150)
                         }
-                        .background(Color.bg)
-                        .padding(.horizontal, 16)
-                        .padding(.top, 8)
-                        .padding(.bottom, 150)
+                        .background(
+                            VStack(spacing: 0) {
+                                LinearGradient(
+                                    colors: [playlistColor.opacity(0.6), Color.bg],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                )
+                                .frame(height: 400)
+                                Color.bg
+                            }
+                            .offset(y: -20)
+                            .ignoresSafeArea(.all, edges: .horizontal)
+                        )
                     }
-                    .background(ScrollOffsetReader(outerGeometry: outerGeometry) { updateScrollOffset($0) })
+                    .background(
+                        ScrollOffsetReader(outerGeometry: outerGeometry) { offset in
+                            self.scrollOffset = offset
+                            updateScrollOffset(offset)
+                        }
+                    )
                 }
             }
             .zIndex(1)
@@ -106,8 +131,11 @@ struct PlaylistView: View {
     }
 
     private func updateScrollOffset(_ offset: CGFloat) {
-        scrollOffset = offset
-        let shouldShow = offset < -imageHeight + 30
-        if shouldShow != showTitleInNavBar { showTitleInNavBar = shouldShow }
+        let threshold: CGFloat = -imageHeight + 80
+        if (offset < threshold) != showTitleInNavBar {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                showTitleInNavBar.toggle()
+            }
+        }
     }
 }
