@@ -165,8 +165,6 @@ protocol ImageServiceProtocol {
 }
 
 // MARK: - Composite protocols
-
-
 typealias PlaylistsServiceProtocol = PlaylistServiceProtocol & UserServiceProtocol
 typealias LibraryServiceProtocol = PlaylistServiceProtocol & ArtistServiceProtocol & AlbumServiceProtocol & PlaylistServiceProtocol & UserServiceProtocol & TrackServiceProtocol
 

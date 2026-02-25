@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		622CFC682EC27FF200BB19F4 /* TrackViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC662EC27FF200BB19F4 /* TrackViewModelTests.swift */; };
+		6201FC2D2F4F97AD004E0845 /* MockURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6201FC2C2F4F97AD004E0845 /* MockURLProtocol.swift */; };
+		6201FC2F2F4F99DE004E0845 /* AuthServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6201FC2E2F4F99DE004E0845 /* AuthServiceTests.swift */; };
 		622CFC6C2EC27FFB00BB19F4 /* Spotify_Clone_IOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC692EC27FFB00BB19F4 /* Spotify_Clone_IOSUITests.swift */; };
 		622CFC6D2EC27FFB00BB19F4 /* Spotify_Clone_IOSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC6A2EC27FFB00BB19F4 /* Spotify_Clone_IOSUITestsLaunchTests.swift */; };
 		622CFC7F2EC2849800BB19F4 /* TrackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC7E2EC2849800BB19F4 /* TrackTests.swift */; };
@@ -44,7 +45,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		622CFC662EC27FF200BB19F4 /* TrackViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackViewModelTests.swift; sourceTree = "<group>"; };
+		6201FC2C2F4F97AD004E0845 /* MockURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLProtocol.swift; sourceTree = "<group>"; };
+		6201FC2E2F4F99DE004E0845 /* AuthServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthServiceTests.swift; sourceTree = "<group>"; };
 		622CFC692EC27FFB00BB19F4 /* Spotify_Clone_IOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spotify_Clone_IOSUITests.swift; sourceTree = "<group>"; };
 		622CFC6A2EC27FFB00BB19F4 /* Spotify_Clone_IOSUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spotify_Clone_IOSUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		622CFC7E2EC2849800BB19F4 /* TrackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTests.swift; sourceTree = "<group>"; };
@@ -67,6 +69,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		6201FC322F4F9E83004E0845 /* Resources */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		627246B42DDB84AD000C8562 /* Spotify_Clone_IOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Spotify_Clone_IOS;
@@ -103,7 +110,6 @@
 			isa = PBXGroup;
 			children = (
 				622CFC6E2EC2833600BB19F4 /* Tests */,
-				622CFC662EC27FF200BB19F4 /* TrackViewModelTests.swift */,
 			);
 			path = Spotify_Clone_IOSTests;
 			sourceTree = "<group>";
@@ -153,6 +159,7 @@
 		622CFC702EC2835100BB19F4 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				6201FC2E2F4F99DE004E0845 /* AuthServiceTests.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -174,6 +181,8 @@
 		622CFC732EC2836A00BB19F4 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
+				6201FC322F4F9E83004E0845 /* Resources */,
+				6201FC2C2F4F97AD004E0845 /* MockURLProtocol.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -235,6 +244,9 @@
 			);
 			dependencies = (
 				627246C42DDB84AE000C8562 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				6201FC322F4F9E83004E0845 /* Resources */,
 			);
 			name = Spotify_Clone_IOSTests;
 			packageProductDependencies = (
@@ -347,17 +359,18 @@
 				622CFC932EC284CC00BB19F4 /* AuthModelsTests.swift in Sources */,
 				622CFC992EC7659600BB19F4 /* Test.swift in Sources */,
 				622CFC8D2EC284BE00BB19F4 /* PlaylistTests.swift in Sources */,
-				622CFC682EC27FF200BB19F4 /* TrackViewModelTests.swift in Sources */,
 				622CFC872EC284B000BB19F4 /* ArtistTests.swift in Sources */,
 				622CFC952EC284D100BB19F4 /* ResponseModelsTests.swift in Sources */,
 				622CFC912EC284C700BB19F4 /* LicenseTests.swift in Sources */,
 				622CFC892EC284B500BB19F4 /* UserTests.swift in Sources */,
 				622CFC7F2EC2849800BB19F4 /* TrackTests.swift in Sources */,
+				6201FC2F2F4F99DE004E0845 /* AuthServiceTests.swift in Sources */,
 				622CFC8F2EC284C300BB19F4 /* PlaylistDetailTests.swift in Sources */,
 				622CFC852EC284AA00BB19F4 /* AlbumMyTests.swift in Sources */,
 				622CFC832EC284A500BB19F4 /* AlbumTests.swift in Sources */,
 				622CFC8B2EC284BA00BB19F4 /* GenreTests.swift in Sources */,
 				622CFC972EC284D500BB19F4 /* FavoriteModelsTests.swift in Sources */,
+				6201FC2D2F4F97AD004E0845 /* MockURLProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

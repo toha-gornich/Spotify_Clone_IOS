@@ -19,8 +19,8 @@ final class NetworkManager {
     private let session: URLSession
     
     // MARK: - Initialization
-    private init(session: URLSession = .shared) {
-        self.session = session
+    init(session: URLSession = .shared) {
+            self.session = session
     }
 }
 
