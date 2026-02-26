@@ -7,7 +7,7 @@
 
 ## 🚀 Features
 
-- **iOS Client** — built with Swift using UIKit / SwiftUI.
+- **iOS Client** — built with Swift using SwiftUI/UIKit .
 - **Backend Integration** — full integration with the [Spotify Clone API](https://github.com/MafanNam/Spotify_Clone_API).
 - **Auth** — user registration and login via JWT.
 - **Music Player** — real-time track playback.
