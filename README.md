@@ -24,7 +24,7 @@
 | Networking | URLSession / Alamofire |
 | Image Loading | Kingfisher / SDWebImage |
 | Audio | AVFoundation |
-| Min. Version | iOS 15.0+ |
+| Min. Version | iOS 16.0+ |
 
 ---
 
