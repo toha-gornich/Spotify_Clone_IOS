@@ -63,7 +63,7 @@ let baseURL = "https://spotify-api-production-6731.up.railway.app"
 
 ## 📸 Demo
 [![Watch Demo](assets/preview.png)](https://youtube.com/shorts/1vQ8NZzl_3Q?feature=share)
-
+[![Watch Demo](https://img.youtube.com/vi/horts/1vQ8NZzl_3Q/maxresdefault.jpg)](https://youtube.com/shorts/1vQ8NZzl_3Q?feature=share)
 ---
 
 ## 👨‍💻 Author
