@@ -19,21 +19,6 @@ struct ProfileView: View {
         VStack(spacing: 0) {
             
             ScrollView {
-//                HStack {
-//                    Button(action: {
-//                        dismiss()
-//                    }) {
-//                        Image(systemName: "chevron.left")
-//                            .foregroundColor(.white)
-//                            .font(.title2)
-//                            .frame(width: 44, height: 44)
-//                    }
-//                    
-//                    Spacer()
-//                }
-//                .padding(.horizontal, 16ř
-//                .padding(.top, 10)
-//                .background(Color.white.opacity(0))
                 
                 HStack{
                     BackButton()

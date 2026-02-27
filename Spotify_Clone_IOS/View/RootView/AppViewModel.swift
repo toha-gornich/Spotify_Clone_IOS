@@ -9,6 +9,7 @@ import Foundation
 
 @MainActor
 final class AppViewModel: ObservableObject {
+    static let shared = AppViewModel()
     @Published var appState: AppState = .loading
     @Published var showActivationAlert = false
     @Published var activationMessage = ""
@@ -26,6 +27,7 @@ final class AppViewModel: ObservableObject {
         guard let tokenData = keychainManager.read(key: .accessToken),
               let token = String(data: tokenData, encoding: .utf8)
         else {
+            print("❌ No token in keychain")
             appState = .unauthenticated
             return
         }
@@ -44,6 +46,9 @@ final class AppViewModel: ObservableObject {
     
     func handleLogout() {
         keychainManager.delete(key: KeychainKey.accessToken.rawValue)
+        
+        URLCache.shared.removeAllCachedResponses()
+        
         appState = .unauthenticated
     }
     
@@ -74,5 +79,6 @@ final class AppViewModel: ObservableObject {
             showActivationAlert = true
         }
     }
+    
 }
 

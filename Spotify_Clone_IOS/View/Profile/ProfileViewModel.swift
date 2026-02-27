@@ -45,18 +45,14 @@ import SwiftUI
                 print(String(userMe.id))
                 print(userId)
                 if String(userMe.id) == userId {
-                    // Це мій профіль, використовуємо userMe
                     user = userMe
                 } else {
-                    // Це чужий профіль, робимо запит
                     user = try await profileManager.getUser(userId: userId)
                 }
             } else {
-                // Якщо userId немає, показуємо свій профіль
                 user = userMe
             }
 
-            // Тепер user доступний
             color = Color(hex: user.color!)
             name = user.displayName!
             playlistsCount = String(user.playlistsCount)

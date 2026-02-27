@@ -9,6 +9,7 @@ import SwiftUI
 
 struct UserDashboardView: View {
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var playerManager: AudioPlayerManager
     @State var selectedTab: AccountTab
     @StateObject private var dashboardVM = UserDashboardViewModel()
     @State private var showProfileFullScreen = false
@@ -27,13 +28,10 @@ struct UserDashboardView: View {
         case help = "Help"
     }
     
-    // Computed property to get available tabs based on user type
     private var availableTabs: [AccountTab] {
         if dashboardVM.isActor {
-            // User tabs
             return [.account, .profile, .subscription, .payment, .settings, .help]
         } else {
-            // Actor tabs
             return [.account, .artistProfile, .tracks, .albums, .license, .subscription, .payment, .settings, .analytics, .help]
         }
     }
@@ -45,34 +43,22 @@ struct UserDashboardView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                
                 Color.bg
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
                     HStack {
-                        VStack(spacing: 0) {
-                            HStack {
-                                HStack {
-                                    Button(action: {
-                                        dismiss()
-                                    }) {
-                                        Image(systemName: "chevron.left")
-                                            .font(.title2)
-                                            .foregroundColor(.white)
-                                    }
-                                    
-                                    Spacer()
-                                }
-                            }
+                        Button(action: {
+                            dismiss()
+                        }) {
+                            Image(systemName: "chevron.left")
+                                .font(.title2)
+                                .foregroundColor(.white)
                         }
-
-                        
                         Spacer()
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
-                    
                     
                     Divider()
                         .background(Color.elementBg)
@@ -96,13 +82,12 @@ struct UserDashboardView: View {
                         .padding(.horizontal, 20)
                     }
                     .padding(.top, 10)
+                    
                     Divider()
                         .background(Color.elementBg)
                         .padding(.top, 10)
                     
-                    
                     viewForSelectedTab()
-                    
                     
                     Spacer()
                 }
@@ -120,12 +105,20 @@ struct UserDashboardView: View {
         }
         .navigationBarHidden(true)
         .fullScreenCover(isPresented: $showProfileFullScreen) {
-            ProfileView()
+            NavigationStack {
+                ProfileView()
+                    .navigationDestination(for: AppRoute.self) { route in
+                        switch route {
+                        case .profile(let id): ProfileView(userId: id)
+                        case .playlist(let slug): PlaylistView(slugPlaylist: slug)
+                        default: EmptyView()
+                        }
+                    }
+                    .environmentObject(Router())
+                    .environmentObject(playerManager)
+            }
         }
     }
-        
-
-    
     
     @ViewBuilder
     private func viewForSelectedTab() -> some View {
@@ -155,7 +148,6 @@ struct UserDashboardView: View {
         }
     }
 }
-
 
 #Preview {
     UserDashboardView()

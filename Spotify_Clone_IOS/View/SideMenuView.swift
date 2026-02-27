@@ -8,11 +8,12 @@
 import SwiftUI
 struct SideMenuView: View {
     @Binding var isShowing: Bool
-    @State private var showGreeting = false
     @State private var showAccount = false
     @State private var showProfile = false
     @State private var selectedAccountTab: UserDashboardView.AccountTab = .account
     @EnvironmentObject var playerManager: AudioPlayerManager
+    @EnvironmentObject var mainVM: MainViewModel
+    @EnvironmentObject var appVM: AppViewModel
     
     var edgeTransition: AnyTransition = .move(edge: .leading)
     
@@ -79,12 +80,11 @@ struct SideMenuView: View {
                                 UserDashboardView(selectedTab: selectedAccountTab)
                             }
                             
-                            MenuItemView(icon: "person.circle.fill", title: "Profile",
-                                         action: {
-                                showProfile = true
-                            })
-                            .fullScreenCover(isPresented: $showProfile) {
-                                ProfileView()
+                            MenuItemView(icon: "person.circle.fill", title: "Profile") {
+                                withAnimation(.easeInOut) { mainVM.isShowMenu = false }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                    mainVM.showOwnProfile = true
+                                }
                             }
                             
                             MenuItemView(icon: "crown.fill", title: "Upgrade to Premium",
@@ -104,14 +104,10 @@ struct SideMenuView: View {
                             
                             MenuItemView(icon: "rectangle.portrait.and.arrow.right", title: "Log out") {
                                 playerManager.dismissPlayer()
-                                logOut()
-                                showGreeting = true
-                            }
-                            .fullScreenCover(isPresented: $showGreeting) {
-                                GreetingView()
-                                    .onDisappear {
-                                        showGreeting = false
-                                    }
+                                withAnimation { isShowing = false }
+                                
+                                
+                                appVM.handleLogout()
                             }
                             
                             Spacer()
@@ -131,11 +127,11 @@ struct SideMenuView: View {
         .animation(.easeInOut(duration: 0.3), value: isShowing)
     }
     
-        func logOut() {
-            KeychainManager.shared.delete(key: KeychainKey.accessToken.rawValue)
-            
-            URLCache.shared.removeAllCachedResponses()
-            
-        }
+//        func logOut() {
+//            KeychainManager.shared.delete(key: KeychainKey.accessToken.rawValue)
+//            
+//            URLCache.shared.removeAllCachedResponses()
+//        
+//        }
     
 }

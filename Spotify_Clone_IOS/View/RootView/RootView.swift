@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RootView: View {
-    @StateObject private var appVM = AppViewModel()
+    @StateObject private var appVM = AppViewModel.shared
     @StateObject private var mainVM = MainViewModel()
     @StateObject private var playerManager = AudioPlayerManager()
     @State private var keyboardHeight: CGFloat = 0
@@ -25,7 +25,7 @@ struct RootView: View {
                 } message: {
                     Text(appVM.activationMessage)
                 }
-                // MiniPlayer прямо тут
+               
                 .overlay(alignment: .bottom) {
                     if playerManager.sheetState == .mini,
                        playerManager.currentTrack != nil {
@@ -50,6 +50,7 @@ struct RootView: View {
             SideMenuView(isShowing: $mainVM.isShowMenu)
                 .environmentObject(mainVM)
                 .environmentObject(playerManager)
+                .environmentObject(appVM)
                 .zIndex(1000)
         }
         .task {
@@ -57,6 +58,20 @@ struct RootView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: .userDidLogin)) { _ in
             appVM.handleLogin()
+        }
+        .fullScreenCover(isPresented: $mainVM.showOwnProfile) {
+            NavigationStack(path: $mainVM.profileRouter.path) {
+                ProfileView()
+                    .navigationDestination(for: AppRoute.self) { route in
+                        switch route {
+                        case .profile(let id): ProfileView(userId: id)
+                        case .playlist(let slug): PlaylistView(slugPlaylist: slug)
+                        default: EmptyView()
+                        }
+                    }
+                    .environmentObject(mainVM.profileRouter)
+                    .environmentObject(playerManager)
+            }
         }
     }
 

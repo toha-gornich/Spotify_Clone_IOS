@@ -15,11 +15,11 @@ struct MainView: View {
     @StateObject private var homeVM = HomeViewModel()
     @StateObject private var genresVM = GenresViewModel()
     @StateObject private var libraryVM = LibraryViewModel()
-
+    
     var body: some View {
         ZStack {
             Color.bg.ignoresSafeArea()
-
+            
             TabView(selection: $mainVM.selectTab) {
                 NavigationStack(path: $homeRouter.path) {
                     HomeView(homeVM: homeVM)
@@ -27,14 +27,14 @@ struct MainView: View {
                 }
                 .environmentObject(homeRouter)
                 .tag(0)
-
+                
                 NavigationStack(path: $searchRouter.path) {
                     GenresView(genreVM: genresVM)
                         .navigationDestination(for: AppRoute.self) { destinations(route: $0) }
                 }
                 .environmentObject(searchRouter)
                 .tag(1)
-
+                
                 NavigationStack(path: $libraryRouter.path) {
                     LibraryView(libraryVM: libraryVM)
                         .navigationDestination(for: AppRoute.self) { destinations(route: $0) }
@@ -45,7 +45,7 @@ struct MainView: View {
             .tabViewStyle(.page(indexDisplayMode: .never))
             .ignoresSafeArea(.container, edges: .top) // content extends under status bar
             .ignoresSafeArea(.keyboard, edges: .bottom)
-
+            
             VStack {
                 Spacer()
                 tabBarView
@@ -60,7 +60,7 @@ struct MainView: View {
             homeVM.loadAllDataIfNeeded()
         }
     }
-
+    
     // MARK: - Tab Bar
     private var tabBarView: some View {
         HStack {
@@ -92,7 +92,7 @@ struct MainView: View {
         )
         .shadow(radius: 2)
     }
-
+    
     // MARK: - Navigation Destinations
     @ViewBuilder
     private func destinations(route: AppRoute) -> some View {

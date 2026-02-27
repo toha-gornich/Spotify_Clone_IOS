@@ -9,11 +9,13 @@ import SwiftUI
 
 struct BackButton:View{
     
-    @EnvironmentObject var router: Router
+//    @EnvironmentObject var router: Router
+    @Environment(\.dismiss) var dismiss
 
     var body: some View{
         Button(action: {
-            router.goBack()
+            dismiss()
+//            router.goBack()
         }) {
             Image(systemName: "chevron.left")
                 .foregroundColor(.white)
