@@ -61,13 +61,8 @@ let baseURL = "https://spotify-api-production-6731.up.railway.app"
 
 ---
 
-## 📸 Screenshots
-
-| Home | Player | Library |
-|:---:|:---:|:---:|
-| ![Home](screenshots/home.png) | ![Player](screenshots/player.png) | ![Library](screenshots/library.png) |
-
-> 📌 *Add your screenshots to the `screenshots/` folder in the project root.*
+## 📸 Demo
+[![Watch Demo](assets/preview.png)](https://youtube.com/shorts/1vQ8NZzl_3Q?feature=share)
 
 ---
 
