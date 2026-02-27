@@ -139,11 +139,3 @@ struct SideMenuView: View {
         }
     
 }
-
-
-
-#Preview {
-    NavigationView{
-//        MainView()
-    }
-}

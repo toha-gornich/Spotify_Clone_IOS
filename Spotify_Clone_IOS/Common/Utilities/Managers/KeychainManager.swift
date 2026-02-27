@@ -20,6 +20,7 @@ final class KeychainManager{
     }
     
     // MARK: - Save
+    @discardableResult
     func save(key: KeychainKey, data: Data) -> OSStatus {
             let query = [
                 kSecClass as String: kSecClassGenericPassword,
@@ -46,6 +47,7 @@ final class KeychainManager{
         }
     
     // MARK: - Delete
+    @discardableResult
     func delete(key: String) -> OSStatus {
         let query = [
             kSecClass as String: kSecClassGenericPassword,
