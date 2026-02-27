@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import SwiftUI
+
 
 struct FullPlayerView: View {
     @ObservedObject var playerManager: AudioPlayerManager

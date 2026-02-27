@@ -1,0 +1,12 @@
+//
+//  Extensios.swift
+//  Spotify_Clone_IOS
+//
+//  Created by Горніч Антон on 27.02.2026.
+//
+
+import Foundation
+
+extension Notification.Name {
+    static let userDidLogin = Notification.Name("userDidLogin")
+}

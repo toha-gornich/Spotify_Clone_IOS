@@ -132,7 +132,7 @@ struct SideMenuView: View {
     }
     
         func logOut() {
-            UserDefaults.standard.removeObject(forKey: "auth_token")
+            KeychainManager.shared.delete(key: KeychainKey.accessToken.rawValue)
             
             URLCache.shared.removeAllCachedResponses()
             

@@ -188,7 +188,7 @@ struct CountryData {
     
     func logOut() {
         // clear auth token
-        UserDefaults.standard.removeObject(forKey: "auth_token")
+        KeychainManager.shared.delete(key: KeychainKey.accessToken.rawValue)
         
         // Clear cache URLs
         URLCache.shared.removeAllCachedResponses()

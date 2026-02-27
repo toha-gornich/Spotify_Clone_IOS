@@ -10,103 +10,75 @@ import SwiftUI
 
 @MainActor
 final class AuthViewModel: ObservableObject {
-    
+
     @Published var emailOrUsername: String = ""
     @Published var password: String = ""
     @Published var isPasswordVisible: Bool = false
     @Published var isLoading: Bool = false
-    @Published var errorMessage: String? = nil
     @Published var alertItem: AlertItem?
-    @Published var loginSuccess: Bool = false
-    
 
     private let authManager: AuthServiceProtocol
-    init(authManager: AuthServiceProtocol = NetworkManager.shared){
+    private let keychainManager = KeychainManager.shared
+
+    init(authManager: AuthServiceProtocol = NetworkManager.shared) {
         self.authManager = authManager
     }
-    
+
+    // MARK: - Computed Properties
+
     var isLoginEnabled: Bool {
         !emailOrUsername.isEmpty && !password.isEmpty
     }
-    
+
     var isEmailValid: Bool {
         emailOrUsername.contains("@") && emailOrUsername.contains(".")
     }
-    
+
+    // MARK: - Actions
+
     func login() async -> Bool {
         guard isLoginEnabled else { return false }
-        
+
         isLoading = true
-        errorMessage = nil
-        loginSuccess = false
-        
-        do {
-            let loginRequest = createLoginRequest()
-            
-            let response = try await authManager.postLogin(loginRequest: loginRequest)
-            
-            let success = await handleLoginSuccess(response)
-            return success
-            
-        } catch {
-            handleLoginError(error)
-            return false
-        }
-    }
 
-    private func createLoginRequest() -> LoginRequest {
-        return LoginRequest(
-            email: emailOrUsername,
-            password: password
-        )
-    }
-
-    private func handleLoginSuccess(_ response: LoginResponse) async -> Bool {
-        isLoading = false
-        loginSuccess = true
-        
-        // Store auth token if needed
-        let token = response.access
-        let tokenRefresh = response.refresh
-        UserDefaults.standard.set(tokenRefresh, forKey: "auth_token")
-        
-        
         do {
-            try await authManager.postVerifyToken(tokenVerifyRequest: TokenVerifyRequest(token: token))
-            print("Token verified successfully")
+            let request = LoginRequest(email: emailOrUsername, password: password)
+            let response = try await authManager.postLogin(loginRequest: request)
+            saveTokens(response)
+            isLoading = false
             return true
         } catch {
-            handleLoginError(error)
+            handleError(error)
             return false
         }
     }
-    
-    
-    
-    private func handleLoginError(_ error: Error) {
-        handleError(error)
-    }
-    
-    private func handleError(_ error: Error) {
-        isLoading = false
-        
-        if let apError = error as? APError {
-            switch apError {
-            case .invalidResponse:
-                alertItem = AlertContext.invalidResponse
-            case .invalidURL:
-                alertItem = AlertContext.invalidURL
-            case .invalidData:
-                alertItem = AlertContext.invalidData
-            case .unableToComplete:
-                alertItem = AlertContext.unableToComplete
-            }
-        }
-    }
-    
- 
+
     func togglePasswordVisibility() {
         isPasswordVisible.toggle()
     }
-}
 
+    // MARK: - Private
+
+    // Saves access and refresh tokens to Keychain after successful login
+    private func saveTokens(_ response: LoginResponse) {
+        if let accessData = response.access.data(using: .utf8) {
+            keychainManager.save(key: .accessToken, data: accessData)
+        }
+        if let refreshData = response.refresh.data(using: .utf8) {
+            keychainManager.save(key: .refreshToken, data: refreshData)
+        }
+    }
+
+    private func handleError(_ error: Error) {
+        isLoading = false
+
+        guard let apError = error as? APError else { return }
+
+        switch apError {
+        case .invalidResponse:  alertItem = AlertContext.invalidResponse
+        case .invalidURL:       alertItem = AlertContext.invalidURL
+        case .invalidData:      alertItem = AlertContext.invalidData
+        case .unableToComplete: alertItem = AlertContext.unableToComplete
+        }
+    }
+}
