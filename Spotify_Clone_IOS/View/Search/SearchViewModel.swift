@@ -7,11 +7,7 @@
 
 import SwiftUI
 @MainActor final class SearchViewModel: ObservableObject {
-    @Published var tracks: [Track] = [] {
-        didSet {
-            print("📊 SearchVM - tracks count changed: \(oldValue.count) -> \(tracks.count)")
-        }
-    }
+    @Published var tracks: [Track] = [] 
     @Published var artists: [Artist] = []
     @Published var albums: [Album] = []
     @Published var profiles: [User] = []

@@ -1,0 +1,59 @@
+{
+  "count": 2,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 23,
+      "album": {
+        "id": 24,
+        "slug": "phonk-dxstruction",
+        "title": "PHONK DXSTRUCTION",
+        "description": "",
+        "artist": {
+          "id": 9,
+          "slug": "artist10",
+          "display_name": "Ashish",
+          "image": "http://192.168.0.108:8080/mediafiles/artists/artist10/ei7xlw0orvda1.jpg",
+          "color": "#430d0a",
+          "is_verify": false
+        },
+        "track_slug": "pr-phonk",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/phonk-dxstruction/ab67616100005174913bcf5a2e5c02be0e6b5d05.jpg",
+        "color": "#088b18",
+        "is_private": false,
+        "release_date": "2024-05-13",
+        "created_at": "2024-07-23T16:25:38.378809+03:00",
+        "updated_at": "2024-07-23T16:25:38.378809+03:00"
+      },
+      "created_at": "2026-02-17T18:17:36.078065+02:00",
+      "updated_at": "2026-02-17T18:17:36.078101+02:00"
+    },
+    {
+      "id": 22,
+      "album": {
+        "id": 25,
+        "slug": "ukrainian-cosssack-phonk",
+        "title": "Ukrainian Cosssack Phonk",
+        "description": "",
+        "artist": {
+          "id": 9,
+          "slug": "artist10",
+          "display_name": "Ashish",
+          "image": "http://192.168.0.108:8080/mediafiles/artists/artist10/ei7xlw0orvda1.jpg",
+          "color": "#430d0a",
+          "is_verify": false
+        },
+        "track_slug": "ukrainian-cosssack-phonk",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/ukrainian-cosssack-phonk/ab67616d0000b27383fc1c7a13e19c9746a1efa2.jpg",
+        "color": "#642d82",
+        "is_private": false,
+        "release_date": "2024-07-20",
+        "created_at": "2024-07-23T16:31:17.226995+03:00",
+        "updated_at": "2024-07-23T16:31:17.226995+03:00"
+      },
+      "created_at": "2026-02-17T18:16:49.068991+02:00",
+      "updated_at": "2026-02-17T18:16:49.069012+02:00"
+    }
+  ]
+}

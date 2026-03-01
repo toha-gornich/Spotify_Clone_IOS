@@ -1,0 +1,10 @@
+{
+  "id": 180,
+  "email": "userNot@gmail.com",
+  "display_name": "userNot",
+  "gender": "male",
+  "country": "UA",
+  "type_profile": "user",
+  "image": "http://spotify-api-production-6731.up.railway.app/mediafiles/default/profile.jpeg"
+}
+

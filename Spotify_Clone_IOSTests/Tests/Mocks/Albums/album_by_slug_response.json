@@ -1,0 +1,58 @@
+{
+  "id": 21,
+  "slug": "warningspeed-up",
+  "title": "WARNING(Speed Up)",
+  "description": "",
+  "artist": {
+    "id": 9,
+    "slug": "artist10",
+    "display_name": "Ashish",
+    "image": "http://192.168.0.108:8080/mediafiles/artists/artist10/ei7xlw0orvda1.jpg",
+    "color": "#430d0a",
+    "is_verify": false
+  },
+  "album_listeners": 5348583,
+  "image": "http://192.168.0.108:8080/mediafiles/albums/warningspeed-up/made-two-more-phonk-album-covers-v0-982imvcl0n0a1.jpg",
+  "color": "#6e1b8f",
+  "tracks": [
+    {
+      "id": 60,
+      "slug": "warning-speed-up",
+      "artist": {
+        "id": 9,
+        "slug": "artist10",
+        "display_name": "Ashish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist10/ei7xlw0orvda1.jpg",
+        "color": "#430d0a",
+        "is_verify": false
+      },
+      "title": "WARNING - Speed Up",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist10/tracks/warning-speed-up/WARNING_-_MC_ORSEN_SPEED_UP_EXTENDED_MIX.mp3",
+      "duration": "00:04:12.551837",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 5348583,
+      "genre": {
+        "id": 19,
+        "slug": "phonk",
+        "name": "Phonk",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/phonk/ab67706c0000da841ae38e18f029f192a9abf7ca.jpg",
+        "color": "#7d387e"
+      },
+      "album": {
+        "id": 21,
+        "slug": "warningspeed-up",
+        "title": "WARNING(Speed Up)",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/warningspeed-up/made-two-more-phonk-album-covers-v0-982imvcl0n0a1.jpg",
+        "color": "#6e1b8f",
+        "is_private": false
+      }
+    }
+  ],
+  "duration": "00:04:12.551837",
+  "is_private": false,
+  "release_date": "2024-01-02",
+  "created_at": "2024-07-23T16:05:23.519219+03:00",
+  "updated_at": "2024-07-23T16:05:23.519219+03:00"
+}
+

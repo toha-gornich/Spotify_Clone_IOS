@@ -16,7 +16,7 @@ final class NetworkManager {
     // MARK: - Properties
     let cache = NSCache<NSString, UIImage>()
     
-    private let session: URLSession
+    let session: URLSession
     
     // MARK: - Initialization
     init(session: URLSession = .shared) {

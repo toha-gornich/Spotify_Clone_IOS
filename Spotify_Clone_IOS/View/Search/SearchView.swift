@@ -246,6 +246,7 @@ struct SearchView: View {
                 }
             }
             .padding(.bottom, 120)
+            .padding(.horizontal)
         }
         .hideKeyboard()
         .id(selectedTab)

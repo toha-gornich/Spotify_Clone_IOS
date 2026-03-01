@@ -1,0 +1,71 @@
+
+{
+  "count": 3,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 3,
+      "slug": "young-and-beautiful",
+      "title": "Young And Beautiful",
+      "description": "",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "track_slug": "young-and-beautiful",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/young-and-beautiful/10045073113_0a5f43387a_z.jpg",
+      "color": "#555557",
+      "is_private": false,
+      "release_date": "2013-07-22",
+      "created_at": "2024-07-22T23:51:08.319514+03:00",
+      "updated_at": "2024-07-22T23:51:08.319514+03:00"
+    },
+    {
+      "id": 2,
+      "slug": "ultraviolence",
+      "title": "Ultraviolence",
+      "description": "",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "track_slug": "money-power-glory",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/ultraviolence/Lana-Del-Rey-Ultraviolence-album-cover-820-1536x1536.jpg",
+      "color": "#767675",
+      "is_private": false,
+      "release_date": "2014-05-10",
+      "created_at": "2024-07-22T23:48:06.097062+03:00",
+      "updated_at": "2024-07-22T23:48:06.097062+03:00"
+    },
+    {
+      "id": 1,
+      "slug": "born-to-die",
+      "title": "Born To Die",
+      "description": "",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "track_slug": "video-games",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/born-to-die/ab67616d0000b273ebc8cfac8b586bc475b04918.jpg",
+      "color": "#6a5c40",
+      "is_private": false,
+      "release_date": "2012-01-02",
+      "created_at": "2024-07-22T23:45:20.776128+03:00",
+      "updated_at": "2024-07-22T23:45:20.776128+03:00"
+    }
+  ]
+}

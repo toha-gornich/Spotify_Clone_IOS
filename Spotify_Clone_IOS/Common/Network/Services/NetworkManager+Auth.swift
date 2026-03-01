@@ -6,8 +6,8 @@
 //
 
 import Foundation
-
 extension NetworkManager: AuthServiceProtocol {
+    
     func postRegUser(regUser: RegUser) async throws -> RegUserResponse {
         let url = AuthEndpoint.registerUser.url
         
@@ -16,42 +16,29 @@ extension NetworkManager: AuthServiceProtocol {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         do {
-            let encoder = JSONEncoder()
-            request.httpBody = try encoder.encode(regUser)
+            request.httpBody = try JSONEncoder().encode(regUser)
         } catch {
             print("❌ postRegUser - Failed to encode request: \(error)")
             throw APError.invalidData
         }
         
+        let (data, response) = try await session.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("❌ postRegUser - Invalid response type")
+            throw APError.invalidResponse
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            print("❌ postRegUser - HTTP error \(httpResponse.statusCode)")
+            throw APError.invalidResponse
+        }
+        
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
-
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("❌ postRegUser - Invalid response type")
-                throw APError.invalidResponse
-            }
-            
-            guard (200...299).contains(httpResponse.statusCode) else {
-                print("❌ postRegUser - HTTP error \(httpResponse.statusCode)")
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ postRegUser - Response: \(responseString)")
-                }
-                throw APError.invalidResponse
-            }
-            
-            do {
-                let decoder = JSONDecoder()
-                return try decoder.decode(RegUserResponse.self, from: data)
-            } catch {
-                print("❌ postRegUser - Failed to decode response: \(error)")
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ postRegUser - Raw response: \(responseString)")
-                }
-                throw APError.invalidData
-            }
+            return try JSONDecoder().decode(RegUserResponse.self, from: data)
         } catch {
-            print("❌ postRegUser - Network error: \(error)")
-            throw error
+            print("❌ postRegUser - Failed to decode response: \(error)")
+            throw APError.invalidData
         }
     }
 
@@ -63,42 +50,29 @@ extension NetworkManager: AuthServiceProtocol {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         do {
-            let encoder = JSONEncoder()
-            request.httpBody = try encoder.encode(loginRequest)
+            request.httpBody = try JSONEncoder().encode(loginRequest)
         } catch {
             print("❌ postLogin - Failed to encode request: \(error)")
             throw APError.invalidData
         }
         
+        let (data, response) = try await session.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("❌ postLogin - Invalid response type")
+            throw APError.invalidResponse
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            print("❌ postLogin - HTTP error \(httpResponse.statusCode)")
+            throw APError.invalidResponse
+        }
+        
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
-
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("❌ postLogin - Invalid response type")
-                throw APError.invalidResponse
-            }
-            
-            guard (200...299).contains(httpResponse.statusCode) else {
-                print("❌ postLogin - HTTP error \(httpResponse.statusCode)")
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ postLogin - Response: \(responseString)")
-                }
-                throw APError.invalidResponse
-            }
-            
-            do {
-                let decoder = JSONDecoder()
-                return try decoder.decode(LoginResponse.self, from: data)
-            } catch {
-                print("❌ postLogin - Failed to decode response: \(error)")
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ postLogin - Raw response: \(responseString)")
-                }
-                throw APError.invalidData
-            }
+            return try JSONDecoder().decode(LoginResponse.self, from: data)
         } catch {
-            print("❌ postLogin - Network error: \(error)")
-            throw error
+            print("❌ postLogin - Failed to decode response: \(error)")
+            throw APError.invalidData
         }
     }
 
@@ -110,31 +84,22 @@ extension NetworkManager: AuthServiceProtocol {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         do {
-            let encoder = JSONEncoder()
-            request.httpBody = try encoder.encode(tokenVerifyRequest)
+            request.httpBody = try JSONEncoder().encode(tokenVerifyRequest)
         } catch {
             print("❌ postVerifyToken - Failed to encode request: \(error)")
             throw APError.invalidData
         }
         
-        do {
-            let (data, response) = try await URLSession.shared.data(for: request)
-
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("❌ postVerifyToken - Invalid response type")
-                throw APError.invalidResponse
-            }
-            
-            guard (200...299).contains(httpResponse.statusCode) else {
-                print("❌ postVerifyToken - HTTP error \(httpResponse.statusCode)")
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ postVerifyToken - Response: \(responseString)")
-                }
-                throw APError.invalidResponse
-            }
-        } catch {
-            print("❌ postVerifyToken - Network error: \(error)")
-            throw error
+        let (_, response) = try await session.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("❌ postVerifyToken - Invalid response type")
+            throw APError.invalidResponse
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            print("❌ postVerifyToken - HTTP error \(httpResponse.statusCode)")
+            throw APError.invalidResponse
         }
     }
 
@@ -146,27 +111,22 @@ extension NetworkManager: AuthServiceProtocol {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         do {
-            let jsonData = try JSONEncoder().encode(activationRequest)
-            request.httpBody = jsonData
-            
-            let (data, response) = try await URLSession.shared.data(for: request)
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("❌ postActivateAccount - Invalid response type")
-                throw APError.invalidResponse
-            }
-            
-            guard (200...299).contains(httpResponse.statusCode) else {
-                print("❌ postActivateAccount - HTTP error \(httpResponse.statusCode)")
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ postActivateAccount - Response: \(responseString)")
-                }
-                throw APError.invalidResponse
-            }
+            request.httpBody = try JSONEncoder().encode(activationRequest)
         } catch {
-            print("❌ postActivateAccount - Network error: \(error)")
-            throw error
+            print("❌ postActivateAccount - Failed to encode request: \(error)")
+            throw APError.invalidData
+        }
+        
+        let (_, response) = try await session.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("❌ postActivateAccount - Invalid response type")
+            throw APError.invalidResponse
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            print("❌ postActivateAccount - HTTP error \(httpResponse.statusCode)")
+            throw APError.invalidResponse
         }
     }
 }
-

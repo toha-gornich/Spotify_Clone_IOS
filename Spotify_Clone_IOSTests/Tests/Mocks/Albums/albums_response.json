@@ -1,0 +1,427 @@
+{
+  "count": 25,
+  "next": "http://192.168.0.108:8080/api/v1/albums/?page=2",
+  "previous": null,
+  "results": [
+    {
+      "id": 25,
+      "slug": "ukrainian-cosssack-phonk",
+      "title": "Ukrainian Cosssack Phonk",
+      "description": "",
+      "artist": {
+        "id": 9,
+        "slug": "artist10",
+        "display_name": "Ashish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist10/ei7xlw0orvda1.jpg",
+        "color": "#430d0a",
+        "is_verify": false
+      },
+      "track_slug": "ukrainian-cosssack-phonk",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/ukrainian-cosssack-phonk/ab67616d0000b27383fc1c7a13e19c9746a1efa2.jpg",
+      "color": "#642d82",
+      "is_private": false,
+      "release_date": "2024-07-20",
+      "created_at": "2024-07-23T16:31:17.226995+03:00",
+      "updated_at": "2024-07-23T16:31:17.226995+03:00"
+    },
+    {
+      "id": 24,
+      "slug": "phonk-dxstruction",
+      "title": "PHONK DXSTRUCTION",
+      "description": "",
+      "artist": {
+        "id": 9,
+        "slug": "artist10",
+        "display_name": "Ashish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist10/ei7xlw0orvda1.jpg",
+        "color": "#430d0a",
+        "is_verify": false
+      },
+      "track_slug": "pr-phonk",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/phonk-dxstruction/ab67616100005174913bcf5a2e5c02be0e6b5d05.jpg",
+      "color": "#088b18",
+      "is_private": false,
+      "release_date": "2024-05-13",
+      "created_at": "2024-07-23T16:25:38.378809+03:00",
+      "updated_at": "2024-07-23T16:25:38.378809+03:00"
+    },
+    {
+      "id": 11,
+      "slug": "chip-chrome",
+      "title": "Chip Chrome",
+      "description": "",
+      "artist": {
+        "id": 4,
+        "slug": "artist5",
+        "display_name": "The Neighborhood",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist5/ab6761610000e5ebdf0b5ac84376a0a4b2166816.jpg",
+        "color": "#222222",
+        "is_verify": true
+      },
+      "track_slug": "pretty-boy",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/chip-chrome/717h8oJwcKL._UF10001000_QL80_.jpg",
+      "color": "#a4cecb",
+      "is_private": false,
+      "release_date": "2020-07-23",
+      "created_at": "2024-07-23T00:57:04.991942+03:00",
+      "updated_at": "2024-07-23T16:22:42.439175+03:00"
+    },
+    {
+      "id": 20,
+      "slug": "happier-than-ever",
+      "title": "Happier Than Ever",
+      "description": "",
+      "artist": {
+        "id": 3,
+        "slug": "artist3",
+        "display_name": "Billie Eilish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist3/hit-me-hard-and-soft-v0-dhnauhkskhvc1.jpeg",
+        "color": "#102231",
+        "is_verify": true
+      },
+      "track_slug": "goldwing",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/happier-than-ever/Billie-Eilish-Happier-Than-Ever.webp",
+      "color": "#a38469",
+      "is_private": false,
+      "release_date": "2021-10-10",
+      "created_at": "2024-07-23T15:48:54.772378+03:00",
+      "updated_at": "2024-07-23T16:21:30.799041+03:00"
+    },
+    {
+      "id": 23,
+      "slug": "menace",
+      "title": "Menace",
+      "description": "",
+      "artist": {
+        "id": 9,
+        "slug": "artist10",
+        "display_name": "Ashish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist10/ei7xlw0orvda1.jpg",
+        "color": "#430d0a",
+        "is_verify": false
+      },
+      "track_slug": "menace",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/menace/ab67616d00001e02de6fe0f2553735fd4ad47567.jpg",
+      "color": "#813739",
+      "is_private": false,
+      "release_date": "2024-06-13",
+      "created_at": "2024-07-23T16:14:24.810725+03:00",
+      "updated_at": "2024-07-23T16:14:24.810725+03:00"
+    },
+    {
+      "id": 22,
+      "slug": "encore",
+      "title": "Encore",
+      "description": "",
+      "artist": {
+        "id": 6,
+        "slug": "artist7",
+        "display_name": "Eminem",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist7/ab6761610000e5eba00b11c129b27a88fc72f36b.jpg",
+        "color": "#2b2b2b",
+        "is_verify": true
+      },
+      "track_slug": null,
+      "image": "http://192.168.0.108:8080/mediafiles/albums/encore/image_dfad7ada-5f99-4e60-a43b-339de4fab445.webp",
+      "color": "#213242",
+      "is_private": false,
+      "release_date": "2004-02-16",
+      "created_at": "2024-07-23T16:08:17.579149+03:00",
+      "updated_at": "2024-07-23T16:08:17.579149+03:00"
+    },
+    {
+      "id": 21,
+      "slug": "warningspeed-up",
+      "title": "WARNING(Speed Up)",
+      "description": "",
+      "artist": {
+        "id": 9,
+        "slug": "artist10",
+        "display_name": "Ashish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist10/ei7xlw0orvda1.jpg",
+        "color": "#430d0a",
+        "is_verify": false
+      },
+      "track_slug": "warning-speed-up",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/warningspeed-up/made-two-more-phonk-album-covers-v0-982imvcl0n0a1.jpg",
+      "color": "#6e1b8f",
+      "is_private": false,
+      "release_date": "2024-01-02",
+      "created_at": "2024-07-23T16:05:23.519219+03:00",
+      "updated_at": "2024-07-23T16:05:23.519219+03:00"
+    },
+    {
+      "id": 19,
+      "slug": "when-we-all-fall",
+      "title": "WHEN WE ALL FALL",
+      "description": "",
+      "artist": {
+        "id": 3,
+        "slug": "artist3",
+        "display_name": "Billie Eilish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist3/hit-me-hard-and-soft-v0-dhnauhkskhvc1.jpeg",
+        "color": "#102231",
+        "is_verify": true
+      },
+      "track_slug": "bad-guy",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/when-we-all-fall/81idxQqxTlL._UF10001000_QL80_.jpg",
+      "color": "#1f1d1b",
+      "is_private": false,
+      "release_date": "2019-01-04",
+      "created_at": "2024-07-23T15:47:35.435848+03:00",
+      "updated_at": "2024-07-23T15:47:35.435848+03:00"
+    },
+    {
+      "id": 18,
+      "slug": "eat-ya-veggies",
+      "title": "eat ya veggies",
+      "description": "",
+      "artist": {
+        "id": 8,
+        "slug": "artist9",
+        "display_name": "bbno$",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist9/ab6761610000e5eba8618661086b4c3c71f18680.jpg",
+        "color": "#4d434b",
+        "is_verify": true
+      },
+      "track_slug": "edaname",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/eat-ya-veggies/ab67616d0000b2738c25aa58d7e0894df7436348.jpg",
+      "color": "#dddadd",
+      "is_private": false,
+      "release_date": "2021-10-01",
+      "created_at": "2024-07-23T02:02:53.504369+03:00",
+      "updated_at": "2024-07-23T02:02:53.505382+03:00"
+    },
+    {
+      "id": 17,
+      "slug": "it-boy",
+      "title": "it boy",
+      "description": "",
+      "artist": {
+        "id": 8,
+        "slug": "artist9",
+        "display_name": "bbno$",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist9/ab6761610000e5eba8618661086b4c3c71f18680.jpg",
+        "color": "#4d434b",
+        "is_verify": true
+      },
+      "track_slug": "it-boy",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/it-boy/1200x1200bf-60.jpg",
+      "color": "#796150",
+      "is_private": false,
+      "release_date": "2024-05-04",
+      "created_at": "2024-07-23T02:01:20.070842+03:00",
+      "updated_at": "2024-07-23T02:01:20.071842+03:00"
+    },
+    {
+      "id": 16,
+      "slug": "my-dear",
+      "title": "My Dear",
+      "description": "",
+      "artist": {
+        "id": 2,
+        "slug": "artist2",
+        "display_name": "The Weeknd",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist2/ab6761610000e5eb214f3cf1cbe7139c1e26ffbb.jpg",
+        "color": "#292f3a",
+        "is_verify": true
+      },
+      "track_slug": "i-was-never-there",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/my-dear/818RSApG0PL._UF8941000_QL80_.jpg",
+      "color": "#1e140f",
+      "is_private": false,
+      "release_date": "2018-01-04",
+      "created_at": "2024-07-23T01:50:36.017548+03:00",
+      "updated_at": "2024-07-23T01:50:36.017548+03:00"
+    },
+    {
+      "id": 15,
+      "slug": "the-idol-ep-4",
+      "title": "The Idol Ep 4",
+      "description": "",
+      "artist": {
+        "id": 2,
+        "slug": "artist2",
+        "display_name": "The Weeknd",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist2/ab6761610000e5eb214f3cf1cbe7139c1e26ffbb.jpg",
+        "color": "#292f3a",
+        "is_verify": true
+      },
+      "track_slug": "one-of-the-girls",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/the-idol-ep-4/500x500.jpg",
+      "color": "#757c77",
+      "is_private": false,
+      "release_date": "2023-10-20",
+      "created_at": "2024-07-23T01:31:38.672452+03:00",
+      "updated_at": "2024-07-23T01:31:38.672452+03:00"
+    },
+    {
+      "id": 14,
+      "slug": "popular",
+      "title": "Popular",
+      "description": "",
+      "artist": {
+        "id": 2,
+        "slug": "artist2",
+        "display_name": "The Weeknd",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist2/ab6761610000e5eb214f3cf1cbe7139c1e26ffbb.jpg",
+        "color": "#292f3a",
+        "is_verify": true
+      },
+      "track_slug": "popularwith-playboy-carty",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/popular/FxoJqQ-WIAAIPck.jpg",
+      "color": "#5a5551",
+      "is_private": false,
+      "release_date": "2024-05-11",
+      "created_at": "2024-07-23T01:29:23.906657+03:00",
+      "updated_at": "2024-07-23T01:29:23.906657+03:00"
+    },
+    {
+      "id": 13,
+      "slug": "starboy",
+      "title": "Starboy",
+      "description": "",
+      "artist": {
+        "id": 2,
+        "slug": "artist2",
+        "display_name": "The Weeknd",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist2/ab6761610000e5eb214f3cf1cbe7139c1e26ffbb.jpg",
+        "color": "#292f3a",
+        "is_verify": true
+      },
+      "track_slug": "love-to-lie",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/starboy/91BiYKRKU8L._UF10001000_QL80_.jpg",
+      "color": "#200f1f",
+      "is_private": false,
+      "release_date": "2016-04-06",
+      "created_at": "2024-07-23T01:27:34.593655+03:00",
+      "updated_at": "2024-07-23T01:27:34.593655+03:00"
+    },
+    {
+      "id": 12,
+      "slug": "after-hours",
+      "title": "After Hours",
+      "description": "",
+      "artist": {
+        "id": 2,
+        "slug": "artist2",
+        "display_name": "The Weeknd",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist2/ab6761610000e5eb214f3cf1cbe7139c1e26ffbb.jpg",
+        "color": "#292f3a",
+        "is_verify": true
+      },
+      "track_slug": "after-hours",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/after-hours/yn81w7k64vh41.jpg",
+      "color": "#413b2d",
+      "is_private": false,
+      "release_date": "2020-02-14",
+      "created_at": "2024-07-23T01:26:23.906717+03:00",
+      "updated_at": "2024-07-23T01:26:23.906717+03:00"
+    },
+    {
+      "id": 10,
+      "slug": "wiped-out",
+      "title": "Wiped Out!",
+      "description": "",
+      "artist": {
+        "id": 4,
+        "slug": "artist5",
+        "display_name": "The Neighborhood",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist5/ab6761610000e5ebdf0b5ac84376a0a4b2166816.jpg",
+        "color": "#222222",
+        "is_verify": true
+      },
+      "track_slug": "daddy-issues",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/wiped-out/s-l1600.jpg",
+      "color": "#242524",
+      "is_private": false,
+      "release_date": "2015-07-23",
+      "created_at": "2024-07-23T00:55:09.244334+03:00",
+      "updated_at": "2024-07-23T00:55:09.244334+03:00"
+    },
+    {
+      "id": 9,
+      "slug": "hard-to-imagine",
+      "title": "Hard To Imagine",
+      "description": "",
+      "artist": {
+        "id": 4,
+        "slug": "artist5",
+        "display_name": "The Neighborhood",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist5/ab6761610000e5ebdf0b5ac84376a0a4b2166816.jpg",
+        "color": "#222222",
+        "is_verify": true
+      },
+      "track_slug": "softcore",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/hard-to-imagine/81F27c5DIXL._UF10001000_QL80_.jpg",
+      "color": "#897770",
+      "is_private": false,
+      "release_date": "2018-07-23",
+      "created_at": "2024-07-23T00:54:03.920400+03:00",
+      "updated_at": "2024-07-23T00:54:03.920400+03:00"
+    },
+    {
+      "id": 8,
+      "slug": "i-love-you",
+      "title": "I Love You.",
+      "description": "",
+      "artist": {
+        "id": 4,
+        "slug": "artist5",
+        "display_name": "The Neighborhood",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist5/ab6761610000e5ebdf0b5ac84376a0a4b2166816.jpg",
+        "color": "#222222",
+        "is_verify": true
+      },
+      "track_slug": "sweater-weather",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/i-love-you/ab67616d0000b2738265a736a1eb838ad5a0b921.jpg",
+      "color": "#727272",
+      "is_private": false,
+      "release_date": "2013-07-23",
+      "created_at": "2024-07-23T00:52:14.660671+03:00",
+      "updated_at": "2024-07-23T00:52:14.660671+03:00"
+    },
+    {
+      "id": 7,
+      "slug": "hotel",
+      "title": "Hotel",
+      "description": "",
+      "artist": {
+        "id": 11,
+        "slug": "artist11",
+        "display_name": "Montell Fish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist11/1900x1900-000000-80-0-0.jpg",
+        "color": "#6c9baa",
+        "is_verify": true
+      },
+      "track_slug": "hotel",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/hotel/artworks-sRvCyMLvJdGc-0-t500x500.jpg",
+      "color": "#a9bda7",
+      "is_private": false,
+      "release_date": "2022-07-23",
+      "created_at": "2024-07-23T00:24:04.120013+03:00",
+      "updated_at": "2024-07-23T00:24:04.120013+03:00"
+    },
+    {
+      "id": 6,
+      "slug": "love-you-more-then-me",
+      "title": "Love you more then me",
+      "description": "",
+      "artist": {
+        "id": 11,
+        "slug": "artist11",
+        "display_name": "Montell Fish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist11/1900x1900-000000-80-0-0.jpg",
+        "color": "#6c9baa",
+        "is_verify": true
+      },
+      "track_slug": "love-you-more-then-me",
+      "image": "http://192.168.0.108:8080/mediafiles/albums/love-you-more-then-me/ab67616d0000b2737ebcdf74ea335847adc33e8e.jpg",
+      "color": "#797976",
+      "is_private": false,
+      "release_date": "2022-07-23",
+      "created_at": "2024-07-23T00:23:00.783197+03:00",
+      "updated_at": "2024-07-23T00:23:00.783197+03:00"
+    }
+  ]
+}

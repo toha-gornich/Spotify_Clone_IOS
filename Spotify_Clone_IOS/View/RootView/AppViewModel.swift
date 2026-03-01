@@ -33,6 +33,7 @@ final class AppViewModel: ObservableObject {
         }
         
         do {
+            print(token)
             try await networkManager.postVerifyToken(tokenVerifyRequest: TokenVerifyRequest(token: token))
             appState = .authenticated
         } catch {

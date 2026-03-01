@@ -25,11 +25,11 @@ class MockURLProtocol: URLProtocol {
         if let error = MockURLProtocol.stubError {
             client?.urlProtocol(self, didFailWithError: error)
         } else {
-            if let data = MockURLProtocol.stubResponseData {
-                client?.urlProtocol(self, didLoad: data)
-            }
             if let response = MockURLProtocol.stubHTTPResponse {
                 client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+            }
+            if let data = MockURLProtocol.stubResponseData {
+                client?.urlProtocol(self, didLoad: data)
             }
         }
         client?.urlProtocolDidFinishLoading(self)
