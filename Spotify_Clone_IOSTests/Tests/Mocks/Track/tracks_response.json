@@ -1,0 +1,667 @@
+{
+  "count": 63,
+  "next": "http://192.168.0.108:8080/api/v1/tracks/?page=2",
+  "previous": null,
+  "results": [
+    {
+      "id": 52,
+      "slug": "i-was-never-there",
+      "artist": {
+        "id": 2,
+        "slug": "artist2",
+        "display_name": "The Weeknd",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist2/ab6761610000e5eb214f3cf1cbe7139c1e26ffbb.jpg",
+        "color": "#292f3a",
+        "is_verify": true
+      },
+      "title": "I Was Never There",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist11/tracks/i-was-never-there/The_Weeknd_Gesaffelstein__I_Was_Never_There.mp3",
+      "duration": "00:04:01.136327",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 164364578,
+      "genre": {
+        "id": 16,
+        "slug": "punk",
+        "name": "Punk",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/punk/ab67616d0000b273f8d415dab5ed7e3747bd38dd.jpg",
+        "color": "#8c3a4a"
+      },
+      "album": {
+        "id": 16,
+        "slug": "my-dear",
+        "title": "My Dear",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/my-dear/818RSApG0PL._UF8941000_QL80_.jpg",
+        "color": "#1e140f",
+        "is_private": false
+      }
+    },
+    {
+      "id": 55,
+      "slug": "bad-guy",
+      "artist": {
+        "id": 3,
+        "slug": "artist3",
+        "display_name": "Billie Eilish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist3/hit-me-hard-and-soft-v0-dhnauhkskhvc1.jpeg",
+        "color": "#102231",
+        "is_verify": true
+      },
+      "title": "bad guy",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist3/tracks/bad-guy/Billie_Eilish_-_Bad_Guy.mp3",
+      "duration": "00:03:14.115918",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 25401345,
+      "genre": {
+        "id": 10,
+        "slug": "party",
+        "name": "Party",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/party/ab67706f00000002533f33347a2ab25c045640f2.jpg",
+        "color": "#2d122b"
+      },
+      "album": {
+        "id": 19,
+        "slug": "when-we-all-fall",
+        "title": "WHEN WE ALL FALL",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/when-we-all-fall/81idxQqxTlL._UF10001000_QL80_.jpg",
+        "color": "#1f1d1b",
+        "is_private": false
+      }
+    },
+    {
+      "id": 13,
+      "slug": "money-power-glory",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "title": "Money Power Glory",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/money-power-glory/Lana_Del_Rey__Money_Power_Glory.mp3",
+      "duration": "00:04:30.733061",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 1452456,
+      "genre": {
+        "id": 20,
+        "slug": "summer",
+        "name": "Summer",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/summer/ab67706c0000da846c82f3a4838b0c07757b8125.jpg",
+        "color": "#205a82"
+      },
+      "album": {
+        "id": 2,
+        "slug": "ultraviolence",
+        "title": "Ultraviolence",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/ultraviolence/Lana-Del-Rey-Ultraviolence-album-cover-820-1536x1536.jpg",
+        "color": "#767675",
+        "is_private": false
+      }
+    },
+    {
+      "id": 4,
+      "slug": "video-games",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "title": "Video Games",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/video-games/Lana_Del_Rey__Video_Games.mp3",
+      "duration": "00:04:44.604082",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 94944619,
+      "genre": {
+        "id": 17,
+        "slug": "horny",
+        "name": "Horny",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/horny/ab67706c0000da84420db2713dfdef9ef521092e.jpg",
+        "color": "#6e0606"
+      },
+      "album": {
+        "id": 1,
+        "slug": "born-to-die",
+        "title": "Born To Die",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/born-to-die/ab67616d0000b273ebc8cfac8b586bc475b04918.jpg",
+        "color": "#6a5c40",
+        "is_private": false
+      }
+    },
+    {
+      "id": 54,
+      "slug": "edaname",
+      "artist": {
+        "id": 8,
+        "slug": "artist9",
+        "display_name": "bbno$",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist9/ab6761610000e5eba8618661086b4c3c71f18680.jpg",
+        "color": "#4d434b",
+        "is_verify": true
+      },
+      "title": "edaname",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist9/tracks/edaname/bbno-rich-brian-edamame-mp3.mp3",
+      "duration": "00:02:13.773061",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 2123453,
+      "genre": {
+        "id": 10,
+        "slug": "party",
+        "name": "Party",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/party/ab67706f00000002533f33347a2ab25c045640f2.jpg",
+        "color": "#2d122b"
+      },
+      "album": {
+        "id": 18,
+        "slug": "eat-ya-veggies",
+        "title": "eat ya veggies",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/eat-ya-veggies/ab67616d0000b2738c25aa58d7e0894df7436348.jpg",
+        "color": "#dddadd",
+        "is_private": false
+      }
+    },
+    {
+      "id": 62,
+      "slug": "pr-phonk",
+      "artist": {
+        "id": 9,
+        "slug": "artist10",
+        "display_name": "Ashish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist10/ei7xlw0orvda1.jpg",
+        "color": "#430d0a",
+        "is_verify": false
+      },
+      "title": "PR PHONK",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist10/tracks/pr-phonk/Montagem_-_Pr_phonk_TikTok_Remix.mp3",
+      "duration": "00:01:03.973878",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 2425454,
+      "genre": {
+        "id": 19,
+        "slug": "phonk",
+        "name": "Phonk",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/phonk/ab67706c0000da841ae38e18f029f192a9abf7ca.jpg",
+        "color": "#7d387e"
+      },
+      "album": {
+        "id": 24,
+        "slug": "phonk-dxstruction",
+        "title": "PHONK DXSTRUCTION",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/phonk-dxstruction/ab67616100005174913bcf5a2e5c02be0e6b5d05.jpg",
+        "color": "#088b18",
+        "is_private": false
+      }
+    },
+    {
+      "id": 60,
+      "slug": "warning-speed-up",
+      "artist": {
+        "id": 9,
+        "slug": "artist10",
+        "display_name": "Ashish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist10/ei7xlw0orvda1.jpg",
+        "color": "#430d0a",
+        "is_verify": false
+      },
+      "title": "WARNING - Speed Up",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist10/tracks/warning-speed-up/WARNING_-_MC_ORSEN_SPEED_UP_EXTENDED_MIX.mp3",
+      "duration": "00:04:12.551837",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 5348583,
+      "genre": {
+        "id": 19,
+        "slug": "phonk",
+        "name": "Phonk",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/phonk/ab67706c0000da841ae38e18f029f192a9abf7ca.jpg",
+        "color": "#7d387e"
+      },
+      "album": {
+        "id": 21,
+        "slug": "warningspeed-up",
+        "title": "WARNING(Speed Up)",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/warningspeed-up/made-two-more-phonk-album-covers-v0-982imvcl0n0a1.jpg",
+        "color": "#6e1b8f",
+        "is_private": false
+      }
+    },
+    {
+      "id": 61,
+      "slug": "menace",
+      "artist": {
+        "id": 9,
+        "slug": "artist10",
+        "display_name": "Ashish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist10/ei7xlw0orvda1.jpg",
+        "color": "#430d0a",
+        "is_verify": false
+      },
+      "title": "Menace",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist10/tracks/menace/Sione_Menace.mp3",
+      "duration": "00:02:15.471020",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 999999944,
+      "genre": {
+        "id": 19,
+        "slug": "phonk",
+        "name": "Phonk",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/phonk/ab67706c0000da841ae38e18f029f192a9abf7ca.jpg",
+        "color": "#7d387e"
+      },
+      "album": {
+        "id": 23,
+        "slug": "menace",
+        "title": "Menace",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/menace/ab67616d00001e02de6fe0f2553735fd4ad47567.jpg",
+        "color": "#813739",
+        "is_private": false
+      }
+    },
+    {
+      "id": 59,
+      "slug": "goldwing",
+      "artist": {
+        "id": 3,
+        "slug": "artist3",
+        "display_name": "Billie Eilish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist3/hit-me-hard-and-soft-v0-dhnauhkskhvc1.jpeg",
+        "color": "#102231",
+        "is_verify": true
+      },
+      "title": "GOLDWING",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist3/tracks/goldwing/Billie_Eilish__GOLDWING.mp3",
+      "duration": "00:02:31.614694",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 12365445,
+      "genre": {
+        "id": 9,
+        "slug": "sleep",
+        "name": "Sleep",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/sleep/ab67706f00000002cd17d41419faa97069e06c16.jpg",
+        "color": "#455569"
+      },
+      "album": {
+        "id": 20,
+        "slug": "happier-than-ever",
+        "title": "Happier Than Ever",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/happier-than-ever/Billie-Eilish-Happier-Than-Ever.webp",
+        "color": "#a38469",
+        "is_private": false
+      }
+    },
+    {
+      "id": 44,
+      "slug": "after-hours",
+      "artist": {
+        "id": 2,
+        "slug": "artist2",
+        "display_name": "The Weeknd",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist2/ab6761610000e5eb214f3cf1cbe7139c1e26ffbb.jpg",
+        "color": "#292f3a",
+        "is_verify": true
+      },
+      "title": "After Hours",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist11/tracks/after-hours/The_Weeknd_-_After_Hours.mp3",
+      "duration": "00:06:01.946667",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 95324545,
+      "genre": {
+        "id": 17,
+        "slug": "horny",
+        "name": "Horny",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/horny/ab67706c0000da84420db2713dfdef9ef521092e.jpg",
+        "color": "#6e0606"
+      },
+      "album": {
+        "id": 12,
+        "slug": "after-hours",
+        "title": "After Hours",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/after-hours/yn81w7k64vh41.jpg",
+        "color": "#413b2d",
+        "is_private": false
+      }
+    },
+    {
+      "id": 63,
+      "slug": "ukrainian-cosssack-phonk",
+      "artist": {
+        "id": 9,
+        "slug": "artist10",
+        "display_name": "Ashish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist10/ei7xlw0orvda1.jpg",
+        "color": "#430d0a",
+        "is_verify": false
+      },
+      "title": "Ukrainian Cosssack Phonk",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist10/tracks/ukrainian-cosssack-phonk/CHASHKAKEFIRA_-_Ukrainian_Cossack_Phonk.mp3",
+      "duration": "00:02:45.903673",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 1999438374,
+      "genre": {
+        "id": 19,
+        "slug": "phonk",
+        "name": "Phonk",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/phonk/ab67706c0000da841ae38e18f029f192a9abf7ca.jpg",
+        "color": "#7d387e"
+      },
+      "album": {
+        "id": 25,
+        "slug": "ukrainian-cosssack-phonk",
+        "title": "Ukrainian Cosssack Phonk",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/ukrainian-cosssack-phonk/ab67616d0000b27383fc1c7a13e19c9746a1efa2.jpg",
+        "color": "#642d82",
+        "is_private": false
+      }
+    },
+    {
+      "id": 41,
+      "slug": "pretty-boy",
+      "artist": {
+        "id": 4,
+        "slug": "artist5",
+        "display_name": "The Neighborhood",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist5/ab6761610000e5ebdf0b5ac84376a0a4b2166816.jpg",
+        "color": "#222222",
+        "is_verify": true
+      },
+      "title": "Pretty Boy",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist5/tracks/pretty-boy/The_Neighbourhood_Pretty_Boy.mp4",
+      "duration": "00:03:54.093333",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 2666744,
+      "genre": {
+        "id": 13,
+        "slug": "jazz",
+        "name": "Jazz",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/jazz/ab67706f00000002dae10fb547a691b6a0d51898.jpg",
+        "color": "#636363"
+      },
+      "album": {
+        "id": 11,
+        "slug": "chip-chrome",
+        "title": "Chip Chrome",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/chip-chrome/717h8oJwcKL._UF10001000_QL80_.jpg",
+        "color": "#a4cecb",
+        "is_private": false
+      }
+    },
+    {
+      "id": 49,
+      "slug": "love-to-lie",
+      "artist": {
+        "id": 2,
+        "slug": "artist2",
+        "display_name": "The Weeknd",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist2/ab6761610000e5eb214f3cf1cbe7139c1e26ffbb.jpg",
+        "color": "#292f3a",
+        "is_verify": true
+      },
+      "title": "Love To Lie",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist2/tracks/love-to-lie/5e2e3677ee375c7b5389a8cbb812da0b.mp3",
+      "duration": "00:03:43.329524",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 1453456,
+      "genre": {
+        "id": 6,
+        "slug": "chill",
+        "name": "Chill",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/chill/ab67706f0000000243cc4425ca68418fcab705fd.jpg",
+        "color": "#ca826a"
+      },
+      "album": {
+        "id": 13,
+        "slug": "starboy",
+        "title": "Starboy",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/starboy/91BiYKRKU8L._UF10001000_QL80_.jpg",
+        "color": "#200f1f",
+        "is_private": false
+      }
+    },
+    {
+      "id": 45,
+      "slug": "starboy",
+      "artist": {
+        "id": 2,
+        "slug": "artist2",
+        "display_name": "The Weeknd",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist2/ab6761610000e5eb214f3cf1cbe7139c1e26ffbb.jpg",
+        "color": "#292f3a",
+        "is_verify": true
+      },
+      "title": "Starboy",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist2/tracks/starboy/the-weeknd-daft-punk-starboy-meloua.com.mp3",
+      "duration": "00:03:50.544000",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 3435665458,
+      "genre": {
+        "id": 11,
+        "slug": "love",
+        "name": "Love",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/love/ab67706f00000002dcb7b32f8bf2e6a7851245e3.jpg",
+        "color": "#4d666f"
+      },
+      "album": {
+        "id": 13,
+        "slug": "starboy",
+        "title": "Starboy",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/starboy/91BiYKRKU8L._UF10001000_QL80_.jpg",
+        "color": "#200f1f",
+        "is_private": false
+      }
+    },
+    {
+      "id": 29,
+      "slug": "sweater-weather",
+      "artist": {
+        "id": 4,
+        "slug": "artist5",
+        "display_name": "The Neighborhood",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist5/ab6761610000e5ebdf0b5ac84376a0a4b2166816.jpg",
+        "color": "#222222",
+        "is_verify": true
+      },
+      "title": "Sweater Weather",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist5/tracks/sweater-weather/The_Neighbourhood_-_Sweater_Weather.mp3",
+      "duration": "00:04:00.400000",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 301949354,
+      "genre": {
+        "id": 18,
+        "slug": "instrumental",
+        "name": "Instrumental",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/instrumental/ab67706c0000da841e4d12ad7f0548bd3fdf9152.jpg",
+        "color": "#7b66aa"
+      },
+      "album": {
+        "id": 8,
+        "slug": "i-love-you",
+        "title": "I Love You.",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/i-love-you/ab67616d0000b2738265a736a1eb838ad5a0b921.jpg",
+        "color": "#727272",
+        "is_private": false
+      }
+    },
+    {
+      "id": 40,
+      "slug": "chip-chrome",
+      "artist": {
+        "id": 4,
+        "slug": "artist5",
+        "display_name": "The Neighborhood",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist5/ab6761610000e5ebdf0b5ac84376a0a4b2166816.jpg",
+        "color": "#222222",
+        "is_verify": true
+      },
+      "title": "Chip Chrome",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist5/tracks/chip-chrome/The_Neighbourhood_-_Chip_Chrome.mp3",
+      "duration": "00:00:28.906667",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 705301,
+      "genre": {
+        "id": 11,
+        "slug": "love",
+        "name": "Love",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/love/ab67706f00000002dcb7b32f8bf2e6a7851245e3.jpg",
+        "color": "#4d666f"
+      },
+      "album": {
+        "id": 11,
+        "slug": "chip-chrome",
+        "title": "Chip Chrome",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/chip-chrome/717h8oJwcKL._UF10001000_QL80_.jpg",
+        "color": "#a4cecb",
+        "is_private": false
+      }
+    },
+    {
+      "id": 58,
+      "slug": "my-future",
+      "artist": {
+        "id": 3,
+        "slug": "artist3",
+        "display_name": "Billie Eilish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist3/hit-me-hard-and-soft-v0-dhnauhkskhvc1.jpeg",
+        "color": "#102231",
+        "is_verify": true
+      },
+      "title": "my future",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist3/tracks/my-future/Billie_Eilish_-_my_futurelivesong.me.mp3",
+      "duration": "00:03:28.248163",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 4647456,
+      "genre": {
+        "id": 4,
+        "slug": "mood",
+        "name": "Mood",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/mood/ab67706f000000028191cc41d8585df6170b3e5e.jpg",
+        "color": "#4c4c9b"
+      },
+      "album": {
+        "id": 20,
+        "slug": "happier-than-ever",
+        "title": "Happier Than Ever",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/happier-than-ever/Billie-Eilish-Happier-Than-Ever.webp",
+        "color": "#a38469",
+        "is_private": false
+      }
+    },
+    {
+      "id": 17,
+      "slug": "hotels",
+      "artist": {
+        "id": 11,
+        "slug": "artist11",
+        "display_name": "Montell Fish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist11/1900x1900-000000-80-0-0.jpg",
+        "color": "#6c9baa",
+        "is_verify": true
+      },
+      "title": "Hotel",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist11/tracks/hotels/Montell_Fish_Hotel.mp4",
+      "duration": "00:03:17.333333",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 3175435,
+      "genre": {
+        "id": 17,
+        "slug": "horny",
+        "name": "Horny",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/horny/ab67706c0000da84420db2713dfdef9ef521092e.jpg",
+        "color": "#6e0606"
+      },
+      "album": {
+        "id": 4,
+        "slug": "her-love-still",
+        "title": "Her Love Still",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/her-love-still/ab67616d0000b273f46e995aa84c6eb1080100a4.jpg",
+        "color": "#4f2a0f",
+        "is_private": false
+      }
+    },
+    {
+      "id": 14,
+      "slug": "hotel",
+      "artist": {
+        "id": 11,
+        "slug": "artist11",
+        "display_name": "Montell Fish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist11/1900x1900-000000-80-0-0.jpg",
+        "color": "#6c9baa",
+        "is_verify": true
+      },
+      "title": "Hotel",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist11/tracks/hotel/Montell_Fish_Hotel.mp4",
+      "duration": "00:03:17.333333",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 3175435,
+      "genre": {
+        "id": 17,
+        "slug": "horny",
+        "name": "Horny",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/horny/ab67706c0000da84420db2713dfdef9ef521092e.jpg",
+        "color": "#6e0606"
+      },
+      "album": {
+        "id": 7,
+        "slug": "hotel",
+        "title": "Hotel",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/hotel/artworks-sRvCyMLvJdGc-0-t500x500.jpg",
+        "color": "#a9bda7",
+        "is_private": false
+      }
+    },
+    {
+      "id": 38,
+      "slug": "daddy-issues",
+      "artist": {
+        "id": 4,
+        "slug": "artist5",
+        "display_name": "The Neighborhood",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist5/ab6761610000e5ebdf0b5ac84376a0a4b2166816.jpg",
+        "color": "#222222",
+        "is_verify": true
+      },
+      "title": "Daddy Issues",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist5/tracks/daddy-issues/The_Neighbourhood_-_Daddy_Issues_TikTok_Remix.mp3",
+      "duration": "00:04:28.382041",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 14476456,
+      "genre": {
+        "id": 18,
+        "slug": "instrumental",
+        "name": "Instrumental",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/instrumental/ab67706c0000da841e4d12ad7f0548bd3fdf9152.jpg",
+        "color": "#7b66aa"
+      },
+      "album": {
+        "id": 10,
+        "slug": "wiped-out",
+        "title": "Wiped Out!",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/wiped-out/s-l1600.jpg",
+        "color": "#242524",
+        "is_private": false
+      }
+    }
+  ]
+}

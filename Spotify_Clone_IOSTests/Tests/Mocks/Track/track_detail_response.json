@@ -1,0 +1,56 @@
+{
+  "id": 52,
+  "slug": "i-was-never-there",
+  "artist": {
+    "id": 2,
+    "slug": "artist2",
+    "display_name": "The Weeknd",
+    "image": "http://192.168.0.108:8080/mediafiles/artists/artist2/ab6761610000e5eb214f3cf1cbe7139c1e26ffbb.jpg",
+    "color": "#292f3a",
+    "is_verify": true
+  },
+  "title": "I Was Never There",
+  "duration": "00:04:01.136327",
+  "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+  "color": "#333333",
+  "license": {
+    "id": 4,
+    "artist": {
+      "id": 2,
+      "slug": "artist2",
+      "display_name": "The Weeknd",
+      "image": "http://192.168.0.108:8080/mediafiles/artists/artist2/ab6761610000e5eb214f3cf1cbe7139c1e26ffbb.jpg",
+      "color": "#292f3a",
+      "is_verify": true
+    },
+    "name": "COPYRIGHT",
+    "text": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32."
+  },
+  "genre": {
+    "id": 16,
+    "slug": "punk",
+    "name": "Punk",
+    "image": "http://192.168.0.108:8080/mediafiles/genres/punk/ab67616d0000b273f8d415dab5ed7e3747bd38dd.jpg",
+    "color": "#8c3a4a"
+  },
+  "album": {
+    "id": 16,
+    "slug": "my-dear",
+    "title": "My Dear",
+    "image": "http://192.168.0.108:8080/mediafiles/albums/my-dear/818RSApG0PL._UF8941000_QL80_.jpg",
+    "color": "#1e140f",
+    "is_private": false
+  },
+  "file": "http://192.168.0.108:8080/mediafiles/artists/artist11/tracks/i-was-never-there/The_Weeknd_Gesaffelstein__I_Was_Never_There.mp3",
+  "plays_count": 164364578,
+  "downloads_count": 2,
+  "likes_count": 2,
+  "user_of_likes": [
+    2,
+    14
+  ],
+  "is_private": false,
+  "release_date": "2018-01-27",
+  "created_at": "2024-07-23T01:51:15.425234+03:00",
+  "updated_at": "2026-02-28T00:41:13.069074+02:00"
+}
