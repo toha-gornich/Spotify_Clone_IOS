@@ -1,0 +1,508 @@
+{
+  "count": 3,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 3,
+      "slug": "young-and-beautiful",
+      "title": "Young And Beautiful",
+      "description": "",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "album_listeners": 13021281,
+      "image": "http://192.168.0.108:8080/mediafiles/albums/young-and-beautiful/10045073113_0a5f43387a_z.jpg",
+      "color": "#555557",
+      "tracks": [
+        {
+          "id": 1,
+          "slug": "young-and-beautiful",
+          "artist": {
+            "id": 1,
+            "slug": "artist1",
+            "display_name": "Lana Del Rey",
+            "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+            "color": "#474a56",
+            "is_verify": true
+          },
+          "title": "Young And Beautiful",
+          "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/young-and-beautiful/Lana_Del_Rey_-_Young_and_Beautiful.mp3",
+          "duration": "00:03:56.094687",
+          "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+          "color": "#333333",
+          "plays_count": 13021281,
+          "genre": {
+            "id": 17,
+            "slug": "horny",
+            "name": "Horny",
+            "image": "http://192.168.0.108:8080/mediafiles/genres/horny/ab67706c0000da84420db2713dfdef9ef521092e.jpg",
+            "color": "#6e0606"
+          },
+          "album": {
+            "id": 3,
+            "slug": "young-and-beautiful",
+            "title": "Young And Beautiful",
+            "image": "http://192.168.0.108:8080/mediafiles/albums/young-and-beautiful/10045073113_0a5f43387a_z.jpg",
+            "color": "#555557",
+            "is_private": false
+          }
+        }
+      ],
+      "duration": "00:03:56.094687",
+      "is_private": false,
+      "release_date": "2013-07-22",
+      "created_at": "2024-07-22T23:51:08.319514+03:00",
+      "updated_at": "2024-07-22T23:51:08.319514+03:00"
+    },
+    {
+      "id": 2,
+      "slug": "ultraviolence",
+      "title": "Ultraviolence",
+      "description": "",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "album_listeners": 110731826,
+      "image": "http://192.168.0.108:8080/mediafiles/albums/ultraviolence/Lana-Del-Rey-Ultraviolence-album-cover-820-1536x1536.jpg",
+      "color": "#767675",
+      "tracks": [
+        {
+          "id": 13,
+          "slug": "money-power-glory",
+          "artist": {
+            "id": 1,
+            "slug": "artist1",
+            "display_name": "Lana Del Rey",
+            "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+            "color": "#474a56",
+            "is_verify": true
+          },
+          "title": "Money Power Glory",
+          "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/money-power-glory/Lana_Del_Rey__Money_Power_Glory.mp3",
+          "duration": "00:04:30.733061",
+          "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+          "color": "#333333",
+          "plays_count": 1452456,
+          "genre": {
+            "id": 20,
+            "slug": "summer",
+            "name": "Summer",
+            "image": "http://192.168.0.108:8080/mediafiles/genres/summer/ab67706c0000da846c82f3a4838b0c07757b8125.jpg",
+            "color": "#205a82"
+          },
+          "album": {
+            "id": 2,
+            "slug": "ultraviolence",
+            "title": "Ultraviolence",
+            "image": "http://192.168.0.108:8080/mediafiles/albums/ultraviolence/Lana-Del-Rey-Ultraviolence-album-cover-820-1536x1536.jpg",
+            "color": "#767675",
+            "is_private": false
+          }
+        },
+        {
+          "id": 12,
+          "slug": "sad-girl",
+          "artist": {
+            "id": 1,
+            "slug": "artist1",
+            "display_name": "Lana Del Rey",
+            "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+            "color": "#474a56",
+            "is_verify": true
+          },
+          "title": "Sad Girl",
+          "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/sad-girl/Lana_Del_Rey__Sad_Girl.mp3",
+          "duration": "00:05:17.857959",
+          "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+          "color": "#333333",
+          "plays_count": 2454775,
+          "genre": {
+            "id": 11,
+            "slug": "love",
+            "name": "Love",
+            "image": "http://192.168.0.108:8080/mediafiles/genres/love/ab67706f00000002dcb7b32f8bf2e6a7851245e3.jpg",
+            "color": "#4d666f"
+          },
+          "album": {
+            "id": 2,
+            "slug": "ultraviolence",
+            "title": "Ultraviolence",
+            "image": "http://192.168.0.108:8080/mediafiles/albums/ultraviolence/Lana-Del-Rey-Ultraviolence-album-cover-820-1536x1536.jpg",
+            "color": "#767675",
+            "is_private": false
+          }
+        },
+        {
+          "id": 11,
+          "slug": "west-coast",
+          "artist": {
+            "id": 1,
+            "slug": "artist1",
+            "display_name": "Lana Del Rey",
+            "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+            "color": "#474a56",
+            "is_verify": true
+          },
+          "title": "West Coast",
+          "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/west-coast/Lana_Del_Rey__West_Coast.mp3",
+          "duration": "00:04:16.835918",
+          "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+          "color": "#333333",
+          "plays_count": 7546334,
+          "genre": {
+            "id": 1,
+            "slug": "pop",
+            "name": "Pop",
+            "image": "http://192.168.0.108:8080/mediafiles/genres/pop/ab67616d0000b2736e336a8e4612a43fd43876e7.jpg",
+            "color": "#f2a0c6"
+          },
+          "album": {
+            "id": 2,
+            "slug": "ultraviolence",
+            "title": "Ultraviolence",
+            "image": "http://192.168.0.108:8080/mediafiles/albums/ultraviolence/Lana-Del-Rey-Ultraviolence-album-cover-820-1536x1536.jpg",
+            "color": "#767675",
+            "is_private": false
+          }
+        },
+        {
+          "id": 10,
+          "slug": "brooklyn-baby",
+          "artist": {
+            "id": 1,
+            "slug": "artist1",
+            "display_name": "Lana Del Rey",
+            "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+            "color": "#474a56",
+            "is_verify": true
+          },
+          "title": "Brooklyn Baby",
+          "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/brooklyn-baby/Lana_Del_Rey__Brooklyn_Baby.mp3",
+          "duration": "00:05:51.712653",
+          "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+          "color": "#333333",
+          "plays_count": 68746567,
+          "genre": {
+            "id": 4,
+            "slug": "mood",
+            "name": "Mood",
+            "image": "http://192.168.0.108:8080/mediafiles/genres/mood/ab67706f000000028191cc41d8585df6170b3e5e.jpg",
+            "color": "#4c4c9b"
+          },
+          "album": {
+            "id": 2,
+            "slug": "ultraviolence",
+            "title": "Ultraviolence",
+            "image": "http://192.168.0.108:8080/mediafiles/albums/ultraviolence/Lana-Del-Rey-Ultraviolence-album-cover-820-1536x1536.jpg",
+            "color": "#767675",
+            "is_private": false
+          }
+        },
+        {
+          "id": 9,
+          "slug": "ultraviolence",
+          "artist": {
+            "id": 1,
+            "slug": "artist1",
+            "display_name": "Lana Del Rey",
+            "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+            "color": "#474a56",
+            "is_verify": true
+          },
+          "title": "Ultraviolence",
+          "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/ultraviolence/Lana_Del_Rey__Ultraviolence.mp3",
+          "duration": "00:04:11.559184",
+          "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+          "color": "#333333",
+          "plays_count": 30531694,
+          "genre": {
+            "id": 11,
+            "slug": "love",
+            "name": "Love",
+            "image": "http://192.168.0.108:8080/mediafiles/genres/love/ab67706f00000002dcb7b32f8bf2e6a7851245e3.jpg",
+            "color": "#4d666f"
+          },
+          "album": {
+            "id": 2,
+            "slug": "ultraviolence",
+            "title": "Ultraviolence",
+            "image": "http://192.168.0.108:8080/mediafiles/albums/ultraviolence/Lana-Del-Rey-Ultraviolence-album-cover-820-1536x1536.jpg",
+            "color": "#767675",
+            "is_private": false
+          }
+        }
+      ],
+      "duration": "00:24:08.698775",
+      "is_private": false,
+      "release_date": "2014-05-10",
+      "created_at": "2024-07-22T23:48:06.097062+03:00",
+      "updated_at": "2024-07-22T23:48:06.097062+03:00"
+    },
+    {
+      "id": 1,
+      "slug": "born-to-die",
+      "title": "Born To Die",
+      "description": "",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "album_listeners": 519430045,
+      "image": "http://192.168.0.108:8080/mediafiles/albums/born-to-die/ab67616d0000b273ebc8cfac8b586bc475b04918.jpg",
+      "color": "#6a5c40",
+      "tracks": [
+        {
+          "id": 4,
+          "slug": "video-games",
+          "artist": {
+            "id": 1,
+            "slug": "artist1",
+            "display_name": "Lana Del Rey",
+            "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+            "color": "#474a56",
+            "is_verify": true
+          },
+          "title": "Video Games",
+          "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/video-games/Lana_Del_Rey__Video_Games.mp3",
+          "duration": "00:04:44.604082",
+          "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+          "color": "#333333",
+          "plays_count": 94944619,
+          "genre": {
+            "id": 17,
+            "slug": "horny",
+            "name": "Horny",
+            "image": "http://192.168.0.108:8080/mediafiles/genres/horny/ab67706c0000da84420db2713dfdef9ef521092e.jpg",
+            "color": "#6e0606"
+          },
+          "album": {
+            "id": 1,
+            "slug": "born-to-die",
+            "title": "Born To Die",
+            "image": "http://192.168.0.108:8080/mediafiles/albums/born-to-die/ab67616d0000b273ebc8cfac8b586bc475b04918.jpg",
+            "color": "#6a5c40",
+            "is_private": false
+          }
+        },
+        {
+          "id": 7,
+          "slug": "radio",
+          "artist": {
+            "id": 1,
+            "slug": "artist1",
+            "display_name": "Lana Del Rey",
+            "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+            "color": "#474a56",
+            "is_verify": true
+          },
+          "title": "Radio",
+          "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/radio/Lana_Del_Rey__Radio.mp3",
+          "duration": "00:03:34.674286",
+          "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+          "color": "#333333",
+          "plays_count": 60448095,
+          "genre": {
+            "id": 18,
+            "slug": "instrumental",
+            "name": "Instrumental",
+            "image": "http://192.168.0.108:8080/mediafiles/genres/instrumental/ab67706c0000da841e4d12ad7f0548bd3fdf9152.jpg",
+            "color": "#7b66aa"
+          },
+          "album": {
+            "id": 1,
+            "slug": "born-to-die",
+            "title": "Born To Die",
+            "image": "http://192.168.0.108:8080/mediafiles/albums/born-to-die/ab67616d0000b273ebc8cfac8b586bc475b04918.jpg",
+            "color": "#6a5c40",
+            "is_private": false
+          }
+        },
+        {
+          "id": 2,
+          "slug": "born-to-die",
+          "artist": {
+            "id": 1,
+            "slug": "artist1",
+            "display_name": "Lana Del Rey",
+            "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+            "color": "#474a56",
+            "is_verify": true
+          },
+          "title": "Born To Die",
+          "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/born-to-die/Lana_Del_Rey_-_Born_To_Die.mp3",
+          "duration": "00:04:45.100408",
+          "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+          "color": "#333333",
+          "plays_count": 70517926,
+          "genre": {
+            "id": 17,
+            "slug": "horny",
+            "name": "Horny",
+            "image": "http://192.168.0.108:8080/mediafiles/genres/horny/ab67706c0000da84420db2713dfdef9ef521092e.jpg",
+            "color": "#6e0606"
+          },
+          "album": {
+            "id": 1,
+            "slug": "born-to-die",
+            "title": "Born To Die",
+            "image": "http://192.168.0.108:8080/mediafiles/albums/born-to-die/ab67616d0000b273ebc8cfac8b586bc475b04918.jpg",
+            "color": "#6a5c40",
+            "is_private": false
+          }
+        },
+        {
+          "id": 8,
+          "slug": "summertime-sadness",
+          "artist": {
+            "id": 1,
+            "slug": "artist1",
+            "display_name": "Lana Del Rey",
+            "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+            "color": "#474a56",
+            "is_verify": true
+          },
+          "title": "Summertime Sadness",
+          "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/summertime-sadness/Lana_Del_Rey__Summertime_Sadness.mp3",
+          "duration": "00:04:24.045714",
+          "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+          "color": "#333333",
+          "plays_count": 150014344,
+          "genre": {
+            "id": 6,
+            "slug": "chill",
+            "name": "Chill",
+            "image": "http://192.168.0.108:8080/mediafiles/genres/chill/ab67706f0000000243cc4425ca68418fcab705fd.jpg",
+            "color": "#ca826a"
+          },
+          "album": {
+            "id": 1,
+            "slug": "born-to-die",
+            "title": "Born To Die",
+            "image": "http://192.168.0.108:8080/mediafiles/albums/born-to-die/ab67616d0000b273ebc8cfac8b586bc475b04918.jpg",
+            "color": "#6a5c40",
+            "is_private": false
+          }
+        },
+        {
+          "id": 6,
+          "slug": "darck-paradise",
+          "artist": {
+            "id": 1,
+            "slug": "artist1",
+            "display_name": "Lana Del Rey",
+            "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+            "color": "#474a56",
+            "is_verify": true
+          },
+          "title": "Darck Paradise",
+          "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/darck-paradise/Lana_Del_Rey__Dark_Paradise.mp3",
+          "duration": "00:04:03.252245",
+          "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+          "color": "#333333",
+          "plays_count": 42879119,
+          "genre": {
+            "id": 17,
+            "slug": "horny",
+            "name": "Horny",
+            "image": "http://192.168.0.108:8080/mediafiles/genres/horny/ab67706c0000da84420db2713dfdef9ef521092e.jpg",
+            "color": "#6e0606"
+          },
+          "album": {
+            "id": 1,
+            "slug": "born-to-die",
+            "title": "Born To Die",
+            "image": "http://192.168.0.108:8080/mediafiles/albums/born-to-die/ab67616d0000b273ebc8cfac8b586bc475b04918.jpg",
+            "color": "#6a5c40",
+            "is_private": false
+          }
+        },
+        {
+          "id": 5,
+          "slug": "diet-mountain-dew",
+          "artist": {
+            "id": 1,
+            "slug": "artist1",
+            "display_name": "Lana Del Rey",
+            "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+            "color": "#474a56",
+            "is_verify": true
+          },
+          "title": "Diet Mountain Dew",
+          "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/diet-mountain-dew/Lana_Del_Rey__Diet_Mountain_Dew.mp3",
+          "duration": "00:03:42.981224",
+          "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+          "color": "#333333",
+          "plays_count": 54928775,
+          "genre": {
+            "id": 17,
+            "slug": "horny",
+            "name": "Horny",
+            "image": "http://192.168.0.108:8080/mediafiles/genres/horny/ab67706c0000da84420db2713dfdef9ef521092e.jpg",
+            "color": "#6e0606"
+          },
+          "album": {
+            "id": 1,
+            "slug": "born-to-die",
+            "title": "Born To Die",
+            "image": "http://192.168.0.108:8080/mediafiles/albums/born-to-die/ab67616d0000b273ebc8cfac8b586bc475b04918.jpg",
+            "color": "#6a5c40",
+            "is_private": false
+          }
+        },
+        {
+          "id": 3,
+          "slug": "blue-jeans",
+          "artist": {
+            "id": 1,
+            "slug": "artist1",
+            "display_name": "Lana Del Rey",
+            "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+            "color": "#474a56",
+            "is_verify": true
+          },
+          "title": "Blue Jeans",
+          "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/blue-jeans/Lana_Del_Rey__Blue_Jeans.mp3",
+          "duration": "00:03:30.128980",
+          "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+          "color": "#333333",
+          "plays_count": 45697167,
+          "genre": {
+            "id": 17,
+            "slug": "horny",
+            "name": "Horny",
+            "image": "http://192.168.0.108:8080/mediafiles/genres/horny/ab67706c0000da84420db2713dfdef9ef521092e.jpg",
+            "color": "#6e0606"
+          },
+          "album": {
+            "id": 1,
+            "slug": "born-to-die",
+            "title": "Born To Die",
+            "image": "http://192.168.0.108:8080/mediafiles/albums/born-to-die/ab67616d0000b273ebc8cfac8b586bc475b04918.jpg",
+            "color": "#6a5c40",
+            "is_private": false
+          }
+        }
+      ],
+      "duration": "00:28:44.786939",
+      "is_private": false,
+      "release_date": "2012-01-02",
+      "created_at": "2024-07-22T23:45:20.776128+03:00",
+      "updated_at": "2024-07-22T23:45:20.776128+03:00"
+    }
+  ]
+}
