@@ -1,0 +1,61 @@
+{
+  "count": 6,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 2,
+      "display_name": "Mafan",
+      "type_profile": "User",
+      "artist_slug": null,
+      "image": "http://192.168.0.108:8080/mediafiles/users/user1%40gmail.com/191b73f11d39978ba7fc8e18b7f1fa5f.jpg",
+      "followers_count": 8,
+      "is_premium": true
+    },
+    {
+      "id": 4,
+      "display_name": "Melenomorf",
+      "type_profile": "User",
+      "artist_slug": null,
+      "image": "http://192.168.0.108:8080/mediafiles/users/user2%40gmail.com/ab67706c0000da848307bc40daddfb05ff54e25b.jpg",
+      "followers_count": 4,
+      "is_premium": false
+    },
+    {
+      "id": 5,
+      "display_name": "Julia",
+      "type_profile": "User",
+      "artist_slug": null,
+      "image": "http://192.168.0.108:8080/mediafiles/users/user3%40gmail.com/yamato-one-piece-1_7juBMmK.webp",
+      "followers_count": 0,
+      "is_premium": true
+    },
+    {
+      "id": 8,
+      "display_name": "ig:17.timx",
+      "type_profile": "User",
+      "artist_slug": null,
+      "image": "http://192.168.0.108:8080/mediafiles/users/user6%40gmail.com/steamuserimages-a.akamaihd.jpg",
+      "followers_count": 2,
+      "is_premium": false
+    },
+    {
+      "id": 10,
+      "display_name": "Arnold",
+      "type_profile": "User",
+      "artist_slug": null,
+      "image": "http://192.168.0.108:8080/mediafiles/users/user8%40gmail.com/60d5dc467b950c5ccc8ced95_spotify-for-artists.jpg",
+      "followers_count": 0,
+      "is_premium": false
+    },
+    {
+      "id": 24,
+      "display_name": "fdsf3",
+      "type_profile": "User",
+      "artist_slug": null,
+      "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+      "followers_count": 0,
+      "is_premium": false
+    }
+  ]
+}

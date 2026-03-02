@@ -1,0 +1,238 @@
+{
+  "count": 7,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 52,
+      "slug": "i-was-never-there",
+      "artist": {
+        "id": 2,
+        "slug": "artist2",
+        "display_name": "The Weeknd",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist2/ab6761610000e5eb214f3cf1cbe7139c1e26ffbb.jpg",
+        "color": "#292f3a",
+        "is_verify": true
+      },
+      "title": "I Was Never There",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist11/tracks/i-was-never-there/The_Weeknd_Gesaffelstein__I_Was_Never_There.mp3",
+      "duration": "00:04:01.136327",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 164364578,
+      "genre": {
+        "id": 16,
+        "slug": "punk",
+        "name": "Punk",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/punk/ab67616d0000b273f8d415dab5ed7e3747bd38dd.jpg",
+        "color": "#8c3a4a"
+      },
+      "album": {
+        "id": 16,
+        "slug": "my-dear",
+        "title": "My Dear",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/my-dear/818RSApG0PL._UF8941000_QL80_.jpg",
+        "color": "#1e140f",
+        "is_private": false
+      }
+    },
+    {
+      "id": 62,
+      "slug": "pr-phonk",
+      "artist": {
+        "id": 9,
+        "slug": "artist10",
+        "display_name": "Ashish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist10/ei7xlw0orvda1.jpg",
+        "color": "#430d0a",
+        "is_verify": false
+      },
+      "title": "PR PHONK",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist10/tracks/pr-phonk/Montagem_-_Pr_phonk_TikTok_Remix.mp3",
+      "duration": "00:01:03.973878",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 2425454,
+      "genre": {
+        "id": 19,
+        "slug": "phonk",
+        "name": "Phonk",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/phonk/ab67706c0000da841ae38e18f029f192a9abf7ca.jpg",
+        "color": "#7d387e"
+      },
+      "album": {
+        "id": 24,
+        "slug": "phonk-dxstruction",
+        "title": "PHONK DXSTRUCTION",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/phonk-dxstruction/ab67616100005174913bcf5a2e5c02be0e6b5d05.jpg",
+        "color": "#088b18",
+        "is_private": false
+      }
+    },
+    {
+      "id": 60,
+      "slug": "warning-speed-up",
+      "artist": {
+        "id": 9,
+        "slug": "artist10",
+        "display_name": "Ashish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist10/ei7xlw0orvda1.jpg",
+        "color": "#430d0a",
+        "is_verify": false
+      },
+      "title": "WARNING - Speed Up",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist10/tracks/warning-speed-up/WARNING_-_MC_ORSEN_SPEED_UP_EXTENDED_MIX.mp3",
+      "duration": "00:04:12.551837",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 5348583,
+      "genre": {
+        "id": 19,
+        "slug": "phonk",
+        "name": "Phonk",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/phonk/ab67706c0000da841ae38e18f029f192a9abf7ca.jpg",
+        "color": "#7d387e"
+      },
+      "album": {
+        "id": 21,
+        "slug": "warningspeed-up",
+        "title": "WARNING(Speed Up)",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/warningspeed-up/made-two-more-phonk-album-covers-v0-982imvcl0n0a1.jpg",
+        "color": "#6e1b8f",
+        "is_private": false
+      }
+    },
+    {
+      "id": 61,
+      "slug": "menace",
+      "artist": {
+        "id": 9,
+        "slug": "artist10",
+        "display_name": "Ashish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist10/ei7xlw0orvda1.jpg",
+        "color": "#430d0a",
+        "is_verify": false
+      },
+      "title": "Menace",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist10/tracks/menace/Sione_Menace.mp3",
+      "duration": "00:02:15.471020",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 999999944,
+      "genre": {
+        "id": 19,
+        "slug": "phonk",
+        "name": "Phonk",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/phonk/ab67706c0000da841ae38e18f029f192a9abf7ca.jpg",
+        "color": "#7d387e"
+      },
+      "album": {
+        "id": 23,
+        "slug": "menace",
+        "title": "Menace",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/menace/ab67616d00001e02de6fe0f2553735fd4ad47567.jpg",
+        "color": "#813739",
+        "is_private": false
+      }
+    },
+    {
+      "id": 63,
+      "slug": "ukrainian-cosssack-phonk",
+      "artist": {
+        "id": 9,
+        "slug": "artist10",
+        "display_name": "Ashish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist10/ei7xlw0orvda1.jpg",
+        "color": "#430d0a",
+        "is_verify": false
+      },
+      "title": "Ukrainian Cosssack Phonk",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist10/tracks/ukrainian-cosssack-phonk/CHASHKAKEFIRA_-_Ukrainian_Cossack_Phonk.mp3",
+      "duration": "00:02:45.903673",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 1999438374,
+      "genre": {
+        "id": 19,
+        "slug": "phonk",
+        "name": "Phonk",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/phonk/ab67706c0000da841ae38e18f029f192a9abf7ca.jpg",
+        "color": "#7d387e"
+      },
+      "album": {
+        "id": 25,
+        "slug": "ukrainian-cosssack-phonk",
+        "title": "Ukrainian Cosssack Phonk",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/ukrainian-cosssack-phonk/ab67616d0000b27383fc1c7a13e19c9746a1efa2.jpg",
+        "color": "#642d82",
+        "is_private": false
+      }
+    },
+    {
+      "id": 23,
+      "slug": "last-dance",
+      "artist": {
+        "id": 11,
+        "slug": "artist11",
+        "display_name": "Montell Fish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist11/1900x1900-000000-80-0-0.jpg",
+        "color": "#6c9baa",
+        "is_verify": true
+      },
+      "title": "Last Dance",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist11/tracks/last-dance/Montell_Fish_Last_Dance.mp4",
+      "duration": "00:03:09.020590",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 112442,
+      "genre": {
+        "id": 18,
+        "slug": "instrumental",
+        "name": "Instrumental",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/instrumental/ab67706c0000da841e4d12ad7f0548bd3fdf9152.jpg",
+        "color": "#7b66aa"
+      },
+      "album": {
+        "id": 5,
+        "slug": "jamie",
+        "title": "JAMIE",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/jamie/1200x1200bb.jpg",
+        "color": "#6d9bac",
+        "is_private": false
+      }
+    },
+    {
+      "id": 11,
+      "slug": "west-coast",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "title": "West Coast",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/west-coast/Lana_Del_Rey__West_Coast.mp3",
+      "duration": "00:04:16.835918",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 7546334,
+      "genre": {
+        "id": 1,
+        "slug": "pop",
+        "name": "Pop",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/pop/ab67616d0000b2736e336a8e4612a43fd43876e7.jpg",
+        "color": "#f2a0c6"
+      },
+      "album": {
+        "id": 2,
+        "slug": "ultraviolence",
+        "title": "Ultraviolence",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/ultraviolence/Lana-Del-Rey-Ultraviolence-album-cover-820-1536x1536.jpg",
+        "color": "#767675",
+        "is_private": false
+      }
+    }
+  ]
+}

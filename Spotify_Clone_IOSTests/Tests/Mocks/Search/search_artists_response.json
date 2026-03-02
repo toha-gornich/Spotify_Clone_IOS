@@ -1,0 +1,49 @@
+{
+  "count": 2,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 1,
+      "slug": "artist1",
+      "user": {
+        "id": 3,
+        "display_name": "artist11",
+        "type_profile": "Artist",
+        "artist_slug": "artist1",
+        "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+        "followers_count": 1,
+        "is_premium": true
+      },
+      "first_name": "Lanas",
+      "last_name": "Del Rey",
+      "display_name": "Lana Del Rey",
+      "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+      "color": "#474a56",
+      "track_slug": "money-power-glory",
+      "artist_listeners": 643183152,
+      "is_verify": true
+    },
+    {
+      "id": 9,
+      "slug": "artist10",
+      "user": {
+        "id": 21,
+        "display_name": "LLLAs",
+        "type_profile": "Artist",
+        "artist_slug": "artist10",
+        "image": "http://192.168.0.108:8080/mediafiles/users/artist10%40gmail.com/ei7xlw0orvda1.jpg",
+        "followers_count": 1,
+        "is_premium": false
+      },
+      "first_name": "Leon",
+      "last_name": "Kenedy",
+      "display_name": "Ashish",
+      "image": "http://192.168.0.108:8080/mediafiles/artists/artist10/ei7xlw0orvda1.jpg",
+      "color": "#430d0a",
+      "track_slug": "pr-phonk",
+      "artist_listeners": 3007212355,
+      "is_verify": false
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "count": 3,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 16,
+      "slug": "my-playlist-3-2",
+      "title": "My Playlist #3",
+      "image": "http://192.168.0.108:8080/mediafiles/default/playlist.jpg",
+      "color": "#333333",
+      "track_slug": "i-was-never-there",
+      "user": {
+        "id": 24,
+        "display_name": "fdsf3",
+        "type_profile": "User",
+        "artist_slug": null,
+        "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+        "followers_count": 0,
+        "is_premium": false
+      },
+      "genre": null,
+      "is_private": false
+    },
+    {
+      "id": 3,
+      "slug": "my-playlist-3",
+      "title": "My Playlist #3",
+      "image": "http://192.168.0.108:8080/mediafiles/default/playlist.jpg",
+      "color": "#333333",
+      "track_slug": "i-was-never-there",
+      "user": {
+        "id": 2,
+        "display_name": "Mafan",
+        "type_profile": "User",
+        "artist_slug": null,
+        "image": "http://192.168.0.108:8080/mediafiles/users/user1%40gmail.com/191b73f11d39978ba7fc8e18b7f1fa5f.jpg",
+        "followers_count": 8,
+        "is_premium": true
+      },
+      "genre": null,
+      "is_private": false
+    },
+    {
+      "id": 2,
+      "slug": "my-playlist-2",
+      "title": "Horny 🥵",
+      "image": "http://192.168.0.108:8080/mediafiles/playlists/my-playlist-2/-PGZMdHSsuuq6LSUlWwq4R7g_V8EYEIRQVnak74RyqU.webp",
+      "color": "#530101",
+      "track_slug": "i-was-never-there",
+      "user": {
+        "id": 2,
+        "display_name": "Mafan",
+        "type_profile": "User",
+        "artist_slug": null,
+        "image": "http://192.168.0.108:8080/mediafiles/users/user1%40gmail.com/191b73f11d39978ba7fc8e18b7f1fa5f.jpg",
+        "followers_count": 8,
+        "is_premium": true
+      },
+      "genre": {
+        "id": 17,
+        "slug": "horny",
+        "name": "Horny",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/horny/ab67706c0000da84420db2713dfdef9ef521092e.jpg",
+        "color": "#6e0606"
+      },
+      "is_private": false
+    }
+  ]
+}
