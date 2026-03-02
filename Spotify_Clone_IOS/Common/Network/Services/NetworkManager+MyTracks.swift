@@ -11,35 +11,23 @@ extension NetworkManager: MyTracksServiceProtocol {
     func getTracksMy() async throws -> [TracksMy] {
         let url = MyTrackEndpoint.list.url
         
+        let (data, response) = try await session.data(from: url)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("❌ getTracksMy - Invalid response type")
+            throw APError.invalidResponse
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            print("❌ getTracksMy - HTTP error \(httpResponse.statusCode)")
+            throw APError.invalidResponse
+        }
+        
         do {
-            let (data, response) = try await URLSession.shared.data(from: url)
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("❌ getTracksMy - Invalid response type")
-                throw APError.invalidResponse
-            }
-            
-            guard (200...299).contains(httpResponse.statusCode) else {
-                print("❌ getTracksMy - HTTP error \(httpResponse.statusCode)")
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ getTracksMy - Response: \(responseString)")
-                }
-                throw APError.invalidResponse
-            }
-            
-            do {
-                let decoder = JSONDecoder()
-                return try decoder.decode(TracksMyResponse.self, from: data).results
-            } catch {
-                print("❌ getTracksMy - Failed to decode response: \(error)")
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ getTracksMy - Raw response: \(responseString)")
-                }
-                throw APError.invalidData
-            }
+            return try JSONDecoder().decode(TracksMyResponse.self, from: data).results
         } catch {
-            print("❌ getTracksMy - Network error: \(error)")
-            throw error
+            print("❌ getTracksMy - Failed to decode response: \(error)")
+            throw APError.invalidData
         }
     }
     
@@ -54,14 +42,12 @@ extension NetworkManager: MyTracksServiceProtocol {
         audioData: Data?
     ) async throws -> Track {
         let url = MyTrackEndpoint.create.url
-        
         let boundary = "Boundary-\(UUID().uuidString)"
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         
         var body = Data()
-        
         func addFormField(name: String, value: String) {
             if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
             if let data = "Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n".data(using: .utf8) { body.append(data) }
@@ -94,71 +80,46 @@ extension NetworkManager: MyTracksServiceProtocol {
         if let data = "--\(boundary)--\r\n".data(using: .utf8) { body.append(data) }
         request.httpBody = body
         
+        let (data, response) = try await session.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("❌ postCreateTrack - Invalid response type")
+            throw APError.invalidResponse
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            print("❌ postCreateTrack - HTTP error \(httpResponse.statusCode)")
+            throw APError.invalidResponse
+        }
+        
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("❌ postCreateTrack - Invalid response type")
-                throw APError.invalidResponse
-            }
-            
-            guard (200...299).contains(httpResponse.statusCode) else {
-                print("❌ postCreateTrack - HTTP error \(httpResponse.statusCode)")
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ postCreateTrack - Response: \(responseString)")
-                }
-                throw APError.invalidResponse
-            }
-            
-            do {
-                let decoder = JSONDecoder()
-                let result = try decoder.decode(Track.self, from: data)
-                return result
-            } catch {
-                print("❌ postCreateTrack - Failed to decode response: \(error)")
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ postCreateTrack - Raw response: \(responseString)")
-                }
-                throw APError.invalidData
-            }
+            return try JSONDecoder().decode(Track.self, from: data)
         } catch {
-            print("❌ postCreateTrack - Network error: \(error)")
-            throw error
+            print("❌ postCreateTrack - Failed to decode response: \(error)")
+            throw APError.invalidData
         }
     }
     
     func getTrackMyBySlug(slug: String) async throws -> TracksMyBySlug {
         let url = MyTrackEndpoint.byID(slug).url
         
+        let (data, response) = try await session.data(from: url)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("❌ getTrackMyBySlug - Invalid response type")
+            throw APError.invalidResponse
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            print("❌ getTrackMyBySlug - HTTP error \(httpResponse.statusCode)")
+            throw APError.invalidResponse
+        }
+        
         do {
-            let (data, response) = try await URLSession.shared.data(from: url)
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("❌ getTrackMyBySlug - Invalid response type")
-                throw APError.invalidResponse
-            }
-            
-            guard (200...299).contains(httpResponse.statusCode) else {
-                print("❌ getTrackMyBySlug - HTTP error \(httpResponse.statusCode)")
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ getTrackMyBySlug - Response: \(responseString)")
-                }
-                throw APError.invalidResponse
-            }
-            
-            do {
-                let decoder = JSONDecoder()
-                return try decoder.decode(TracksMyBySlug.self, from: data)
-            } catch {
-                print("❌ getTrackMyBySlug - Failed to decode response: \(error)")
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ getTrackMyBySlug - Raw response: \(responseString)")
-                }
-                throw APError.invalidData
-            }
+            return try JSONDecoder().decode(TracksMyBySlug.self, from: data)
         } catch {
-            print("❌ getTrackMyBySlug - Network error: \(error)")
-            throw error
+            print("❌ getTrackMyBySlug - Failed to decode response: \(error)")
+            throw APError.invalidData
         }
     }
     
@@ -174,38 +135,24 @@ extension NetworkManager: MyTracksServiceProtocol {
         audioData: Data? = nil
     ) async throws -> TracksMyBySlug {
         let url = MyTrackEndpoint.update(slug).url
-        
         let boundary = "Boundary-\(UUID().uuidString)"
         var request = URLRequest(url: url)
         request.httpMethod = "PATCH"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         
         var body = Data()
-        
         func addFormField(name: String, value: String) {
             if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
             if let data = "Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n".data(using: .utf8) { body.append(data) }
             if let data = "\(value)\r\n".data(using: .utf8) { body.append(data) }
         }
         
-        if let title = title {
-            addFormField(name: "title", value: title)
-        }
-        if let licenseId = licenseId {
-            addFormField(name: "license", value: "\(licenseId)")
-        }
-        if let genreId = genreId {
-            addFormField(name: "genre", value: "\(genreId)")
-        }
-        if let albumId = albumId {
-            addFormField(name: "album", value: "\(albumId)")
-        }
-        if let isPrivate = isPrivate {
-            addFormField(name: "is_private", value: "\(isPrivate)")
-        }
-        if let releaseDate = releaseDate {
-            addFormField(name: "release_date", value: releaseDate)
-        }
+        if let title = title { addFormField(name: "title", value: title) }
+        if let licenseId = licenseId { addFormField(name: "license", value: "\(licenseId)") }
+        if let genreId = genreId { addFormField(name: "genre", value: "\(genreId)") }
+        if let albumId = albumId { addFormField(name: "album", value: "\(albumId)") }
+        if let isPrivate = isPrivate { addFormField(name: "is_private", value: "\(isPrivate)") }
+        if let releaseDate = releaseDate { addFormField(name: "release_date", value: releaseDate) }
         
         if let imageData = imageData {
             if let data = "--\(boundary)\r\n".data(using: .utf8) { body.append(data) }
@@ -226,106 +173,73 @@ extension NetworkManager: MyTracksServiceProtocol {
         if let data = "--\(boundary)--\r\n".data(using: .utf8) { body.append(data) }
         request.httpBody = body
         
+        let (data, response) = try await session.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("❌ patchTrackMyBySlug - Invalid response type")
+            throw APError.invalidResponse
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            print("❌ patchTrackMyBySlug - HTTP error \(httpResponse.statusCode)")
+            throw APError.invalidResponse
+        }
+        
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("❌ patchTrackMyBySlug - Invalid response type")
-                throw APError.invalidResponse
-            }
-            
-            guard (200...299).contains(httpResponse.statusCode) else {
-                print("❌ patchTrackMyBySlug - HTTP error \(httpResponse.statusCode)")
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ patchTrackMyBySlug - Response: \(responseString)")
-                }
-                throw APError.invalidResponse
-            }
-            
-            do {
-                let decoder = JSONDecoder()
-                let result = try decoder.decode(TracksMyBySlug.self, from: data)
-                return result
-            } catch {
-                print("❌ patchTrackMyBySlug - Failed to decode response: \(error)")
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ patchTrackMyBySlug - Raw response: \(responseString)")
-                }
-                throw APError.invalidData
-            }
+            return try JSONDecoder().decode(TracksMyBySlug.self, from: data)
         } catch {
-            print("❌ patchTrackMyBySlug - Network error: \(error)")
-            throw error
+            print("❌ patchTrackMyBySlug - Failed to decode response: \(error)")
+            throw APError.invalidData
         }
     }
     
     func patchTracksMy(slug: String, isPrivate: Bool, retryCount: Int = 0) async throws {
         let url = MyTrackEndpoint.update(slug).url
-        
         var request = URLRequest(url: url)
         request.httpMethod = "PATCH"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         let body = ["is_private": isPrivate]
+        request.httpBody = try JSONEncoder().encode(body)
         
-        do {
-            request.httpBody = try JSONEncoder().encode(body)
-            
-            let (data, response) = try await URLSession.shared.data(for: request)
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("❌ patchTracksMy - Invalid response type")
-                throw APError.invalidResponse
+        let (data, response) = try await session.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("❌ patchTracksMy - Invalid response type")
+            throw APError.invalidResponse
+        }
+        
+        if httpResponse.statusCode == 500 && retryCount < 3 {
+            if let responseString = String(data: data, encoding: .utf8),
+               responseString.contains("database is locked") {
+                print("⏳ patchTracksMy - Database locked, retrying in 1 second... (attempt \(retryCount + 1)/3)")
+                try await Task.sleep(nanoseconds: 1_000_000_000)
+                return try await patchTracksMy(slug: slug, isPrivate: isPrivate, retryCount: retryCount + 1)
             }
-            
-            if httpResponse.statusCode == 500 && retryCount < 3 {
-                if let responseString = String(data: data, encoding: .utf8),
-                   responseString.contains("database is locked") {
-                    print("⏳ patchTracksMy - Database locked, retrying in 1 second... (attempt \(retryCount + 1)/3)")
-                    try await Task.sleep(nanoseconds: 1_000_000_000)
-                    return try await patchTracksMy(slug: slug, isPrivate: isPrivate, retryCount: retryCount + 1)
-                }
-            }
-            
-            guard (200...299).contains(httpResponse.statusCode) else {
-                print("❌ patchTracksMy - HTTP error \(httpResponse.statusCode)")
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ patchTracksMy - Response: \(responseString)")
-                }
-                throw APError.invalidResponse
-            }
-            
-        } catch {
-            print("❌ patchTracksMy - Network error: \(error)")
-            throw error
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            print("❌ patchTracksMy - HTTP error \(httpResponse.statusCode)")
+            throw APError.invalidResponse
         }
     }
 
     func deleteTracksMy(slug: String) async throws {
         let url = MyTrackEndpoint.delete(slug).url
-        
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        do {
-            let (data, response) = try await URLSession.shared.data(for: request)
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("❌ deleteTracksMy - Invalid response type")
-                throw APError.invalidResponse
-            }
-            
-            guard (200...299).contains(httpResponse.statusCode) else {
-                print("❌ deleteTracksMy - HTTP error \(httpResponse.statusCode)")
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("❌ deleteTracksMy - Response: \(responseString)")
-                }
-                throw APError.invalidResponse
-            }
-        } catch {
-            print("❌ deleteTracksMy - Network error: \(error)")
-            throw error
+        let (_, response) = try await session.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("❌ deleteTracksMy - Invalid response type")
+            throw APError.invalidResponse
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            print("❌ deleteTracksMy - HTTP error \(httpResponse.statusCode)")
+            throw APError.invalidResponse
         }
     }
 }

@@ -1,0 +1,33 @@
+{
+  "id": 52,
+  "slug": "i-was-never-there",
+  "artist": {
+    "id": 2,
+    "slug": "artist2",
+    "display_name": "The Weeknd",
+    "image": "http://192.168.0.108:8080/mediafiles/artists/artist2/ab6761610000e5eb214f3cf1cbe7139c1e26ffbb.jpg",
+    "color": "#292f3a",
+    "is_verify": true
+  },
+  "title": "I Was Never There",
+  "file": "http://192.168.0.108:8080/mediafiles/artists/artist11/tracks/i-was-never-there/The_Weeknd_Gesaffelstein__I_Was_Never_There.mp3",
+  "duration": "00:04:01.136327",
+  "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+  "color": "#333333",
+  "plays_count": 164364578,
+  "genre": {
+    "id": 16,
+    "slug": "punk",
+    "name": "Punk",
+    "image": "http://192.168.0.108:8080/mediafiles/genres/punk/ab67616d0000b273f8d415dab5ed7e3747bd38dd.jpg",
+    "color": "#8c3a4a"
+  },
+  "album": {
+    "id": 16,
+    "slug": "my-dear",
+    "title": "My Dear",
+    "image": "http://192.168.0.108:8080/mediafiles/albums/my-dear/818RSApG0PL._UF8941000_QL80_.jpg",
+    "color": "#1e140f",
+    "is_private": false
+  }
+}

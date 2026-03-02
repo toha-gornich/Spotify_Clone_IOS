@@ -27,6 +27,7 @@
 		6281EABB2F5594F2002C5F44 /* GenreServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6281EABA2F5594F2002C5F44 /* GenreServiceTests.swift */; };
 		6281EC5B2F559A52002C5F44 /* LicenseServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6281EC5A2F559A52002C5F44 /* LicenseServiceTests.swift */; };
 		6281EC682F55A1AA002C5F44 /* MyAlbumServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6281EC672F55A1AA002C5F44 /* MyAlbumServiceTests.swift */; };
+		6281EC722F55A61A002C5F44 /* MyTrackServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6281EC712F55A61A002C5F44 /* MyTrackServiceTests.swift */; };
 		6298DC582F54CE790077B646 /* ArtistServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6298DC572F54CE790077B646 /* ArtistServiceTest.swift */; };
 		62E390052F519B8600A2F669 /* KeychainManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E390042F519B8600A2F669 /* KeychainManagerTests.swift */; };
 		62E391A12F536CDA00A2F669 /* AlbumServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E391A02F536CDA00A2F669 /* AlbumServiceTest.swift */; };
@@ -73,6 +74,7 @@
 		6281EABA2F5594F2002C5F44 /* GenreServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreServiceTests.swift; sourceTree = "<group>"; };
 		6281EC5A2F559A52002C5F44 /* LicenseServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseServiceTests.swift; sourceTree = "<group>"; };
 		6281EC672F55A1AA002C5F44 /* MyAlbumServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAlbumServiceTests.swift; sourceTree = "<group>"; };
+		6281EC712F55A61A002C5F44 /* MyTrackServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTrackServiceTests.swift; sourceTree = "<group>"; };
 		6298DC572F54CE790077B646 /* ArtistServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistServiceTest.swift; sourceTree = "<group>"; };
 		62E390042F519B8600A2F669 /* KeychainManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManagerTests.swift; sourceTree = "<group>"; };
 		62E3919F2F53497D00A2F669 /* Spotify_Clone_IOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Spotify_Clone_IOS.xctestplan; sourceTree = "<group>"; };
@@ -118,6 +120,11 @@
 		6281EC5E2F559CFA002C5F44 /* License */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = License;
+			sourceTree = "<group>";
+		};
+		6281EC732F55A689002C5F44 /* Track */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Track;
 			sourceTree = "<group>";
 		};
 		62E391892F53022B00A2F669 /* Auth */ = {
@@ -234,6 +241,7 @@
 				6281EABA2F5594F2002C5F44 /* GenreServiceTests.swift */,
 				6281EC5A2F559A52002C5F44 /* LicenseServiceTests.swift */,
 				6281EC672F55A1AA002C5F44 /* MyAlbumServiceTests.swift */,
+				6281EC712F55A61A002C5F44 /* MyTrackServiceTests.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -248,6 +256,7 @@
 		622CFC732EC2836A00BB19F4 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
+				6281EC732F55A689002C5F44 /* Track */,
 				6281EC5E2F559CFA002C5F44 /* License */,
 				6281EC532F55978F002C5F44 /* Genre */,
 				6281EC522F55977B002C5F44 /* Artist */,
@@ -320,6 +329,7 @@
 				6281EC522F55977B002C5F44 /* Artist */,
 				6281EC532F55978F002C5F44 /* Genre */,
 				6281EC5E2F559CFA002C5F44 /* License */,
+				6281EC732F55A689002C5F44 /* Track */,
 				62E391892F53022B00A2F669 /* Auth */,
 				62E391942F530A3B00A2F669 /* Common */,
 				62E391A22F536E3C00A2F669 /* Albums */,
@@ -434,6 +444,7 @@
 				622CFC812EC2849F00BB19F4 /* TrackDetailTests.swift in Sources */,
 				62E390052F519B8600A2F669 /* KeychainManagerTests.swift in Sources */,
 				622CFC932EC284CC00BB19F4 /* AuthModelsTests.swift in Sources */,
+				6281EC722F55A61A002C5F44 /* MyTrackServiceTests.swift in Sources */,
 				622CFC992EC7659600BB19F4 /* Test.swift in Sources */,
 				6281EC5B2F559A52002C5F44 /* LicenseServiceTests.swift in Sources */,
 				622CFC8D2EC284BE00BB19F4 /* PlaylistTests.swift in Sources */,

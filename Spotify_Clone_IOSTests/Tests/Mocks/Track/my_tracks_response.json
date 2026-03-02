@@ -1,0 +1,707 @@
+{
+  "count": 13,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 13,
+      "slug": "money-power-glory",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "title": "Money Power Glory",
+      "duration": "00:04:30.733061",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "license": {
+        "id": 1,
+        "artist": {
+          "id": 1,
+          "slug": "artist1",
+          "display_name": "Lana Del Rey",
+          "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+          "color": "#474a56",
+          "is_verify": true
+        },
+        "name": "MIT",
+        "text": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout."
+      },
+      "genre": {
+        "id": 20,
+        "slug": "summer",
+        "name": "Summer",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/summer/ab67706c0000da846c82f3a4838b0c07757b8125.jpg",
+        "color": "#205a82"
+      },
+      "album": {
+        "id": 2,
+        "slug": "ultraviolence",
+        "title": "Ultraviolence",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/ultraviolence/Lana-Del-Rey-Ultraviolence-album-cover-820-1536x1536.jpg",
+        "color": "#767675",
+        "is_private": false
+      },
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/money-power-glory/Lana_Del_Rey__Money_Power_Glory.mp3",
+      "plays_count": 1452456,
+      "downloads_count": 0,
+      "likes_count": 2,
+      "user_of_likes": [
+        2,
+        3
+      ],
+      "is_private": false,
+      "release_date": "2014-07-23",
+      "created_at": "2024-07-23T00:15:20.957546+03:00",
+      "updated_at": "2026-02-24T16:24:27.413718+02:00"
+    },
+    {
+      "id": 4,
+      "slug": "video-games",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "title": "Video Games",
+      "duration": "00:04:44.604082",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "license": {
+        "id": 1,
+        "artist": {
+          "id": 1,
+          "slug": "artist1",
+          "display_name": "Lana Del Rey",
+          "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+          "color": "#474a56",
+          "is_verify": true
+        },
+        "name": "MIT",
+        "text": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout."
+      },
+      "genre": {
+        "id": 17,
+        "slug": "horny",
+        "name": "Horny",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/horny/ab67706c0000da84420db2713dfdef9ef521092e.jpg",
+        "color": "#6e0606"
+      },
+      "album": {
+        "id": 1,
+        "slug": "born-to-die",
+        "title": "Born To Die",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/born-to-die/ab67616d0000b273ebc8cfac8b586bc475b04918.jpg",
+        "color": "#6a5c40",
+        "is_private": false
+      },
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/video-games/Lana_Del_Rey__Video_Games.mp3",
+      "plays_count": 94944619,
+      "downloads_count": 0,
+      "likes_count": 1,
+      "user_of_likes": [
+        2
+      ],
+      "is_private": false,
+      "release_date": "2011-07-22",
+      "created_at": "2024-07-23T00:01:06.850756+03:00",
+      "updated_at": "2026-02-24T16:24:22.255537+02:00"
+    },
+    {
+      "id": 7,
+      "slug": "radio",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "title": "Radio",
+      "duration": "00:03:34.674286",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "license": {
+        "id": 1,
+        "artist": {
+          "id": 1,
+          "slug": "artist1",
+          "display_name": "Lana Del Rey",
+          "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+          "color": "#474a56",
+          "is_verify": true
+        },
+        "name": "MIT",
+        "text": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout."
+      },
+      "genre": {
+        "id": 18,
+        "slug": "instrumental",
+        "name": "Instrumental",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/instrumental/ab67706c0000da841e4d12ad7f0548bd3fdf9152.jpg",
+        "color": "#7b66aa"
+      },
+      "album": {
+        "id": 1,
+        "slug": "born-to-die",
+        "title": "Born To Die",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/born-to-die/ab67616d0000b273ebc8cfac8b586bc475b04918.jpg",
+        "color": "#6a5c40",
+        "is_private": false
+      },
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/radio/Lana_Del_Rey__Radio.mp3",
+      "plays_count": 60448095,
+      "downloads_count": 0,
+      "likes_count": 1,
+      "user_of_likes": [
+        2
+      ],
+      "is_private": false,
+      "release_date": "2012-07-23",
+      "created_at": "2024-07-23T00:05:36.731156+03:00",
+      "updated_at": "2024-07-23T16:44:08.625631+03:00"
+    },
+    {
+      "id": 2,
+      "slug": "born-to-die",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "title": "Born To Die",
+      "duration": "00:04:45.100408",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "license": {
+        "id": 1,
+        "artist": {
+          "id": 1,
+          "slug": "artist1",
+          "display_name": "Lana Del Rey",
+          "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+          "color": "#474a56",
+          "is_verify": true
+        },
+        "name": "MIT",
+        "text": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout."
+      },
+      "genre": {
+        "id": 17,
+        "slug": "horny",
+        "name": "Horny",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/horny/ab67706c0000da84420db2713dfdef9ef521092e.jpg",
+        "color": "#6e0606"
+      },
+      "album": {
+        "id": 1,
+        "slug": "born-to-die",
+        "title": "Born To Die",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/born-to-die/ab67616d0000b273ebc8cfac8b586bc475b04918.jpg",
+        "color": "#6a5c40",
+        "is_private": false
+      },
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/born-to-die/Lana_Del_Rey_-_Born_To_Die.mp3",
+      "plays_count": 70517926,
+      "downloads_count": 0,
+      "likes_count": 1,
+      "user_of_likes": [
+        2
+      ],
+      "is_private": false,
+      "release_date": "2012-07-22",
+      "created_at": "2024-07-22T23:57:45.821450+03:00",
+      "updated_at": "2024-07-23T16:44:05.325094+03:00"
+    },
+    {
+      "id": 8,
+      "slug": "summertime-sadness",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "title": "Summertime Sadness",
+      "duration": "00:04:24.045714",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "license": {
+        "id": 1,
+        "artist": {
+          "id": 1,
+          "slug": "artist1",
+          "display_name": "Lana Del Rey",
+          "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+          "color": "#474a56",
+          "is_verify": true
+        },
+        "name": "MIT",
+        "text": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout."
+      },
+      "genre": {
+        "id": 6,
+        "slug": "chill",
+        "name": "Chill",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/chill/ab67706f0000000243cc4425ca68418fcab705fd.jpg",
+        "color": "#ca826a"
+      },
+      "album": {
+        "id": 1,
+        "slug": "born-to-die",
+        "title": "Born To Die",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/born-to-die/ab67616d0000b273ebc8cfac8b586bc475b04918.jpg",
+        "color": "#6a5c40",
+        "is_private": false
+      },
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/summertime-sadness/Lana_Del_Rey__Summertime_Sadness.mp3",
+      "plays_count": 150014344,
+      "downloads_count": 0,
+      "likes_count": 1,
+      "user_of_likes": [
+        2
+      ],
+      "is_private": false,
+      "release_date": "2012-07-23",
+      "created_at": "2024-07-23T00:07:12.938132+03:00",
+      "updated_at": "2024-07-23T16:43:51.141505+03:00"
+    },
+    {
+      "id": 12,
+      "slug": "sad-girl",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "title": "Sad Girl",
+      "duration": "00:05:17.857959",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "license": {
+        "id": 1,
+        "artist": {
+          "id": 1,
+          "slug": "artist1",
+          "display_name": "Lana Del Rey",
+          "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+          "color": "#474a56",
+          "is_verify": true
+        },
+        "name": "MIT",
+        "text": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout."
+      },
+      "genre": {
+        "id": 11,
+        "slug": "love",
+        "name": "Love",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/love/ab67706f00000002dcb7b32f8bf2e6a7851245e3.jpg",
+        "color": "#4d666f"
+      },
+      "album": {
+        "id": 2,
+        "slug": "ultraviolence",
+        "title": "Ultraviolence",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/ultraviolence/Lana-Del-Rey-Ultraviolence-album-cover-820-1536x1536.jpg",
+        "color": "#767675",
+        "is_private": false
+      },
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/sad-girl/Lana_Del_Rey__Sad_Girl.mp3",
+      "plays_count": 2454775,
+      "downloads_count": 0,
+      "likes_count": 0,
+      "user_of_likes": [],
+      "is_private": false,
+      "release_date": "2014-07-23",
+      "created_at": "2024-07-23T00:14:17.600159+03:00",
+      "updated_at": "2024-07-23T00:14:17.600159+03:00"
+    },
+    {
+      "id": 11,
+      "slug": "west-coast",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "title": "West Coast",
+      "duration": "00:04:16.835918",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "license": {
+        "id": 1,
+        "artist": {
+          "id": 1,
+          "slug": "artist1",
+          "display_name": "Lana Del Rey",
+          "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+          "color": "#474a56",
+          "is_verify": true
+        },
+        "name": "MIT",
+        "text": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout."
+      },
+      "genre": {
+        "id": 1,
+        "slug": "pop",
+        "name": "Pop",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/pop/ab67616d0000b2736e336a8e4612a43fd43876e7.jpg",
+        "color": "#f2a0c6"
+      },
+      "album": {
+        "id": 2,
+        "slug": "ultraviolence",
+        "title": "Ultraviolence",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/ultraviolence/Lana-Del-Rey-Ultraviolence-album-cover-820-1536x1536.jpg",
+        "color": "#767675",
+        "is_private": false
+      },
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/west-coast/Lana_Del_Rey__West_Coast.mp3",
+      "plays_count": 7546334,
+      "downloads_count": 0,
+      "likes_count": 0,
+      "user_of_likes": [],
+      "is_private": false,
+      "release_date": "2014-07-23",
+      "created_at": "2024-07-23T00:13:09.641117+03:00",
+      "updated_at": "2024-07-23T00:13:09.641117+03:00"
+    },
+    {
+      "id": 10,
+      "slug": "brooklyn-baby",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "title": "Brooklyn Baby",
+      "duration": "00:05:51.712653",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "license": {
+        "id": 1,
+        "artist": {
+          "id": 1,
+          "slug": "artist1",
+          "display_name": "Lana Del Rey",
+          "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+          "color": "#474a56",
+          "is_verify": true
+        },
+        "name": "MIT",
+        "text": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout."
+      },
+      "genre": {
+        "id": 4,
+        "slug": "mood",
+        "name": "Mood",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/mood/ab67706f000000028191cc41d8585df6170b3e5e.jpg",
+        "color": "#4c4c9b"
+      },
+      "album": {
+        "id": 2,
+        "slug": "ultraviolence",
+        "title": "Ultraviolence",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/ultraviolence/Lana-Del-Rey-Ultraviolence-album-cover-820-1536x1536.jpg",
+        "color": "#767675",
+        "is_private": false
+      },
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/brooklyn-baby/Lana_Del_Rey__Brooklyn_Baby.mp3",
+      "plays_count": 68746567,
+      "downloads_count": 0,
+      "likes_count": 0,
+      "user_of_likes": [],
+      "is_private": false,
+      "release_date": "2014-07-23",
+      "created_at": "2024-07-23T00:12:03.347969+03:00",
+      "updated_at": "2024-07-23T00:12:03.347969+03:00"
+    },
+    {
+      "id": 9,
+      "slug": "ultraviolence",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "title": "Ultraviolence",
+      "duration": "00:04:11.559184",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "license": {
+        "id": 1,
+        "artist": {
+          "id": 1,
+          "slug": "artist1",
+          "display_name": "Lana Del Rey",
+          "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+          "color": "#474a56",
+          "is_verify": true
+        },
+        "name": "MIT",
+        "text": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout."
+      },
+      "genre": {
+        "id": 11,
+        "slug": "love",
+        "name": "Love",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/love/ab67706f00000002dcb7b32f8bf2e6a7851245e3.jpg",
+        "color": "#4d666f"
+      },
+      "album": {
+        "id": 2,
+        "slug": "ultraviolence",
+        "title": "Ultraviolence",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/ultraviolence/Lana-Del-Rey-Ultraviolence-album-cover-820-1536x1536.jpg",
+        "color": "#767675",
+        "is_private": false
+      },
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/ultraviolence/Lana_Del_Rey__Ultraviolence.mp3",
+      "plays_count": 30531694,
+      "downloads_count": 0,
+      "likes_count": 0,
+      "user_of_likes": [],
+      "is_private": false,
+      "release_date": "2014-07-23",
+      "created_at": "2024-07-23T00:10:26.707319+03:00",
+      "updated_at": "2024-07-23T00:10:26.707319+03:00"
+    },
+    {
+      "id": 6,
+      "slug": "darck-paradise",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "title": "Darck Paradise",
+      "duration": "00:04:03.252245",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "license": {
+        "id": 1,
+        "artist": {
+          "id": 1,
+          "slug": "artist1",
+          "display_name": "Lana Del Rey",
+          "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+          "color": "#474a56",
+          "is_verify": true
+        },
+        "name": "MIT",
+        "text": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout."
+      },
+      "genre": {
+        "id": 17,
+        "slug": "horny",
+        "name": "Horny",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/horny/ab67706c0000da84420db2713dfdef9ef521092e.jpg",
+        "color": "#6e0606"
+      },
+      "album": {
+        "id": 1,
+        "slug": "born-to-die",
+        "title": "Born To Die",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/born-to-die/ab67616d0000b273ebc8cfac8b586bc475b04918.jpg",
+        "color": "#6a5c40",
+        "is_private": false
+      },
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/darck-paradise/Lana_Del_Rey__Dark_Paradise.mp3",
+      "plays_count": 42879119,
+      "downloads_count": 0,
+      "likes_count": 0,
+      "user_of_likes": [],
+      "is_private": false,
+      "release_date": "2012-07-23",
+      "created_at": "2024-07-23T00:04:11.087148+03:00",
+      "updated_at": "2024-07-23T00:04:11.088147+03:00"
+    },
+    {
+      "id": 5,
+      "slug": "diet-mountain-dew",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "title": "Diet Mountain Dew",
+      "duration": "00:03:42.981224",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "license": {
+        "id": 1,
+        "artist": {
+          "id": 1,
+          "slug": "artist1",
+          "display_name": "Lana Del Rey",
+          "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+          "color": "#474a56",
+          "is_verify": true
+        },
+        "name": "MIT",
+        "text": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout."
+      },
+      "genre": {
+        "id": 17,
+        "slug": "horny",
+        "name": "Horny",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/horny/ab67706c0000da84420db2713dfdef9ef521092e.jpg",
+        "color": "#6e0606"
+      },
+      "album": {
+        "id": 1,
+        "slug": "born-to-die",
+        "title": "Born To Die",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/born-to-die/ab67616d0000b273ebc8cfac8b586bc475b04918.jpg",
+        "color": "#6a5c40",
+        "is_private": false
+      },
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/diet-mountain-dew/Lana_Del_Rey__Diet_Mountain_Dew.mp3",
+      "plays_count": 54928775,
+      "downloads_count": 0,
+      "likes_count": 0,
+      "user_of_likes": [],
+      "is_private": false,
+      "release_date": "2012-07-23",
+      "created_at": "2024-07-23T00:02:38.303317+03:00",
+      "updated_at": "2024-07-23T00:02:38.303317+03:00"
+    },
+    {
+      "id": 3,
+      "slug": "blue-jeans",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "title": "Blue Jeans",
+      "duration": "00:03:30.128980",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "license": {
+        "id": 1,
+        "artist": {
+          "id": 1,
+          "slug": "artist1",
+          "display_name": "Lana Del Rey",
+          "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+          "color": "#474a56",
+          "is_verify": true
+        },
+        "name": "MIT",
+        "text": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout."
+      },
+      "genre": {
+        "id": 17,
+        "slug": "horny",
+        "name": "Horny",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/horny/ab67706c0000da84420db2713dfdef9ef521092e.jpg",
+        "color": "#6e0606"
+      },
+      "album": {
+        "id": 1,
+        "slug": "born-to-die",
+        "title": "Born To Die",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/born-to-die/ab67616d0000b273ebc8cfac8b586bc475b04918.jpg",
+        "color": "#6a5c40",
+        "is_private": false
+      },
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/blue-jeans/Lana_Del_Rey__Blue_Jeans.mp3",
+      "plays_count": 45697167,
+      "downloads_count": 0,
+      "likes_count": 0,
+      "user_of_likes": [],
+      "is_private": false,
+      "release_date": "2012-07-22",
+      "created_at": "2024-07-22T23:59:43.849863+03:00",
+      "updated_at": "2024-07-22T23:59:43.849863+03:00"
+    },
+    {
+      "id": 1,
+      "slug": "young-and-beautiful",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "title": "Young And Beautiful",
+      "duration": "00:03:56.094687",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "license": {
+        "id": 1,
+        "artist": {
+          "id": 1,
+          "slug": "artist1",
+          "display_name": "Lana Del Rey",
+          "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+          "color": "#474a56",
+          "is_verify": true
+        },
+        "name": "MIT",
+        "text": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout."
+      },
+      "genre": {
+        "id": 17,
+        "slug": "horny",
+        "name": "Horny",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/horny/ab67706c0000da84420db2713dfdef9ef521092e.jpg",
+        "color": "#6e0606"
+      },
+      "album": {
+        "id": 3,
+        "slug": "young-and-beautiful",
+        "title": "Young And Beautiful",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/young-and-beautiful/10045073113_0a5f43387a_z.jpg",
+        "color": "#555557",
+        "is_private": false
+      },
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/young-and-beautiful/Lana_Del_Rey_-_Young_and_Beautiful.mp3",
+      "plays_count": 13021281,
+      "downloads_count": 0,
+      "likes_count": 0,
+      "user_of_likes": [],
+      "is_private": false,
+      "release_date": "2013-07-22",
+      "created_at": "2024-07-22T23:55:17.914827+03:00",
+      "updated_at": "2024-07-22T23:55:17.914827+03:00"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": 13,
+  "slug": "money-power-glory",
+  "artist": {
+    "id": 1,
+    "slug": "artist1",
+    "display_name": "Lana Del Rey",
+    "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+    "color": "#474a56",
+    "is_verify": true
+  },
+  "title": "Money Power Glory",
+  "duration": "00:04:30.733061",
+  "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+  "color": "#333333",
+  "license": 1,
+  "genre": 20,
+  "album": 2,
+  "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/money-power-glory/Lana_Del_Rey__Money_Power_Glory.mp3",
+  "plays_count": 1452456,
+  "downloads_count": 0,
+  "likes_count": 2,
+  "user_of_likes": [
+    2,
+    3
+  ],
+  "is_private": false,
+  "release_date": "2014-07-23",
+  "created_at": "2024-07-23T00:15:20.957546+03:00",
+  "updated_at": "2026-02-24T16:24:27.413718+02:00"
+}
