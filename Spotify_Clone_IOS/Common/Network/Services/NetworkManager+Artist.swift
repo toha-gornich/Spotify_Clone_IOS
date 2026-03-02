@@ -12,7 +12,7 @@ extension NetworkManager: ArtistServiceProtocol {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         
-        let (data, response) = try await session.data(for: request)
+        let (_, response) = try await session.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
             throw FavoriteError.invalidResponse

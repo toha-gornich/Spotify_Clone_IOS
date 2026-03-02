@@ -14,7 +14,7 @@ struct AlbumTrack: Codable, Identifiable {
     let title: String
     let image: String
     let color: String
-    let isPrivate: Bool
+    let isPrivate: Bool?
     
     enum CodingKeys: String, CodingKey {
         case id, slug, title, image, color

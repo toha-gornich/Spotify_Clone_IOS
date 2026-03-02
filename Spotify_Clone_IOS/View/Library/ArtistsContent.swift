@@ -20,7 +20,7 @@ struct ArtistsContent: View {
                 }label: {
                     LibraryItemRow(
                         imageURL: artist.image,
-                        title: artist.displayName,
+                        title: artist.displayName ?? "",
                         subtitle: "Artist"
                     )
                 }

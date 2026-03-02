@@ -1,0 +1,252 @@
+{
+  "count": 11,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 16,
+      "slug": "my-playlist-3-2",
+      "title": "My Playlist #3",
+      "image": "http://192.168.0.108:8080/mediafiles/default/playlist.jpg",
+      "color": "#333333",
+      "track_slug": "i-was-never-there",
+      "user": {
+        "id": 24,
+        "display_name": "fdsf3",
+        "type_profile": "User",
+        "artist_slug": null,
+        "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+        "followers_count": 0,
+        "is_premium": false
+      },
+      "genre": null,
+      "is_private": false
+    },
+    {
+      "id": 14,
+      "slug": "my-playlist-2-2",
+      "title": "My Playlist #2",
+      "image": "http://192.168.0.108:8080/mediafiles/default/playlist.jpg",
+      "color": "#333333",
+      "track_slug": null,
+      "user": {
+        "id": 24,
+        "display_name": "fdsf3",
+        "type_profile": "User",
+        "artist_slug": null,
+        "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+        "followers_count": 0,
+        "is_premium": false
+      },
+      "genre": null,
+      "is_private": false
+    },
+    {
+      "id": 12,
+      "slug": "my-playlist-1-7",
+      "title": "My Playlist #1",
+      "image": "http://192.168.0.108:8080/mediafiles/default/playlist.jpg",
+      "color": "#333333",
+      "track_slug": "goldwing",
+      "user": {
+        "id": 24,
+        "display_name": "fdsf3",
+        "type_profile": "User",
+        "artist_slug": null,
+        "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+        "followers_count": 0,
+        "is_premium": false
+      },
+      "genre": null,
+      "is_private": false
+    },
+    {
+      "id": 9,
+      "slug": "my-playlist-1-6",
+      "title": "My Playlist #1",
+      "image": "http://192.168.0.108:8080/mediafiles/default/playlist.jpg",
+      "color": "#333333",
+      "track_slug": "money-power-glory",
+      "user": {
+        "id": 3,
+        "display_name": "artist11",
+        "type_profile": "Artist",
+        "artist_slug": "artist1",
+        "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+        "followers_count": 1,
+        "is_premium": true
+      },
+      "genre": null,
+      "is_private": false
+    },
+    {
+      "id": 7,
+      "slug": "my-playlist-1-5",
+      "title": "Sweet",
+      "image": "http://192.168.0.108:8080/mediafiles/playlists/my-playlist-1-5/ab67616d00001e02f9deeea1b908619e700f91b3.jpg",
+      "color": "#75249b",
+      "track_slug": "love-to-lie",
+      "user": {
+        "id": 10,
+        "display_name": "Arnold",
+        "type_profile": "User",
+        "artist_slug": null,
+        "image": "http://192.168.0.108:8080/mediafiles/users/user8%40gmail.com/60d5dc467b950c5ccc8ced95_spotify-for-artists.jpg",
+        "followers_count": 0,
+        "is_premium": false
+      },
+      "genre": {
+        "id": 6,
+        "slug": "chill",
+        "name": "Chill",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/chill/ab67706f0000000243cc4425ca68418fcab705fd.jpg",
+        "color": "#ca826a"
+      },
+      "is_private": false
+    },
+    {
+      "id": 6,
+      "slug": "my-playlist-1-4",
+      "title": "My Playlist #1",
+      "image": "http://192.168.0.108:8080/mediafiles/playlists/my-playlist-1-4/8a2911bc9fc17c8c0af28c6daa5b7519.jpg",
+      "color": "#2a153d",
+      "track_slug": "let-it-go",
+      "user": {
+        "id": 8,
+        "display_name": "ig:17.timx",
+        "type_profile": "User",
+        "artist_slug": null,
+        "image": "http://192.168.0.108:8080/mediafiles/users/user6%40gmail.com/steamuserimages-a.akamaihd.jpg",
+        "followers_count": 2,
+        "is_premium": false
+      },
+      "genre": {
+        "id": 18,
+        "slug": "instrumental",
+        "name": "Instrumental",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/instrumental/ab67706c0000da841e4d12ad7f0548bd3fdf9152.jpg",
+        "color": "#7b66aa"
+      },
+      "is_private": false
+    },
+    {
+      "id": 5,
+      "slug": "my-playlist-1-3",
+      "title": "playlist for hot person",
+      "image": "http://192.168.0.108:8080/mediafiles/playlists/my-playlist-1-3/ab67706c0000da84e68455e72dcc9894854b7ff1.jpg",
+      "color": "#6b221d",
+      "track_slug": "video-games",
+      "user": {
+        "id": 5,
+        "display_name": "Julia",
+        "type_profile": "User",
+        "artist_slug": null,
+        "image": "http://192.168.0.108:8080/mediafiles/users/user3%40gmail.com/yamato-one-piece-1_7juBMmK.webp",
+        "followers_count": 0,
+        "is_premium": true
+      },
+      "genre": {
+        "id": 17,
+        "slug": "horny",
+        "name": "Horny",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/horny/ab67706c0000da84420db2713dfdef9ef521092e.jpg",
+        "color": "#6e0606"
+      },
+      "is_private": false
+    },
+    {
+      "id": 4,
+      "slug": "my-playlist-1-2",
+      "title": "My Playlist #1",
+      "image": "http://192.168.0.108:8080/mediafiles/playlists/my-playlist-1-2/ccf7b23b67fc46919be6ac07634d5bfc.jpg",
+      "color": "#d39c9c",
+      "track_slug": "video-games",
+      "user": {
+        "id": 4,
+        "display_name": "Melenomorf",
+        "type_profile": "User",
+        "artist_slug": null,
+        "image": "http://192.168.0.108:8080/mediafiles/users/user2%40gmail.com/ab67706c0000da848307bc40daddfb05ff54e25b.jpg",
+        "followers_count": 4,
+        "is_premium": false
+      },
+      "genre": {
+        "id": 15,
+        "slug": "anime",
+        "name": "Anime",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/anime/ab6761610000e5eb9d19cabcea040938e6d01a7b.jpg",
+        "color": "#b9a698"
+      },
+      "is_private": false
+    },
+    {
+      "id": 3,
+      "slug": "my-playlist-3",
+      "title": "My Playlist #3",
+      "image": "http://192.168.0.108:8080/mediafiles/default/playlist.jpg",
+      "color": "#333333",
+      "track_slug": "i-was-never-there",
+      "user": {
+        "id": 2,
+        "display_name": "Mafan",
+        "type_profile": "User",
+        "artist_slug": null,
+        "image": "http://192.168.0.108:8080/mediafiles/users/user1%40gmail.com/191b73f11d39978ba7fc8e18b7f1fa5f.jpg",
+        "followers_count": 8,
+        "is_premium": true
+      },
+      "genre": null,
+      "is_private": false
+    },
+    {
+      "id": 2,
+      "slug": "my-playlist-2",
+      "title": "Horny 🥵",
+      "image": "http://192.168.0.108:8080/mediafiles/playlists/my-playlist-2/-PGZMdHSsuuq6LSUlWwq4R7g_V8EYEIRQVnak74RyqU.webp",
+      "color": "#530101",
+      "track_slug": "i-was-never-there",
+      "user": {
+        "id": 2,
+        "display_name": "Mafan",
+        "type_profile": "User",
+        "artist_slug": null,
+        "image": "http://192.168.0.108:8080/mediafiles/users/user1%40gmail.com/191b73f11d39978ba7fc8e18b7f1fa5f.jpg",
+        "followers_count": 8,
+        "is_premium": true
+      },
+      "genre": {
+        "id": 17,
+        "slug": "horny",
+        "name": "Horny",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/horny/ab67706c0000da84420db2713dfdef9ef521092e.jpg",
+        "color": "#6e0606"
+      },
+      "is_private": false
+    },
+    {
+      "id": 1,
+      "slug": "my-playlist-1",
+      "title": "BRAZILIAN",
+      "image": "http://192.168.0.108:8080/mediafiles/playlists/my-playlist-1/artworks-0BVo2oRy0KzhyQAz-sQg2JQ-t500x500.jpg",
+      "color": "#7b3736",
+      "track_slug": "pr-phonk",
+      "user": {
+        "id": 2,
+        "display_name": "Mafan",
+        "type_profile": "User",
+        "artist_slug": null,
+        "image": "http://192.168.0.108:8080/mediafiles/users/user1%40gmail.com/191b73f11d39978ba7fc8e18b7f1fa5f.jpg",
+        "followers_count": 8,
+        "is_premium": true
+      },
+      "genre": {
+        "id": 19,
+        "slug": "phonk",
+        "name": "Phonk",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/phonk/ab67706c0000da841ae38e18f029f192a9abf7ca.jpg",
+        "color": "#7d387e"
+      },
+      "is_private": false
+    }
+  ]
+}

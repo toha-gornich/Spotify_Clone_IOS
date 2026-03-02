@@ -32,7 +32,7 @@ struct Track: Codable, Identifiable {
     let duration: String
     let image: String
     let color: String
-    let playsCount: Int
+    let playsCount: Int?
     let genre: Genre
     let album: AlbumTrack
     
@@ -208,18 +208,20 @@ extension Track {
     
     // Formatted number of listens
     var formattedPlaysCount: String {
-        if playsCount >= 1_000_000_000 {
-            return String(format: "%.1fB", Double(playsCount) / 1_000_000_000)
-        } else if playsCount >= 1_000_000 {
-            return String(format: "%.1fM", Double(playsCount) / 1_000_000)
-        } else if playsCount >= 1_000 {
-            return String(format: "%.1fK", Double(playsCount) / 1_000)
-        } else {
-            return "\(playsCount)"
-        }
+        if let playsCount = playsCount{
+            if playsCount >= 1_000_000_000 {
+                return String(format: "%.1fB", Double(playsCount) / 1_000_000_000)
+            } else if playsCount >= 1_000_000 {
+                return String(format: "%.1fM", Double(playsCount) / 1_000_000)
+            } else if playsCount >= 1_000 {
+                return String(format: "%.1fK", Double(playsCount) / 1_000)
+            } else {
+                return "\(playsCount)"
+            }
+        } else {return ""}
     }
     var artistName: String {
-        return artist.displayName
+        return artist.displayName ?? ""
     }
     
     var albumTitle: String {
@@ -420,7 +422,7 @@ extension TrackDetail {
     
     // Get artist name
     var artistName: String {
-        return artist.displayName
+        return artist.displayName ?? ""
     }
     
     // Get album title

@@ -39,10 +39,10 @@ struct ArtistAlbum: Codable, Identifiable {
 struct ArtistTrack: Codable, Identifiable {
     let id: Int
     let slug: String
-    let displayName: String
+    let displayName: String?
     let image: String
     let color: String
-    let isVerify: Bool
+    let isVerify: Bool?
     
     enum CodingKeys: String, CodingKey {
         case id, slug, image, color

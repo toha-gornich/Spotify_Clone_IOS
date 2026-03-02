@@ -31,7 +31,7 @@ struct SearchTrackRow: View {
                     .foregroundColor(.white)
                     .lineLimit(1)
                 
-                Text(track.artist.displayName)
+                Text(track.artist.displayName ?? "")
                     .font(.caption)
                     .foregroundColor(.gray)
                     .lineLimit(1)

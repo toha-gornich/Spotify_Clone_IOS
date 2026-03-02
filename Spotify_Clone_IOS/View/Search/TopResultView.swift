@@ -44,7 +44,7 @@ struct TopResultView: View {
                             .font(.customFont(.regular, fontSize: 14))
                             .foregroundColor(.gray)
                         
-                        Text(track.artist.displayName)
+                        Text(track.artist.displayName ?? "")
                             .font(.customFont(.regular, fontSize: 14))
                             .foregroundColor(.gray)
                             .lineLimit(1)

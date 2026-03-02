@@ -91,7 +91,7 @@ struct TrackListView: View {
                             Button(){
                                 router.navigateTo(AppRoute.artist(slugArtist: sObj.artist.slug))
                             }label: {
-                                Text(tracks[index].artist.displayName)
+                                Text(tracks[index].artist.displayName ?? "")
                                     .font(.caption)
                                     .foregroundColor(.gray)
                                     .lineLimit(1)

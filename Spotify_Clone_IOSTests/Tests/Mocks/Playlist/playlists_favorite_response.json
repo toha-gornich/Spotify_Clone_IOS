@@ -1,0 +1,31 @@
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 16,
+      "playlist": {
+        "id": 9,
+        "slug": "my-playlist-1-6",
+        "title": "My Playlist #1",
+        "image": "http://192.168.0.108:8080/mediafiles/default/playlist.jpg",
+        "color": "#333333",
+        "track_slug": "money-power-glory",
+        "user": {
+          "id": 3,
+          "display_name": "artist11",
+          "type_profile": "Artist",
+          "artist_slug": "artist1",
+          "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+          "followers_count": 1,
+          "is_premium": true
+        },
+        "genre": null,
+        "is_private": false
+      },
+      "created_at": "2026-01-04T21:51:24.800078+02:00",
+      "updated_at": "2026-01-04T21:51:24.800100+02:00"
+    }
+  ]
+}

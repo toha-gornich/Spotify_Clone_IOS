@@ -30,7 +30,7 @@ struct TrackRowCell: View {
                     .foregroundColor(.primaryText)
                     .lineLimit(1)
                 
-                Text(track.artist.displayName)
+                Text(track.artist.displayName ?? "")
                     .font(.customFont(.regular, fontSize: 14))
                     .foregroundColor(.secondaryText)
                     .lineLimit(1)

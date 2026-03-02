@@ -23,7 +23,7 @@ struct TrackGridCell: View {
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
                 
-                Text(track.artist.displayName)
+                Text(track.artist.displayName ?? "")
                     .font(.customFont(.regular, fontSize: 11))
                     .foregroundColor(.secondaryText)
                     .lineLimit(1)

@@ -1,0 +1,125 @@
+{
+  "id": 16,
+  "slug": "my-playlist-3-2",
+  "title": "My Playlist #3",
+  "description": "",
+  "image": "http://192.168.0.108:8080/mediafiles/default/playlist.jpg",
+  "color": "#333333",
+  "user": {
+    "id": 24,
+    "display_name": "fdsf3",
+    "type_profile": "User",
+    "artist_slug": null,
+    "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+    "followers_count": 0,
+    "is_premium": false
+  },
+  "tracks": [
+    {
+      "id": 52,
+      "slug": "i-was-never-there",
+      "artist": {
+        "id": 2,
+        "slug": "artist2",
+        "display_name": "The Weeknd",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist2/ab6761610000e5eb214f3cf1cbe7139c1e26ffbb.jpg",
+        "color": "#292f3a",
+        "is_verify": true
+      },
+      "title": "I Was Never There",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist11/tracks/i-was-never-there/The_Weeknd_Gesaffelstein__I_Was_Never_There.mp3",
+      "duration": "00:04:01.136327",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 164364578,
+      "genre": {
+        "id": 16,
+        "slug": "punk",
+        "name": "Punk",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/punk/ab67616d0000b273f8d415dab5ed7e3747bd38dd.jpg",
+        "color": "#8c3a4a"
+      },
+      "album": {
+        "id": 16,
+        "slug": "my-dear",
+        "title": "My Dear",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/my-dear/818RSApG0PL._UF8941000_QL80_.jpg",
+        "color": "#1e140f",
+        "is_private": false
+      }
+    },
+    {
+      "id": 55,
+      "slug": "bad-guy",
+      "artist": {
+        "id": 3,
+        "slug": "artist3",
+        "display_name": "Billie Eilish",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist3/hit-me-hard-and-soft-v0-dhnauhkskhvc1.jpeg",
+        "color": "#102231",
+        "is_verify": true
+      },
+      "title": "bad guy",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist3/tracks/bad-guy/Billie_Eilish_-_Bad_Guy.mp3",
+      "duration": "00:03:14.115918",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 25401345,
+      "genre": {
+        "id": 10,
+        "slug": "party",
+        "name": "Party",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/party/ab67706f00000002533f33347a2ab25c045640f2.jpg",
+        "color": "#2d122b"
+      },
+      "album": {
+        "id": 19,
+        "slug": "when-we-all-fall",
+        "title": "WHEN WE ALL FALL",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/when-we-all-fall/81idxQqxTlL._UF10001000_QL80_.jpg",
+        "color": "#1f1d1b",
+        "is_private": false
+      }
+    },
+    {
+      "id": 13,
+      "slug": "money-power-glory",
+      "artist": {
+        "id": 1,
+        "slug": "artist1",
+        "display_name": "Lana Del Rey",
+        "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+        "color": "#474a56",
+        "is_verify": true
+      },
+      "title": "Money Power Glory",
+      "file": "http://192.168.0.108:8080/mediafiles/artists/artist1/tracks/money-power-glory/Lana_Del_Rey__Money_Power_Glory.mp3",
+      "duration": "00:04:30.733061",
+      "image": "http://192.168.0.108:8080/mediafiles/default/track.jpg",
+      "color": "#333333",
+      "plays_count": 1452456,
+      "genre": {
+        "id": 20,
+        "slug": "summer",
+        "name": "Summer",
+        "image": "http://192.168.0.108:8080/mediafiles/genres/summer/ab67706c0000da846c82f3a4838b0c07757b8125.jpg",
+        "color": "#205a82"
+      },
+      "album": {
+        "id": 2,
+        "slug": "ultraviolence",
+        "title": "Ultraviolence",
+        "image": "http://192.168.0.108:8080/mediafiles/albums/ultraviolence/Lana-Del-Rey-Ultraviolence-album-cover-820-1536x1536.jpg",
+        "color": "#767675",
+        "is_private": false
+      }
+    }
+  ],
+  "genre": null,
+  "release_date": "2026-02-28",
+  "is_private": false,
+  "duration": "00:11:45.985306",
+  "favorite_count": 1,
+  "created_at": "2026-02-28T00:41:26.378590+02:00",
+  "updated_at": "2026-02-28T00:41:26.378614+02:00"
+}

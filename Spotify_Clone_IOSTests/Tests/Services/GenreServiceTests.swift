@@ -81,7 +81,7 @@ final class GenreServiceTests: XCTestCase {
     
     /// Verifies that server error on genre by slug throws invalidResponse
     func test_getGenreBySlug_serverError() async {
-        let slug = "summer"
+        let slug = "summers"
         stubResponse(file: "genre_by_slug_response", url: GenreEndpoint.bySlug(slug).url, statusCode: 404)
         do {
             _ = try await sut.getGenreBySlug(slug: slug)

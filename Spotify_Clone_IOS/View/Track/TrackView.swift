@@ -121,7 +121,7 @@ extension TrackView {
                 HStack(spacing: 8) {
                     Circle().fill(Color.gray).frame(width: 6, height: 6)
                     Button { router.navigateTo(AppRoute.artist(slugArtist: trackVM.track.artist.slug)) } label: {
-                        Text(trackVM.track.artist.displayName).font(.subheadline).foregroundColor(.white)
+                        Text(trackVM.track.artist.displayName ?? "").font(.subheadline).foregroundColor(.white)
                     }
                 }
                 HStack(spacing: 4) {
