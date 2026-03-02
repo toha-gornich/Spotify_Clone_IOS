@@ -24,10 +24,6 @@
 		622CFC952EC284D100BB19F4 /* ResponseModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC942EC284D100BB19F4 /* ResponseModelsTests.swift */; };
 		622CFC972EC284D500BB19F4 /* FavoriteModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC962EC284D500BB19F4 /* FavoriteModelsTests.swift */; };
 		622CFC992EC7659600BB19F4 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 622CFC982EC7659600BB19F4 /* Test.swift */; };
-		6281EAB32F55936D002C5F44 /* artists_response.json in Resources */ = {isa = PBXBuildFile; fileRef = 6281EAB22F559366002C5F44 /* artists_response.json */; };
-		6281EAB52F559380002C5F44 /* artist_by_slug_response.json in Resources */ = {isa = PBXBuildFile; fileRef = 6281EAB42F559380002C5F44 /* artist_by_slug_response.json */; };
-		6281EAB72F5593BB002C5F44 /* artists_favorite_response.json in Resources */ = {isa = PBXBuildFile; fileRef = 6281EAB62F5593BB002C5F44 /* artists_favorite_response.json */; };
-		6281EAB92F55943A002C5F44 /* artist_me_response.json in Resources */ = {isa = PBXBuildFile; fileRef = 6281EAB82F55943A002C5F44 /* artist_me_response.json */; };
 		6281EABB2F5594F2002C5F44 /* GenreServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6281EABA2F5594F2002C5F44 /* GenreServiceTests.swift */; };
 		6298DC582F54CE790077B646 /* ArtistServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6298DC572F54CE790077B646 /* ArtistServiceTest.swift */; };
 		62E390052F519B8600A2F669 /* KeychainManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E390042F519B8600A2F669 /* KeychainManagerTests.swift */; };
@@ -72,10 +68,6 @@
 		627246B22DDB84AD000C8562 /* Spotify_Clone_IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spotify_Clone_IOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		627246C22DDB84AE000C8562 /* Spotify_Clone_IOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Spotify_Clone_IOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		627246CC2DDB84AE000C8562 /* Spotify_Clone_IOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Spotify_Clone_IOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6281EAB22F559366002C5F44 /* artists_response.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = artists_response.json; sourceTree = "<group>"; };
-		6281EAB42F559380002C5F44 /* artist_by_slug_response.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = artist_by_slug_response.json; sourceTree = "<group>"; };
-		6281EAB62F5593BB002C5F44 /* artists_favorite_response.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = artists_favorite_response.json; sourceTree = "<group>"; };
-		6281EAB82F55943A002C5F44 /* artist_me_response.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = artist_me_response.json; sourceTree = "<group>"; };
 		6281EABA2F5594F2002C5F44 /* GenreServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreServiceTests.swift; sourceTree = "<group>"; };
 		6298DC572F54CE790077B646 /* ArtistServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistServiceTest.swift; sourceTree = "<group>"; };
 		62E390042F519B8600A2F669 /* KeychainManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManagerTests.swift; sourceTree = "<group>"; };
@@ -107,6 +99,16 @@
 		627246B42DDB84AD000C8562 /* Spotify_Clone_IOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Spotify_Clone_IOS;
+			sourceTree = "<group>";
+		};
+		6281EC522F55977B002C5F44 /* Artist */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Artist;
+			sourceTree = "<group>";
+		};
+		6281EC532F55978F002C5F44 /* Genre */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Genre;
 			sourceTree = "<group>";
 		};
 		62E391892F53022B00A2F669 /* Auth */ = {
@@ -235,10 +237,8 @@
 		622CFC732EC2836A00BB19F4 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
-				6281EAB22F559366002C5F44 /* artists_response.json */,
-				6281EAB42F559380002C5F44 /* artist_by_slug_response.json */,
-				6281EAB62F5593BB002C5F44 /* artists_favorite_response.json */,
-				6281EAB82F55943A002C5F44 /* artist_me_response.json */,
+				6281EC532F55978F002C5F44 /* Genre */,
+				6281EC522F55977B002C5F44 /* Artist */,
 				62E391A22F536E3C00A2F669 /* Albums */,
 				62E391892F53022B00A2F669 /* Auth */,
 			);
@@ -305,6 +305,8 @@
 				627246C42DDB84AE000C8562 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
+				6281EC522F55977B002C5F44 /* Artist */,
+				6281EC532F55978F002C5F44 /* Genre */,
 				62E391892F53022B00A2F669 /* Auth */,
 				62E391942F530A3B00A2F669 /* Common */,
 				62E391A22F536E3C00A2F669 /* Albums */,
@@ -392,10 +394,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6281EAB32F55936D002C5F44 /* artists_response.json in Resources */,
-				6281EAB52F559380002C5F44 /* artist_by_slug_response.json in Resources */,
-				6281EAB92F55943A002C5F44 /* artist_me_response.json in Resources */,
-				6281EAB72F5593BB002C5F44 /* artists_favorite_response.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

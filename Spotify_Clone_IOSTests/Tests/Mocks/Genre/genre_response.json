@@ -1,0 +1,147 @@
+{
+  "count": 20,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 20,
+      "slug": "summer",
+      "name": "Summer",
+      "image": "http://192.168.0.108:8080/mediafiles/genres/summer/ab67706c0000da846c82f3a4838b0c07757b8125.jpg",
+      "color": "#205a82"
+    },
+    {
+      "id": 19,
+      "slug": "phonk",
+      "name": "Phonk",
+      "image": "http://192.168.0.108:8080/mediafiles/genres/phonk/ab67706c0000da841ae38e18f029f192a9abf7ca.jpg",
+      "color": "#7d387e"
+    },
+    {
+      "id": 18,
+      "slug": "instrumental",
+      "name": "Instrumental",
+      "image": "http://192.168.0.108:8080/mediafiles/genres/instrumental/ab67706c0000da841e4d12ad7f0548bd3fdf9152.jpg",
+      "color": "#7b66aa"
+    },
+    {
+      "id": 17,
+      "slug": "horny",
+      "name": "Horny",
+      "image": "http://192.168.0.108:8080/mediafiles/genres/horny/ab67706c0000da84420db2713dfdef9ef521092e.jpg",
+      "color": "#6e0606"
+    },
+    {
+      "id": 16,
+      "slug": "punk",
+      "name": "Punk",
+      "image": "http://192.168.0.108:8080/mediafiles/genres/punk/ab67616d0000b273f8d415dab5ed7e3747bd38dd.jpg",
+      "color": "#8c3a4a"
+    },
+    {
+      "id": 15,
+      "slug": "anime",
+      "name": "Anime",
+      "image": "http://192.168.0.108:8080/mediafiles/genres/anime/ab6761610000e5eb9d19cabcea040938e6d01a7b.jpg",
+      "color": "#b9a698"
+    },
+    {
+      "id": 14,
+      "slug": "focus",
+      "name": "Focus",
+      "image": "http://192.168.0.108:8080/mediafiles/genres/focus/ab67706f000000026020f2f6476db518ef747da4.jpg",
+      "color": "#3b342e"
+    },
+    {
+      "id": 13,
+      "slug": "jazz",
+      "name": "Jazz",
+      "image": "http://192.168.0.108:8080/mediafiles/genres/jazz/ab67706f00000002dae10fb547a691b6a0d51898.jpg",
+      "color": "#636363"
+    },
+    {
+      "id": 12,
+      "slug": "metal",
+      "name": "Metal",
+      "image": "http://192.168.0.108:8080/mediafiles/genres/metal/EvOKleEWYAA8W4B.jpg",
+      "color": "#6d4447"
+    },
+    {
+      "id": 11,
+      "slug": "love",
+      "name": "Love",
+      "image": "http://192.168.0.108:8080/mediafiles/genres/love/ab67706f00000002dcb7b32f8bf2e6a7851245e3.jpg",
+      "color": "#4d666f"
+    },
+    {
+      "id": 10,
+      "slug": "party",
+      "name": "Party",
+      "image": "http://192.168.0.108:8080/mediafiles/genres/party/ab67706f00000002533f33347a2ab25c045640f2.jpg",
+      "color": "#2d122b"
+    },
+    {
+      "id": 9,
+      "slug": "sleep",
+      "name": "Sleep",
+      "image": "http://192.168.0.108:8080/mediafiles/genres/sleep/ab67706f00000002cd17d41419faa97069e06c16.jpg",
+      "color": "#455569"
+    },
+    {
+      "id": 8,
+      "slug": "k-pop",
+      "name": "K-pop",
+      "image": "http://192.168.0.108:8080/mediafiles/genres/k-pop/Spotify-K-Pop-ON-2.jpg",
+      "color": "#836469"
+    },
+    {
+      "id": 7,
+      "slug": "workout",
+      "name": "Workout",
+      "image": "http://192.168.0.108:8080/mediafiles/genres/workout/ab67706c0000da84781355501085dec579477533.jpg",
+      "color": "#c5333c"
+    },
+    {
+      "id": 6,
+      "slug": "chill",
+      "name": "Chill",
+      "image": "http://192.168.0.108:8080/mediafiles/genres/chill/ab67706f0000000243cc4425ca68418fcab705fd.jpg",
+      "color": "#ca826a"
+    },
+    {
+      "id": 5,
+      "slug": "sports",
+      "name": "Sports",
+      "image": "http://192.168.0.108:8080/mediafiles/genres/sports/ab67706c0000da846ca236de27ce7f492334ea56.jpg",
+      "color": "#3c95d9"
+    },
+    {
+      "id": 4,
+      "slug": "mood",
+      "name": "Mood",
+      "image": "http://192.168.0.108:8080/mediafiles/genres/mood/ab67706f000000028191cc41d8585df6170b3e5e.jpg",
+      "color": "#4c4c9b"
+    },
+    {
+      "id": 3,
+      "slug": "rock",
+      "name": "Rock",
+      "image": "http://192.168.0.108:8080/mediafiles/genres/rock/ab67706f000000031e4a64644c89f628292bf7c6.jpg",
+      "color": "#be4251"
+    },
+    {
+      "id": 2,
+      "slug": "hip-hop",
+      "name": "Hip-Hop",
+      "image": "http://192.168.0.108:8080/mediafiles/genres/hip-hop/ab67616d0000b27376734ac5d18dd3bf06751b9f.jpg",
+      "color": "#b93c61"
+    },
+    {
+      "id": 1,
+      "slug": "pop",
+      "name": "Pop",
+      "image": "http://192.168.0.108:8080/mediafiles/genres/pop/ab67616d0000b2736e336a8e4612a43fd43876e7.jpg",
+      "color": "#f2a0c6"
+    }
+  ]
+}
