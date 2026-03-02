@@ -24,7 +24,7 @@ extension NetworkManager: ImageServiceProtocol {
             return
         }
         
-        let task = URLSession.shared.dataTask(with: URLRequest(url: url)) { data, response, error in
+        let task = session.dataTask(with: URLRequest(url: url)) { data, response, error in
             guard let data, let image = UIImage(data: data) else {
                 completed(nil)
                 return

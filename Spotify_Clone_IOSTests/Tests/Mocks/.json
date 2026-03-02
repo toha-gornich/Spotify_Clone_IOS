@@ -1,0 +1,15 @@
+[
+  {
+    "id": 1,
+    "artist": {
+      "id": 1,
+      "slug": "artist1",
+      "display_name": "Lana Del Rey",
+      "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+      "color": "#474a56",
+      "is_verify": true
+    },
+    "name": "MIT",
+    "text": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout."
+  }
+]

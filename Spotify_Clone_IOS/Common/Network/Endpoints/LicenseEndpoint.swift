@@ -22,7 +22,7 @@ enum LicenseEndpoint {
         case .myLicenses:
             return "artists/me/license/"
         case .byID(let id):
-            return "licenses/\(id)/"
+            return "artists/me/license/\(id)/"
         case .getById(let id), .deleteById(let id):
             return "artists/me/license/\(id)/"
         }
