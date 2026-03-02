@@ -1,0 +1,238 @@
+{
+  "count": 11,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 1,
+      "slug": "artist1",
+      "user": {
+        "id": 3,
+        "display_name": "artist11",
+        "type_profile": "Artist",
+        "artist_slug": "artist1",
+        "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+        "followers_count": 1,
+        "is_premium": true
+      },
+      "first_name": "Lanas",
+      "last_name": "Del Rey",
+      "display_name": "Lana Del Rey",
+      "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+      "color": "#474a56",
+      "track_slug": "money-power-glory",
+      "artist_listeners": 643183152,
+      "is_verify": true
+    },
+    {
+      "id": 9,
+      "slug": "artist10",
+      "user": {
+        "id": 21,
+        "display_name": "LLLAs",
+        "type_profile": "Artist",
+        "artist_slug": "artist10",
+        "image": "http://192.168.0.108:8080/mediafiles/users/artist10%40gmail.com/ei7xlw0orvda1.jpg",
+        "followers_count": 1,
+        "is_premium": false
+      },
+      "first_name": "Leon",
+      "last_name": "Kenedy",
+      "display_name": "Ashish",
+      "image": "http://192.168.0.108:8080/mediafiles/artists/artist10/ei7xlw0orvda1.jpg",
+      "color": "#430d0a",
+      "track_slug": "pr-phonk",
+      "artist_listeners": 3007212355,
+      "is_verify": false
+    },
+    {
+      "id": 2,
+      "slug": "artist2",
+      "user": {
+        "id": 13,
+        "display_name": "artist2",
+        "type_profile": "Artist",
+        "artist_slug": "artist2",
+        "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+        "followers_count": 1,
+        "is_premium": true
+      },
+      "first_name": "the",
+      "last_name": "weeknd",
+      "display_name": "The Weeknd",
+      "image": "http://192.168.0.108:8080/mediafiles/artists/artist2/ab6761610000e5eb214f3cf1cbe7139c1e26ffbb.jpg",
+      "color": "#292f3a",
+      "track_slug": "i-was-never-there",
+      "artist_listeners": 3858626067,
+      "is_verify": true
+    },
+    {
+      "id": 4,
+      "slug": "artist5",
+      "user": {
+        "id": 16,
+        "display_name": "artist5",
+        "type_profile": "Artist",
+        "artist_slug": "artist5",
+        "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+        "followers_count": 1,
+        "is_premium": true
+      },
+      "first_name": "The",
+      "last_name": "Neighborhood",
+      "display_name": "The Neighborhood",
+      "image": "http://192.168.0.108:8080/mediafiles/artists/artist5/ab6761610000e5ebdf0b5ac84376a0a4b2166816.jpg",
+      "color": "#222222",
+      "track_slug": "pretty-boy",
+      "artist_listeners": 482073829,
+      "is_verify": true
+    },
+    {
+      "id": 11,
+      "slug": "artist11",
+      "user": {
+        "id": 22,
+        "display_name": "artist11",
+        "type_profile": "Artist",
+        "artist_slug": "artist11",
+        "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+        "followers_count": 2,
+        "is_premium": true
+      },
+      "first_name": "Montell",
+      "last_name": "Fish",
+      "display_name": "Montell Fish",
+      "image": "http://192.168.0.108:8080/mediafiles/artists/artist11/1900x1900-000000-80-0-0.jpg",
+      "color": "#6c9baa",
+      "track_slug": "hotels",
+      "artist_listeners": 19560959,
+      "is_verify": true
+    },
+    {
+      "id": 5,
+      "slug": "artist6",
+      "user": {
+        "id": 17,
+        "display_name": "artist6",
+        "type_profile": "Artist",
+        "artist_slug": "artist6",
+        "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+        "followers_count": 0,
+        "is_premium": false
+      },
+      "first_name": "Filin",
+      "last_name": "Mercury",
+      "display_name": "So I dont",
+      "image": "http://192.168.0.108:8080/mediafiles/artists/artist6/1348855.png",
+      "color": "#6c0d7f",
+      "track_slug": null,
+      "artist_listeners": 0,
+      "is_verify": false
+    },
+    {
+      "id": 10,
+      "slug": "wiwaldy",
+      "user": {
+        "id": 15,
+        "display_name": "artist4",
+        "type_profile": "Artist",
+        "artist_slug": "wiwaldy",
+        "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+        "followers_count": 0,
+        "is_premium": false
+      },
+      "first_name": "Liend",
+      "last_name": "Rufus",
+      "display_name": "Wiwaldy",
+      "image": "http://192.168.0.108:8080/mediafiles/artists/wiwaldy/1143698.jpg",
+      "color": "#645579",
+      "track_slug": null,
+      "artist_listeners": 0,
+      "is_verify": false
+    },
+    {
+      "id": 7,
+      "slug": "artist8",
+      "user": {
+        "id": 19,
+        "display_name": "artist8",
+        "type_profile": "Artist",
+        "artist_slug": "artist8",
+        "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+        "followers_count": 1,
+        "is_premium": false
+      },
+      "first_name": "Artem",
+      "last_name": "Woit",
+      "display_name": "Eternxlkz",
+      "image": "http://192.168.0.108:8080/mediafiles/artists/artist8/ab6761610000e5eb478a1b262658935c8f5bc57b.jpg",
+      "color": "#4a2915",
+      "track_slug": null,
+      "artist_listeners": 0,
+      "is_verify": false
+    },
+    {
+      "id": 8,
+      "slug": "artist9",
+      "user": {
+        "id": 20,
+        "display_name": "artist9",
+        "type_profile": "Artist",
+        "artist_slug": "artist9",
+        "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+        "followers_count": 1,
+        "is_premium": true
+      },
+      "first_name": "Siraul",
+      "last_name": "Malow",
+      "display_name": "bbno$",
+      "image": "http://192.168.0.108:8080/mediafiles/artists/artist9/ab6761610000e5eba8618661086b4c3c71f18680.jpg",
+      "color": "#4d434b",
+      "track_slug": "edaname",
+      "artist_listeners": 4328020,
+      "is_verify": true
+    },
+    {
+      "id": 6,
+      "slug": "artist7",
+      "user": {
+        "id": 18,
+        "display_name": "artist7",
+        "type_profile": "Artist",
+        "artist_slug": "artist7",
+        "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+        "followers_count": 1,
+        "is_premium": true
+      },
+      "first_name": "eminem",
+      "last_name": "eminem",
+      "display_name": "Eminem",
+      "image": "http://192.168.0.108:8080/mediafiles/artists/artist7/ab6761610000e5eba00b11c129b27a88fc72f36b.jpg",
+      "color": "#2b2b2b",
+      "track_slug": null,
+      "artist_listeners": 0,
+      "is_verify": true
+    },
+    {
+      "id": 3,
+      "slug": "artist3",
+      "user": {
+        "id": 14,
+        "display_name": "artist3",
+        "type_profile": "Artist",
+        "artist_slug": "artist3",
+        "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+        "followers_count": 0,
+        "is_premium": true
+      },
+      "first_name": "Billie",
+      "last_name": "Eilish",
+      "display_name": "Billie Eilish",
+      "image": "http://192.168.0.108:8080/mediafiles/artists/artist3/hit-me-hard-and-soft-v0-dhnauhkskhvc1.jpeg",
+      "color": "#102231",
+      "track_slug": "bad-guy",
+      "artist_listeners": 113492245,
+      "is_verify": true
+    }
+  ]
+}

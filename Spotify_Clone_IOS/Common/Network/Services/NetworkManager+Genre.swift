@@ -7,40 +7,43 @@
 import Foundation
 
 extension NetworkManager: GenreServiceProtocol {
+    
     func getGenres() async throws -> [Genre] {
         let url = GenreEndpoint.list.url
         
-        let (data, response) = try await URLSession.shared.data(from: url)
+        let (data, response) = try await session.data(from: url)
         
-        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
-            print("❌ [getGenres] Response error: \(httpResponse.statusCode)")
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw APError.invalidResponse
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw APError.invalidResponse
         }
         
         do {
-            let decoder = JSONDecoder()
-//            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            return try decoder.decode(GenresResponse.self, from: data).results
+            return try JSONDecoder().decode(GenresResponse.self, from: data).results
         } catch {
-            print("❌ [getGenres] JSON decoding failed: \(error)")
             throw APError.invalidData
         }
     }
 
-    func getGenreBySlug(slug:String) async throws -> Genre {
+    func getGenreBySlug(slug: String) async throws -> Genre {
         let url = GenreEndpoint.bySlug(slug).url
-
         
-        let (data, response) = try await URLSession.shared.data(from: url)
+        let (data, response) = try await session.data(from: url)
         
-        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
-            print("❌ [getGenreBySlug] Response error: \(httpResponse.statusCode) for slug: \(slug)")
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw APError.invalidResponse
         }
         
-        do{
-            let decoder = JSONDecoder()
-            return try decoder.decode(Genre.self, from: data)
-        } catch{
-            print("❌ [getGenreBySlug] JSON decoding failed: \(error.localizedDescription)")
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw APError.invalidResponse
+        }
+        
+        do {
+            return try JSONDecoder().decode(Genre.self, from: data)
+        } catch {
             throw APError.invalidData
         }
     }

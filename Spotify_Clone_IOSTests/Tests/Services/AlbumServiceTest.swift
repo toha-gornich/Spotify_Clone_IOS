@@ -27,7 +27,7 @@ final class AlbumServiceTests: XCTestCase {
         MockURLProtocol.stubResponseData = nil
         super.tearDown()
     }
-    
+    /// Verifies successful albums list fetch — response contains at least one album
     func test_getAlbums_successfully() async {
         stubResponse(file: "albums_response", url: AlbumEndpoint.list.url)
         do {
@@ -37,7 +37,7 @@ final class AlbumServiceTests: XCTestCase {
             XCTFail("Expected success but got error: \(error)")
         }
     }
-    
+    /// Verifies album fetch by slug — response slug matches requested slug
     func test_getAlbumBySlug_successfully() async {
         let slug = "warningspeed-up"
         stubResponse(file: "album_by_slug_response", url: AlbumEndpoint.bySlug(slug).url)
@@ -48,7 +48,7 @@ final class AlbumServiceTests: XCTestCase {
             XCTFail("Expected success but got error: \(error)")
         }
     }
-    
+    /// Verifies albums fetch by artist slug — response contains at least one album
     func test_getAlbumsBySlugArtist_successfully() async {
         let slug = "artist1"
         stubResponse(file: "albums_by_artist_response", url: AlbumEndpoint.byArtist(slug).url)
@@ -59,7 +59,7 @@ final class AlbumServiceTests: XCTestCase {
             XCTFail("Expected success but got error: \(error)")
         }
     }
-    
+    /// Verifies favorite albums fetch — response contains at least one album
     func test_getAlbumsFavorite_successfully() async {
         stubResponse(file: "albums_favorite_response", url: AlbumEndpoint.favorite.url)
         do {
@@ -69,7 +69,7 @@ final class AlbumServiceTests: XCTestCase {
             XCTFail("Expected success but got error: \(error)")
         }
     }
-    
+    /// Verifies adding album to favorites — server returns 201 without error
     func test_postAddFavoriteAlbum_successfully() async {
         let slug = "after-hours"
         stubResponse(url: AlbumEndpoint.addFavorite(slug).url, statusCode: 201)
@@ -79,7 +79,7 @@ final class AlbumServiceTests: XCTestCase {
             XCTFail("Expected success but got error: \(error)")
         }
     }
-    
+    /// Verifies removing album from favorites — server returns 204 without error
     func test_deleteAlbumsFavorite_successfully() async {
         let slug = "after-hours"
         stubResponse(url: AlbumEndpoint.removeFavorite(slug).url, statusCode: 204)

@@ -1,0 +1,22 @@
+{
+  "id": 1,
+  "slug": "artist1",
+  "user": {
+    "id": 3,
+    "display_name": "artist11",
+    "type_profile": "Artist",
+    "artist_slug": "artist1",
+    "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+    "followers_count": 1,
+    "is_premium": true
+  },
+  "first_name": "Lanas",
+  "last_name": "Del Rey",
+  "display_name": "Lana Del Rey",
+  "image": "http://192.168.0.108:8080/mediafiles/artists/artist1/FjnQCsoXoAE3GlG.jpg",
+  "color": "#474a56",
+  "track_slug": "money-power-glory",
+  "artist_listeners": 643183152,
+  "is_verify": true
+}
+
