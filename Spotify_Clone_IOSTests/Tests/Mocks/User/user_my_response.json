@@ -1,0 +1,11 @@
+{
+  "id": 3,
+  "email": "artist1@gmail.com",
+  "display_name": "artist11",
+  "gender": "male",
+  "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+  "type_profile": "artist",
+  "country": "UA",
+  "is_premium": true
+}
+

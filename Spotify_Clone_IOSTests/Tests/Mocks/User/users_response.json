@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "display_name": "fdsf3",
+    "type_profile": "User",
+    "artist_slug": null,
+    "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+    "followers_count": 0,
+    "is_premium": false
+  }
+]
+

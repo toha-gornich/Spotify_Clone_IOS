@@ -1,0 +1,15 @@
+{
+  "id": 3,
+  "email": "artist1@gmail.com",
+  "display_name": "artist11",
+  "gender": "Male",
+  "country": "UA",
+  "image": "http://192.168.0.108:8080/mediafiles/default/profile.jpeg",
+  "color": "#1c1c1c",
+  "type_profile": "Artist",
+  "artist_slug": "artist1",
+  "is_premium": true,
+  "followers_count": 1,
+  "following_count": 0,
+  "playlists_count": 1
+}
