@@ -9,125 +9,143 @@ import XCTest
 @testable import Spotify_Clone_IOS
 
 @MainActor
-final class MyPlaylistViewModelTests: XCTestCase {
+final class PlaylistViewModelTests: XCTestCase {
 
-    var sut: MyPlaylistViewModel!
-    var mockPlaylistService: MockPlaylistService!
-    var mockSearchService: MockSearchService!
+    var sut: PlaylistViewModel!
+    var mockService: MockPlaylistService!
 
     override func setUp() {
         super.setUp()
-        mockPlaylistService = MockPlaylistService()
-        mockSearchService = MockSearchService()
-        sut = MyPlaylistViewModel(playlistManager: mockPlaylistService, searchManager: mockSearchService)
+        mockService = MockPlaylistService()
+        sut = PlaylistViewModel(playlistManager: mockService)
     }
 
     override func tearDown() {
         sut = nil
-        mockPlaylistService = nil
-        mockSearchService = nil
+        mockService = nil
         super.tearDown()
     }
 
-    // MARK: - getPlaylist
+    // MARK: - getPlaylistBySlug
 
-    func test_getPlaylist_success_setsPlaylist() async {
-        mockPlaylistService.mockPlaylistDetail = makeMockPlaylistDetail(slug: "test-playlist")
+    func test_getPlaylistBySlug_success_setsPlaylist() async {
+        mockService.mockPlaylistDetail = makeMockPlaylistDetail(slug: "test-playlist")
 
-        sut.getPlaylist("test-playlist")
+        sut.getPlaylistBySlug(slug: "test-playlist")
         try? await Task.sleep(nanoseconds: 100_000_000)
 
         XCTAssertEqual(sut.playlist.slug, "test-playlist")
         XCTAssertFalse(sut.isLoading)
     }
 
-    func test_getPlaylist_failure_setsAlertItem() async {
-        mockPlaylistService.shouldFail = true
+    func test_getPlaylistBySlug_failure_setsAlertItem() async {
+        mockService.shouldFail = true
 
-        sut.getPlaylist("test-playlist")
+        sut.getPlaylistBySlug(slug: "test-playlist")
         try? await Task.sleep(nanoseconds: 100_000_000)
 
         XCTAssertNotNil(sut.alertItem)
         XCTAssertFalse(sut.isLoading)
     }
 
-    // MARK: - patchPlaylist
+    // MARK: - getPlaylistLicked
 
-    func test_patchPlaylist_success_returnsTrue() async {
-        let result = await sut.patchPlaylist(title: "New Title", description: "Desc", isPrivate: false, imageData: nil)
+    func test_getPlaylistLicked_isLiked_whenSlugMatches() async {
+        let playlist = makeMockPlaylistDetail(slug: "test-playlist")
+        sut.playlist = playlist
+        mockService.mockFavoritePlaylists = [makeFavoritePlaylistItem(slug: "test-playlist")]
 
-        XCTAssertTrue(result)
+        await sut.getPlaylistLicked()
+
+        XCTAssertTrue(sut.isPlaylistLiked)
     }
 
-    func test_patchPlaylist_failure_returnsFalse() async {
-        mockPlaylistService.shouldFail = true
+    func test_getPlaylistLicked_isNotLiked_whenSlugNotMatches() async {
+        sut.playlist = makeMockPlaylistDetail(slug: "my-playlist")
+        mockService.mockFavoritePlaylists = [makeFavoritePlaylistItem(slug: "other-playlist")]
 
-        let result = await sut.patchPlaylist(title: "New Title", description: "Desc", isPrivate: false, imageData: nil)
+        await sut.getPlaylistLicked()
 
-        XCTAssertFalse(result)
+        XCTAssertFalse(sut.isPlaylistLiked)
     }
 
-    // MARK: - addTrack
+    func test_getPlaylistLicked_failure_setsAlertItem() async {
+        mockService.shouldFail = true
 
-    func test_addTrack_success_returnsTrue() async {
-        mockPlaylistService.mockPlaylistDetail = makeMockPlaylistDetail(slug: "test-playlist")
-        sut.playlist = mockPlaylistService.mockPlaylistDetail
+        await sut.getPlaylistLicked()
 
-        let result = await sut.addTrack("track-slug")
-
-        XCTAssertTrue(result)
-    }
-
-    func test_addTrack_failure_returnsFalse() async {
-        mockPlaylistService.shouldFail = true
-
-        let result = await sut.addTrack("track-slug")
-
-        XCTAssertFalse(result)
         XCTAssertNotNil(sut.alertItem)
     }
 
-    // MARK: - removeTrack
+    // MARK: - postPlaylistFavorite
 
-    func test_removeTrack_success_returnsTrue() async {
-        mockPlaylistService.mockPlaylistDetail = makeMockPlaylistDetail(slug: "test-playlist")
-        sut.playlist = mockPlaylistService.mockPlaylistDetail
+    func test_postPlaylistFavorite_success_setsIsPlaylistLiked() async {
+        sut.postPlaylistFavorite(slug: "test-playlist")
+        try? await Task.sleep(nanoseconds: 100_000_000)
 
-        let result = await sut.removeTrack("track-slug")
-
-        XCTAssertTrue(result)
-    }
-
-    func test_removeTrack_failure_returnsFalse() async {
-        mockPlaylistService.shouldFail = true
-
-        let result = await sut.removeTrack("track-slug")
-
-        XCTAssertFalse(result)
-        XCTAssertNotNil(sut.alertItem)
-    }
-
-    // MARK: - deletePlaylist
-
-    func test_deletePlaylist_success_setsIsLoadingFalse() async {
-        await sut.deletePlaylist()
-
+        XCTAssertTrue(sut.isPlaylistLiked)
         XCTAssertFalse(sut.isLoading)
-        XCTAssertNil(sut.alertItem)
     }
 
-    func test_deletePlaylist_failure_setsAlertItem() async {
-        mockPlaylistService.shouldFail = true
+    func test_postPlaylistFavorite_failure_revertsLike() async {
+        mockService.shouldFail = true
 
-        await sut.deletePlaylist()
+        sut.postPlaylistFavorite(slug: "test-playlist")
+        try? await Task.sleep(nanoseconds: 100_000_000)
 
+        XCTAssertFalse(sut.isPlaylistLiked)
         XCTAssertNotNil(sut.alertItem)
         XCTAssertFalse(sut.isLoading)
     }
 
-    // MARK: - isTrackInPlaylist
+    // MARK: - deletePlaylistFavorite
 
-    func test_isTrackInPlaylist_returnsTrue_whenTrackExists() {
+    func test_deletePlaylistFavorite_success_setsIsPlaylistLikedFalse() async {
+        sut.isPlaylistLiked = true
+
+        sut.deletePlaylistFavorite(slug: "test-playlist")
+        try? await Task.sleep(nanoseconds: 100_000_000)
+
+        XCTAssertFalse(sut.isPlaylistLiked)
+        XCTAssertFalse(sut.isLoading)
+    }
+
+    func test_deletePlaylistFavorite_failure_setsAlertItem() async {
+        mockService.shouldFail = true
+        sut.isPlaylistLiked = true
+
+        sut.deletePlaylistFavorite(slug: "test-playlist")
+        try? await Task.sleep(nanoseconds: 100_000_000)
+
+        XCTAssertNotNil(sut.alertItem)
+        XCTAssertFalse(sut.isLoading)
+    }
+
+    // MARK: - totalDuration
+
+    func test_totalDuration_returnsMinusOne_whenNoTracks() {
+        sut.playlist = PlaylistDetail(
+            id: 0,
+            slug: "",
+            title: "",
+            description: nil,
+            image: "",
+            color: "",
+            user: User.empty,
+            tracks: nil,
+            genre: nil,
+            releaseDate: nil,
+            isPrivate: false,
+            duration: nil,
+            favoriteCount: nil,
+            createdAt: nil,
+            updatedAt: nil
+        )
+
+        XCTAssertEqual(sut.totalDuration, "-1")
+    }
+    
+    func test_totalDuration_returnsFormattedDuration_whenTracksExist() {
         sut.playlist = PlaylistDetail(
             id: 1,
             slug: "test",
@@ -146,50 +164,6 @@ final class MyPlaylistViewModelTests: XCTestCase {
             updatedAt: nil
         )
 
-        XCTAssertTrue(sut.isTrackInPlaylist("track-1"))
-    }
-
-    func test_isTrackInPlaylist_returnsFalse_whenTrackNotExists() {
-        sut.playlist = PlaylistDetail.empty
-
-        XCTAssertFalse(sut.isTrackInPlaylist("track-1"))
-    }
-
-    // MARK: - searchTracks
-
-    func test_searchTracks_emptyText_clearsResults() {
-        sut.searchResults = [makeMockTrack(slug: "track-1")]
-
-        sut.searchTracks(searchText: "")
-
-        XCTAssertTrue(sut.searchResults.isEmpty)
-        XCTAssertFalse(sut.isSearching)
-    }
-
-    func test_searchTracks_success_populatesResults() async {
-        mockSearchService.mockTracksResponse = TracksResponse(
-            count: 2,
-            next: nil,
-            previous: nil,
-            results: [makeMockTrack(slug: "track-1"), makeMockTrack(slug: "track-2")]
-        )
-
-        sut.searchTracks(searchText: "test")
-        try? await Task.sleep(nanoseconds: 500_000_000)
-
-        XCTAssertEqual(sut.searchResults.count, 2)
-        XCTAssertFalse(sut.isSearching)
-    }
-
-    // MARK: - clearSearch
-
-    func test_clearSearch_clearsResultsAndStopsSearching() {
-        sut.searchResults = [makeMockTrack(slug: "track-1")]
-        sut.isSearching = true
-
-        sut.clearSearch()
-
-        XCTAssertTrue(sut.searchResults.isEmpty)
-        XCTAssertFalse(sut.isSearching)
+        XCTAssertNotEqual(sut.totalDuration, "-1")
     }
 }
