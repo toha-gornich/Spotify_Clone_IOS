@@ -8,11 +8,6 @@
 import SwiftUI
 
 
-struct ResponseLicense: Codable{
-    let licenses: [License]
-
-}
-
 struct License: Codable, Identifiable{
     let id: Int
     let artist: ArtistTracksMy
