@@ -24,15 +24,15 @@ struct ArtistAlbum: Codable, Identifiable {
         case isVerify = "is_verify"
     }
     static var empty: ArtistAlbum {
-           ArtistAlbum(
-               id: -1,
-               slug: "",
-               displayName: "",
-               image: "",
-               color: "#000000",
-               isVerify: false
-           )
-       }
+        ArtistAlbum(
+            id: -1,
+            slug: "",
+            displayName: "",
+            image: "",
+            color: "#000000",
+            isVerify: false
+        )
+    }
 }
 
 // MARK: - Artist Model
@@ -87,21 +87,21 @@ struct FavoriteArtistItem: Codable {
     }
     
     
-        func toArtist() -> ArtistTrack {
-            return ArtistTrack(
-                id: artist.id,
-                slug: artist.slug,
-                displayName: artist.displayName,
-                image: artist.image,
-                color: artist.color,
-                isVerify: artist.isVerify
-            )
-        }
-        
-        
-        static func toArtists(_ items: [FavoriteArtistItem]) -> [ArtistTrack] {
-            return items.map { $0.toArtist() }
-        }
+    func toArtist() -> ArtistTrack {
+        return ArtistTrack(
+            id: artist.id,
+            slug: artist.slug,
+            displayName: artist.displayName,
+            image: artist.image,
+            color: artist.color,
+            isVerify: artist.isVerify
+        )
+    }
+    
+    
+    static func toArtists(_ items: [FavoriteArtistItem]) -> [ArtistTrack] {
+        return items.map { $0.toArtist() }
+    }
 }
 
 struct Artist: Codable, Identifiable {
@@ -170,14 +170,14 @@ struct ArtistTracksMy: Codable, Identifiable {
         )
     }
 }
-    
+
 struct UpdateArtist: Codable, Identifiable {
     let id: Int
     let firstName: String
     let lastName: String
     let displayName: String
     let image: String
-
+    
     
     enum CodingKeys: String, CodingKey {
         case id, image
@@ -186,53 +186,53 @@ struct UpdateArtist: Codable, Identifiable {
         case displayName = "display_name"
     }
 }
+
+
+
+// MARK: - Extension for convenience methods
+extension Artist {
+    var fullName: String {
+        return "\(firstName) \(lastName)"
+    }
     
+    var formattedListeners: String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        return formatter.string(from: NSNumber(value: artistListeners)) ?? "0"
+    }
     
-    
-    // MARK: - Extension for convenience methods
-    extension Artist {
-        var fullName: String {
-            return "\(firstName) \(lastName)"
-        }
-        
-        var formattedListeners: String {
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .decimal
-            return formatter.string(from: NSNumber(value: artistListeners)) ?? "0"
-        }
-        
-        var hasTrack: Bool {
-            return trackSlug != nil
+    var hasTrack: Bool {
+        return trackSlug != nil
+    }
+}
+
+extension User {
+    var isArtist: Bool {
+        return typeProfile == "Artist"
+    }
+}
+
+// MARK: - Sample Usage
+class ArtistService {
+    func parseArtistResponse(from data: Data) -> ArtistResponse? {
+        let decoder = JSONDecoder()
+        do {
+            let response = try decoder.decode(ArtistResponse.self, from: data)
+            return response
+        } catch {
+            print("Error parsing artist response: \(error)")
+            return nil
         }
     }
     
-   extension User {
-        var isArtist: Bool {
-            return typeProfile == "Artist"
+    func encodeArtistResponse(_ response: ArtistResponse) -> Data? {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        do {
+            return try encoder.encode(response)
+        } catch {
+            print("Error encoding artist response: \(error)")
+            return nil
         }
     }
-    
-    // MARK: - Sample Usage
-    class ArtistService {
-        func parseArtistResponse(from data: Data) -> ArtistResponse? {
-            let decoder = JSONDecoder()
-            do {
-                let response = try decoder.decode(ArtistResponse.self, from: data)
-                return response
-            } catch {
-                print("Error parsing artist response: \(error)")
-                return nil
-            }
-        }
-        
-        func encodeArtistResponse(_ response: ArtistResponse) -> Data? {
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = .prettyPrinted
-            do {
-                return try encoder.encode(response)
-            } catch {
-                print("Error encoding artist response: \(error)")
-                return nil
-            }
-        }
-    }
+}

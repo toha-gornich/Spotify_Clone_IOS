@@ -18,14 +18,12 @@ import SwiftUI
     @Published var alertItem: AlertItem?
     @Published var user = UserMy.empty()
     
-    // Окремі флаги завантаження для кожного типу
     @Published var isLoadingMoreTracks: Bool = false
     @Published var isLoadingMoreArtists: Bool = false
     @Published var isLoadingMoreAlbums: Bool = false
     @Published var isLoadingMorePlaylists: Bool = false
     @Published var isLoadingMoreProfiles: Bool = false
     
-    // Pagination state
     private var currentTracksPage: Int = 1
     private var currentArtistsPage: Int = 1
     private var currentAlbumsPage: Int = 1
@@ -38,14 +36,12 @@ import SwiftUI
     private var hasMorePlaylists: Bool = false
     private var hasMoreProfiles: Bool = false
     
-    // Окремі searchText для кожного типу
     private var tracksSearchText: String = ""
     private var artistsSearchText: String = ""
     private var albumsSearchText: String = ""
     private var playlistsSearchText: String = ""
     private var profilesSearchText: String = ""
     
-    // Захист від дублювання запитів
     private var lastTracksLoadTime: Date = .distantPast
     private var lastArtistsLoadTime: Date = .distantPast
     private var lastAlbumsLoadTime: Date = .distantPast
@@ -63,7 +59,6 @@ import SwiftUI
     
     // MARK: - Tracks
     func searchTracks(searchText: String) {
-        print("🔍 SearchVM - searchTracks called with: '\(searchText)'")
         tracks = []
         currentTracksPage = 1
         tracksSearchText = searchText
@@ -76,9 +71,7 @@ import SwiftUI
                 tracks = response.results
                 hasMoreTracks = response.next != nil
                 isLoading = false
-                print("✅ SearchVM - Loaded \(response.results.count) tracks, hasMore: \(hasMoreTracks)")
             } catch {
-                print("❌ SearchVM - searchTracks error: \(error)")
                 handleError(error)
                 isLoading = false
             }
@@ -86,27 +79,22 @@ import SwiftUI
     }
     
     func loadMoreTracks() {
-        // Захист від дублювання запитів (мінімум 500мс між запитами)
         let now = Date()
         guard now.timeIntervalSince(lastTracksLoadTime) > 0.5 else {
-            print("⚠️ SearchVM - Skip loadMoreTracks: too soon since last request")
             return
         }
         
         guard !isLoadingMoreTracks, hasMoreTracks, !tracksSearchText.isEmpty else {
-            print("⚠️ SearchVM - Skip loadMoreTracks: isLoadingMore=\(isLoadingMoreTracks), hasMore=\(hasMoreTracks), searchText='\(tracksSearchText)'")
             return
         }
         
         lastTracksLoadTime = now
         isLoadingMoreTracks = true
         currentTracksPage += 1
-        print("📄 SearchVM - Loading tracks page \(currentTracksPage) for '\(tracksSearchText)', current count: \(tracks.count)")
-        
+
         Task {
             do {
                 let response = try await searchManager.searchTracks(searchText: tracksSearchText, page: currentTracksPage)
-                print("✅ SearchVM - Received \(response.results.count) tracks from page \(currentTracksPage)")
                 
                 let beforeCount = tracks.count
                 tracks.append(contentsOf: response.results)
@@ -114,9 +102,7 @@ import SwiftUI
                 
                 hasMoreTracks = response.next != nil
                 isLoadingMoreTracks = false
-                print("✅ SearchVM - Tracks count: \(beforeCount) -> \(afterCount), hasMore: \(hasMoreTracks)")
             } catch {
-                print("❌ SearchVM - loadMoreTracks error: \(error)")
                 handleError(error)
                 isLoadingMoreTracks = false
                 currentTracksPage -= 1
@@ -126,7 +112,6 @@ import SwiftUI
     
     // MARK: - Artists
     func searchArtists(searchText: String) {
-        print("🔍 SearchVM - searchArtists called with: '\(searchText)'")
         artists = []
         currentArtistsPage = 1
         artistsSearchText = searchText
@@ -139,9 +124,7 @@ import SwiftUI
                 artists = response.results
                 hasMoreArtists = response.next != nil
                 isLoading = false
-                print("✅ SearchVM - Loaded \(response.results.count) artists")
             } catch {
-                print("❌ SearchVM - searchArtists error: \(error)")
                 handleError(error)
                 isLoading = false
             }
@@ -151,19 +134,16 @@ import SwiftUI
     func loadMoreArtists() {
         let now = Date()
         guard now.timeIntervalSince(lastArtistsLoadTime) > 0.5 else {
-            print("⚠️ SearchVM - Skip loadMoreArtists: too soon")
             return
         }
         
         guard !isLoadingMoreArtists, hasMoreArtists, !artistsSearchText.isEmpty else {
-            print("⚠️ SearchVM - Skip loadMoreArtists")
             return
         }
         
         lastArtistsLoadTime = now
         isLoadingMoreArtists = true
         currentArtistsPage += 1
-        print("📄 SearchVM - Loading artists page \(currentArtistsPage)")
         
         Task {
             do {
@@ -171,9 +151,7 @@ import SwiftUI
                 artists.append(contentsOf: response.results)
                 hasMoreArtists = response.next != nil
                 isLoadingMoreArtists = false
-                print("✅ SearchVM - Loaded more artists, total: \(artists.count)")
             } catch {
-                print("❌ SearchVM - loadMoreArtists error: \(error)")
                 handleError(error)
                 isLoadingMoreArtists = false
                 currentArtistsPage -= 1
@@ -196,9 +174,7 @@ import SwiftUI
                 albums = response.results
                 hasMoreAlbums = response.next != nil
                 isLoading = false
-                print("✅ SearchVM - Loaded \(response.results.count) albums")
             } catch {
-                print("❌ SearchVM - searchAlbums error: \(error)")
                 handleError(error)
                 isLoading = false
             }
@@ -208,19 +184,16 @@ import SwiftUI
     func loadMoreAlbums() {
         let now = Date()
         guard now.timeIntervalSince(lastAlbumsLoadTime) > 0.5 else {
-            print("⚠️ SearchVM - Skip loadMoreAlbums: too soon")
             return
         }
         
         guard !isLoadingMoreAlbums, hasMoreAlbums, !albumsSearchText.isEmpty else {
-            print("⚠️ SearchVM - Skip loadMoreAlbums")
             return
         }
         
         lastAlbumsLoadTime = now
         isLoadingMoreAlbums = true
         currentAlbumsPage += 1
-        print("📄 SearchVM - Loading albums page \(currentAlbumsPage)")
         
         Task {
             do {
@@ -228,9 +201,7 @@ import SwiftUI
                 albums.append(contentsOf: response.results)
                 hasMoreAlbums = response.next != nil
                 isLoadingMoreAlbums = false
-                print("✅ SearchVM - Loaded more albums, total: \(albums.count)")
             } catch {
-                print("❌ SearchVM - loadMoreAlbums error: \(error)")
                 handleError(error)
                 isLoadingMoreAlbums = false
                 currentAlbumsPage -= 1
@@ -240,7 +211,6 @@ import SwiftUI
     
     // MARK: - Playlists
     func searchPlaylists(searchText: String) {
-        print("🔍 SearchVM - searchPlaylists called with: '\(searchText)'")
         playlists = []
         currentPlaylistsPage = 1
         playlistsSearchText = searchText
@@ -253,9 +223,7 @@ import SwiftUI
                 playlists = response.results
                 hasMorePlaylists = response.next != nil
                 isLoading = false
-                print("✅ SearchVM - Loaded \(response.results.count) playlists")
             } catch {
-                print("❌ SearchVM - searchPlaylists error: \(error)")
                 handleError(error)
                 isLoading = false
             }
@@ -265,19 +233,17 @@ import SwiftUI
     func loadMorePlaylists() {
         let now = Date()
         guard now.timeIntervalSince(lastPlaylistsLoadTime) > 0.5 else {
-            print("⚠️ SearchVM - Skip loadMorePlaylists: too soon")
             return
         }
         
         guard !isLoadingMorePlaylists, hasMorePlaylists, !playlistsSearchText.isEmpty else {
-            print("⚠️ SearchVM - Skip loadMorePlaylists")
             return
         }
         
         lastPlaylistsLoadTime = now
         isLoadingMorePlaylists = true
         currentPlaylistsPage += 1
-        print("📄 SearchVM - Loading playlists page \(currentPlaylistsPage)")
+
         
         Task {
             do {
@@ -285,9 +251,7 @@ import SwiftUI
                 playlists.append(contentsOf: response.results)
                 hasMorePlaylists = response.next != nil
                 isLoadingMorePlaylists = false
-                print("✅ SearchVM - Loaded more playlists, total: \(playlists.count)")
             } catch {
-                print("❌ SearchVM - loadMorePlaylists error: \(error)")
                 handleError(error)
                 isLoadingMorePlaylists = false
                 currentPlaylistsPage -= 1
@@ -297,7 +261,6 @@ import SwiftUI
     
     // MARK: - Profiles
     func searchProfiles(searchText: String) {
-        print("🔍 SearchVM - searchProfiles called with: '\(searchText)'")
         profiles = []
         currentProfilesPage = 1
         profilesSearchText = searchText
@@ -310,9 +273,7 @@ import SwiftUI
                 profiles = response.results
                 hasMoreProfiles = response.next != nil
                 isLoading = false
-                print("✅ SearchVM - Loaded \(response.results.count) profiles")
             } catch {
-                print("❌ SearchVM - searchProfiles error: \(error)")
                 handleError(error)
                 isLoading = false
             }
@@ -322,19 +283,16 @@ import SwiftUI
     func loadMoreProfiles() {
         let now = Date()
         guard now.timeIntervalSince(lastProfilesLoadTime) > 0.5 else {
-            print("⚠️ SearchVM - Skip loadMoreProfiles: too soon")
             return
         }
         
         guard !isLoadingMoreProfiles, hasMoreProfiles, !profilesSearchText.isEmpty else {
-            print("⚠️ SearchVM - Skip loadMoreProfiles")
             return
         }
         
         lastProfilesLoadTime = now
         isLoadingMoreProfiles = true
         currentProfilesPage += 1
-        print("📄 SearchVM - Loading profiles page \(currentProfilesPage)")
         
         Task {
             do {
@@ -342,9 +300,7 @@ import SwiftUI
                 profiles.append(contentsOf: response.results)
                 hasMoreProfiles = response.next != nil
                 isLoadingMoreProfiles = false
-                print("✅ SearchVM - Loaded more profiles, total: \(profiles.count)")
             } catch {
-                print("❌ SearchVM - loadMoreProfiles error: \(error)")
                 handleError(error)
                 isLoadingMoreProfiles = false
                 currentProfilesPage -= 1

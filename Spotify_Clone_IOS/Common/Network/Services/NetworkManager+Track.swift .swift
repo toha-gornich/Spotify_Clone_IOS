@@ -163,7 +163,6 @@ extension NetworkManager: TrackServiceProtocol {
         case 200...299:
             return
         case 400, 409:
-            print("ℹ️ postLikeTrack - Track already liked: \(slug)")
             throw FavoriteError.alreadyLiked
         default:
             print("❌ postLikeTrack - HTTP error \(httpResponse.statusCode)")

@@ -209,4 +209,35 @@ extension XCTestCase {
         )
     }
     
+    func makeMockUserMy() -> UserMy {
+        UserMy(
+            id: 1,
+            email: "test@test.com",
+            displayName: "Test User",
+            gender: "male",
+            country: "UA",
+            image: "user.jpg",
+            typeProfile: "user",
+            isPremium: false
+        )
+    }
+
+    func makeMockUserMe() -> UserMe {
+        UserMe(
+            id: 1,
+            email: "test@test.com",
+            displayName: "Test User",
+            gender: "male",
+            country: "UA",
+            image: "user.jpg",
+            color: "#FFFFFF",
+            typeProfile: "user",
+            artistSlug: nil,
+            isPremium: false,
+            followersCount: 0,
+            followingCount: 0,
+            playlistsCount: 0
+        )
+    }
+    
 }
