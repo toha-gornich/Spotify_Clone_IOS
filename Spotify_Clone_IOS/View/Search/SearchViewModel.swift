@@ -96,9 +96,9 @@ import SwiftUI
             do {
                 let response = try await searchManager.searchTracks(searchText: tracksSearchText, page: currentTracksPage)
                 
-                let beforeCount = tracks.count
+                _ = tracks.count
                 tracks.append(contentsOf: response.results)
-                let afterCount = tracks.count
+                _ = tracks.count
                 
                 hasMoreTracks = response.next != nil
                 isLoadingMoreTracks = false

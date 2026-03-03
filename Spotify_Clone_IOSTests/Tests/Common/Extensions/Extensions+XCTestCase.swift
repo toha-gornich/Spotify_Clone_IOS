@@ -239,5 +239,58 @@ extension XCTestCase {
             playlistsCount: 0
         )
     }
-    
+
+    func makeMockAlbumMy(slug: String) -> AlbumMy {
+        AlbumMy(
+            id: 1,
+            slug: slug,
+            title: "Test Album",
+            description: "Test Description",
+            artist: ArtistTracksMy.empty(),
+            albumListeners: 100,
+            image: "album.jpg",
+            color: "#FFFFFF",
+            tracks: [],
+            duration: "3:00",
+            isPrivate: false,
+            releaseDate: "2024-01-01",
+            createdAt: "2024-01-01",
+            updatedAt: "2024-01-01"
+        )
+    }
+
+
+    func makeMockLicense() -> License {
+        License(
+            id: 1,
+            artist: ArtistTracksMy.empty(),
+            name: "Test License",
+            text: "Test License Text"
+        )
+    }
+
+
+    func makeMockTrackMy(slug: String) -> TracksMy {
+        TracksMy(
+            id: 1,
+            slug: slug,
+            artist: ArtistTracksMy.empty(),
+            title: "Test Track",
+            duration: "3:00",
+            image: "track.jpg",
+            color: "#FFFFFF",
+            license: makeMockLicense(),
+            genre: Genre.empty(),
+            album: AlbumTrack.empty(),
+            file: "track.mp3",
+            playsCount: 0,
+            downloadsCount: 0,
+            likesCount: 0,
+            userOfLikes: [],
+            isPrivate: false,
+            releaseDate: "2024-01-01",
+            createdAt: "2024-01-01",
+            updatedAt: "2024-01-01"
+        )
+    }
 }

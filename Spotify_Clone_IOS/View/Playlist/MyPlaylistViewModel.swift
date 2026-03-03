@@ -103,8 +103,6 @@ class MyPlaylistViewModel: ObservableObject {
                 isPrivate: isPrivate,
                 imageData: imageData
             )
-
-//            self.playlist = updatedPlaylist
             
             return true
         } catch {

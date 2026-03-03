@@ -124,6 +124,7 @@ struct TracksMy: Codable, Identifiable {
             )
         }
 }
+
 struct TracksMyBySlug: Codable, Identifiable {
     let id: Int
     let slug: String

@@ -107,6 +107,25 @@ struct AlbumMy: Codable, Identifiable {
         case updatedAt = "updated_at"
     }
     
+    static func empty() -> AlbumMy {
+        return AlbumMy(
+            id: 0,
+            slug: "",
+            title: "",
+            description: "",
+            artist: ArtistTracksMy.empty(),
+            albumListeners: 0,
+            image: nil,
+            color: nil,
+            tracks: [],
+            duration: nil,
+            isPrivate: false,
+            releaseDate: nil,
+            createdAt: "",
+            updatedAt: ""
+        )
+    }
+    
     var formattedListenersCount: String {
         formatNumber(albumListeners)
     }

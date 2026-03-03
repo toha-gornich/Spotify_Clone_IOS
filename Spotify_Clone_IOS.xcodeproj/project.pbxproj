@@ -38,6 +38,8 @@
 		62D165942F573DD400D8593A /* AlbumViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D165932F573DD400D8593A /* AlbumViewModelTests.swift */; };
 		62D165962F573F8900D8593A /* GenreViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D165952F573F8900D8593A /* GenreViewModelTests.swift */; };
 		62D1659C2F578C1100D8593A /* SearchViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D1659B2F578C1100D8593A /* SearchViewModelTests.swift */; };
+		62D165A22F578F0400D8593A /* ProfileViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D165A12F578F0400D8593A /* ProfileViewModelTests.swift */; };
+		62D165A62F5795D900D8593A /* PlaylistViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D165A52F5795D900D8593A /* PlaylistViewModelTests.swift */; };
 		62E390052F519B8600A2F669 /* KeychainManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E390042F519B8600A2F669 /* KeychainManagerTests.swift */; };
 		62E391A12F536CDA00A2F669 /* AlbumServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62E391A02F536CDA00A2F669 /* AlbumServiceTest.swift */; };
 /* End PBXBuildFile section */
@@ -94,6 +96,8 @@
 		62D165932F573DD400D8593A /* AlbumViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumViewModelTests.swift; sourceTree = "<group>"; };
 		62D165952F573F8900D8593A /* GenreViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreViewModelTests.swift; sourceTree = "<group>"; };
 		62D1659B2F578C1100D8593A /* SearchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModelTests.swift; sourceTree = "<group>"; };
+		62D165A12F578F0400D8593A /* ProfileViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModelTests.swift; sourceTree = "<group>"; };
+		62D165A52F5795D900D8593A /* PlaylistViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistViewModelTests.swift; sourceTree = "<group>"; };
 		62E390042F519B8600A2F669 /* KeychainManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManagerTests.swift; sourceTree = "<group>"; };
 		62E3919F2F53497D00A2F669 /* Spotify_Clone_IOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Spotify_Clone_IOS.xctestplan; sourceTree = "<group>"; };
 		62E391A02F536CDA00A2F669 /* AlbumServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumServiceTest.swift; sourceTree = "<group>"; };
@@ -252,10 +256,12 @@
 			isa = PBXGroup;
 			children = (
 				6281ED212F572135002C5F44 /* ArtistViewModelTests.swift */,
+				62D165A12F578F0400D8593A /* ProfileViewModelTests.swift */,
 				6281ED1D2F56FAF6002C5F44 /* TrackViewModelTests.swift */,
 				62D165932F573DD400D8593A /* AlbumViewModelTests.swift */,
 				62D165952F573F8900D8593A /* GenreViewModelTests.swift */,
 				62D1659B2F578C1100D8593A /* SearchViewModelTests.swift */,
+				62D165A52F5795D900D8593A /* PlaylistViewModelTests.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -458,10 +464,12 @@
 				62E391A12F536CDA00A2F669 /* AlbumServiceTest.swift in Sources */,
 				622CFC912EC284C700BB19F4 /* LicenseTests.swift in Sources */,
 				622CFC892EC284B500BB19F4 /* UserTests.swift in Sources */,
+				62D165A22F578F0400D8593A /* ProfileViewModelTests.swift in Sources */,
 				62D1659C2F578C1100D8593A /* SearchViewModelTests.swift in Sources */,
 				622CFC7F2EC2849800BB19F4 /* TrackTests.swift in Sources */,
 				6298DC582F54CE790077B646 /* ArtistServiceTest.swift in Sources */,
 				6281ED222F572146002C5F44 /* ArtistViewModelTests.swift in Sources */,
+				62D165A62F5795D900D8593A /* PlaylistViewModelTests.swift in Sources */,
 				6281EC802F55A8E2002C5F44 /* PlaylistServiceTests.swift in Sources */,
 				6201FC2F2F4F99DE004E0845 /* AuthServiceTests.swift in Sources */,
 				622CFC8F2EC284C300BB19F4 /* PlaylistDetailTests.swift in Sources */,

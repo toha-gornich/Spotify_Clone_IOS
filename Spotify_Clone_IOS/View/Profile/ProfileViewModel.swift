@@ -107,7 +107,6 @@ import SwiftUI
     
     func loadPlaylists() async {
         guard user.id != 0 else {
-            print("❌ User ID is not available yet")
             return
         }
         
