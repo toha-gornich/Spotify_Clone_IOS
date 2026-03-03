@@ -26,7 +26,7 @@ import SwiftUI
         
         Task {
             do {
-                genres = try await NetworkManager.shared.getGenres()
+                genres = try await genreManager.getGenres()
                 isLoading = false
             } catch {
                 handleError(error)

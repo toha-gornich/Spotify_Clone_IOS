@@ -127,4 +127,86 @@ extension XCTestCase {
         )
     }
     
+    func makeMockPlaylist(slug: String) -> Playlist {
+        Playlist(
+            id: 1,
+            slug: slug,
+            title: "Test Playlist",
+            image: "playlist.jpg",
+            color: "#FFFFFF",
+            trackSlug: nil,
+            user: User(
+                id: 1,
+                displayName: "Test User",
+                typeProfile: "user",
+                artistSlug: nil,
+                image: "user.jpg",
+                followersCount: 0,
+                isPremium: false
+            ),
+            genre: nil,
+            isPrivate: false
+        )
+    }
+
+    func makeFavoritePlaylistItem(slug: String) -> FavoritePlaylistItem {
+        FavoritePlaylistItem(
+            id: 1,
+            playlist: makeMockPlaylist(slug: slug),
+            createdAt: "2024-01-01",
+            updatedAt: "2024-01-01"
+        )
+    }
+
+    func makeMockPlaylistDetail(slug: String) -> PlaylistDetail {
+        PlaylistDetail(
+            id: 1,
+            slug: slug,
+            title: "Test Playlist",
+            description: "Test Description",
+            image: "playlist.jpg",
+            color: "#FFFFFF",
+            user: User(
+                id: 1,
+                displayName: "Test User",
+                typeProfile: "user",
+                artistSlug: nil,
+                image: "user.jpg",
+                followersCount: 0,
+                isPremium: false
+            ),
+            tracks: [],
+            genre: nil,
+            releaseDate: "2024-01-01",
+            isPrivate: false,
+            duration: "3:00",
+            favoriteCount: 0,
+            createdAt: "2024-01-01",
+            updatedAt: "2024-01-01"
+        )
+    }
+
+    func makeMockGenre(slug: String) -> Genre {
+        Genre(
+            id: 1,
+            slug: slug,
+            name: "Test Genre",
+            image: "genre.jpg",
+            color: "#FFFFFF"
+        )
+    }
+
+    func makeMockPatchResponse(slug: String) -> PatchPlaylistResponse {
+        PatchPlaylistResponse(
+            id: 1,
+            slug: slug,
+            title: "Test Playlist",
+            description: "Test Description",
+            image: "playlist.jpg",
+            genre: nil,
+            releaseDate: "2024-01-01",
+            isPrivate: false
+        )
+    }
+    
 }

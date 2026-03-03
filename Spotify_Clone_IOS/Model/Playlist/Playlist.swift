@@ -148,4 +148,16 @@ struct PatchPlaylistResponse: Codable, Identifiable {
         case releaseDate = "release_date"
         case isPrivate = "is_private"
     }
+    static var empty: PatchPlaylistResponse {
+            PatchPlaylistResponse(
+                id: 0,
+                slug: "",
+                title: "",
+                description: nil,
+                image: nil,
+                genre: nil,
+                releaseDate: "",
+                isPrivate: false
+            )
+        }
 }
